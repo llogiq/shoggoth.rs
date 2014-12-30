@@ -1,3 +1,3 @@
-#[test]
-fn it_works() {
-}
+#![feature(associated_types)]
+
+pub mod hlist;
