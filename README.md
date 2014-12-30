@@ -2,7 +2,7 @@
 
 Type-level programming in Rust
 
-[![build status](https://api.travis-ci.org/darinmorrison/type-level.rs.svg?branch=master)](https://travis-ci.org/darinmorrison/type-level.rs)
+[![build status](https://api.travis-ci.org/epsilonz/type-level.rs.svg?branch=master)](https://travis-ci.org/epsilonz/type-level.rs)
 
 ## Synopsis
 
@@ -10,7 +10,7 @@ This library implements type-level programming functionality.
 
 ## Documentation
 
-See the API documentation [here](http://darinmorrison.github.io/type-level.rs/doc/type-level/).
+See the API documentation [here](http://epsilonz.github.io/type-level.rs/doc/type-level/).
 
 ## Requirements
 
