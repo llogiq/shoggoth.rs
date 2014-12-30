@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="rustdoc">
+    <meta name="description" content="API documentation for the Rust `Pred` struct in crate `shoggoth`.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, Pred">
+
+    <title>shoggoth::nat::ops::Pred - Rust</title>
+
+    <link rel="stylesheet" type="text/css" href="../../../main.css">
+
+    
+    
+</head>
+<body class="rustdoc">
+    <!--[if lte IE 8]>
+    <div class="warning">
+        This old browser is unsupported and will most likely display funky
+        things.
+    </div>
+    <![endif]-->
+
+    
+
+    <section class="sidebar">
+        
+        <p class='location'><a href='../../index.html'>shoggoth</a>::<wbr><a href='../index.html'>nat</a>::<wbr><a href='index.html'>ops</a></p><div class='block struct'><h2>Structs</h2><a class='struct ' href='struct.Add.html' title=''>Add</a><a class='struct ' href='struct.Compare.html' title=''>Compare</a><a class='struct current' href='struct.Pred.html' title=''>Pred</a><a class='struct ' href='struct.Sub.html' title=''>Sub</a><a class='struct ' href='struct.Succ.html' title=''>Succ</a></div>
+    </section>
+
+    <nav class="sub">
+        <form class="search-form js-only">
+            <div class="search-container">
+                <input class="search-input" name="search"
+                       autocomplete="off"
+                       placeholder="Click or press 'S' to search, '?' for more options..."
+                       type="search">
+            </div>
+        </form>
+    </nav>
+
+    <section id='main' class="content struct">
+<h1 class='fqn'><span class='in-band'>Struct <a href='../../index.html'>shoggoth</a>::<wbr><a href='../index.html'>nat</a>::<wbr><a href='index.html'>ops</a>::<wbr><a class='struct' href=''>Pred</a><wbr></span><span class='out-of-band'><span id='render-detail'>
+            <a id="collapse-all" href="#">[-]</a>&nbsp;<a id="expand-all" href="#">[+]</a>
+        </span><a id='src-7522' href='../../../src/shoggoth/nat/mod.rs.html#64'>[src]</a></span></h1>
+<pre class='rust struct'>pub struct Pred;</pre><h2 id='implementations'>Trait Implementations</h2><h3 class='impl'><a class='stability Stable' title='Stable'></a><code>impl&lt;N: <a class='trait' href='../../../shoggoth/nat/trait.IsNat.html' title='shoggoth::nat::IsNat'>IsNat</a>, Rec: <a class='trait' href='../../../shoggoth/nat/trait.IsNat.html' title='shoggoth::nat::IsNat'>IsNat</a>&gt; <a class='trait' href='http://doc.rust-lang.org/nightly/core/ops/trait.Fn.html' title='core::ops::Fn'>Fn</a>&lt;<a href='http://doc.rust-lang.org/nightly/std/primitive.tuple.html'>(<a class='struct' href='../../../shoggoth/nat/struct.W.html' title='shoggoth::nat::W'>W</a>&lt;N&gt;,)</a>&gt; for <a class='struct' href='../../../shoggoth/nat/ops/struct.Pred.html' title='shoggoth::nat::ops::Pred'>Pred</a> <span class='where'>where <a class='struct' href='../../../shoggoth/nat/ops/struct.Pred.html' title='shoggoth::nat::ops::Pred'>Pred</a>: <a class='trait' href='http://doc.rust-lang.org/nightly/core/ops/trait.Fn.html' title='core::ops::Fn'>Fn</a>&lt;<a href='http://doc.rust-lang.org/nightly/std/primitive.tuple.html'>(N,)</a>, Output=Rec&gt;</span></code></h3><div class='impl-items'><h4 id='assoc_type.Output' class='type'><a class='stability Unmarked' title='No stability level'></a><code>type Output = <a class='struct' href='../../../shoggoth/nat/struct.W.html' title='shoggoth::nat::W'>W</a>&lt;Rec&gt;</code></h4>
+<h4 id='method.call' class='method'><a class='stability Unstable' title='Unstable'></a><code>extern "rust-call" fn <a href='#method.call' class='fnname'>call</a>(&amp;self, (W): <a href='http://doc.rust-lang.org/nightly/std/primitive.tuple.html'>(<a class='struct' href='../../../shoggoth/nat/struct.W.html' title='shoggoth::nat::W'>W</a>&lt;N&gt;,)</a>) -&gt; <a class='struct' href='../../../shoggoth/nat/struct.W.html' title='shoggoth::nat::W'>W</a>&lt;Rec&gt;</code></h4>
+</div><h3 class='impl'><a class='stability Stable' title='Stable'></a><code>impl&lt;B: <a class='trait' href='../../../shoggoth/bit/trait.Bit.html' title='shoggoth::bit::Bit'>Bit</a>&gt; <a class='trait' href='http://doc.rust-lang.org/nightly/core/ops/trait.Fn.html' title='core::ops::Fn'>Fn</a>&lt;<a href='http://doc.rust-lang.org/nightly/std/primitive.tuple.html'>(B,)</a>&gt; for <a class='struct' href='../../../shoggoth/nat/ops/struct.Pred.html' title='shoggoth::nat::ops::Pred'>Pred</a></code></h3><div class='impl-items'><h4 id='assoc_type.Output' class='type'><a class='stability Unmarked' title='No stability level'></a><code>type Output = <a class='struct' href='../../../shoggoth/bit/struct._0.html' title='shoggoth::bit::_0'>_0</a></code></h4>
+<h4 id='method.call' class='method'><a class='stability Unstable' title='Unstable'></a><code>extern "rust-call" fn <a href='#method.call' class='fnname'>call</a>(&amp;self, (_): <a href='http://doc.rust-lang.org/nightly/std/primitive.tuple.html'>(B,)</a>) -&gt; <a class='struct' href='../../../shoggoth/bit/struct._0.html' title='shoggoth::bit::_0'>_0</a></code></h4>
+</div><h3 class='impl'><a class='stability Stable' title='Stable'></a><code>impl&lt;Rec, P: <a class='trait' href='../../../shoggoth/nat/trait.Pos.html' title='shoggoth::nat::Pos'>Pos</a>&gt; <a class='trait' href='http://doc.rust-lang.org/nightly/core/ops/trait.Fn.html' title='core::ops::Fn'>Fn</a>&lt;<a href='http://doc.rust-lang.org/nightly/std/primitive.tuple.html'>(<a href='http://doc.rust-lang.org/nightly/std/primitive.tuple.html'>(P, <a class='struct' href='../../../shoggoth/bit/struct._0.html' title='shoggoth::bit::_0'>_0</a>)</a>,)</a>&gt; for <a class='struct' href='../../../shoggoth/nat/ops/struct.Pred.html' title='shoggoth::nat::ops::Pred'>Pred</a> <span class='where'>where PredDouble: <a class='trait' href='http://doc.rust-lang.org/nightly/core/ops/trait.Fn.html' title='core::ops::Fn'>Fn</a>&lt;<a href='http://doc.rust-lang.org/nightly/std/primitive.tuple.html'>(P,)</a>, Output=Rec&gt;</span></code></h3><div class='impl-items'><h4 id='assoc_type.Output' class='type'><a class='stability Unmarked' title='No stability level'></a><code>type Output = Rec</code></h4>
+<h4 id='method.call' class='method'><a class='stability Unstable' title='Unstable'></a><code>extern "rust-call" fn <a href='#method.call' class='fnname'>call</a>(&amp;self, ((p, _0 {  })): <a href='http://doc.rust-lang.org/nightly/std/primitive.tuple.html'>(<a href='http://doc.rust-lang.org/nightly/std/primitive.tuple.html'>(P, <a class='struct' href='../../../shoggoth/bit/struct._0.html' title='shoggoth::bit::_0'>_0</a>)</a>,)</a>) -&gt; Rec</code></h4>
+</div><h3 class='impl'><a class='stability Stable' title='Stable'></a><code>impl&lt;P: <a class='trait' href='../../../shoggoth/nat/trait.Pos.html' title='shoggoth::nat::Pos'>Pos</a>&gt; <a class='trait' href='http://doc.rust-lang.org/nightly/core/ops/trait.Fn.html' title='core::ops::Fn'>Fn</a>&lt;<a href='http://doc.rust-lang.org/nightly/std/primitive.tuple.html'>(<a href='http://doc.rust-lang.org/nightly/std/primitive.tuple.html'>(P, <a class='struct' href='../../../shoggoth/bit/struct._1.html' title='shoggoth::bit::_1'>_1</a>)</a>,)</a>&gt; for <a class='struct' href='../../../shoggoth/nat/ops/struct.Pred.html' title='shoggoth::nat::ops::Pred'>Pred</a></code></h3><div class='impl-items'><h4 id='assoc_type.Output' class='type'><a class='stability Unmarked' title='No stability level'></a><code>type Output = <a href='http://doc.rust-lang.org/nightly/std/primitive.tuple.html'>(P, <a class='struct' href='../../../shoggoth/bit/struct._0.html' title='shoggoth::bit::_0'>_0</a>)</a></code></h4>
+<h4 id='method.call' class='method'><a class='stability Unstable' title='Unstable'></a><code>extern "rust-call" fn <a href='#method.call' class='fnname'>call</a>(&amp;self, ((p, _1 {  })): <a href='http://doc.rust-lang.org/nightly/std/primitive.tuple.html'>(<a href='http://doc.rust-lang.org/nightly/std/primitive.tuple.html'>(P, <a class='struct' href='../../../shoggoth/bit/struct._1.html' title='shoggoth::bit::_1'>_1</a>)</a>,)</a>) -&gt; <a href='http://doc.rust-lang.org/nightly/std/primitive.tuple.html'>(P, <a class='struct' href='../../../shoggoth/bit/struct._0.html' title='shoggoth::bit::_0'>_0</a>)</a></code></h4>
+</div></section>
+    <section id='search' class="content hidden"></section>
+
+    <section class="footer"></section>
+
+    <div id="help" class="hidden">
+        <div class="shortcuts">
+            <h1>Keyboard shortcuts</h1>
+            <dl>
+                <dt>?</dt>
+                <dd>Show this help dialog</dd>
+                <dt>S</dt>
+                <dd>Focus the search field</dd>
+                <dt>&larrb;</dt>
+                <dd>Move up in search results</dd>
+                <dt>&rarrb;</dt>
+                <dd>Move down in search results</dd>
+                <dt>&#9166;</dt>
+                <dd>Go to active search result</dd>
+            </dl>
+        </div>
+        <div class="infos">
+            <h1>Search tricks</h1>
+            <p>
+                Prefix searches with a type followed by a colon (e.g.
+                <code>fn:</code>) to restrict the search to a given type.
+            </p>
+            <p>
+                Accepted types are: <code>fn</code>, <code>mod</code>,
+                <code>struct</code>, <code>enum</code>,
+                <code>trait</code>, <code>typedef</code> (or
+                <code>tdef</code>).
+            </p>
+        </div>
+    </div>
+
+    
+
+    <script>
+        window.rootPath = "../../../";
+        window.currentCrate = "shoggoth";
+        window.playgroundUrl = "";
+    </script>
+    <script src="../../../jquery.js"></script>
+    <script src="../../../main.js"></script>
+    
+    <script async src="../../../search-index.js"></script>
+</body>
+</html>
