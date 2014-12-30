@@ -16,7 +16,7 @@ pub trait HList {
 }
 
 impl HList for HNil {}
-impl<X, Xs: HList> HList for HCons<X, Xs> where Xs: HList {}
+impl<X, Xs: HList> HList for HCons<X, Xs> {}
 
 pub trait Head {
     type Car;
