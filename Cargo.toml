@@ -1,0 +1,5 @@
+[package]
+
+name = "type-level"
+version = "0.0.1"
+authors = ["Darin Morrison <darinmorrison+epsilonz@gmail.com>"]
