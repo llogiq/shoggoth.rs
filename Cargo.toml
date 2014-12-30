@@ -3,3 +3,13 @@
 name = "type-level"
 version = "0.0.1"
 authors = ["Darin Morrison <darinmorrison+epsilonz@gmail.com>"]
+description = "Type-level programming in Rust"
+documentation = "http://epsilonz.github.io/type-level.rs/doc/type-level/"
+keywords = ["type-level"]
+license = "MIT"
+readme = "README.md"
+repository = "https://github.com/epsilonz/type-level.rs"
+
+[lib]
+name = "type-level"
+path = "src/lib.rs"
