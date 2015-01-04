@@ -204,7 +204,7 @@ impl<A0: Copy, A1: Copy, A2: Copy, A3: Copy, A4: Copy, A5: Copy, A6: Copy, A7: C
     }
 }
 
-pub trait ProductOps {
+pub trait ProductOps: Sized {
     #[inline]
     fn to_hlist(self) -> <Self as ToHList>::Out where
         Self: ToHList

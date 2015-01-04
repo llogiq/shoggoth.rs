@@ -152,7 +152,7 @@ impl<A0, A1, A2, A3, A4, A5, A6, A7, A8, A9,> IsComposite for (A0, A1, A2, A3, A
 }
 
 ///
-pub trait TupleOps {
+pub trait TupleOps: Sized {
     #[inline]
     fn head(self) -> <Self as IsComposite>::H where
         Self: IsComposite
