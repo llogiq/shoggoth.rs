@@ -24,12 +24,36 @@ pub mod tuples;
 
 #[cfg(test)]
 mod tests {
+    use equality::{
+        Is,
+    };
+
     use products::{
         ProductOps,
     };
     use tuples::{
         TupleOps,
     };
+
+    #[test]
+    fn equality_coerce() {
+        fn aux<X, Y: Is<X>>(y: Y) -> X {
+            y.coerce()
+        }
+        assert_eq!((), aux::<(), ()>(()))
+    }
+
+    // FIXME: Need compile-time #[should_fail]
+    /*
+    #[test]
+    #[should_fail]
+    fn equality_coerce_fail() {
+        fn aux<X, Y: Is<X>>(y: Y) -> X {
+            y.coerce()
+        }
+        aux::<(), bool>(())
+    }
+     */
 
     #[test]
     fn tuple_head() {
