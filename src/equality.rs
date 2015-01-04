@@ -34,7 +34,7 @@ impl<A, B> Id<A, B> {
 }
 
 /// The `Is` trait acts like a type equality predicate
-pub trait Is<A> {
+pub trait Is<A>: Sized {
     /// On demand, provide evidence of the truth of `Is<A>` in terms
     /// of provable type-equality of `A` and `Self`. The obligation to
     /// define this method keeps the trait from being implemented in
