@@ -1,16 +1,16 @@
-# type-level.rs
+# shoggoth.rs
 
-Type-level programming in Rust
+Generic and type-level programming for Rust
 
-[![build status](https://api.travis-ci.org/epsilonz/type-level.rs.svg?branch=master)](https://travis-ci.org/epsilonz/type-level.rs)
+[![build status](https://api.travis-ci.org/epsilonz/shoggoth.rs.svg?branch=master)](https://travis-ci.org/epsilonz/shoggoth.rs)
 
 ## Synopsis
 
-This library implements type-level programming functionality.
+This library implements generic and type-level programming functionality. It is heavily inspired by Scala's [Shapeless](https://github.com/milessabin/shapeless).
 
 ## Documentation
 
-See the API documentation [here](http://epsilonz.github.io/type-level.rs/doc/type-level/).
+See the API documentation [here](http://epsilonz.github.io/shoggoth.rs/doc/shoggoth/).
 
 ## Requirements
 

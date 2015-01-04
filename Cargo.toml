@@ -1,15 +1,15 @@
 [package]
 
-name = "type-level"
+name = "shoggoth"
 version = "0.0.1"
 authors = ["Darin Morrison <darinmorrison+epsilonz@gmail.com>"]
-description = "Type-level programming in Rust"
-documentation = "http://epsilonz.github.io/type-level.rs/doc/type-level/"
-keywords = ["type-level"]
+description = "Generic and type-level programming for Rust"
+documentation = "http://epsilonz.github.io/shoggoth.rs/doc/shoggoth/"
+keywords = ["generic", "heterogenous", "hlist", "type-level"]
 license = "MIT"
 readme = "README.md"
-repository = "https://github.com/epsilonz/type-level.rs"
+repository = "https://github.com/epsilonz/shoggoth.rs"
 
 [lib]
-name = "type-level"
+name = "shoggoth"
 path = "src/lib.rs"
