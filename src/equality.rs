@@ -41,6 +41,10 @@ pub trait Is<A>: Sized {
     /// other crates in violation of the intended semantics.
     #[inline]
     fn completeness(&self) -> Squash<Id<A, Self>>;
+    #[inline]
+    fn coerce(self) -> A {
+        unsafe { *::std::mem::transmute::<_, Box<_>>(box self) }
+    }
 }
 
 impl<A> Is<A> for A {
