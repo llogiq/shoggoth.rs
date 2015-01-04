@@ -17,6 +17,7 @@
 // }
 ///
 
+pub mod equality;
 pub mod hlist;
 pub mod products;
 pub mod tuples;
