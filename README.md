@@ -4,6 +4,10 @@ Generic and type-level programming for Rust
 
 [![build status](https://api.travis-ci.org/epsilonz/shoggoth.rs.svg?branch=master)](https://travis-ci.org/epsilonz/shoggoth.rs)
 
+_It was a terrible, indescribable thing vaster than any subway train—a shapeless congeries of protoplasmic bubbles, faintly self-luminous, and with myriads of temporary eyes forming and un-forming as pustules of greenish light all over the tunnel-filling front that bore down upon us, crushing the frantic penguins and slithering over the glistening floor that it and its kind had swept so evilly free of all litter._
+
+—H. P. Lovecraft, _At The Mountains of Madness_
+
 ## Synopsis
 
 This library implements generic and type-level programming functionality. It is heavily inspired by Scala's [Shapeless](https://github.com/milessabin/shapeless).
