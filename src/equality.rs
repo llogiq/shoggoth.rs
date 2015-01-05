@@ -34,7 +34,7 @@ pub trait Is<A>: Sized {
     fn completeness(&self) -> Squash<Id<A, Self>>;
     #[inline]
     fn coerce(self) -> A {
-        unsafe { *::std::mem::transmute::<_, Box<_>>(box self) }
+        * unsafe { ::std::mem::transmute::<_, Box<_>>(box self) }
     }
 }
 
