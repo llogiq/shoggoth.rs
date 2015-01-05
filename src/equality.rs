@@ -14,13 +14,13 @@ impl<A> IdTerm<A, A> for Refl<A> {}
 
 impl<A> Id<A, A> {
     /// Construct a proof that type `A` is equal to itself
-    #[inline(always)]
+    #[inline]
     pub fn refl() -> Id<A, A> { Id(box Refl) }
 }
 
 impl<A, B> Id<A, B> {
     /// Construct a `Squash` from a type equality proof.
-    #[inline(always)]
+    #[inline]
     pub fn squash(&self) -> Squash<Id<A, B>> { Squash::new(self) }
 }
 
@@ -37,7 +37,7 @@ pub trait Is<A> {
     /// `x` to type `Y`. The safety comes from the fact that the only
     /// time the bound `X: Is<Y>` holds is when `X` and `Y` are the
     /// same type (determined statically).
-    #[inline(always)]
+    #[inline]
     fn coerce(self) -> A where Self: Sized {
         * unsafe { ::std::mem::transmute::<_, Box<_>>(box self) }
     }
