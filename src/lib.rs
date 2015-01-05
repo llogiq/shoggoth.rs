@@ -1,22 +1,5 @@
 #![feature(associated_types)]
 
-///
-// pub trait DepFn0 {
-//     type Out;
-//     fn apply() -> Self;
-// }
-
-// pub trait DepFn1 {
-//     type Out;
-//     fn apply(self) -> Self::Out;
-// }
-
-// pub trait DepFn2<U> {
-//     type Out;
-//     fn apply(self, u: U) -> Self::Out;
-// }
-///
-
 pub mod equality;
 pub mod hlist;
 pub mod products;
