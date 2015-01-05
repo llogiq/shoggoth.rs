@@ -11,6 +11,7 @@ pub struct Squash<Sized? P>(());
 impl<Sized? P> Squash<P> {
     /// Construct a `Squash` given a reference to a witness
     #[allow(unused_variables)]
+    #[inline(always)]
     pub fn new(witness: &P) -> Squash<P> { Squash(()) }
 }
 
