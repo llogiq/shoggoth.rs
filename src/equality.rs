@@ -33,7 +33,11 @@ pub trait Is<A> {
     #[inline]
     fn completeness(&self) -> Squash<Id<A, Self>>;
 
-    #[inline]
+    /// Given `X: Is<Y>` and `x: X`, this method will safely coerce an
+    /// `x` to type `Y`. The safety comes from the fact that the only
+    /// time the bound `X: Is<Y>` holds is when `X` and `Y` are the
+    /// same type (determined statically).
+    #[inline(always)]
     fn coerce(self) -> A where Self: Sized {
         * unsafe { ::std::mem::transmute::<_, Box<_>>(box self) }
     }
