@@ -19,7 +19,6 @@ mod tests {
     use equality::{
         Is,
     };
-
     use products::{
         ProductOps,
     };

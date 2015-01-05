@@ -29,6 +29,7 @@ pub trait IsHCons: HList {
 
     #[inline]
     fn head(self) -> Self::H;
+
     #[inline]
     fn tail(self) -> Self::T;
 }
@@ -39,6 +40,7 @@ impl<H, T: HList> IsHCons for HCons<H, T> {
 
     #[inline]
     fn head(self) -> H { self.0 }
+
     #[inline]
     fn tail(self) -> T { self.1 }
 }

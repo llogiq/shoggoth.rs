@@ -13,14 +13,10 @@ impl<A0,> IsComposite for (A0,) {
     type T = ();
 
     #[inline]
-    fn head(self) -> A0 {
-        self.0
-    }
+    fn head(self) -> A0 { self.0 }
 
     #[inline]
-    fn tail(self) -> () {
-        ()
-    }
+    fn tail(self) -> () { () }
 }
 
 impl<A0, A1,> IsComposite for (A0, A1,) {
@@ -28,9 +24,7 @@ impl<A0, A1,> IsComposite for (A0, A1,) {
     type T = (A1,);
 
     #[inline]
-    fn head(self) -> A0 {
-        self.0
-    }
+    fn head(self) -> A0 { self.0 }
 
     #[inline]
     fn tail(self) -> (A1,) {
@@ -151,18 +145,15 @@ impl<A0, A1, A2, A3, A4, A5, A6, A7, A8, A9,> IsComposite for (A0, A1, A2, A3, A
     }
 }
 
-///
 pub trait TupleOps: Sized {
     #[inline]
-    fn head(self) -> <Self as IsComposite>::H where
-        Self: IsComposite
+    fn head(self) -> <Self as IsComposite>::H where Self: IsComposite
     {
         IsComposite::head(self)
     }
 
     #[inline]
-    fn tail(self) -> <Self as IsComposite>::T where
-        Self: IsComposite
+    fn tail(self) -> <Self as IsComposite>::T where Self: IsComposite
     {
         IsComposite::tail(self)
     }

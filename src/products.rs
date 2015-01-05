@@ -89,9 +89,7 @@ pub trait ToHList {
 impl ToHList for () {
     type Out = HNil;
     #[inline]
-    fn apply(self) -> HNil {
-        HNil
-    }
+    fn apply(self) -> HNil { HNil }
 }
 
 impl<A0: Copy,> ToHList for (A0,) {
