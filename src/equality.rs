@@ -1,11 +1,6 @@
-/// Evidence of a proposition where the witness has been forgotten
-pub struct Squash<Sized? P>(());
-
-impl<Sized? P> Squash<P> {
-    /// Construct a `Squash` given a reference to a witness
-    #[allow(unused_variables)]
-    pub fn new(witness: &P) -> Squash<P> { Squash(()) }
-}
+use super::{
+    Squash,
+};
 
 /// The `Term` trait classifies proof terms for type quality
 trait IdTerm<A, B> {}

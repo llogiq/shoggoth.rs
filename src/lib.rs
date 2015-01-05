@@ -5,6 +5,15 @@ pub mod hlist;
 pub mod products;
 pub mod tuples;
 
+/// Evidence of a proposition where the witness has been forgotten
+pub struct Squash<Sized? P>(());
+
+impl<Sized? P> Squash<P> {
+    /// Construct a `Squash` given a reference to a witness
+    #[allow(unused_variables)]
+    pub fn new(witness: &P) -> Squash<P> { Squash(()) }
+}
+
 #[cfg(test)]
 mod tests {
     use equality::{
