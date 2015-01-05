@@ -33,7 +33,7 @@ pub trait Is<A> {
     #[inline]
     fn completeness(&self) -> Squash<Id<A, Self>>;
 
-    /// Given `X: Is<Y>` and `x: X`, this method will safely coerce an
+    /// Given `X: Is<Y>` and `x: X`, this method will safely coerce
     /// `x` to type `Y`. The safety comes from the fact that the only
     /// time the bound `X: Is<Y>` holds is when `X` and `Y` are the
     /// same type (determined statically).
