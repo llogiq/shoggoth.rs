@@ -15,17 +15,13 @@ impl<A> IdTerm<A, A> for Refl<A> {}
 impl<A> Id<A, A> {
     /// Construct a proof that type `A` is equal to itself
     #[inline]
-    pub fn refl() -> Id<A, A> {
-        Id(box Refl)
-    }
+    pub fn refl() -> Id<A, A> { Id(box Refl) }
 }
 
 impl<A, B> Id<A, B> {
     /// Construct a `Squash` from a type equality proof.
     #[inline]
-    pub fn squash(&self) -> Squash<Id<A, B>> {
-        Squash::new(self)
-    }
+    pub fn squash(&self) -> Squash<Id<A, B>> { Squash::new(self) }
 }
 
 /// The `Is` trait acts like a type equality predicate
