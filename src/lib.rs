@@ -2,8 +2,6 @@
 
 pub mod equality;
 pub mod hlist;
-pub mod products;
-pub mod tuples;
 
 /// Evidence of a proposition where the witness has been forgotten
 pub struct Squash<Sized? P>(());
@@ -13,16 +11,18 @@ impl<Sized? P> Squash<P> {
     #[inline]
     pub fn new(_witness: &P) -> Squash<P> { Squash(()) }
 }
+pub mod product;
+pub mod tuple;
 
 #[cfg(test)]
 mod tests {
     use equality::{
         Is,
     };
-    use products::{
+    use product::{
         ProductOps,
     };
-    use tuples::{
+    use tuple::{
         TupleOps,
     };
 

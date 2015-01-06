@@ -4,7 +4,7 @@ use hlist::{
     HNil,
 };
 
-use tuples::{
+use tuple::{
     IsComposite,
 };
 
