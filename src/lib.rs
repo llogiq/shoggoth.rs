@@ -3,6 +3,7 @@
 pub mod equality;
 pub mod hlist;
 pub mod product;
+pub mod singleton;
 pub mod squash;
 pub mod tuple;
 
