@@ -1,6 +1,7 @@
 #![feature(associated_types)]
 
 pub mod equality;
+pub mod function;
 pub mod hlist;
 pub mod product;
 pub mod singleton;
