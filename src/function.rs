@@ -21,10 +21,12 @@ pub trait TFn<This, In>: Singleton<This> {
 pub struct TVal<X>(());
 
 impl TVal<()> {
+    #[inline]
     pub fn val<F: TFn<F, X>, X>() -> TVal<<F as TFn<F, X>>::Out> { TVal(()) }
 }
 
 pub trait DFn<This, In>: TFn<This, In> {
+    #[inline]
     fn call<X: Is<Self>>(arg: In) -> <Self as TFn<This, In>>::Out;
 }
 
