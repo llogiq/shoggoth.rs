@@ -35,14 +35,14 @@ impl<TN: TNat> TNat for TS<TN> {}
 #[derive(PartialOrd)]
 #[derive(Show)]
 pub enum Add {}
-impl<TN: TNat> TFn<Add, (TZ, TN)> for Add
+impl<RHS: TNat> TFn<Add, (TZ, RHS)> for Add
 {
-    type Out = TN;
+    type Out = RHS;
 }
-impl<TN0: TNat, TN1: TNat> TFn<Add, (TS<TN0>, TN1)> for Add where
-    Add: TFn<Add, (TN0, TN1)>,
+impl<LHS: TNat, RHS: TNat> TFn<Add, (TS<LHS>, RHS)> for Add where
+    Add: TFn<Add, (LHS, RHS)>,
 {
-    type Out = TS<<Add as TFn<Add, (TN0, TN1)>>::Out>;
+    type Out = TS<<Add as TFn<Add, (LHS, RHS)>>::Out>;
 }
 
 #[derive(Clone)]
@@ -54,15 +54,15 @@ impl<TN0: TNat, TN1: TNat> TFn<Add, (TS<TN0>, TN1)> for Add where
 #[derive(PartialOrd)]
 #[derive(Show)]
 pub enum Mul {}
-impl<TN1: TNat> TFn<Mul, (TZ, TN1)> for Mul
+impl<RHS: TNat> TFn<Mul, (TZ, RHS)> for Mul
 {
     type Out = TZ;
 }
-impl<TN0: TNat, TN1: TNat, Rec: TNat> TFn<Mul, (TS<TN0>, TN1)> for Mul where
-    Mul: TFn<Mul, (TN0, TN1), Out = Rec>,
-    Add: TFn<Add, (TN1, Rec)>,
+impl<LHS: TNat, RHS: TNat, Rec: TNat> TFn<Mul, (TS<LHS>, RHS)> for Mul where
+    Mul: TFn<Mul, (LHS, RHS), Out = Rec>,
+    Add: TFn<Add, (RHS, Rec)>,
 {
-    type Out = <Add as TFn<Add, (TN1, Rec)>>::Out;
+    type Out = <Add as TFn<Add, (RHS, Rec)>>::Out;
 }
 
 #[derive(Clone)]
@@ -74,15 +74,15 @@ impl<TN0: TNat, TN1: TNat, Rec: TNat> TFn<Mul, (TS<TN0>, TN1)> for Mul where
 #[derive(PartialOrd)]
 #[derive(Show)]
 pub enum Exp {}
-impl<TN1: TNat> TFn<Exp, (TZ, TN1)> for Exp
+impl<RHS: TNat> TFn<Exp, (TZ, RHS)> for Exp
 {
     type Out = TS<TZ>;
 }
-impl<TN0: TNat, TN1: TNat, Rec: TNat> TFn<Exp, (TS<TN0>, TN1)> for Exp where
-    Exp: TFn<Exp, (TN0, TN1), Out = Rec>,
-    Mul: TFn<Mul, (TN1, Rec)>,
+impl<LHS: TNat, RHS: TNat, Rec: TNat> TFn<Exp, (TS<LHS>, RHS)> for Exp where
+    Exp: TFn<Exp, (LHS, RHS), Out = Rec>,
+    Mul: TFn<Mul, (RHS, Rec)>,
 {
-    type Out = <Mul as TFn<Mul, (TN1, Rec)>>::Out;
+    type Out = <Mul as TFn<Mul, (RHS, Rec)>>::Out;
 }
 
 #[derive(Clone)]
@@ -98,11 +98,11 @@ impl TFn<Fac, TZ> for Fac
 {
     type Out = TS<TZ>;
 }
-impl<TN: TNat, Rec: TNat> TFn<Fac, TS<TN>> for Fac where
-    Fac: TFn<Fac, TN, Out = Rec>,
-    Mul: TFn<Mul, (TS<TN>, Rec)>,
+impl<LHS: TNat, Rec: TNat> TFn<Fac, TS<LHS>> for Fac where
+    Fac: TFn<Fac, LHS, Out = Rec>,
+    Mul: TFn<Mul, (TS<LHS>, Rec)>,
 {
-    type Out = <Mul as TFn<Mul, (TS<TN>, Rec)>>::Out;
+    type Out = <Mul as TFn<Mul, (TS<LHS>, Rec)>>::Out;
 }
 
 pub type TN00 = TZ;
