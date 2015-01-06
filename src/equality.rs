@@ -47,3 +47,28 @@ impl<A> Is<A> for A {
     #[inline]
     fn completeness(&self) -> Squash<Id<A, A>> { Id::refl().squash() }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::{
+        Is,
+    };
+
+    #[test]
+    fn coerce() {
+        fn aux<X, Y: Is<X>>(y: Y) -> X {
+            y.coerce()
+        }
+        assert_eq!((), aux::<(), ()>(()))
+    }
+
+    // // FIXME: Need compile-time #[should_fail]
+    // #[test]
+    // #[should_fail]
+    // fn equality_coerce_fail() {
+    //     fn aux<X, Y: Is<X>>(y: Y) -> X {
+    //         y.coerce()
+    //     }
+    //     aux::<(), bool>(())
+    // }
+}

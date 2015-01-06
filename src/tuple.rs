@@ -170,3 +170,76 @@ impl<A0, A1, A2, A3, A4, A5, A6,> TupleOps for (A0, A1, A2, A3, A4, A5, A6,) {}
 impl<A0, A1, A2, A3, A4, A5, A6, A7,> TupleOps for (A0, A1, A2, A3, A4, A5, A6, A7,) {}
 impl<A0, A1, A2, A3, A4, A5, A6, A7, A8,> TupleOps for (A0, A1, A2, A3, A4, A5, A6, A7, A8,) {}
 impl<A0, A1, A2, A3, A4, A5, A6, A7, A8, A9,> TupleOps for (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9,) {}
+
+#[cfg(test)]
+mod tests {
+    use super::{
+        TupleOps,
+    };
+
+    #[test]
+    fn head() {
+        let x = (0u8,);
+        x.head();
+
+        let x = (0u8, 0u8,);
+        x.head();
+
+        let x = (0u8, 0u8, 0u8,);
+        x.head();
+
+        let x = (0u8, 0u8, 0u8, 0u8,);
+        x.head();
+
+        let x = (0u8, 0u8, 0u8, 0u8, 0u8,);
+        x.head();
+
+        let x = (0u8, 0u8, 0u8, 0u8, 0u8, 0u8,);
+        x.head();
+
+        let x = (0u8, 0u8, 0u8, 0u8, 0u8, 0u8, 0u8,);
+        x.head();
+
+        let x = (0u8, 0u8, 0u8, 0u8, 0u8, 0u8, 0u8, 0u8,);
+        x.head();
+
+        let x = (0u8, 0u8, 0u8, 0u8, 0u8, 0u8, 0u8, 0u8, 0u8,);
+        x.head();
+
+        let x = (0u8, 0u8, 0u8, 0u8, 0u8, 0u8, 0u8, 0u8, 0u8, 0u8,);
+        x.head();
+    }
+
+    #[test]
+    fn tail() {
+        let x = (0u8,);
+        x.tail();
+
+        let x = (0u8, 0u8,);
+        x.tail();
+
+        let x = (0u8, 0u8, 0u8,);
+        x.tail();
+
+        let x = (0u8, 0u8, 0u8, 0u8,);
+        x.tail();
+
+        let x = (0u8, 0u8, 0u8, 0u8, 0u8,);
+        x.tail();
+
+        let x = (0u8, 0u8, 0u8, 0u8, 0u8, 0u8,);
+        x.tail();
+
+        let x = (0u8, 0u8, 0u8, 0u8, 0u8, 0u8, 0u8,);
+        x.tail();
+
+        let x = (0u8, 0u8, 0u8, 0u8, 0u8, 0u8, 0u8, 0u8,);
+        x.tail();
+
+        let x = (0u8, 0u8, 0u8, 0u8, 0u8, 0u8, 0u8, 0u8, 0u8,);
+        x.tail();
+
+        let x = (0u8, 0u8, 0u8, 0u8, 0u8, 0u8, 0u8, 0u8, 0u8, 0u8,);
+        x.tail();
+    }
+}
