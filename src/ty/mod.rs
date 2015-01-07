@@ -9,8 +9,8 @@ pub use self::bool::{
 };
 
 pub use self::eq::{
+    Eq,
     Id,
-    Is,
 };
 
 pub use self::fun::{

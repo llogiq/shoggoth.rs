@@ -25,17 +25,17 @@ impl<A, B> Id<A, B> {
 }
 
 /// The `Is` trait acts like a type equality predicate
-pub trait Is<A> {
-    /// On demand, provide evidence of the truth of `Is<A>` in terms
+pub trait Eq<A> {
+    /// On demand, provide evidence of the truth of `Eq<A>` in terms
     /// of provable type-equality of `A` and `Self`. The obligation to
     /// define this method keeps the trait from being implemented in
     /// other crates in violation of the intended semantics.
     #[inline]
     fn completeness(&self) -> Squash<Id<A, Self>>;
 
-    /// Given `X: Is<Y>` and `x: X`, this method will safely coerce
+    /// Given `X: Eq<Y>` and `x: X`, this method will safely coerce
     /// `x` to type `Y`. The safety comes from the fact that the only
-    /// time the bound `X: Is<Y>` holds is when `X` and `Y` are the
+    /// time the bound `X: Eq<Y>` holds is when `X` and `Y` are the
     /// same type (determined statically).
     #[inline]
     fn coerce(self) -> A where Self: Sized {
@@ -43,20 +43,18 @@ pub trait Is<A> {
     }
 }
 
-impl<A> Is<A> for A {
+impl<A> Eq<A> for A {
     #[inline]
     fn completeness(&self) -> Squash<Id<A, A>> { Id::refl().squash() }
 }
 
 #[cfg(test)]
 mod tests {
-    use super::{
-        Is,
-    };
+    use ty;
 
     #[test]
     fn coerce() {
-        fn aux<X, Y: Is<X>>(y: Y) -> X {
+        fn aux<X, Y: ty::eq::Eq<X>>(y: Y) -> X {
             y.coerce()
         }
         assert_eq!((), aux::<(), ()>(()))
@@ -66,7 +64,7 @@ mod tests {
     // #[test]
     // #[should_fail]
     // fn equality_coerce_fail() {
-    //     fn aux<X, Y: Is<X>>(y: Y) -> X {
+    //     fn aux<X, Y: Eq<X>>(y: Y) -> X {
     //         y.coerce()
     //     }
     //     aux::<(), bool>(())

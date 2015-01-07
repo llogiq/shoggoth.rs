@@ -1,6 +1,6 @@
 use ty::{
-    Is,
+    Eq,
 };
 
-pub trait Singleton<T> where Self: Is<T> {}
+pub trait Singleton<T> where Self: Eq<T> {}
 impl<T> Singleton<T> for T {}
