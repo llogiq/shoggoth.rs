@@ -1,5 +1,44 @@
-pub mod bool;
-pub mod eq;
-pub mod fun;
-pub mod nat;
-pub mod list;
+pub use self::bool::{
+    And,
+    Bool,
+    False,
+    If,
+    Not,
+    Or,
+    True,
+};
+
+pub use self::eq::{
+    Id,
+    Is,
+};
+
+pub use self::fun::{
+    DepFn,
+    Fn,
+    Val,
+};
+
+pub use self::nat::{
+    Add,
+    Exp,
+    Fac,
+    Mul,
+    Nat,
+    S,
+    Z,
+};
+
+pub use self::list::{
+    Append,
+    Cons,
+    Length,
+    List,
+    Nil,
+};
+
+mod bool;
+mod eq;
+mod fun;
+mod list;
+mod nat;
