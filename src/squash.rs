@@ -1,7 +1,7 @@
 /// Evidence of a proposition where the witness has been forgotten
-pub struct Squash<Sized? P>(());
+pub struct Squash<P: ?Sized>(());
 
-impl<Sized? P> Squash<P> {
+impl<P: ?Sized> Squash<P> {
     /// Construct a `Squash` given a reference to a witness
     #[inline]
     pub fn new(_witness: &P) -> Squash<P> { Squash(()) }
