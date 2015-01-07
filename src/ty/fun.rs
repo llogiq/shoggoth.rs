@@ -7,7 +7,7 @@ pub trait Fn<This, In>: Singleton<This> {
     type Out;
 }
 
-pub trait DFn<This, In>: self::Fn<This, In> {
+pub trait DepFn<This, In>: self::Fn<This, In> {
     #[inline]
     fn call<X: eq::Is<Self>>(arg: In) -> <Self as self::Fn<This, In>>::Out;
 }
