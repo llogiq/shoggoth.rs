@@ -1,4 +1,4 @@
-use equality::{
+use ty::eq::{
     Is,
 };
 
