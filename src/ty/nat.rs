@@ -206,7 +206,7 @@ pub type N99 = S<N98>;
 
 #[cfg(test)]
 mod tests {
-    use ty::fun;
+    use ty::fun::Val;
     use super::{
         Add,
         Mul,
@@ -222,14 +222,14 @@ mod tests {
     };
 
     #[test]
-    fn add() { let _: fun::Val< N05 > = fun::Val::val::<Add, ( N03, N02, )>(); }
+    fn add() { let _: Val< N05 > = Val::val::<Add, ( N03, N02, )>(); }
 
     #[test]
-    fn mul() { let _: fun::Val< N06 > = fun::Val::val::<Mul, ( N03, N02, )>(); }
+    fn mul() { let _: Val< N06 > = Val::val::<Mul, ( N03, N02, )>(); }
 
     #[test]
-    fn exp() { let _: fun::Val< N08 > = fun::Val::val::<Exp, ( N03, N02, )>(); }
+    fn exp() { let _: Val< N08 > = Val::val::<Exp, ( N03, N02, )>(); }
 
     #[test]
-    fn fac() { let _: fun::Val< N24 > = fun::Val::val::<Fac, ( N04, ) >(); }
+    fn fac() { let _: Val< N24 > = Val::val::<Fac, ( N04, ) >(); }
 }

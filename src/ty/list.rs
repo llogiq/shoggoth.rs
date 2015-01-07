@@ -64,7 +64,7 @@ impl<H, T: List> fun::Fn<Length, ( Cons<H, T>, )> for fun::Call where
 
 #[cfg(test)]
 mod tests {
-    use ty::fun;
+    use ty::fun::Val;
     use ty::nat;
     use super::{
         Append,
@@ -76,8 +76,8 @@ mod tests {
     #[test]
     fn append() {
         fn aux<A0, A1, A2, A3>() {
-            let _: fun::Val< Cons<A0, Cons<A1, Cons<A2, Cons<A3, Nil>>>> > =
-                fun::Val::val::<Append, (
+            let _: Val< Cons<A0, Cons<A1, Cons<A2, Cons<A3, Nil>>>> > =
+                Val::val::<Append, (
                     Cons<A0, Cons<A1, Nil>>,
                     Cons<A2, Cons<A3, Nil>>,
                     )>();
@@ -88,8 +88,8 @@ mod tests {
     #[test]
     fn length() {
         fn aux<A0, A1, A2, A3>() {
-            let _: fun::Val< nat::N04 > =
-                fun::Val::val::<Length, (
+            let _: Val< nat::N04 > =
+                Val::val::<Length, (
                     Cons<A0, Cons<A1, Cons<A2, Cons<A3, Nil>>>>,
                     )>();
         }
