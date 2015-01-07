@@ -1,5 +1,3 @@
-#![feature(associated_types)]
-
 pub use self::hlist::{
     HCons,
     HList,
