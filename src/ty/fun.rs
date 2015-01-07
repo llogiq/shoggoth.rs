@@ -1,6 +1,4 @@
-use ty::eq::{
-    Is,
-};
+use ty::eq;
 use singleton::{
     Singleton,
 };
@@ -11,7 +9,7 @@ pub trait Fn<This, In>: Singleton<This> {
 
 pub trait DFn<This, In>: self::Fn<This, In> {
     #[inline]
-    fn call<X: Is<Self>>(arg: In) -> <Self as self::Fn<This, In>>::Out;
+    fn call<X: eq::Is<Self>>(arg: In) -> <Self as self::Fn<This, In>>::Out;
 }
 
 #[derive(Clone)]
