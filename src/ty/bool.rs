@@ -33,8 +33,8 @@ impl Bool for True  {}
 #[derive(PartialOrd)]
 #[derive(Show)]
 pub enum Not {}
-impl fun::Fn<Not, ( False, )> for Not { type Out =  True; }
-impl fun::Fn<Not, (  True, )> for Not { type Out = False; }
+impl fun::Fn<Not, ( False, )> for fun::Call { type T =  True; }
+impl fun::Fn<Not, (  True, )> for fun::Call { type T = False; }
 
 #[derive(Clone)]
 #[derive(Copy)]
@@ -45,8 +45,8 @@ impl fun::Fn<Not, (  True, )> for Not { type Out = False; }
 #[derive(PartialOrd)]
 #[derive(Show)]
 pub enum And {}
-impl<RHS: Bool> fun::Fn<And, ( False, RHS, )> for And { type Out = False; }
-impl<RHS: Bool> fun::Fn<And, (  True, RHS, )> for And { type Out =   RHS; }
+impl<RHS: Bool> fun::Fn<And, ( False, RHS, )> for fun::Call { type T = False; }
+impl<RHS: Bool> fun::Fn<And, (  True, RHS, )> for fun::Call { type T =   RHS; }
 
 #[derive(Clone)]
 #[derive(Copy)]
@@ -57,8 +57,8 @@ impl<RHS: Bool> fun::Fn<And, (  True, RHS, )> for And { type Out =   RHS; }
 #[derive(PartialOrd)]
 #[derive(Show)]
 pub enum Or {}
-impl<RHS: Bool> fun::Fn<Or, ( False, RHS, )> for Or { type Out =  RHS; }
-impl<RHS: Bool> fun::Fn<Or, (  True, RHS, )> for Or { type Out = True; }
+impl<RHS: Bool> fun::Fn<Or, ( False, RHS, )> for fun::Call { type T =  RHS; }
+impl<RHS: Bool> fun::Fn<Or, (  True, RHS, )> for fun::Call { type T = True; }
 
 #[derive(Clone)]
 #[derive(Copy)]
@@ -69,8 +69,8 @@ impl<RHS: Bool> fun::Fn<Or, (  True, RHS, )> for Or { type Out = True; }
 #[derive(PartialOrd)]
 #[derive(Show)]
 pub enum If {}
-impl<LHS, RHS> fun::Fn<If, (  True, LHS, RHS, )> for If { type Out = LHS; }
-impl<LHS, RHS> fun::Fn<If, ( False, LHS, RHS, )> for If { type Out = RHS; }
+impl<LHS, RHS> fun::Fn<If, (  True, LHS, RHS, )> for fun::Call { type T = LHS; }
+impl<LHS, RHS> fun::Fn<If, ( False, LHS, RHS, )> for fun::Call { type T = RHS; }
 
 #[cfg(test)]
 mod tests {

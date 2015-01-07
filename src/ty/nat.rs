@@ -1,4 +1,4 @@
-use ty;
+use ty::fun;
 
 #[derive(Clone)]
 #[derive(Copy)]
@@ -33,14 +33,14 @@ impl<N: Nat> Nat for S<N> {}
 #[derive(PartialOrd)]
 #[derive(Show)]
 pub enum Add {}
-impl<RHS: Nat> ty::fun::Fn<Add, ( Z, RHS, )> for Add
+impl<RHS: Nat> fun::Fn<Add, ( Z, RHS, )> for fun::Call
 {
-    type Out = RHS;
+    type T = RHS;
 }
-impl<LHS: Nat, RHS: Nat> ty::fun::Fn<Add, ( S<LHS>, RHS, )> for Add where
-    Add: ty::fun::Fn<Add, ( LHS, RHS ,)>,
+impl<LHS: Nat, RHS: Nat> fun::Fn<Add, ( S<LHS>, RHS, )> for fun::Call where
+    fun::Call: fun::Fn<Add, ( LHS, RHS ,)>,
 {
-    type Out = S<<Add as ty::fun::Fn<Add, ( LHS, RHS, )>>::Out>;
+    type T = S<<fun::Call as fun::Fn<Add, ( LHS, RHS, )>>::T>;
 }
 
 #[derive(Clone)]
@@ -52,15 +52,15 @@ impl<LHS: Nat, RHS: Nat> ty::fun::Fn<Add, ( S<LHS>, RHS, )> for Add where
 #[derive(PartialOrd)]
 #[derive(Show)]
 pub enum Mul {}
-impl<RHS: Nat> ty::fun::Fn<Mul, ( Z, RHS, )> for Mul
+impl<RHS: Nat> fun::Fn<Mul, ( Z, RHS, )> for fun::Call
 {
-    type Out = Z;
+    type T = Z;
 }
-impl<LHS: Nat, RHS: Nat, Rec: Nat> ty::fun::Fn<Mul, ( S<LHS>, RHS, )> for Mul where
-    Mul: ty::fun::Fn<Mul, ( LHS, RHS, ), Out = Rec>,
-    Add: ty::fun::Fn<Add, ( RHS, Rec, )>,
+impl<LHS: Nat, RHS: Nat, Rec: Nat> fun::Fn<Mul, ( S<LHS>, RHS, )> for fun::Call where
+    fun::Call: fun::Fn<Mul, ( LHS, RHS, ), T = Rec>,
+    fun::Call: fun::Fn<Add, ( RHS, Rec, )>,
 {
-    type Out = <Add as ty::fun::Fn<Add, ( RHS, Rec, )>>::Out;
+    type T = <fun::Call as fun::Fn<Add, ( RHS, Rec, )>>::T;
 }
 
 #[derive(Clone)]
@@ -72,15 +72,15 @@ impl<LHS: Nat, RHS: Nat, Rec: Nat> ty::fun::Fn<Mul, ( S<LHS>, RHS, )> for Mul wh
 #[derive(PartialOrd)]
 #[derive(Show)]
 pub enum Exp {}
-impl<RHS: Nat> ty::fun::Fn<Exp, ( Z, RHS, )> for Exp
+impl<RHS: Nat> fun::Fn<Exp, ( Z, RHS, )> for fun::Call
 {
-    type Out = S<Z>;
+    type T = S<Z>;
 }
-impl<LHS: Nat, RHS: Nat, Rec: Nat> ty::fun::Fn<Exp, ( S<LHS>, RHS, )> for Exp where
-    Exp: ty::fun::Fn<Exp, ( LHS, RHS, ), Out = Rec>,
-    Mul: ty::fun::Fn<Mul, ( RHS, Rec, )>,
+impl<LHS: Nat, RHS: Nat, Rec: Nat> fun::Fn<Exp, ( S<LHS>, RHS, )> for fun::Call where
+    fun::Call: fun::Fn<Exp, ( LHS, RHS, ), T = Rec>,
+    fun::Call: fun::Fn<Mul, ( RHS, Rec, )>,
 {
-    type Out = <Mul as ty::fun::Fn<Mul, ( RHS, Rec, )>>::Out;
+    type T = <fun::Call as fun::Fn<Mul, ( RHS, Rec, )>>::T;
 }
 
 #[derive(Clone)]
@@ -92,15 +92,15 @@ impl<LHS: Nat, RHS: Nat, Rec: Nat> ty::fun::Fn<Exp, ( S<LHS>, RHS, )> for Exp wh
 #[derive(PartialOrd)]
 #[derive(Show)]
 pub enum Fac {}
-impl ty::fun::Fn<Fac, ( Z, )> for Fac
+impl fun::Fn<Fac, ( Z, )> for fun::Call
 {
-    type Out = S<Z>;
+    type T = S<Z>;
 }
-impl<LHS: Nat, Rec: Nat> ty::fun::Fn<Fac, ( S<LHS>, )> for Fac where
-    Fac: ty::fun::Fn<Fac, ( LHS, ), Out = Rec>,
-    Mul: ty::fun::Fn<Mul, ( S<LHS>, Rec, )>,
+impl<LHS: Nat, Rec: Nat> fun::Fn<Fac, ( S<LHS>, )> for fun::Call where
+    fun::Call: fun::Fn<Fac, ( LHS, ), T = Rec>,
+    fun::Call: fun::Fn<Mul, ( S<LHS>, Rec, )>,
 {
-    type Out = <Mul as ty::fun::Fn<Mul, ( S<LHS>, Rec, )>>::Out;
+    type T = <fun::Call as fun::Fn<Mul, ( S<LHS>, Rec, )>>::T;
 }
 
 pub type N00 = Z;
@@ -206,7 +206,7 @@ pub type N99 = S<N98>;
 
 #[cfg(test)]
 mod tests {
-    use ty;
+    use ty::fun;
     use super::{
         Add,
         Mul,
@@ -222,14 +222,14 @@ mod tests {
     };
 
     #[test]
-    fn add() { let _: ty::fun::Val< N05 > = ty::fun::Val::val::<Add, ( N03, N02, )>(); }
+    fn add() { let _: fun::Val< N05 > = fun::Val::val::<Add, ( N03, N02, )>(); }
 
     #[test]
-    fn mul() { let _: ty::fun::Val< N06 > = ty::fun::Val::val::<Mul, ( N03, N02, )>(); }
+    fn mul() { let _: fun::Val< N06 > = fun::Val::val::<Mul, ( N03, N02, )>(); }
 
     #[test]
-    fn exp() { let _: ty::fun::Val< N08 > = ty::fun::Val::val::<Exp, ( N03, N02, )>(); }
+    fn exp() { let _: fun::Val< N08 > = fun::Val::val::<Exp, ( N03, N02, )>(); }
 
     #[test]
-    fn fac() { let _: ty::fun::Val< N24 > = ty::fun::Val::val::<Fac, ( N04, ) >(); }
+    fn fac() { let _: fun::Val< N24 > = fun::Val::val::<Fac, ( N04, ) >(); }
 }

@@ -14,6 +14,7 @@ pub use self::eq::{
 };
 
 pub use self::fun::{
+    Call,
     DepFn,
     Fn,
     Val,

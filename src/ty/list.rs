@@ -34,14 +34,14 @@ impl<H, T: List> List for Cons<H, T> {}
 #[derive(PartialOrd)]
 #[derive(Show)]
 pub enum Append {}
-impl<RHS: List> fun::Fn<Append, ( Nil, RHS, )> for Append
+impl<RHS: List> fun::Fn<Append, ( Nil, RHS, )> for fun::Call
 {
-    type Out = RHS;
+    type T = RHS;
 }
-impl<H, LHS: List, RHS: List> fun::Fn<Append, ( Cons<H, LHS>, RHS, )> for Append where
-    Append: fun::Fn<Append, ( LHS, RHS, )>,
+impl<H, LHS: List, RHS: List> fun::Fn<Append, ( Cons<H, LHS>, RHS, )> for fun::Call where
+    fun::Call: fun::Fn<Append, ( LHS, RHS, )>,
 {
-    type Out = Cons<H, <Append as fun::Fn<Append, ( LHS, RHS, )>>::Out>;
+    type T = Cons<H, <fun::Call as fun::Fn<Append, ( LHS, RHS, )>>::T>;
 }
 
 #[derive(Clone)]
@@ -53,13 +53,13 @@ impl<H, LHS: List, RHS: List> fun::Fn<Append, ( Cons<H, LHS>, RHS, )> for Append
 #[derive(PartialOrd)]
 #[derive(Show)]
 pub enum Length {}
-impl fun::Fn<Length, ( Nil, )> for Length {
-    type Out = nat::Z;
+impl fun::Fn<Length, ( Nil, )> for fun::Call {
+    type T = nat::Z;
 }
-impl<H, T: List> fun::Fn<Length, ( Cons<H, T>, )> for Length where
-    Length: fun::Fn<Length, ( T, )>,
+impl<H, T: List> fun::Fn<Length, ( Cons<H, T>, )> for fun::Call where
+    fun::Call: fun::Fn<Length, ( T, )>,
 {
-    type Out = nat::S<<Length as fun::Fn<Length, ( T, )>>::Out>;
+    type T = nat::S<<fun::Call as fun::Fn<Length, ( T, )>>::T>;
 }
 
 #[cfg(test)]
