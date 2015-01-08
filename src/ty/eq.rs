@@ -31,7 +31,7 @@ pub trait Eq<A> {
     /// define this method keeps the trait from being implemented in
     /// other crates in violation of the intended semantics.
     #[inline]
-    fn completeness(&self) -> Squash<Id<A, Self>>;
+    fn completeness(&self) -> Squash<Id<Self, A>>;
 
     /// Given `X: Eq<Y>` and `x: X`, this method will safely coerce
     /// `x` to type `Y`. The safety comes from the fact that the only
