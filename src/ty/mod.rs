@@ -14,10 +14,11 @@ pub use self::eq::{
 };
 
 pub use self::fun::{
-    Call,
+    Ap,
     DepFn,
     Fn,
     Val,
+    val,
 };
 
 pub use self::nat::{

@@ -1,25 +1,12 @@
 use ty;
-use singleton::{
-    Singleton,
-};
 
-#[derive(Clone)]
-#[derive(Copy)]
-#[derive(Eq)]
-#[derive(Hash)]
-#[derive(Ord)]
-#[derive(PartialEq)]
-#[derive(PartialOrd)]
-#[derive(Show)]
-pub enum Call {}
+pub trait Fn<I> { type O; }
 
-pub trait Fn<This, In>: Singleton<Call> {
-    type T;
-}
+pub type Ap<F: Fn<I>, I> = <F as Fn<I>>::O;
 
-pub trait DepFn<This, In>: self::Fn<This, In> {
+pub trait DepFn<I>: self::Fn<I> {
     #[inline]
-    fn call<X: ty::eq::Eq<Self>>(arg: In) -> <Self as self::Fn<This, In>>::T;
+    fn call<X: ty::eq::Eq<Self>>(arg: I) -> Ap<Self, I>;
 }
 
 #[derive(Clone)]
@@ -33,12 +20,5 @@ pub trait DepFn<This, In>: self::Fn<This, In> {
 #[derive(Show)]
 pub struct Val<X>(());
 
-impl Val<()> {
-    #[inline]
-    pub fn val<F, X>() -> Val<<Call as self::Fn<F, X>>::T> where
-        Call: self::Fn<F, X>,
-    {
-        Val(())
-    }
-}
-
+#[inline]
+pub fn val<F: Fn<I>, I>() -> Val<Ap<F, I>> { Val(()) }

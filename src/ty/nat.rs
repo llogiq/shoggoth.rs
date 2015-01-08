@@ -33,14 +33,14 @@ impl<N: Nat> Nat for S<N> {}
 #[derive(PartialOrd)]
 #[derive(Show)]
 pub enum Add {}
-impl<RHS: Nat> fun::Fn<Add, ( Z, RHS, )> for fun::Call
+impl<RHS: Nat> fun::Fn<(Z, RHS,)> for Add
 {
-    type T = RHS;
+    type O = RHS;
 }
-impl<LHS: Nat, RHS: Nat> fun::Fn<Add, ( S<LHS>, RHS, )> for fun::Call where
-    fun::Call: fun::Fn<Add, ( LHS, RHS ,)>,
+impl<LHS: Nat, RHS: Nat> fun::Fn<(S<LHS>, RHS,)> for Add where
+    Add: fun::Fn<(LHS, RHS,)>,
 {
-    type T = S<<fun::Call as fun::Fn<Add, ( LHS, RHS, )>>::T>;
+    type O = S<fun::Ap<Add, (LHS, RHS,)>>;
 }
 
 #[derive(Clone)]
@@ -52,15 +52,15 @@ impl<LHS: Nat, RHS: Nat> fun::Fn<Add, ( S<LHS>, RHS, )> for fun::Call where
 #[derive(PartialOrd)]
 #[derive(Show)]
 pub enum Mul {}
-impl<RHS: Nat> fun::Fn<Mul, ( Z, RHS, )> for fun::Call
+impl<RHS: Nat> fun::Fn<(Z, RHS,)> for Mul
 {
-    type T = Z;
+    type O = Z;
 }
-impl<LHS: Nat, RHS: Nat, Rec: Nat> fun::Fn<Mul, ( S<LHS>, RHS, )> for fun::Call where
-    fun::Call: fun::Fn<Mul, ( LHS, RHS, ), T = Rec>,
-    fun::Call: fun::Fn<Add, ( RHS, Rec, )>,
+impl<LHS: Nat, RHS: Nat, Rec: Nat> fun::Fn<(S<LHS>, RHS,)> for Mul where
+    Mul: fun::Fn<(LHS, RHS,), O = Rec>,
+    Add: fun::Fn<(RHS, Rec,)>,
 {
-    type T = <fun::Call as fun::Fn<Add, ( RHS, Rec, )>>::T;
+    type O = fun::Ap<Add, (RHS, Rec,)>;
 }
 
 #[derive(Clone)]
@@ -72,15 +72,15 @@ impl<LHS: Nat, RHS: Nat, Rec: Nat> fun::Fn<Mul, ( S<LHS>, RHS, )> for fun::Call 
 #[derive(PartialOrd)]
 #[derive(Show)]
 pub enum Exp {}
-impl<RHS: Nat> fun::Fn<Exp, ( Z, RHS, )> for fun::Call
+impl<RHS: Nat> fun::Fn<(Z, RHS,)> for Exp
 {
-    type T = S<Z>;
+    type O = S<Z>;
 }
-impl<LHS: Nat, RHS: Nat, Rec: Nat> fun::Fn<Exp, ( S<LHS>, RHS, )> for fun::Call where
-    fun::Call: fun::Fn<Exp, ( LHS, RHS, ), T = Rec>,
-    fun::Call: fun::Fn<Mul, ( RHS, Rec, )>,
+impl<LHS: Nat, RHS: Nat, Rec: Nat> fun::Fn<(S<LHS>, RHS,)> for Exp where
+    Exp: fun::Fn<(LHS, RHS,), O = Rec>,
+    Mul: fun::Fn<(RHS, Rec,)>,
 {
-    type T = <fun::Call as fun::Fn<Mul, ( RHS, Rec, )>>::T;
+    type O = fun::Ap<Mul, (RHS, Rec,)>;
 }
 
 #[derive(Clone)]
@@ -92,15 +92,15 @@ impl<LHS: Nat, RHS: Nat, Rec: Nat> fun::Fn<Exp, ( S<LHS>, RHS, )> for fun::Call 
 #[derive(PartialOrd)]
 #[derive(Show)]
 pub enum Fac {}
-impl fun::Fn<Fac, ( Z, )> for fun::Call
+impl fun::Fn<(Z,)> for Fac
 {
-    type T = S<Z>;
+    type O = S<Z>;
 }
-impl<LHS: Nat, Rec: Nat> fun::Fn<Fac, ( S<LHS>, )> for fun::Call where
-    fun::Call: fun::Fn<Fac, ( LHS, ), T = Rec>,
-    fun::Call: fun::Fn<Mul, ( S<LHS>, Rec, )>,
+impl<LHS: Nat, Rec: Nat> fun::Fn<(S<LHS>,)> for Fac where
+    Fac: fun::Fn<(LHS,), O = Rec>,
+    Mul: fun::Fn<(S<LHS>, Rec,)>,
 {
-    type T = <fun::Call as fun::Fn<Mul, ( S<LHS>, Rec, )>>::T;
+    type O = fun::Ap<Mul, (S<LHS>, Rec,)>;
 }
 
 pub type N00 = Z;
@@ -206,7 +206,10 @@ pub type N99 = S<N98>;
 
 #[cfg(test)]
 mod tests {
-    use ty::fun::Val;
+    use ty::fun::{
+        Val,
+        val,
+    };
     use super::{
         Add,
         Mul,
@@ -222,14 +225,14 @@ mod tests {
     };
 
     #[test]
-    fn add() { let _: Val< N05 > = Val::val::<Add, ( N03, N02, )>(); }
+    fn add() { let _: Val<N05> = val::<Add, (N03, N02,)>(); }
 
     #[test]
-    fn mul() { let _: Val< N06 > = Val::val::<Mul, ( N03, N02, )>(); }
+    fn mul() { let _: Val<N06> = val::<Mul, (N03, N02,)>(); }
 
     #[test]
-    fn exp() { let _: Val< N08 > = Val::val::<Exp, ( N03, N02, )>(); }
+    fn exp() { let _: Val<N08> = val::<Exp, (N03, N02,)>(); }
 
     #[test]
-    fn fac() { let _: Val< N24 > = Val::val::<Fac, ( N04, ) >(); }
+    fn fac() { let _: Val<N24> = val::<Fac, (N04,) >(); }
 }

@@ -22,7 +22,7 @@ pub enum True {}
 
 pub trait Bool {}
 impl Bool for False {}
-impl Bool for True  {}
+impl Bool for  True {}
 
 #[derive(Clone)]
 #[derive(Copy)]
@@ -33,8 +33,8 @@ impl Bool for True  {}
 #[derive(PartialOrd)]
 #[derive(Show)]
 pub enum Not {}
-impl fun::Fn<Not, ( False, )> for fun::Call { type T =  True; }
-impl fun::Fn<Not, (  True, )> for fun::Call { type T = False; }
+impl fun::Fn<(False,)> for Not { type O =  True; }
+impl fun::Fn<( True,)> for Not { type O = False; }
 
 #[derive(Clone)]
 #[derive(Copy)]
@@ -45,8 +45,8 @@ impl fun::Fn<Not, (  True, )> for fun::Call { type T = False; }
 #[derive(PartialOrd)]
 #[derive(Show)]
 pub enum And {}
-impl<RHS: Bool> fun::Fn<And, ( False, RHS, )> for fun::Call { type T = False; }
-impl<RHS: Bool> fun::Fn<And, (  True, RHS, )> for fun::Call { type T =   RHS; }
+impl<RHS: Bool> fun::Fn<(False, RHS,)> for And { type O = False; }
+impl<RHS: Bool> fun::Fn<( True, RHS,)> for And { type O =   RHS; }
 
 #[derive(Clone)]
 #[derive(Copy)]
@@ -57,8 +57,8 @@ impl<RHS: Bool> fun::Fn<And, (  True, RHS, )> for fun::Call { type T =   RHS; }
 #[derive(PartialOrd)]
 #[derive(Show)]
 pub enum Or {}
-impl<RHS: Bool> fun::Fn<Or, ( False, RHS, )> for fun::Call { type T =  RHS; }
-impl<RHS: Bool> fun::Fn<Or, (  True, RHS, )> for fun::Call { type T = True; }
+impl<RHS: Bool> fun::Fn<(False, RHS,)> for Or { type O =  RHS; }
+impl<RHS: Bool> fun::Fn<( True, RHS,)> for Or { type O = True; }
 
 #[derive(Clone)]
 #[derive(Copy)]
@@ -69,12 +69,15 @@ impl<RHS: Bool> fun::Fn<Or, (  True, RHS, )> for fun::Call { type T = True; }
 #[derive(PartialOrd)]
 #[derive(Show)]
 pub enum If {}
-impl<LHS, RHS> fun::Fn<If, (  True, LHS, RHS, )> for fun::Call { type T = LHS; }
-impl<LHS, RHS> fun::Fn<If, ( False, LHS, RHS, )> for fun::Call { type T = RHS; }
+impl<LHS, RHS> fun::Fn<( True, LHS, RHS,)> for If { type O = LHS; }
+impl<LHS, RHS> fun::Fn<(False, LHS, RHS,)> for If { type O = RHS; }
 
 #[cfg(test)]
 mod tests {
-    use ty::fun::Val;
+    use ty::fun::{
+        Val,
+        val,
+    };
     use super::{
         And,
         Bool,
@@ -86,15 +89,15 @@ mod tests {
     };
 
     #[test]
-    fn not_false() { let _: Val<  True > = Val::val::<Not, ( False, )>(); }
+    fn not_false() { let _: Val<True> = val::<Not, (False,)>(); }
 
     #[test]
-    fn not_true () { let _: Val< False > = Val::val::<Not, (  True, )>(); }
+    fn not_true () { let _: Val<False> = val::<Not, (True,)>(); }
 
     #[test]
     fn and_false() {
         fn aux<RHS: Bool>() {
-            let _: Val< False > = Val::val::<And, ( False, RHS, )>();
+            let _: Val<False> = val::<And, (False, RHS,)>();
         }
         aux::<False>();
         aux::< True>();
@@ -103,7 +106,7 @@ mod tests {
     #[test]
     fn and_true() {
         fn aux<RHS: Bool>() {
-            let _: Val< RHS > = Val::val::<And, ( True, RHS, )>();
+            let _: Val< RHS > = val::<And, (True, RHS,)>();
         }
         aux::<False>();
         aux::< True>();
@@ -112,7 +115,7 @@ mod tests {
     #[test]
     fn or_false() {
         fn aux<RHS: Bool>() {
-            let _: Val< RHS > = Val::val::<Or, ( False, RHS, )>();
+            let _: Val<RHS> = val::<Or, (False, RHS,)>();
         }
         aux::<False>();
         aux::< True>();
@@ -121,7 +124,7 @@ mod tests {
     #[test]
     fn or_true() {
         fn aux<RHS: Bool>() {
-            let _: Val< True > = Val::val::<Or, ( True, RHS, )>();
+            let _: Val<True> = val::<Or, (True, RHS,)>();
         }
         aux::<False>();
         aux::< True>();
@@ -130,7 +133,7 @@ mod tests {
     #[test]
     fn if_false() {
         fn aux<LHS, RHS>() {
-            let _: Val< RHS > = Val::val::<If, ( False, LHS, RHS, )>();
+            let _: Val<RHS> = val::<If, (False, LHS, RHS,)>();
         }
         aux::<(), bool>();
         aux::<(), bool>();
@@ -139,7 +142,7 @@ mod tests {
     #[test]
     fn if_true() {
         fn aux<LHS, RHS>() {
-            let _: Val< LHS > = Val::val::<If, (  True, LHS, RHS, )>();
+            let _: Val<LHS> = val::<If, (True, LHS, RHS,)>();
         }
         aux::<(), bool>();
         aux::<(), bool>();

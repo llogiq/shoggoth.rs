@@ -34,14 +34,14 @@ impl<H, T: List> List for Cons<H, T> {}
 #[derive(PartialOrd)]
 #[derive(Show)]
 pub enum Append {}
-impl<RHS: List> fun::Fn<Append, ( Nil, RHS, )> for fun::Call
+impl<RHS: List> fun::Fn<(Nil, RHS,)> for Append
 {
-    type T = RHS;
+    type O = RHS;
 }
-impl<H, LHS: List, RHS: List> fun::Fn<Append, ( Cons<H, LHS>, RHS, )> for fun::Call where
-    fun::Call: fun::Fn<Append, ( LHS, RHS, )>,
+impl<H, LHS: List, RHS: List> fun::Fn<(Cons<H, LHS>, RHS,)> for Append where
+    Append: fun::Fn<(LHS, RHS,)>,
 {
-    type T = Cons<H, <fun::Call as fun::Fn<Append, ( LHS, RHS, )>>::T>;
+    type O = Cons<H, fun::Ap<Append, (LHS, RHS,)>>;
 }
 
 #[derive(Clone)]
@@ -53,18 +53,21 @@ impl<H, LHS: List, RHS: List> fun::Fn<Append, ( Cons<H, LHS>, RHS, )> for fun::C
 #[derive(PartialOrd)]
 #[derive(Show)]
 pub enum Length {}
-impl fun::Fn<Length, ( Nil, )> for fun::Call {
-    type T = nat::Z;
+impl fun::Fn<(Nil,)> for Length {
+    type O = nat::Z;
 }
-impl<H, T: List> fun::Fn<Length, ( Cons<H, T>, )> for fun::Call where
-    fun::Call: fun::Fn<Length, ( T, )>,
+impl<H, T: List> fun::Fn<(Cons<H, T>,)> for Length where
+    Length: fun::Fn<(T,)>,
 {
-    type T = nat::S<<fun::Call as fun::Fn<Length, ( T, )>>::T>;
+    type O = nat::S<fun::Ap<Length, (T,)>>;
 }
 
 #[cfg(test)]
 mod tests {
-    use ty::fun::Val;
+    use ty::fun::{
+        Val,
+        val,
+    };
     use ty::nat;
     use super::{
         Append,
@@ -76,8 +79,8 @@ mod tests {
     #[test]
     fn append() {
         fn aux<A0, A1, A2, A3>() {
-            let _: Val< Cons<A0, Cons<A1, Cons<A2, Cons<A3, Nil>>>> > =
-                Val::val::<Append, (
+            let _: Val<Cons<A0, Cons<A1, Cons<A2, Cons<A3, Nil>>>>> =
+                val::<Append, (
                     Cons<A0, Cons<A1, Nil>>,
                     Cons<A2, Cons<A3, Nil>>,
                     )>();
@@ -88,8 +91,8 @@ mod tests {
     #[test]
     fn length() {
         fn aux<A0, A1, A2, A3>() {
-            let _: Val< nat::N04 > =
-                Val::val::<Length, (
+            let _: Val<nat::N04> =
+                val::<Length, (
                     Cons<A0, Cons<A1, Cons<A2, Cons<A3, Nil>>>>,
                     )>();
         }
