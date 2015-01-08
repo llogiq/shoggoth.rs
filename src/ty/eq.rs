@@ -15,7 +15,7 @@ pub struct Id<A, B>(Box<IdTerm<A, B> + 'static>);
 impl<A> Id<A, A> {
     /// Construct a proof that type `A` is equal to itself
     #[inline]
-    pub fn refl() -> Id<A, A> { Id(box Refl) }
+    pub fn refl() -> Id<A, A> { Id(Box::new(Refl)) }
 }
 
 impl<A, B> Id<A, B> {
@@ -47,7 +47,7 @@ pub trait Eq<A> {
     /// same type (determined statically).
     #[inline]
     fn coerce(self) -> A where Self: Sized {
-        * unsafe { ::std::mem::transmute::<_, Box<_>>(box self) }
+        * unsafe { ::std::mem::transmute::<_, Box<_>>(Box::new(self)) }
     }
 }
 
