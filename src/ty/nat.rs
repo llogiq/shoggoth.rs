@@ -1,5 +1,6 @@
 use ty::fun;
 
+/// Type-level natural number zero
 #[derive(Clone)]
 #[derive(Copy)]
 #[derive(Eq)]
@@ -10,6 +11,7 @@ use ty::fun;
 #[derive(Show)]
 pub enum Z {}
 
+/// Type-level natural number successor of n
 #[derive(Clone)]
 #[derive(Copy)]
 #[derive(Eq)]
@@ -20,10 +22,12 @@ pub enum Z {}
 #[derive(Show)]
 pub enum S<N: Nat> {}
 
+/// Predicate classifying type-level natural numbers
 pub trait Nat {}
 impl Nat for Z {}
 impl<N: Nat> Nat for S<N> {}
 
+/// Type-level function for nat addition
 #[derive(Clone)]
 #[derive(Copy)]
 #[derive(Eq)]
@@ -43,6 +47,7 @@ impl<LHS: Nat, RHS: Nat> fun::Fn<(S<LHS>, RHS,)> for Add where
     type O = S<fun::Ap<Add, (LHS, RHS,)>>;
 }
 
+/// Type-level function for nat multiplication
 #[derive(Clone)]
 #[derive(Copy)]
 #[derive(Eq)]
@@ -63,6 +68,7 @@ impl<LHS: Nat, RHS: Nat, Rec: Nat> fun::Fn<(S<LHS>, RHS,)> for Mul where
     type O = fun::Ap<Add, (RHS, Rec,)>;
 }
 
+/// Type-level function for nat exponentiation
 #[derive(Clone)]
 #[derive(Copy)]
 #[derive(Eq)]
@@ -83,6 +89,7 @@ impl<LHS: Nat, RHS: Nat, Rec: Nat> fun::Fn<(S<LHS>, RHS,)> for Exp where
     type O = fun::Ap<Mul, (RHS, Rec,)>;
 }
 
+/// Type-level function for nat factorial
 #[derive(Clone)]
 #[derive(Copy)]
 #[derive(Eq)]

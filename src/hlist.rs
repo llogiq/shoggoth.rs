@@ -1,5 +1,7 @@
+/// Heterogeneous Lists
 pub trait HList {}
 
+/// Empty `HList`
 #[derive(Clone)]
 #[derive(Copy)]
 #[derive(Eq)]
@@ -11,6 +13,7 @@ pub trait HList {}
 pub struct HNil;
 impl HList for HNil {}
 
+/// Cons for `HList`
 #[derive(Clone)]
 #[derive(Copy)]
 #[derive(Eq)]
@@ -23,6 +26,7 @@ impl HList for HNil {}
 pub struct HCons<H, T: HList>(pub H, pub T);
 impl<H, T: HList> HList for HCons<H, T> {}
 
+/// `HList` predicate implemented when `Self` is an `HCons`
 pub trait IsHCons: HList {
     type H;
     type T: HList;

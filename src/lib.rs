@@ -29,4 +29,6 @@ mod product;
 mod singleton;
 mod squash;
 mod tuple;
+
+/// Type-level programming
 pub mod ty;

@@ -1,6 +1,7 @@
 use ty::fun;
 use ty::nat;
 
+/// Type-level empty list
 #[derive(Clone)]
 #[derive(Copy)]
 #[derive(Eq)]
@@ -11,6 +12,7 @@ use ty::nat;
 #[derive(Show)]
 pub enum Nil {}
 
+/// Type-level cons list
 #[derive(Clone)]
 #[derive(Copy)]
 #[derive(Eq)]
@@ -21,10 +23,12 @@ pub enum Nil {}
 #[derive(Show)]
 pub enum Cons<H, T: List> {}
 
+/// Predicate classifying type-level lists
 pub trait List {}
 impl List for Nil {}
 impl<H, T: List> List for Cons<H, T> {}
 
+/// Type-level function for list append
 #[derive(Clone)]
 #[derive(Copy)]
 #[derive(Eq)]
@@ -44,6 +48,7 @@ impl<H, LHS: List, RHS: List> fun::Fn<(Cons<H, LHS>, RHS,)> for Append where
     type O = Cons<H, fun::Ap<Append, (LHS, RHS,)>>;
 }
 
+/// Type-level function for list length
 #[derive(Clone)]
 #[derive(Copy)]
 #[derive(Eq)]

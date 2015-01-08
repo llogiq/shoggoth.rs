@@ -1,3 +1,4 @@
+/// Predicate implemented when `Self` has a concept of `head` and `tail`
 pub trait IsComposite {
     type H;
     type T;
@@ -145,6 +146,7 @@ impl<A0, A1, A2, A3, A4, A5, A6, A7, A8, A9,> IsComposite for (A0, A1, A2, A3, A
     }
 }
 
+/// Operations on `Tuples`
 pub trait TupleOps: Sized {
     #[inline]
     fn head(self) -> <Self as IsComposite>::H where Self: IsComposite

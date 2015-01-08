@@ -8,6 +8,7 @@ use tuple::{
     IsComposite,
 };
 
+/// Trait for converting things to a `Tuple`
 pub trait ToTuple {
     type Out;
     #[inline]
@@ -80,6 +81,7 @@ impl<A0, A1, A2, A3, A4, A5, A6, A7, A8, A9,> ToTuple for (A0, A1, A2, A3, A4, A
     fn apply(self) -> Self { self }
 }
 
+/// Trait for converting things to an `HList`
 pub trait ToHList {
     type Out: HList;
     #[inline]
@@ -202,6 +204,7 @@ impl<A0: Copy, A1: Copy, A2: Copy, A3: Copy, A4: Copy, A5: Copy, A6: Copy, A7: C
     }
 }
 
+/// Operations on `Products`
 pub trait ProductOps: Sized {
     #[inline]
     fn to_hlist(self) -> <Self as ToHList>::Out where
