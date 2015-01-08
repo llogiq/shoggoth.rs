@@ -30,6 +30,14 @@ pub trait Eq<A> {
     /// of provable type-equality of `A` and `Self`. The obligation to
     /// define this method keeps the trait from being implemented in
     /// other crates in violation of the intended semantics.
+    ///
+    /// The method is called completeness because it characterizes the
+    /// following notion:
+    ///
+    /// `Self: Eq<A> ==> exists p: Squash<Id<Self, A>>`
+    ///
+    /// Implication in the reverse direction would be something like
+    /// soundness but that isn't very useful here.
     #[inline]
     fn completeness(&self) -> Squash<Id<Self, A>>;
 
