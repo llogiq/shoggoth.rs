@@ -2,15 +2,15 @@ use squash::{
     Squash,
 };
 
+/// Canonical proof term for type equality
+struct Refl<A>;
+
 /// The `Term` trait classifies proof terms for type quality
 trait IdTerm<A, B> {}
+impl<A> IdTerm<A, A> for Refl<A> {}
 
 /// Evidence of type equality where the proof term is existentially quantified
 pub struct Id<A, B>(Box<IdTerm<A, B> + 'static>);
-
-/// Canonical proof term for type equality
-struct Refl<A>;
-impl<A> IdTerm<A, A> for Refl<A> {}
 
 impl<A> Id<A, A> {
     /// Construct a proof that type `A` is equal to itself
