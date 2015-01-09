@@ -1,5 +1,8 @@
 #![allow(staged_experimental)]
 
+pub use self::functor::{
+    Functor,
+};
 
 pub use self::hlist::{
     HCons,
@@ -27,6 +30,7 @@ pub use self::tuple::{
     TupleOps,
 };
 
+mod functor;
 mod hlist;
 mod product;
 mod singleton;
