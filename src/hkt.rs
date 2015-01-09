@@ -32,6 +32,7 @@ pub trait Ins<T> { type O: Arg<O = Self> + Tag<O = T>; }
 
 /// Type-level function for applying an HKT tag to a parameter
 pub type Ap<T, A: Ins<T>> = <A as Ins<T>>::O;
+pub type Un<TX: Arg> = <TX as Arg>::O;
 
 // Option as an HKT
 impl<A> Arg for Option<A> { type O = A; }
