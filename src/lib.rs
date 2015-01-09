@@ -1,3 +1,4 @@
+
 pub use self::hlist::{
     HCons,
     HList,
@@ -29,6 +30,9 @@ mod product;
 mod singleton;
 mod squash;
 mod tuple;
+
+/// "Higher-kinded Types"
+pub mod hkt;
 
 /// Type-level programming
 pub mod ty;
