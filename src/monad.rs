@@ -15,11 +15,11 @@ pub trait Monad<T>: Functor<T> {
 
 impl<A> Monad<hkt::tag::Option> for Option<A> {
     #[inline]
-    fn point<X>(x: A) -> Option<A> {
+    fn point<This>(x: A) -> Option<A> {
         Some(x)
     }
     #[inline]
-    fn join<X>(m: Option<Option<A>>) -> Option<A> {
+    fn join<This>(m: Option<Option<A>>) -> Option<A> {
         match m {
             None => None,
             Some(x) => x,
