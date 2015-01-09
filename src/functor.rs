@@ -1,8 +1,9 @@
 use hkt;
+use ty;
 
 /// Functors using the HKT encoding
 pub trait Functor<T>: hkt::Arg + hkt::Tag<O = T> {
-    type X: hkt::Ins<T>;
+    type X: hkt::Ins<T> + ty::Eq<hkt::Un<Self>>;
     #[inline]
     fn fmap<B, F>(self, f: F) -> hkt::Ap<T, B> where F: Fn(Self::X) -> B;
 }
