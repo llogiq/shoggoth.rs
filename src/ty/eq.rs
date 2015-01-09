@@ -25,7 +25,7 @@ impl<A, B> Id<A, B> {
 }
 
 /// The `Is` trait acts like a type equality predicate
-pub trait Eq<A> {
+pub trait Eq<A, B = A> {
     /// On demand, provide evidence of the truth of `Eq<A>` in terms
     /// of provable type-equality of `A` and `Self`. The obligation to
     /// define this method keeps the trait from being implemented in
@@ -55,6 +55,10 @@ impl<A> Eq<A> for A {
     #[inline]
     fn completeness(&self) -> Squash<Id<A, A>> { Id::refl().squash() }
 }
+
+/// Bi-directional type-level equality constraint
+pub trait BiEq<A, B> where A: Eq<B>, B: Eq<A> {}
+impl<A: Eq<B>, B: Eq<A>, C> BiEq<A, B> for C {}
 
 #[cfg(test)]
 mod tests {

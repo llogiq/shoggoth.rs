@@ -9,6 +9,7 @@ pub use self::bool::{
 };
 
 pub use self::eq::{
+    BiEq,
     Eq,
     Id,
 };
