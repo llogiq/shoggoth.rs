@@ -7,7 +7,7 @@ pub trait Functor<T>: hkt::Arg + hkt::Tag<O = T> {
     fn fmap<B, F>(self, f: F) -> hkt::Ap<T, B> where F: Fn(Self::X) -> B;
 }
 
-/// Type-level function for 
+/// Type-level function for "unapplying" a functor, returning the parameter
 pub type Un<T, TX: Functor<T>> = <TX as Functor<T>>::X;
 
 impl<A> Functor<hkt::tag::Option> for Option<A> {
