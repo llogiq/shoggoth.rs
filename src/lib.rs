@@ -1,3 +1,5 @@
+#![allow(staged_experimental)]
+
 
 pub use self::hlist::{
     HCons,
