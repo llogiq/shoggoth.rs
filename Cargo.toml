@@ -16,4 +16,5 @@ path = "src/lib.rs"
 
 [dependencies]
 
+hkt = "*"
 unify = "*"
