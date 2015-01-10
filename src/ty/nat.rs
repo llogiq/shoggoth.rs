@@ -27,6 +27,21 @@ pub trait Nat {}
 impl Nat for Z {}
 impl<N: Nat> Nat for S<N> {}
 
+/// Type-level function for nat predecessor
+#[derive(Clone)]
+#[derive(Copy)]
+#[derive(Eq)]
+#[derive(Hash)]
+#[derive(Ord)]
+#[derive(PartialEq)]
+#[derive(PartialOrd)]
+#[derive(Show)]
+pub enum Pred {}
+impl<LHS: Nat> fun::Fn<(S<LHS>,)> for Pred
+{
+    type O = LHS;
+}
+
 /// Type-level function for nat addition
 #[derive(Clone)]
 #[derive(Copy)]
@@ -229,7 +244,11 @@ mod tests {
         N06,
         N08,
         N24,
+        Pred,
     };
+
+    #[test]
+    fn pred() { let _: Val<N01> = val::<Pred, (N02,)>(); }
 
     #[test]
     fn add() { let _: Val<N05> = val::<Add, (N03, N02,)>(); }
