@@ -2,9 +2,9 @@
 
 extern crate unify;
 
-pub use self::functor::{
-    Functor,
-};
+// pub use self::functor::{
+//     Functor,
+// };
 
 pub use self::hlist::{
     HCons,
@@ -13,9 +13,9 @@ pub use self::hlist::{
     IsHCons,
 };
 
-pub use self::monad::{
-    Monad,
-};
+// pub use self::monad::{
+//     Monad,
+// };
 
 pub use self::product::{
     ProductOps,
@@ -32,15 +32,12 @@ pub use self::tuple::{
     TupleOps,
 };
 
-mod functor;
+// mod functor;
 mod hlist;
-mod monad;
+// mod monad;
 mod product;
 mod squash;
 mod tuple;
-
-/// "Higher-kinded Types"
-pub mod hkt;
 
 /// Type-level programming
 pub mod ty;
