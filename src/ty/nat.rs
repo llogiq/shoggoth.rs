@@ -1,5 +1,7 @@
 use ty::bool::{
+    Bool,
     False,
+    If,
     True,
 };
 use ty::fun;
@@ -178,6 +180,14 @@ impl<LHS: Nat, RHS: Nat> fun::Fn<(S<LHS>, S<RHS>,)> for LTEq where
     type O = fun::Ap<LTEq, (LHS, RHS,)>;
 }
 
+pub enum Min {}
+impl<LHS: Nat, RHS: Nat, Rec: Bool> fun::Fn<(LHS, RHS,)> for Min where
+    LTEq: fun::Fn<(LHS, RHS), O = Rec>,
+    If: fun::Fn<(Rec, LHS, RHS,)>,
+{
+    type O = fun::Ap<If, (Rec, LHS, RHS,)>;
+}
+
 pub type N00 = Z;
 pub type N01 = S<N00>;
 pub type N02 = S<N01>;
@@ -295,6 +305,7 @@ mod tests {
         Fac,
         LT,
         LTEq,
+        Min,
         Mul,
         N00,
         N01,
@@ -342,4 +353,9 @@ mod tests {
     #[test]
     fn lteq_true_01() { let _: Val<True> = val::<LTEq, (N02, N04,)>(); }
 
+    #[test]
+    fn min_lhs() { let _: Val<N02> = val::<Min, (N02, N04,)>(); }
+
+    #[test]
+    fn min_rhs() { let _: Val<N02> = val::<Min, (N04, N02,)>(); }
 }
