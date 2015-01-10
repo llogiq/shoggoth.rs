@@ -13,3 +13,7 @@ repository = "https://github.com/epsilonz/shoggoth.rs"
 [lib]
 name = "shoggoth"
 path = "src/lib.rs"
+
+[dependencies]
+
+unify = "*"

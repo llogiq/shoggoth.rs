@@ -1,4 +1,4 @@
-use ty::eq;
+use unify;
 
 /// Type-level functions
 pub trait Fn<I> { type O; }
@@ -10,7 +10,7 @@ pub type Ap<F: self::Fn<I>, I> = <F as self::Fn<I>>::O;
 /// determined by a type-level function
 pub trait DepFn<I>: self::Fn<I> {
     #[inline]
-    fn call<X: eq::Eq<Self>>(arg: I) -> Ap<Self, I>;
+    fn call<X: unify::Eq<Self>>(arg: I) -> Ap<Self, I>;
 }
 
 /// A structure for witnessing a type-level computation

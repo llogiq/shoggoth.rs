@@ -1,5 +1,7 @@
 #![allow(unstable)]
 
+extern crate unify;
+
 pub use self::functor::{
     Functor,
 };

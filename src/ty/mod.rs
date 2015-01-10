@@ -8,12 +8,6 @@ pub use self::bool::{
     True,
 };
 
-pub use self::eq::{
-    BiEq,
-    Eq,
-    Id,
-};
-
 pub use self::fun::{
     Ap,
     DepFn,
@@ -41,7 +35,6 @@ pub use self::list::{
 };
 
 mod bool;
-mod eq;
 mod fun;
 mod list;
 mod nat;

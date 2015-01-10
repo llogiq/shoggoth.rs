@@ -3,14 +3,14 @@ use functor::{
     Functor,
 };
 use hkt;
-use ty;
+use unify;
 
 /// Monads using the HKT encoding
 pub trait Monad<T>: Functor<T> {
     #[inline]
-    fn point<This>(x: ftor::Un<T, Self>) -> Self where (): ty::BiEq<This, Self>;
+    fn point<This>(x: ftor::Un<T, Self>) -> Self where (): unify::BiEq<This, Self>;
     #[inline]
-    fn join<This>(m: hkt::Ap<T, Self>) -> Self where (): ty::BiEq<This, Self>;
+    fn join<This>(m: hkt::Ap<T, Self>) -> Self where (): unify::BiEq<This, Self>;
 }
 
 impl<A> Monad<hkt::tag::Option> for Option<A> {
