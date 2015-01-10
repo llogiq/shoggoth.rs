@@ -62,6 +62,26 @@ impl<LHS: Nat, RHS: Nat> fun::Fn<(S<LHS>, RHS,)> for Add where
     type O = S<fun::Ap<Add, (LHS, RHS,)>>;
 }
 
+/// Type-level function for nat subtraction
+#[derive(Clone)]
+#[derive(Copy)]
+#[derive(Eq)]
+#[derive(Hash)]
+#[derive(Ord)]
+#[derive(PartialEq)]
+#[derive(PartialOrd)]
+#[derive(Show)]
+pub enum Sub {}
+impl<LHS: Nat> fun::Fn<(LHS, Z,)> for Sub
+{
+    type O = LHS;
+}
+impl<LHS: Nat, RHS: Nat, Rec: Nat> fun::Fn<(S<LHS>, S<RHS>,)> for Sub where
+    Sub: fun::Fn<(LHS, RHS,), O = Rec>,
+{
+    type O = Rec;
+}
+
 /// Type-level function for nat multiplication
 #[derive(Clone)]
 #[derive(Copy)]
@@ -234,9 +254,11 @@ mod tests {
     };
     use super::{
         Add,
-        Mul,
         Exp,
         Fac,
+        Mul,
+        N00,
+        N01,
         N02,
         N03,
         N04,
@@ -245,6 +267,7 @@ mod tests {
         N08,
         N24,
         Pred,
+        Sub,
     };
 
     #[test]
@@ -252,6 +275,9 @@ mod tests {
 
     #[test]
     fn add() { let _: Val<N05> = val::<Add, (N03, N02,)>(); }
+
+    #[test]
+    fn sub() { let _: Val<N03> = val::<Sub, (N05, N02,)>(); }
 
     #[test]
     fn mul() { let _: Val<N06> = val::<Mul, (N03, N02,)>(); }
