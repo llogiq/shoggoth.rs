@@ -162,6 +162,22 @@ impl<LHS: Nat, RHS: Nat> fun::Fn<(S<LHS>, S<RHS>,)> for LT where
     type O = fun::Ap<LT, (LHS, RHS,)>;
 }
 
+pub enum LTEq {}
+impl fun::Fn<(Z, Z,)> for LTEq {
+    type O = True;
+}
+impl<LHS: Nat> fun::Fn<(S<LHS>, Z,)> for LTEq {
+    type O = False;
+}
+impl<RHS: Nat> fun::Fn<(Z, S<RHS>,)> for LTEq {
+    type O = True;
+}
+impl<LHS: Nat, RHS: Nat> fun::Fn<(S<LHS>, S<RHS>,)> for LTEq where
+    LTEq: fun::Fn<(LHS, RHS,)>,
+{
+    type O = fun::Ap<LTEq, (LHS, RHS,)>;
+}
+
 pub type N00 = Z;
 pub type N01 = S<N00>;
 pub type N02 = S<N01>;
@@ -278,6 +294,7 @@ mod tests {
         Exp,
         Fac,
         LT,
+        LTEq,
         Mul,
         N00,
         N01,
@@ -315,5 +332,14 @@ mod tests {
 
     #[test]
     fn lt_true() { let _: Val<True> = val::<LT, (N02, N04,)>(); }
+
+    #[test]
+    fn lteq_false() { let _: Val<False> = val::<LTEq, (N04, N02,)>(); }
+
+    #[test]
+    fn lteq_true_00() { let _: Val<True> = val::<LTEq, (N02, N02,)>(); }
+
+    #[test]
+    fn lteq_true_01() { let _: Val<True> = val::<LTEq, (N02, N04,)>(); }
 
 }
