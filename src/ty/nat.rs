@@ -1,3 +1,7 @@
+use ty::bool::{
+    False,
+    True,
+};
 use ty::fun;
 
 /// Type-level natural number zero
@@ -145,6 +149,19 @@ impl<LHS: Nat, Rec: Nat> fun::Fn<(S<LHS>,)> for Fac where
     type O = fun::Ap<Mul, (S<LHS>, Rec,)>;
 }
 
+pub enum LT {}
+impl<RHS: Nat> fun::Fn<(Z, RHS,)> for LT {
+    type O = True;
+}
+impl<LHS: Nat> fun::Fn<(S<LHS>, Z,)> for LT {
+    type O = False;
+}
+impl<LHS: Nat, RHS: Nat> fun::Fn<(S<LHS>, S<RHS>,)> for LT where
+    LT: fun::Fn<(LHS, RHS,)>,
+{
+    type O = fun::Ap<LT, (LHS, RHS,)>;
+}
+
 pub type N00 = Z;
 pub type N01 = S<N00>;
 pub type N02 = S<N01>;
@@ -248,6 +265,10 @@ pub type N99 = S<N98>;
 
 #[cfg(test)]
 mod tests {
+    use ty::bool::{
+        False,
+        True,
+    };
     use ty::fun::{
         Val,
         val,
@@ -256,6 +277,7 @@ mod tests {
         Add,
         Exp,
         Fac,
+        LT,
         Mul,
         N00,
         N01,
@@ -287,4 +309,11 @@ mod tests {
 
     #[test]
     fn fac() { let _: Val<N24> = val::<Fac, (N04,) >(); }
+
+    #[test]
+    fn lt_false() { let _: Val<False> = val::<LT, (N04, N02,)>(); }
+
+    #[test]
+    fn lt_true() { let _: Val<True> = val::<LT, (N02, N04,)>(); }
+
 }
