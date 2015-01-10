@@ -21,10 +21,6 @@ pub use self::product::{
     ToTuple,
 };
 
-pub use self::singleton::{
-    Singleton,
-};
-
 pub use self::squash::{
     Squash,
 };
@@ -38,7 +34,6 @@ mod functor;
 mod hlist;
 mod monad;
 mod product;
-mod singleton;
 mod squash;
 mod tuple;
 
