@@ -1,4 +1,4 @@
-#![allow(staged_experimental)]
+#![allow(unstable)]
 
 pub use self::functor::{
     Functor,
