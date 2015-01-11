@@ -150,3 +150,13 @@ mod fin;
 mod fun;
 mod list;
 mod nat;
+
+/// Helper for calling "dependent functions" as methods on suitable types
+pub trait DepMethod {
+    #[inline(always)]
+    fn dep<DF>(self) -> Ap<DF, Self> where Self: Sized, DF: DepFn<Self>,
+    {
+        DepFn::call::<DF>(self)
+    }
+}
+impl<A> DepMethod for A {}
