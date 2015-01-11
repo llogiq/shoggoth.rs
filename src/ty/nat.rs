@@ -151,6 +151,15 @@ impl<LHS: Nat, Rec: Nat> fun::Fn<(S<LHS>,)> for Fac where
     type O = fun::Ap<Mul, (S<LHS>, Rec,)>;
 }
 
+/// Type-level function for nat less-than
+#[derive(Clone)]
+#[derive(Copy)]
+#[derive(Eq)]
+#[derive(Hash)]
+#[derive(Ord)]
+#[derive(PartialEq)]
+#[derive(PartialOrd)]
+#[derive(Show)]
 pub enum LT {}
 impl<RHS: Nat> fun::Fn<(Z, RHS,)> for LT {
     type O = True;
@@ -164,6 +173,15 @@ impl<LHS: Nat, RHS: Nat> fun::Fn<(S<LHS>, S<RHS>,)> for LT where
     type O = fun::Ap<LT, (LHS, RHS,)>;
 }
 
+/// Type-level function for nat less-than-or-eq
+#[derive(Clone)]
+#[derive(Copy)]
+#[derive(Eq)]
+#[derive(Hash)]
+#[derive(Ord)]
+#[derive(PartialEq)]
+#[derive(PartialOrd)]
+#[derive(Show)]
 pub enum LTEq {}
 impl fun::Fn<(Z, Z,)> for LTEq {
     type O = True;
@@ -180,6 +198,15 @@ impl<LHS: Nat, RHS: Nat> fun::Fn<(S<LHS>, S<RHS>,)> for LTEq where
     type O = fun::Ap<LTEq, (LHS, RHS,)>;
 }
 
+/// Type-level function for nat min
+#[derive(Clone)]
+#[derive(Copy)]
+#[derive(Eq)]
+#[derive(Hash)]
+#[derive(Ord)]
+#[derive(PartialEq)]
+#[derive(PartialOrd)]
+#[derive(Show)]
 pub enum Min {}
 impl<LHS: Nat, RHS: Nat, Rec: Bool> fun::Fn<(LHS, RHS,)> for Min where
     LTEq: fun::Fn<(LHS, RHS), O = Rec>,
