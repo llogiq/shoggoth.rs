@@ -256,16 +256,16 @@ mod tests {
 
     #[test]
     fn at() {
-        println!("{:?}", (0u8,).dep::<At<ty::_0>>());
-        println!("{:?}", (0u8, 1u8,).dep::<At<ty::_1>>());
-        println!("{:?}", (0u8, 1u8, 2u8,).dep::<At<ty::_2>>());
-        println!("{:?}", (0u8, 1u8, 2u8, 3u8,).dep::<At<ty::_3>>());
-        println!("{:?}", (0u8, 1u8, 2u8, 3u8, 4u8,).dep::<At<ty::_4>>());
-        println!("{:?}", (0u8, 1u8, 2u8, 3u8, 4u8, 5u8,).dep::<At<ty::_5>>());
-        println!("{:?}", (0u8, 1u8, 2u8, 3u8, 4u8, 5u8, 6u8,).dep::<At<ty::_6>>());
-        println!("{:?}", (0u8, 1u8, 2u8, 3u8, 4u8, 5u8, 6u8, 7u8,).dep::<At<ty::_7>>());
-        println!("{:?}", (0u8, 1u8, 2u8, 3u8, 4u8, 5u8, 6u8, 7u8, 8u8,).dep::<At<ty::_8>>());
-        println!("{:?}", (0u8, 1u8, 2u8, 3u8, 4u8, 5u8, 6u8, 7u8, 8u8, 9u8,).dep::<At<ty::_9>>());
+        assert_eq!(0u8, (0u8,).dep::<At<ty::_0>>());
+        assert_eq!(1u8, (0u8, 1u8,).dep::<At<ty::_1>>());
+        assert_eq!(2u8, (0u8, 1u8, 2u8,).dep::<At<ty::_2>>());
+        assert_eq!(3u8, (0u8, 1u8, 2u8, 3u8,).dep::<At<ty::_3>>());
+        assert_eq!(4u8, (0u8, 1u8, 2u8, 3u8, 4u8,).dep::<At<ty::_4>>());
+        assert_eq!(5u8, (0u8, 1u8, 2u8, 3u8, 4u8, 5u8,).dep::<At<ty::_5>>());
+        assert_eq!(6u8, (0u8, 1u8, 2u8, 3u8, 4u8, 5u8, 6u8,).dep::<At<ty::_6>>());
+        assert_eq!(7u8, (0u8, 1u8, 2u8, 3u8, 4u8, 5u8, 6u8, 7u8,).dep::<At<ty::_7>>());
+        assert_eq!(8u8, (0u8, 1u8, 2u8, 3u8, 4u8, 5u8, 6u8, 7u8, 8u8,).dep::<At<ty::_8>>());
+        assert_eq!(9u8, (0u8, 1u8, 2u8, 3u8, 4u8, 5u8, 6u8, 7u8, 8u8, 9u8,).dep::<At<ty::_9>>());
     }
 
     #[test]
