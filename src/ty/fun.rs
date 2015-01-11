@@ -23,7 +23,7 @@ pub trait DepFn<I>: self::Fn<I> {
 #[derive(PartialOrd)]
 #[derive(Rand)]
 #[derive(Show)]
-pub struct Val<X>(());
+pub struct Val<A>(());
 
 /// Compute a type-level expression by applying a type-level function
 /// `F` to a type-level argument `I`
