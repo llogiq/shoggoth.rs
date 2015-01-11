@@ -96,7 +96,7 @@ mod tests {
     #[test]
     fn length() {
         fn aux<A0, A1, A2, A3>() {
-            let _: Val<nat::N04> =
+            let _: Val<nat::_4> =
                 val::<Length, (
                     Cons<A0, Cons<A1, Cons<A2, Cons<A3, Nil>>>>,
                     )>();

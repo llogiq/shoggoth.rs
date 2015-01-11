@@ -215,106 +215,106 @@ impl<LHS: Nat, RHS: Nat, Rec: Bool> fun::Fn<(LHS, RHS,)> for Min where
     type O = fun::Ap<If, (Rec, LHS, RHS,)>;
 }
 
-pub type N00 = Z;
-pub type N01 = S<N00>;
-pub type N02 = S<N01>;
-pub type N03 = S<N02>;
-pub type N04 = S<N03>;
-pub type N05 = S<N04>;
-pub type N06 = S<N05>;
-pub type N07 = S<N06>;
-pub type N08 = S<N07>;
-pub type N09 = S<N08>;
-pub type N10 = S<N09>;
-pub type N11 = S<N10>;
-pub type N12 = S<N11>;
-pub type N13 = S<N12>;
-pub type N14 = S<N13>;
-pub type N15 = S<N14>;
-pub type N16 = S<N15>;
-pub type N17 = S<N16>;
-pub type N18 = S<N17>;
-pub type N19 = S<N18>;
-pub type N20 = S<N19>;
-pub type N21 = S<N20>;
-pub type N22 = S<N21>;
-pub type N23 = S<N22>;
-pub type N24 = S<N23>;
-pub type N25 = S<N24>;
-pub type N26 = S<N25>;
-pub type N27 = S<N26>;
-pub type N28 = S<N27>;
-pub type N29 = S<N28>;
-pub type N30 = S<N29>;
-pub type N31 = S<N30>;
-pub type N32 = S<N31>;
-pub type N33 = S<N32>;
-pub type N34 = S<N33>;
-pub type N35 = S<N34>;
-pub type N36 = S<N35>;
-pub type N37 = S<N36>;
-pub type N38 = S<N37>;
-pub type N39 = S<N38>;
-pub type N40 = S<N39>;
-pub type N41 = S<N40>;
-pub type N42 = S<N41>;
-pub type N43 = S<N42>;
-pub type N44 = S<N43>;
-pub type N45 = S<N44>;
-pub type N46 = S<N45>;
-pub type N47 = S<N46>;
-pub type N48 = S<N47>;
-pub type N49 = S<N48>;
-pub type N50 = S<N49>;
-pub type N51 = S<N50>;
-pub type N52 = S<N51>;
-pub type N53 = S<N52>;
-pub type N54 = S<N53>;
-pub type N55 = S<N54>;
-pub type N56 = S<N55>;
-pub type N57 = S<N56>;
-pub type N58 = S<N57>;
-pub type N59 = S<N58>;
-pub type N60 = S<N59>;
-pub type N61 = S<N60>;
-pub type N62 = S<N61>;
-pub type N63 = S<N62>;
-pub type N64 = S<N63>;
-pub type N65 = S<N64>;
-pub type N66 = S<N65>;
-pub type N67 = S<N66>;
-pub type N68 = S<N67>;
-pub type N69 = S<N68>;
-pub type N70 = S<N69>;
-pub type N71 = S<N70>;
-pub type N72 = S<N71>;
-pub type N73 = S<N72>;
-pub type N74 = S<N73>;
-pub type N75 = S<N74>;
-pub type N76 = S<N75>;
-pub type N77 = S<N76>;
-pub type N78 = S<N77>;
-pub type N79 = S<N78>;
-pub type N80 = S<N79>;
-pub type N81 = S<N80>;
-pub type N82 = S<N81>;
-pub type N83 = S<N82>;
-pub type N84 = S<N83>;
-pub type N85 = S<N84>;
-pub type N86 = S<N85>;
-pub type N87 = S<N86>;
-pub type N88 = S<N87>;
-pub type N89 = S<N88>;
-pub type N90 = S<N89>;
-pub type N91 = S<N90>;
-pub type N92 = S<N91>;
-pub type N93 = S<N92>;
-pub type N94 = S<N93>;
-pub type N95 = S<N94>;
-pub type N96 = S<N95>;
-pub type N97 = S<N96>;
-pub type N98 = S<N97>;
-pub type N99 = S<N98>;
+pub type  _0 = Z;
+pub type  _1 = S< _0>;
+pub type  _2 = S< _1>;
+pub type  _3 = S< _2>;
+pub type  _4 = S< _3>;
+pub type  _5 = S< _4>;
+pub type  _6 = S< _5>;
+pub type  _7 = S< _6>;
+pub type  _8 = S< _7>;
+pub type  _9 = S< _8>;
+pub type _10 = S< _9>;
+pub type _11 = S<_10>;
+pub type _12 = S<_11>;
+pub type _13 = S<_12>;
+pub type _14 = S<_13>;
+pub type _15 = S<_14>;
+pub type _16 = S<_15>;
+pub type _17 = S<_16>;
+pub type _18 = S<_17>;
+pub type _19 = S<_18>;
+pub type _20 = S<_19>;
+pub type _21 = S<_20>;
+pub type _22 = S<_21>;
+pub type _23 = S<_22>;
+pub type _24 = S<_23>;
+pub type _25 = S<_24>;
+pub type _26 = S<_25>;
+pub type _27 = S<_26>;
+pub type _28 = S<_27>;
+pub type _29 = S<_28>;
+pub type _30 = S<_29>;
+pub type _31 = S<_30>;
+pub type _32 = S<_31>;
+pub type _33 = S<_32>;
+pub type _34 = S<_33>;
+pub type _35 = S<_34>;
+pub type _36 = S<_35>;
+pub type _37 = S<_36>;
+pub type _38 = S<_37>;
+pub type _39 = S<_38>;
+pub type _40 = S<_39>;
+pub type _41 = S<_40>;
+pub type _42 = S<_41>;
+pub type _43 = S<_42>;
+pub type _44 = S<_43>;
+pub type _45 = S<_44>;
+pub type _46 = S<_45>;
+pub type _47 = S<_46>;
+pub type _48 = S<_47>;
+pub type _49 = S<_48>;
+pub type _50 = S<_49>;
+pub type _51 = S<_50>;
+pub type _52 = S<_51>;
+pub type _53 = S<_52>;
+pub type _54 = S<_53>;
+pub type _55 = S<_54>;
+pub type _56 = S<_55>;
+pub type _57 = S<_56>;
+pub type _58 = S<_57>;
+pub type _59 = S<_58>;
+pub type _60 = S<_59>;
+pub type _61 = S<_60>;
+pub type _62 = S<_61>;
+pub type _63 = S<_62>;
+pub type _64 = S<_63>;
+pub type _65 = S<_64>;
+pub type _66 = S<_65>;
+pub type _67 = S<_66>;
+pub type _68 = S<_67>;
+pub type _69 = S<_68>;
+pub type _70 = S<_69>;
+pub type _71 = S<_70>;
+pub type _72 = S<_71>;
+pub type _73 = S<_72>;
+pub type _74 = S<_73>;
+pub type _75 = S<_74>;
+pub type _76 = S<_75>;
+pub type _77 = S<_76>;
+pub type _78 = S<_77>;
+pub type _79 = S<_78>;
+pub type _80 = S<_79>;
+pub type _81 = S<_80>;
+pub type _82 = S<_81>;
+pub type _83 = S<_82>;
+pub type _84 = S<_83>;
+pub type _85 = S<_84>;
+pub type _86 = S<_85>;
+pub type _87 = S<_86>;
+pub type _88 = S<_87>;
+pub type _89 = S<_88>;
+pub type _90 = S<_89>;
+pub type _91 = S<_90>;
+pub type _92 = S<_91>;
+pub type _93 = S<_92>;
+pub type _94 = S<_93>;
+pub type _95 = S<_94>;
+pub type _96 = S<_95>;
+pub type _97 = S<_96>;
+pub type _98 = S<_97>;
+pub type _99 = S<_98>;
 
 #[cfg(test)]
 mod tests {
@@ -334,54 +334,54 @@ mod tests {
         LTEq,
         Min,
         Mul,
-        N01,
-        N02,
-        N03,
-        N04,
-        N05,
-        N06,
-        N08,
-        N24,
+         _1,
+         _2,
+         _3,
+         _4,
+         _5,
+         _6,
+         _8,
+        _24,
         Pred,
         Sub,
     };
 
     #[test]
-    fn pred() { let _: Val<N01> = val::<Pred, (N02,)>(); }
+    fn pred() { let _: Val<_1> = val::<Pred, (_2,)>(); }
 
     #[test]
-    fn add() { let _: Val<N05> = val::<Add, (N03, N02,)>(); }
+    fn add() { let _: Val<_5> = val::<Add, (_3, _2,)>(); }
 
     #[test]
-    fn sub() { let _: Val<N03> = val::<Sub, (N05, N02,)>(); }
+    fn sub() { let _: Val<_3> = val::<Sub, (_5, _2,)>(); }
 
     #[test]
-    fn mul() { let _: Val<N06> = val::<Mul, (N03, N02,)>(); }
+    fn mul() { let _: Val<_6> = val::<Mul, (_3, _2,)>(); }
 
     #[test]
-    fn exp() { let _: Val<N08> = val::<Exp, (N03, N02,)>(); }
+    fn exp() { let _: Val<_8> = val::<Exp, (_3, _2,)>(); }
 
     #[test]
-    fn fac() { let _: Val<N24> = val::<Fac, (N04,) >(); }
+    fn fac() { let _: Val<_24> = val::<Fac, (_4,) >(); }
 
     #[test]
-    fn lt_false() { let _: Val<False> = val::<LT, (N04, N02,)>(); }
+    fn lt_false() { let _: Val<False> = val::<LT, (_4, _2,)>(); }
 
     #[test]
-    fn lt_true() { let _: Val<True> = val::<LT, (N02, N04,)>(); }
+    fn lt_true() { let _: Val<True> = val::<LT, (_2, _4,)>(); }
 
     #[test]
-    fn lteq_false() { let _: Val<False> = val::<LTEq, (N04, N02,)>(); }
+    fn lteq_false() { let _: Val<False> = val::<LTEq, (_4, _2,)>(); }
 
     #[test]
-    fn lteq_true_00() { let _: Val<True> = val::<LTEq, (N02, N02,)>(); }
+    fn lteq_true_00() { let _: Val<True> = val::<LTEq, (_2, _2,)>(); }
 
     #[test]
-    fn lteq_true_01() { let _: Val<True> = val::<LTEq, (N02, N04,)>(); }
+    fn lteq_true_01() { let _: Val<True> = val::<LTEq, (_2, _4,)>(); }
 
     #[test]
-    fn min_lhs() { let _: Val<N02> = val::<Min, (N02, N04,)>(); }
+    fn min_lhs() { let _: Val<_2> = val::<Min, (_2, _4,)>(); }
 
     #[test]
-    fn min_rhs() { let _: Val<N02> = val::<Min, (N04, N02,)>(); }
+    fn min_rhs() { let _: Val<_2> = val::<Min, (_4, _2,)>(); }
 }
