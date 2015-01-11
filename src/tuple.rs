@@ -1,3 +1,5 @@
+use ty;
+
 /// Predicate implemented when `Self` has a concept of `head` and `tail`
 pub trait IsComposite {
     type H;
@@ -122,6 +124,98 @@ impl<A0, A1, A2, A3, A4, A5, A6, A7, A8, A9,> IsComposite for (A0, A1, A2, A3, A
     }
 }
 
+pub enum At<N: ty::Nat> {}
+
+impl<A0> ty::Fn<(A0,)> for At<ty::_0> {
+    type O = A0;
+}
+impl<A0> ty::DepFn<(A0,)> for At<ty::_0> {
+    fn call<X>(arg: (A0,)) -> A0 {
+        arg.0
+    }
+}
+
+impl<A0, A1> ty::Fn<(A0, A1,)> for At<ty::_1> {
+    type O = A1;
+}
+impl<A0, A1> ty::DepFn<(A0, A1,)> for At<ty::_1> {
+    fn call<X>(arg: (A0, A1,)) -> A1 {
+        arg.1
+    }
+}
+
+impl<A0, A1, A2> ty::Fn<(A0, A1, A2,)> for At<ty::_2> {
+    type O = A2;
+}
+impl<A0, A1, A2> ty::DepFn<(A0, A1, A2,)> for At<ty::_2> {
+    fn call<X>(arg: (A0, A1, A2,)) -> A2 {
+        arg.2
+    }
+}
+
+impl<A0, A1, A2, A3> ty::Fn<(A0, A1, A2, A3,)> for At<ty::_3> {
+    type O = A3;
+}
+impl<A0, A1, A2, A3> ty::DepFn<(A0, A1, A2, A3,)> for At<ty::_3> {
+    fn call<X>(arg: (A0, A1, A2, A3,)) -> A3 {
+        arg.3
+    }
+}
+
+impl<A0, A1, A2, A3, A4> ty::Fn<(A0, A1, A2, A3, A4,)> for At<ty::_4> {
+    type O = A4;
+}
+impl<A0, A1, A2, A3, A4> ty::DepFn<(A0, A1, A2, A3, A4,)> for At<ty::_4> {
+    fn call<X>(arg: (A0, A1, A2, A3, A4,)) -> A4 {
+        arg.4
+    }
+}
+
+impl<A0, A1, A2, A3, A4, A5> ty::Fn<(A0, A1, A2, A3, A4, A5,)> for At<ty::_5> {
+    type O = A5;
+}
+impl<A0, A1, A2, A3, A4, A5> ty::DepFn<(A0, A1, A2, A3, A4, A5,)> for At<ty::_5> {
+    fn call<X>(arg: (A0, A1, A2, A3, A4, A5)) -> A5 {
+        arg.5
+    }
+}
+
+impl<A0, A1, A2, A3, A4, A5, A6> ty::Fn<(A0, A1, A2, A3, A4, A5, A6,)> for At<ty::_6> {
+    type O = A6;
+}
+impl<A0, A1, A2, A3, A4, A5, A6> ty::DepFn<(A0, A1, A2, A3, A4, A5, A6,)> for At<ty::_6> {
+    fn call<X>(arg: (A0, A1, A2, A3, A4, A5, A6,)) -> A6 {
+        arg.6
+    }
+}
+
+impl<A0, A1, A2, A3, A4, A5, A6, A7> ty::Fn<(A0, A1, A2, A3, A4, A5, A6, A7,)> for At<ty::_7> {
+    type O = A7;
+}
+impl<A0, A1, A2, A3, A4, A5, A6, A7> ty::DepFn<(A0, A1, A2, A3, A4, A5, A6, A7,)> for At<ty::_7> {
+    fn call<X>(arg: (A0, A1, A2, A3, A4, A5, A6, A7)) -> A7 {
+        arg.7
+    }
+}
+
+impl<A0, A1, A2, A3, A4, A5, A6, A7, A8> ty::Fn<(A0, A1, A2, A3, A4, A5, A6, A7, A8,)> for At<ty::_8> {
+    type O = A8;
+}
+impl<A0, A1, A2, A3, A4, A5, A6, A7, A8> ty::DepFn<(A0, A1, A2, A3, A4, A5, A6, A7, A8)> for At<ty::_8> {
+    fn call<X>(arg: (A0, A1, A2, A3, A4, A5, A6, A7, A8)) -> A8 {
+        arg.8
+    }
+}
+
+impl<A0, A1, A2, A3, A4, A5, A6, A7, A8, A9> ty::Fn<(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9,)> for At<ty::_9> {
+    type O = A9;
+}
+impl<A0, A1, A2, A3, A4, A5, A6, A7, A8, A9> ty::DepFn<(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9)> for At<ty::_9> {
+    fn call<X>(arg: (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9)) -> A9 {
+        arg.9
+    }
+}
+
 /// Operations on `Tuples`
 pub trait TupleOps {
     #[inline]
@@ -152,8 +246,27 @@ impl<A0, A1, A2, A3, A4, A5, A6, A7, A8, A9,> TupleOps for (A0, A1, A2, A3, A4, 
 #[cfg(test)]
 mod tests {
     use super::{
+        At,
         TupleOps,
     };
+    use ty::{
+        self,
+        DepMethod,
+    };
+
+    #[test]
+    fn at() {
+        println!("{:?}", (0u8,).dep::<At<ty::_0>>());
+        println!("{:?}", (0u8, 1u8,).dep::<At<ty::_1>>());
+        println!("{:?}", (0u8, 1u8, 2u8,).dep::<At<ty::_2>>());
+        println!("{:?}", (0u8, 1u8, 2u8, 3u8,).dep::<At<ty::_3>>());
+        println!("{:?}", (0u8, 1u8, 2u8, 3u8, 4u8,).dep::<At<ty::_4>>());
+        println!("{:?}", (0u8, 1u8, 2u8, 3u8, 4u8, 5u8,).dep::<At<ty::_5>>());
+        println!("{:?}", (0u8, 1u8, 2u8, 3u8, 4u8, 5u8, 6u8,).dep::<At<ty::_6>>());
+        println!("{:?}", (0u8, 1u8, 2u8, 3u8, 4u8, 5u8, 6u8, 7u8,).dep::<At<ty::_7>>());
+        println!("{:?}", (0u8, 1u8, 2u8, 3u8, 4u8, 5u8, 6u8, 7u8, 8u8,).dep::<At<ty::_8>>());
+        println!("{:?}", (0u8, 1u8, 2u8, 3u8, 4u8, 5u8, 6u8, 7u8, 8u8, 9u8,).dep::<At<ty::_9>>());
+    }
 
     #[test]
     fn head() {
