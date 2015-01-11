@@ -1,6 +1,5 @@
 #![allow(unstable)]
 
-extern crate hkt;
 extern crate unify;
 
 // pub use self::functor::{
