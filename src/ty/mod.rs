@@ -8,6 +8,12 @@ pub use self::bool::{
     True,
 };
 
+pub use self::fin::{
+    Fin,
+    FZ,
+    FS,
+};
+
 pub use self::fun::{
     Ap,
     DepFn,
@@ -35,6 +41,7 @@ pub use self::list::{
 };
 
 mod bool;
+mod fin;
 mod fun;
 mod list;
 mod nat;
