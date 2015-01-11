@@ -307,7 +307,6 @@ mod tests {
         LTEq,
         Min,
         Mul,
-        N00,
         N01,
         N02,
         N03,

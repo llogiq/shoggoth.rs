@@ -1,5 +1,4 @@
 use ty::bool::{
-    False,
     True,
 };
 use ty::fun;

@@ -26,8 +26,13 @@ pub use self::nat::{
     Add,
     Exp,
     Fac,
+    LT,
+    LTEq,
+    Min,
     Mul,
     Nat,
+    Pred,
+    Sub,
     S,
     Z,
 };
