@@ -10,7 +10,7 @@ pub type Ap<F: self::Fn<I>, I> = <F as self::Fn<I>>::O;
 /// determined by a type-level function
 pub trait DepFn<I>: self::Fn<I> {
     #[inline(always)]
-    fn call<X: unify::Eq<Self>>(arg: I) -> Ap<Self, I>;
+    fn call<X>(arg: I) -> Ap<Self, I> where X: unify::Eq<Self>;
 }
 
 /// A structure for witnessing a type-level computation
