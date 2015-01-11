@@ -1,7 +1,7 @@
 use hlist::{
-    HCons,
+    HC,
     HList,
-    HNil,
+    HN,
 };
 
 use tuple::{
@@ -89,98 +89,98 @@ pub trait ToHList {
 }
 
 impl ToHList for () {
-    type Out = HNil;
+    type Out = HN;
     #[inline]
-    fn apply(self) -> HNil { HNil }
+    fn apply(self) -> HN { HN }
 }
 
 impl<A0,> ToHList for (A0,) {
-    type Out = HCons<A0, HNil>;
+    type Out = HC<A0, HN>;
     #[inline]
-    fn apply(self) -> HCons<A0, HNil> {
+    fn apply(self) -> HC<A0, HN> {
         let (h, t) = IsComposite::split(self);
-        HCons(h, ToHList::apply(t))
+        HC(h, ToHList::apply(t))
     }
 }
 
 impl<A0, A1,> ToHList for (A0, A1,) {
-    type Out = HCons<A0, HCons<A1, HNil>>;
+    type Out = HC<A0, HC<A1, HN>>;
     #[inline]
-    fn apply(self) -> HCons<A0, HCons<A1, HNil>> {
+    fn apply(self) -> HC<A0, HC<A1, HN>> {
         let (h, t) = IsComposite::split(self);
-        HCons(h, ToHList::apply(t))
+        HC(h, ToHList::apply(t))
     }
 }
 
 impl<A0, A1, A2,> ToHList for (A0, A1, A2,) {
-    type Out = HCons<A0, HCons<A1, HCons<A2, HNil>>>;
+    type Out = HC<A0, HC<A1, HC<A2, HN>>>;
     #[inline]
-    fn apply(self) -> HCons<A0, HCons<A1, HCons<A2, HNil>>> {
+    fn apply(self) -> HC<A0, HC<A1, HC<A2, HN>>> {
         let (h, t) = IsComposite::split(self);
-        HCons(h, ToHList::apply(t))
+        HC(h, ToHList::apply(t))
     }
 }
 
 impl<A0, A1, A2, A3,> ToHList for (A0, A1, A2, A3,) {
-    type Out = HCons<A0, HCons<A1, HCons<A2, HCons<A3, HNil>>>>;
+    type Out = HC<A0, HC<A1, HC<A2, HC<A3, HN>>>>;
     #[inline]
-    fn apply(self) -> HCons<A0, HCons<A1, HCons<A2, HCons<A3, HNil>>>> {
+    fn apply(self) -> HC<A0, HC<A1, HC<A2, HC<A3, HN>>>> {
         let (h, t) = IsComposite::split(self);
-        HCons(h, ToHList::apply(t))
+        HC(h, ToHList::apply(t))
     }
 }
 
 impl<A0, A1, A2, A3, A4,> ToHList for (A0, A1, A2, A3, A4,) {
-    type Out = HCons<A0, HCons<A1, HCons<A2, HCons<A3, HCons<A4, HNil>>>>>;
+    type Out = HC<A0, HC<A1, HC<A2, HC<A3, HC<A4, HN>>>>>;
     #[inline]
-    fn apply(self) -> HCons<A0, HCons<A1, HCons<A2, HCons<A3, HCons<A4, HNil>>>>> {
+    fn apply(self) -> HC<A0, HC<A1, HC<A2, HC<A3, HC<A4, HN>>>>> {
         let (h, t) = IsComposite::split(self);
-        HCons(h, ToHList::apply(t))
+        HC(h, ToHList::apply(t))
     }
 }
 
 impl<A0, A1, A2, A3, A4, A5,> ToHList for (A0, A1, A2, A3, A4, A5,) {
-    type Out = HCons<A0, HCons<A1, HCons<A2, HCons<A3, HCons<A4, HCons<A5, HNil>>>>>>;
+    type Out = HC<A0, HC<A1, HC<A2, HC<A3, HC<A4, HC<A5, HN>>>>>>;
     #[inline]
-    fn apply(self) -> HCons<A0, HCons<A1, HCons<A2, HCons<A3, HCons<A4, HCons<A5, HNil>>>>>> {
+    fn apply(self) -> HC<A0, HC<A1, HC<A2, HC<A3, HC<A4, HC<A5, HN>>>>>> {
         let (h, t) = IsComposite::split(self);
-        HCons(h, ToHList::apply(t))
+        HC(h, ToHList::apply(t))
     }
 }
 
 impl<A0, A1, A2, A3, A4, A5, A6,> ToHList for (A0, A1, A2, A3, A4, A5, A6,) {
-    type Out = HCons<A0, HCons<A1, HCons<A2, HCons<A3, HCons<A4, HCons<A5, HCons<A6, HNil>>>>>>>;
+    type Out = HC<A0, HC<A1, HC<A2, HC<A3, HC<A4, HC<A5, HC<A6, HN>>>>>>>;
     #[inline]
-    fn apply(self) -> HCons<A0, HCons<A1, HCons<A2, HCons<A3, HCons<A4, HCons<A5, HCons<A6, HNil>>>>>>> {
+    fn apply(self) -> HC<A0, HC<A1, HC<A2, HC<A3, HC<A4, HC<A5, HC<A6, HN>>>>>>> {
         let (h, t) = IsComposite::split(self);
-        HCons(h, ToHList::apply(t))
+        HC(h, ToHList::apply(t))
     }
 }
 
 impl<A0, A1, A2, A3, A4, A5, A6, A7,> ToHList for (A0, A1, A2, A3, A4, A5, A6, A7,) {
-    type Out = HCons<A0, HCons<A1, HCons<A2, HCons<A3, HCons<A4, HCons<A5, HCons<A6, HCons<A7, HNil>>>>>>>>;
+    type Out = HC<A0, HC<A1, HC<A2, HC<A3, HC<A4, HC<A5, HC<A6, HC<A7, HN>>>>>>>>;
     #[inline]
-    fn apply(self) -> HCons<A0, HCons<A1, HCons<A2, HCons<A3, HCons<A4, HCons<A5, HCons<A6, HCons<A7, HNil>>>>>>>> {
+    fn apply(self) -> HC<A0, HC<A1, HC<A2, HC<A3, HC<A4, HC<A5, HC<A6, HC<A7, HN>>>>>>>> {
         let (h, t) = IsComposite::split(self);
-        HCons(h, ToHList::apply(t))
+        HC(h, ToHList::apply(t))
     }
 }
 
 impl<A0, A1, A2, A3, A4, A5, A6, A7, A8,> ToHList for (A0, A1, A2, A3, A4, A5, A6, A7, A8,) {
-    type Out = HCons<A0, HCons<A1, HCons<A2, HCons<A3, HCons<A4, HCons<A5, HCons<A6, HCons<A7, HCons<A8, HNil>>>>>>>>>;
+    type Out = HC<A0, HC<A1, HC<A2, HC<A3, HC<A4, HC<A5, HC<A6, HC<A7, HC<A8, HN>>>>>>>>>;
     #[inline]
-    fn apply(self) -> HCons<A0, HCons<A1, HCons<A2, HCons<A3, HCons<A4, HCons<A5, HCons<A6, HCons<A7, HCons<A8, HNil>>>>>>>>> {
+    fn apply(self) -> HC<A0, HC<A1, HC<A2, HC<A3, HC<A4, HC<A5, HC<A6, HC<A7, HC<A8, HN>>>>>>>>> {
         let (h, t) = IsComposite::split(self);
-        HCons(h, ToHList::apply(t))
+        HC(h, ToHList::apply(t))
     }
 }
 
 impl<A0, A1, A2, A3, A4, A5, A6, A7, A8, A9,> ToHList for (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9,) {
-    type Out = HCons<A0, HCons<A1, HCons<A2, HCons<A3, HCons<A4, HCons<A5, HCons<A6, HCons<A7, HCons<A8, HCons<A9, HNil>>>>>>>>>>;
+    type Out = HC<A0, HC<A1, HC<A2, HC<A3, HC<A4, HC<A5, HC<A6, HC<A7, HC<A8, HC<A9, HN>>>>>>>>>>;
     #[inline]
-    fn apply(self) -> HCons<A0, HCons<A1, HCons<A2, HCons<A3, HCons<A4, HCons<A5, HCons<A6, HCons<A7, HCons<A8, HCons<A9, HNil>>>>>>>>>> {
+    fn apply(self) -> HC<A0, HC<A1, HC<A2, HC<A3, HC<A4, HC<A5, HC<A6, HC<A7, HC<A8, HC<A9, HN>>>>>>>>>> {
         let (h, t) = IsComposite::split(self);
-        HCons(h, ToHList::apply(t))
+        HC(h, ToHList::apply(t))
     }
 }
 
