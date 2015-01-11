@@ -201,54 +201,54 @@ pub trait ProductOps {
     }
 }
 
-// impl ProductOps for () {}
-// impl<A0,> ProductOps for (A0,) {}
-// impl<A0, A1,> ProductOps for (A0, A1,) {}
-// impl<A0, A1, A2,> ProductOps for (A0, A1, A2,) {}
-// impl<A0, A1, A2, A3,> ProductOps for (A0, A1, A2, A3,) {}
-// impl<A0, A1, A2, A3, A4,> ProductOps for (A0, A1, A2, A3, A4,) {}
-// impl<A0, A1, A2, A3, A4, A5,> ProductOps for (A0, A1, A2, A3, A4, A5,) {}
-// impl<A0, A1, A2, A3, A4, A5, A6,> ProductOps for (A0, A1, A2, A3, A4, A5, A6,) {}
-// impl<A0, A1, A2, A3, A4, A5, A6, A7,> ProductOps for (A0, A1, A2, A3, A4, A5, A6, A7,) {}
-// impl<A0, A1, A2, A3, A4, A5, A6, A7, A8,> ProductOps for (A0, A1, A2, A3, A4, A5, A6, A7, A8,) {}
-// impl<A0, A1, A2, A3, A4, A5, A6, A7, A8, A9,> ProductOps for (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9,) {}
+impl ProductOps for () {}
+impl<A0,> ProductOps for (A0,) {}
+impl<A0, A1,> ProductOps for (A0, A1,) {}
+impl<A0, A1, A2,> ProductOps for (A0, A1, A2,) {}
+impl<A0, A1, A2, A3,> ProductOps for (A0, A1, A2, A3,) {}
+impl<A0, A1, A2, A3, A4,> ProductOps for (A0, A1, A2, A3, A4,) {}
+impl<A0, A1, A2, A3, A4, A5,> ProductOps for (A0, A1, A2, A3, A4, A5,) {}
+impl<A0, A1, A2, A3, A4, A5, A6,> ProductOps for (A0, A1, A2, A3, A4, A5, A6,) {}
+impl<A0, A1, A2, A3, A4, A5, A6, A7,> ProductOps for (A0, A1, A2, A3, A4, A5, A6, A7,) {}
+impl<A0, A1, A2, A3, A4, A5, A6, A7, A8,> ProductOps for (A0, A1, A2, A3, A4, A5, A6, A7, A8,) {}
+impl<A0, A1, A2, A3, A4, A5, A6, A7, A8, A9,> ProductOps for (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9,) {}
 
-// #[cfg(test)]
-// mod tests {
-//     use super::{
-//         ProductOps,
-//     };
+#[cfg(test)]
+mod tests {
+    use super::{
+        ProductOps,
+    };
 
-//     #[test]
-//     fn to_hlist() {
-//         let x = (0u8,);
-//         x.to_hlist();
+    #[test]
+    fn to_hlist() {
+        let x = (0u8,);
+        x.to_hlist();
 
-//         let x = (0u8, 0u8,);
-//         x.to_hlist();
+        let x = (0u8, 0u8,);
+        x.to_hlist();
 
-//         let x = (0u8, 0u8, 0u8,);
-//         x.to_hlist();
+        let x = (0u8, 0u8, 0u8,);
+        x.to_hlist();
 
-//         let x = (0u8, 0u8, 0u8, 0u8,);
-//         x.to_hlist();
+        let x = (0u8, 0u8, 0u8, 0u8,);
+        x.to_hlist();
 
-//         let x = (0u8, 0u8, 0u8, 0u8, 0u8,);
-//         x.to_hlist();
+        let x = (0u8, 0u8, 0u8, 0u8, 0u8,);
+        x.to_hlist();
 
-//         let x = (0u8, 0u8, 0u8, 0u8, 0u8, 0u8,);
-//         x.to_hlist();
+        let x = (0u8, 0u8, 0u8, 0u8, 0u8, 0u8,);
+        x.to_hlist();
 
-//         let x = (0u8, 0u8, 0u8, 0u8, 0u8, 0u8, 0u8,);
-//         x.to_hlist();
+        let x = (0u8, 0u8, 0u8, 0u8, 0u8, 0u8, 0u8,);
+        x.to_hlist();
 
-//         let x = (0u8, 0u8, 0u8, 0u8, 0u8, 0u8, 0u8, 0u8,);
-//         x.to_hlist();
+        let x = (0u8, 0u8, 0u8, 0u8, 0u8, 0u8, 0u8, 0u8,);
+        x.to_hlist();
 
-//         let x = (0u8, 0u8, 0u8, 0u8, 0u8, 0u8, 0u8, 0u8, 0u8,);
-//         x.to_hlist();
+        let x = (0u8, 0u8, 0u8, 0u8, 0u8, 0u8, 0u8, 0u8, 0u8,);
+        x.to_hlist();
 
-//         let x = (0u8, 0u8, 0u8, 0u8, 0u8, 0u8, 0u8, 0u8, 0u8, 0u8,);
-//         x.to_hlist();
-//     }
-// }
+        let x = (0u8, 0u8, 0u8, 0u8, 0u8, 0u8, 0u8, 0u8, 0u8, 0u8,);
+        x.to_hlist();
+    }
+}
