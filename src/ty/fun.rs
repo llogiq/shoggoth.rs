@@ -9,7 +9,7 @@ pub type Ap<F: self::Fn<I>, I> = <F as self::Fn<I>>::O;
 /// "Dependent functions": the output type depends on the input type,
 /// determined by a type-level function
 pub trait DepFn<I>: self::Fn<I> {
-    #[inline]
+    #[inline(always)]
     fn call<X: unify::Eq<Self>>(arg: I) -> Ap<Self, I>;
 }
 
