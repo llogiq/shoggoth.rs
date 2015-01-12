@@ -23,10 +23,6 @@ pub use self::product::{
     ToTuple,
 };
 
-pub use self::squash::{
-    Squash,
-};
-
 pub use self::tuple::{
     IsComposite,
     TupleOps,
@@ -36,7 +32,6 @@ pub use self::tuple::{
 mod hlist;
 // mod monad;
 mod product;
-mod squash;
 mod tuple;
 
 /// Type-level programming
