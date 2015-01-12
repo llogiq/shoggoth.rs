@@ -151,6 +151,7 @@ mod fun;
 mod list;
 mod nat;
 pub mod literal;
+pub mod val;
 
 /// Helper for calling "dependent functions" as methods on suitable types
 pub trait DepMethod {
