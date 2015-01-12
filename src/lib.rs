@@ -2,10 +2,6 @@
 
 extern crate unify;
 
-// pub use self::functor::{
-//     Functor,
-// };
-
 pub use self::hlist::{
     HC,
     HList,
@@ -28,7 +24,6 @@ pub use self::tuple::{
     TupleOps,
 };
 
-// mod functor;
 mod hlist;
 // mod monad;
 mod product;
