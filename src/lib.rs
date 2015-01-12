@@ -9,10 +9,6 @@ pub use self::hlist::{
     IsHCons,
 };
 
-// pub use self::monad::{
-//     Monad,
-// };
-
 pub use self::product::{
     ProductOps,
     ToHList,
@@ -25,7 +21,6 @@ pub use self::tuple::{
 };
 
 mod hlist;
-// mod monad;
 mod product;
 mod tuple;
 
