@@ -1,4 +1,4 @@
-use ty::fun;
+use ty;
 
 /// Type-level boolean `false`
 #[derive(Clone)]
@@ -25,7 +25,7 @@ pub enum True {}
 /// Predicate classifying type-level booleans
 pub trait Bool {}
 impl Bool for False {}
-impl Bool for  True {}
+impl Bool for True {}
 
 /// Type-level function for boolean negation
 #[derive(Clone)]
@@ -37,8 +37,8 @@ impl Bool for  True {}
 #[derive(PartialOrd)]
 #[derive(Show)]
 pub enum Not {}
-impl fun::Fn<(False,)> for Not { type O =  True; }
-impl fun::Fn<( True,)> for Not { type O = False; }
+impl ty::fun::Fn<(False,)> for Not { type O = True; }
+impl ty::fun::Fn<(True,)> for Not { type O = False; }
 
 /// Type-level function for boolean conjunction
 #[derive(Clone)]
@@ -50,8 +50,8 @@ impl fun::Fn<( True,)> for Not { type O = False; }
 #[derive(PartialOrd)]
 #[derive(Show)]
 pub enum And {}
-impl<RHS: Bool> fun::Fn<(False, RHS,)> for And { type O = False; }
-impl<RHS: Bool> fun::Fn<( True, RHS,)> for And { type O =   RHS; }
+impl<RHS: Bool> ty::fun::Fn<(False, RHS,)> for And { type O = False; }
+impl<RHS: Bool> ty::fun::Fn<(True, RHS,)> for And { type O = RHS; }
 
 /// Type-level function for boolean disjunction
 #[derive(Clone)]
@@ -63,8 +63,8 @@ impl<RHS: Bool> fun::Fn<( True, RHS,)> for And { type O =   RHS; }
 #[derive(PartialOrd)]
 #[derive(Show)]
 pub enum Or {}
-impl<RHS: Bool> fun::Fn<(False, RHS,)> for Or { type O =  RHS; }
-impl<RHS: Bool> fun::Fn<( True, RHS,)> for Or { type O = True; }
+impl<RHS: Bool> ty::fun::Fn<(False, RHS,)> for Or { type O = RHS; }
+impl<RHS: Bool> ty::fun::Fn<(True, RHS,)> for Or { type O = True; }
 
 /// Type-level function for boolean conditional
 #[derive(Clone)]
@@ -76,71 +76,63 @@ impl<RHS: Bool> fun::Fn<( True, RHS,)> for Or { type O = True; }
 #[derive(PartialOrd)]
 #[derive(Show)]
 pub enum If {}
-impl<LHS, RHS> fun::Fn<( True, LHS, RHS,)> for If { type O = LHS; }
-impl<LHS, RHS> fun::Fn<(False, LHS, RHS,)> for If { type O = RHS; }
+impl<LHS, RHS> ty::fun::Fn<(True, LHS, RHS,)> for If { type O = LHS; }
+impl<LHS, RHS> ty::fun::Fn<(False, LHS, RHS,)> for If { type O = RHS; }
 
 #[cfg(test)]
 mod tests {
-    use ty::fun::{
-        Val,
-        val,
-    };
-    use super::{
-        And,
-        Bool,
-        False,
-        If,
-        Not,
-        Or,
-        True,
-    };
+    use ty::bool::*;
+    use ty::literal::*;
+    use ty::val::*;
+
+    // FIXME: implement tests corresponding to boolean algebras
 
     #[test]
-    fn not_false() { let _: Val<True> = val::<Not, (False,)>(); }
+    fn not_false() { let _: Val<TT> = val::<Not, (FF,)>(); }
 
     #[test]
-    fn not_true () { let _: Val<False> = val::<Not, (True,)>(); }
+    fn not_true () { let _: Val<FF> = val::<Not, (TT,)>(); }
 
     #[test]
     fn and_false() {
         fn aux<RHS: Bool>() {
-            let _: Val<False> = val::<And, (False, RHS,)>();
+            let _: Val<FF> = val::<And, (FF, RHS,)>();
         }
-        aux::<False>();
-        aux::< True>();
+        aux::<FF>();
+        aux::<TT>();
     }
 
     #[test]
     fn and_true() {
         fn aux<RHS: Bool>() {
-            let _: Val< RHS > = val::<And, (True, RHS,)>();
+            let _: Val<RHS> = val::<And, (TT, RHS,)>();
         }
-        aux::<False>();
-        aux::< True>();
+        aux::<FF>();
+        aux::<TT>();
     }
 
     #[test]
     fn or_false() {
         fn aux<RHS: Bool>() {
-            let _: Val<RHS> = val::<Or, (False, RHS,)>();
+            let _: Val<RHS> = val::<Or, (FF, RHS,)>();
         }
-        aux::<False>();
-        aux::< True>();
+        aux::<FF>();
+        aux::<TT>();
     }
 
     #[test]
     fn or_true() {
         fn aux<RHS: Bool>() {
-            let _: Val<True> = val::<Or, (True, RHS,)>();
+            let _: Val<TT> = val::<Or, (TT, RHS,)>();
         }
-        aux::<False>();
-        aux::< True>();
+        aux::<FF>();
+        aux::< TT>();
     }
 
     #[test]
     fn if_false() {
         fn aux<LHS, RHS>() {
-            let _: Val<RHS> = val::<If, (False, LHS, RHS,)>();
+            let _: Val<RHS> = val::<If, (FF, LHS, RHS,)>();
         }
         aux::<(), bool>();
         aux::<(), bool>();
@@ -149,7 +141,7 @@ mod tests {
     #[test]
     fn if_true() {
         fn aux<LHS, RHS>() {
-            let _: Val<LHS> = val::<If, (True, LHS, RHS,)>();
+            let _: Val<LHS> = val::<If, (TT, LHS, RHS,)>();
         }
         aux::<(), bool>();
         aux::<(), bool>();

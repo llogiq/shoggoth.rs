@@ -1,18 +1,17 @@
-use ty::bool::{
-    True,
-};
+use ty::bool;
 use ty::fun;
 use ty::nat::{
-    LT,
+    self,
     Nat,
-    S,
-    Z,
 };
 
-pub struct FZ<N: Nat> where LT: fun::Fn<(Z, N,), O = True>;
-pub struct FS<N: Nat, P: Fin<N>> where LT: fun::Fn<(Z, N,), O = True>;
+pub struct Zero<N: Nat> where
+    nat::LT: fun::Fn<(nat::Zero, N,), O = bool::True>;
+pub struct Succ<N: Nat, P: Fin<N>> where
+    nat::LT: fun::Fn<(nat::Zero, N,), O = bool::True>;
 
 pub trait Fin<N: Nat> {}
-impl<N: Nat> Fin<N> for FZ<N> where LT: fun::Fn<(Z, N,), O = True> {}
-impl<N: Nat, P: Fin<N>> Fin<S<N>> for FS<N, P> where LT: fun::Fn<(Z, N,), O = True> {}
-
+impl<N: Nat> Fin<N> for Zero<N> where
+    nat::LT: fun::Fn<(nat::Zero, N,), O = bool::True> {}
+impl<N: Nat, P: Fin<N>> Fin<nat::Succ<N>> for Succ<N, P> where
+    nat::LT: fun::Fn<(nat::Zero, N,), O = bool::True> {}
