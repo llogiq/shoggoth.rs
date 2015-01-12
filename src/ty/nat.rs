@@ -45,7 +45,7 @@ impl<N: Nat> Nat for Succ<N> {}
 pub enum Pred {}
 impl<LHS: Nat> fun::Fn<(Succ<LHS>,)> for Pred
 {
-    type O = LHS;
+    type Out = LHS;
 }
 
 /// Type-level function for nat addition
@@ -60,12 +60,12 @@ impl<LHS: Nat> fun::Fn<(Succ<LHS>,)> for Pred
 pub enum Add {}
 impl<RHS: Nat> fun::Fn<(Zero, RHS,)> for Add
 {
-    type O = RHS;
+    type Out = RHS;
 }
 impl<LHS: Nat, RHS: Nat> fun::Fn<(Succ<LHS>, RHS,)> for Add where
     Add: fun::Fn<(LHS, RHS,)>,
 {
-    type O = Succ<fun::Ap<Add, (LHS, RHS,)>>;
+    type Out = Succ<fun::Ap<Add, (LHS, RHS,)>>;
 }
 
 /// Type-level function for nat subtraction
@@ -80,12 +80,12 @@ impl<LHS: Nat, RHS: Nat> fun::Fn<(Succ<LHS>, RHS,)> for Add where
 pub enum Sub {}
 impl<LHS: Nat> fun::Fn<(LHS, Zero,)> for Sub
 {
-    type O = LHS;
+    type Out = LHS;
 }
 impl<LHS: Nat, RHS: Nat, Rec: Nat> fun::Fn<(Succ<LHS>, Succ<RHS>,)> for Sub where
-    Sub: fun::Fn<(LHS, RHS,), O = Rec>,
+    Sub: fun::Fn<(LHS, RHS,), Out = Rec>,
 {
-    type O = Rec;
+    type Out = Rec;
 }
 
 /// Type-level function for nat multiplication
@@ -100,13 +100,13 @@ impl<LHS: Nat, RHS: Nat, Rec: Nat> fun::Fn<(Succ<LHS>, Succ<RHS>,)> for Sub wher
 pub enum Mul {}
 impl<RHS: Nat> fun::Fn<(Zero, RHS,)> for Mul
 {
-    type O = Zero;
+    type Out = Zero;
 }
 impl<LHS: Nat, RHS: Nat, Rec: Nat> fun::Fn<(Succ<LHS>, RHS,)> for Mul where
-    Mul: fun::Fn<(LHS, RHS,), O = Rec>,
+    Mul: fun::Fn<(LHS, RHS,), Out = Rec>,
     Add: fun::Fn<(RHS, Rec,)>,
 {
-    type O = fun::Ap<Add, (RHS, Rec,)>;
+    type Out = fun::Ap<Add, (RHS, Rec,)>;
 }
 
 /// Type-level function for nat exponentiation
@@ -121,13 +121,13 @@ impl<LHS: Nat, RHS: Nat, Rec: Nat> fun::Fn<(Succ<LHS>, RHS,)> for Mul where
 pub enum Exp {}
 impl<RHS: Nat> fun::Fn<(Zero, RHS,)> for Exp
 {
-    type O = Succ<Zero>;
+    type Out = Succ<Zero>;
 }
 impl<LHS: Nat, RHS: Nat, Rec: Nat> fun::Fn<(Succ<LHS>, RHS,)> for Exp where
-    Exp: fun::Fn<(LHS, RHS,), O = Rec>,
+    Exp: fun::Fn<(LHS, RHS,), Out = Rec>,
     Mul: fun::Fn<(RHS, Rec,)>,
 {
-    type O = fun::Ap<Mul, (RHS, Rec,)>;
+    type Out = fun::Ap<Mul, (RHS, Rec,)>;
 }
 
 /// Type-level function for nat factorial
@@ -142,13 +142,13 @@ impl<LHS: Nat, RHS: Nat, Rec: Nat> fun::Fn<(Succ<LHS>, RHS,)> for Exp where
 pub enum Fac {}
 impl fun::Fn<(Zero,)> for Fac
 {
-    type O = Succ<Zero>;
+    type Out = Succ<Zero>;
 }
 impl<LHS: Nat, Rec: Nat> fun::Fn<(Succ<LHS>,)> for Fac where
-    Fac: fun::Fn<(LHS,), O = Rec>,
+    Fac: fun::Fn<(LHS,), Out = Rec>,
     Mul: fun::Fn<(Succ<LHS>, Rec,)>,
 {
-    type O = fun::Ap<Mul, (Succ<LHS>, Rec,)>;
+    type Out = fun::Ap<Mul, (Succ<LHS>, Rec,)>;
 }
 
 /// Type-level function for nat less-than
@@ -162,15 +162,15 @@ impl<LHS: Nat, Rec: Nat> fun::Fn<(Succ<LHS>,)> for Fac where
 #[derive(Show)]
 pub enum LT {}
 impl<RHS: Nat> fun::Fn<(Zero, RHS,)> for LT {
-    type O = True;
+    type Out = True;
 }
 impl<LHS: Nat> fun::Fn<(Succ<LHS>, Zero,)> for LT {
-    type O = False;
+    type Out = False;
 }
 impl<LHS: Nat, RHS: Nat> fun::Fn<(Succ<LHS>, Succ<RHS>,)> for LT where
     LT: fun::Fn<(LHS, RHS,)>,
 {
-    type O = fun::Ap<LT, (LHS, RHS,)>;
+    type Out = fun::Ap<LT, (LHS, RHS,)>;
 }
 
 /// Type-level function for nat less-than-or-eq
@@ -184,18 +184,18 @@ impl<LHS: Nat, RHS: Nat> fun::Fn<(Succ<LHS>, Succ<RHS>,)> for LT where
 #[derive(Show)]
 pub enum LTEq {}
 impl fun::Fn<(Zero, Zero,)> for LTEq {
-    type O = True;
+    type Out = True;
 }
 impl<LHS: Nat> fun::Fn<(Succ<LHS>, Zero,)> for LTEq {
-    type O = False;
+    type Out = False;
 }
 impl<RHS: Nat> fun::Fn<(Zero, Succ<RHS>,)> for LTEq {
-    type O = True;
+    type Out = True;
 }
 impl<LHS: Nat, RHS: Nat> fun::Fn<(Succ<LHS>, Succ<RHS>,)> for LTEq where
     LTEq: fun::Fn<(LHS, RHS,)>,
 {
-    type O = fun::Ap<LTEq, (LHS, RHS,)>;
+    type Out = fun::Ap<LTEq, (LHS, RHS,)>;
 }
 
 /// Type-level function for nat min
@@ -209,10 +209,10 @@ impl<LHS: Nat, RHS: Nat> fun::Fn<(Succ<LHS>, Succ<RHS>,)> for LTEq where
 #[derive(Show)]
 pub enum Min {}
 impl<LHS: Nat, RHS: Nat, Rec: Bool> fun::Fn<(LHS, RHS,)> for Min where
-    LTEq: fun::Fn<(LHS, RHS), O = Rec>,
+    LTEq: fun::Fn<(LHS, RHS), Out = Rec>,
     If: fun::Fn<(Rec, LHS, RHS,)>,
 {
-    type O = fun::Ap<If, (Rec, LHS, RHS,)>;
+    type Out = fun::Ap<If, (Rec, LHS, RHS,)>;
 }
 
 #[cfg(test)]

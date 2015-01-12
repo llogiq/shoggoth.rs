@@ -37,8 +37,8 @@ impl Bool for True {}
 #[derive(PartialOrd)]
 #[derive(Show)]
 pub enum Not {}
-impl ty::fun::Fn<(False,)> for Not { type O = True; }
-impl ty::fun::Fn<(True,)> for Not { type O = False; }
+impl ty::fun::Fn<(False,)> for Not { type Out = True; }
+impl ty::fun::Fn<(True,)> for Not { type Out = False; }
 
 /// Type-level function for boolean conjunction
 #[derive(Clone)]
@@ -50,8 +50,8 @@ impl ty::fun::Fn<(True,)> for Not { type O = False; }
 #[derive(PartialOrd)]
 #[derive(Show)]
 pub enum And {}
-impl<RHS: Bool> ty::fun::Fn<(False, RHS,)> for And { type O = False; }
-impl<RHS: Bool> ty::fun::Fn<(True, RHS,)> for And { type O = RHS; }
+impl<RHS: Bool> ty::fun::Fn<(False, RHS,)> for And { type Out = False; }
+impl<RHS: Bool> ty::fun::Fn<(True, RHS,)> for And { type Out = RHS; }
 
 /// Type-level function for boolean disjunction
 #[derive(Clone)]
@@ -63,8 +63,8 @@ impl<RHS: Bool> ty::fun::Fn<(True, RHS,)> for And { type O = RHS; }
 #[derive(PartialOrd)]
 #[derive(Show)]
 pub enum Or {}
-impl<RHS: Bool> ty::fun::Fn<(False, RHS,)> for Or { type O = RHS; }
-impl<RHS: Bool> ty::fun::Fn<(True, RHS,)> for Or { type O = True; }
+impl<RHS: Bool> ty::fun::Fn<(False, RHS,)> for Or { type Out = RHS; }
+impl<RHS: Bool> ty::fun::Fn<(True, RHS,)> for Or { type Out = True; }
 
 /// Type-level function for boolean conditional
 #[derive(Clone)]
@@ -76,8 +76,8 @@ impl<RHS: Bool> ty::fun::Fn<(True, RHS,)> for Or { type O = True; }
 #[derive(PartialOrd)]
 #[derive(Show)]
 pub enum If {}
-impl<LHS, RHS> ty::fun::Fn<(True, LHS, RHS,)> for If { type O = LHS; }
-impl<LHS, RHS> ty::fun::Fn<(False, LHS, RHS,)> for If { type O = RHS; }
+impl<LHS, RHS> ty::fun::Fn<(True, LHS, RHS,)> for If { type Out = LHS; }
+impl<LHS, RHS> ty::fun::Fn<(False, LHS, RHS,)> for If { type Out = RHS; }
 
 #[cfg(test)]
 mod tests {

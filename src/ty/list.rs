@@ -39,12 +39,12 @@ impl<H, T: List> List for Cons<H, T> {}
 pub enum Append {}
 impl<RHS: List> ty::fun::Fn<(Nil, RHS,)> for Append
 {
-    type O = RHS;
+    type Out = RHS;
 }
 impl<H, LHS: List, RHS: List> ty::fun::Fn<(Cons<H, LHS>, RHS,)> for Append where
     Append: ty::fun::Fn<(LHS, RHS,)>,
 {
-    type O = Cons<H, ty::fun::Ap<Append, (LHS, RHS,)>>;
+    type Out = Cons<H, ty::fun::Ap<Append, (LHS, RHS,)>>;
 }
 
 /// Type-level function for list length
@@ -58,12 +58,12 @@ impl<H, LHS: List, RHS: List> ty::fun::Fn<(Cons<H, LHS>, RHS,)> for Append where
 #[derive(Show)]
 pub enum Length {}
 impl ty::fun::Fn<(Nil,)> for Length {
-    type O = ty::nat::Zero;
+    type Out = ty::nat::Zero;
 }
 impl<H, T: List> ty::fun::Fn<(Cons<H, T>,)> for Length where
     Length: ty::fun::Fn<(T,)>,
 {
-    type O = ty::nat::Succ<ty::fun::Ap<Length, (T,)>>;
+    type Out = ty::nat::Succ<ty::fun::Ap<Length, (T,)>>;
 }
 
 #[cfg(test)]
