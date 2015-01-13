@@ -213,24 +213,24 @@ impl<N0: Tm<Nat>, N1: Tm<Nat>, Rec: Tm<bool::Bool>> fun::Fn<LTEq> for (Succ<N0>,
     type O = Rec;
 }
 
-// /// Type-level function for nat min
-// #[derive(Clone)]
-// #[derive(Copy)]
-// #[derive(Eq)]
-// #[derive(Hash)]
-// #[derive(Ord)]
-// #[derive(PartialEq)]
-// #[derive(PartialOrd)]
-// #[derive(Show)]
-// pub enum Min {}
-// impl fun::Sig for Min { type Dom = (Nat, Nat,); type Cod = Nat; }
-// impl<N0: Tm<Nat>, N1: Tm<Nat>, Rec: Tm<bool::Bool>> fun::Fn<Min> for (N0, N1,) where
-//     (N0, N1): fun::Fn<LTEq, O = Rec>,
-//     (Rec, N0, N1,): fun::Fn<bool::If<Nat>>,
-//     fun::Ap<bool::If<Nat>, (Rec, N0, N1,)>: Tm<Nat>,
-// {
-//     type O = fun::Ap<bool::If<Nat>, (Rec, N0, N1,)>;
-// }
+/// Type-level function for nat min
+#[derive(Clone)]
+#[derive(Copy)]
+#[derive(Eq)]
+#[derive(Hash)]
+#[derive(Ord)]
+#[derive(PartialEq)]
+#[derive(PartialOrd)]
+#[derive(Show)]
+pub enum Min {}
+impl fun::Sig for Min { type Dom = (Nat, Nat,); type Cod = Nat; }
+impl<N0: Tm<Nat>, N1: Tm<Nat>, Rec0: Tm<bool::Bool>, Rec1: Tm<Nat>> fun::Fn<Min> for (N0, N1,) where
+    (N0, N1): Tm<(Nat, Nat)>, // FIXME: coherence failed to report ambiguity
+    (N0, N1): fun::Fn<LTEq, O = Rec0>,
+    (Rec0, N0, N1,): fun::Fn<bool::If<Nat>, O = Rec1>,
+{
+    type O = Rec1;
+}
 
 #[cfg(test)]
 mod tests {
@@ -271,9 +271,9 @@ mod tests {
     #[test]
     fn lteq_true_01() { let _: Val<TT> = val::<LTEq, (_2n, _4n,)>(); }
 
-    // #[test]
-    // fn min_lhs() { let _: Val<_2n> = val::<Min, (_2n, _4n,)>(); }
+    #[test]
+    fn min_lhs() { let _: Val<_2n> = val::<Min, (_2n, _4n,)>(); }
 
-    // #[test]
-    // fn min_rhs() { let _: Val<_2n> = val::<Min, (_4n, _2n,)>(); }
+    #[test]
+    fn min_rhs() { let _: Val<_2n> = val::<Min, (_4n, _2n,)>(); }
 }
