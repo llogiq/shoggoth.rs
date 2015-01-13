@@ -54,7 +54,7 @@ impl fun::Sig for Not { type Dom = (Bool,); type Cod = Bool; }
 impl fun::Fn<Not> for (False,) { type O = True; }
 impl fun::Fn<Not> for (True,) { type O = False; }
 
-// Type-level function for bool conjunction
+/// Type-level function for bool conjunction
 #[derive(Clone)]
 #[derive(Copy)]
 #[derive(Eq)]
