@@ -240,7 +240,6 @@ impl<N0: Tm<Nat>, N1: Tm<Nat>> fun::Fn<LTEq> for (Succ<N0>, Succ<N1>,) where
 
 #[cfg(test)]
 mod tests {
-    use ty::bool::*;
     use ty::literal::*;
     use ty::nat::*;
     use ty::val::*;
@@ -264,19 +263,19 @@ mod tests {
     fn fac() { let _: Val<_24n> = val::<Fac, (_4n,) >(); }
 
     #[test]
-    fn lt_false() { let _: Val<False> = val::<LT, (_4n, _2n,)>(); }
+    fn lt_false() { let _: Val<FF> = val::<LT, (_4n, _2n,)>(); }
 
     #[test]
-    fn lt_true() { let _: Val<True> = val::<LT, (_2n, _4n,)>(); }
+    fn lt_true() { let _: Val<TT> = val::<LT, (_2n, _4n,)>(); }
 
     #[test]
-    fn lteq_false() { let _: Val<False> = val::<LTEq, (_4n, _2n,)>(); }
+    fn lteq_false() { let _: Val<FF> = val::<LTEq, (_4n, _2n,)>(); }
 
     #[test]
-    fn lteq_true_00() { let _: Val<True> = val::<LTEq, (_2n, _2n,)>(); }
+    fn lteq_true_00() { let _: Val<TT> = val::<LTEq, (_2n, _2n,)>(); }
 
     #[test]
-    fn lteq_true_01() { let _: Val<True> = val::<LTEq, (_2n, _4n,)>(); }
+    fn lteq_true_01() { let _: Val<TT> = val::<LTEq, (_2n, _4n,)>(); }
 
     // #[test]
     // fn min_lhs() { let _: Val<_2n> = val::<Min, (_2n, _4n,)>(); }
