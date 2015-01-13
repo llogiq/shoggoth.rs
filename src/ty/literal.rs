@@ -2,7 +2,6 @@ use ty::{
     bool,
     list,
     nat,
-    self,
 };
 
 pub type FF = bool::False;
@@ -110,4 +109,4 @@ pub type _98n = nat::Succ<_97n>;
 pub type _99n = nat::Succ<_98n>;
 
 pub type Nl = list::Nil;
-pub type Cl<A: ty::Ty, H: ty::Tm<A>, T: ty::Tm<ty::list::List<A>>> = list::Cons<A, H, T>;
+pub type Cl<H, T> = list::Cons<H, T>;
