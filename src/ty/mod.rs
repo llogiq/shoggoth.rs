@@ -1,9 +1,57 @@
-pub mod bool;
-pub mod fun;
-pub mod list;
+pub use self::bool::{
+    And,
+    Bool,
+    False,
+    If,
+    Not,
+    Or,
+    True,
+};
+
+pub use self::fun::{
+    Ap,
+    Def,
+    DepFn,
+    Fn,
+    Sig,
+};
+
+pub use self::list::{
+    Append,
+    At,
+    Cons,
+    Length,
+    List,
+    Nil,
+    ReplaceAt,
+};
+
+pub use self::nat::{
+    Add,
+    Exp,
+    Fac,
+    LT,
+    LTEq,
+    Min,
+    Mul,
+    Nat,
+    Pred,
+    Sub,
+    Succ,
+    Zero,
+};
+
+pub use self::val::{
+    Val,
+    val,
+};
+
+mod bool;
+mod fun;
+mod list;
 pub mod literal;
-pub mod nat;
-pub mod val;
+mod nat;
+mod val;
 
 /// Predicate classifying type-level "types"
 pub trait Ty {}
