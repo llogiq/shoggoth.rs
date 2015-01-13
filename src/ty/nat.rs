@@ -5,6 +5,7 @@ use ty::{
     fun,
 };
 
+/// Type-level nat
 #[derive(Clone)]
 #[derive(Copy)]
 #[derive(Eq)]
