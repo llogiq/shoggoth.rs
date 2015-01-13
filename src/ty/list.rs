@@ -83,18 +83,61 @@ impl<A: Ty, H: Tm<A>, T: Tm<List<A>>> fun::Fn<Length<A>> for (Cons<A, H, T>,) wh
     type O = nat::Succ<fun::Ap<Length<A>, (T,)>>;
 }
 
+#[derive(Clone)]
+#[derive(Copy)]
+#[derive(Eq)]
+#[derive(Hash)]
+#[derive(Ord)]
+#[derive(PartialEq)]
+#[derive(PartialOrd)]
+#[derive(Show)]
+pub enum At<A: Ty> {}
+impl<A: Ty> fun::Sig for At<A> { type Dom = (List<A>, nat::Nat,); type Cod = A; }
+impl<A: Ty, H: Tm<A>, T: Tm<List<A>>> fun::Fn<At<A>> for (Cons<A, H, T>, nat::Zero,) {
+    type O = H;
+}
+impl<A: Ty, H: Tm<A>, T: Tm<List<A>>, N: Tm<nat::Nat>> fun::Fn<At<A>> for (Cons<A, H, T>, nat::Succ<N>,) where
+    (T, N,): fun::Fn<At<A>>,
+    fun::Ap<At<A>, (T, N,)>: Tm<A>,
+{
+    type O = fun::Ap<At<A>, (T, N,)>;
+}
+
+#[derive(Clone)]
+#[derive(Copy)]
+#[derive(Eq)]
+#[derive(Hash)]
+#[derive(Ord)]
+#[derive(PartialEq)]
+#[derive(PartialOrd)]
+#[derive(Show)]
+pub enum ReplaceAt<A: Ty> {}
+impl<A: Ty> fun::Sig for ReplaceAt<A> { type Dom = (List<A>, nat::Nat, A); type Cod = List<A>; }
+impl<A: Ty, H: Tm<A>, T: Tm<List<A>>, X: Tm<A>> fun::Fn<ReplaceAt<A>> for (Cons<A, H, T>, nat::Zero, X,) {
+    type O = Cons<A, X, T>;
+}
+impl<A: Ty, H: Tm<A>, T: Tm<List<A>>, N: Tm<nat::Nat>, X: Tm<A>> fun::Fn<ReplaceAt<A>> for (Cons<A, H, T>, nat::Succ<N>, X,) where
+    (T, N, X,): fun::Fn<ReplaceAt<A>>,
+    fun::Ap<ReplaceAt<A>, (T, N, X)>: Tm<List<A>>,
+{
+    type O = Cons<A, H, fun::Ap<ReplaceAt<A>, (T, N, X)>>;
+}
+
 #[cfg(test)]
 mod tests {
+    use ty::{
+        nat,
+    };
     use ty::list::*;
     use ty::literal::*;
     use ty::val::*;
 
     #[test]
     fn append() {
-        let _: Val<Cons<(), (), Cons<(), (), Cons<(), (), Cons<(), (), Nil>>>>> =
+        let _: Val<Cl<(), (), Cl<(), (), Cl<(), (), Cl<(), (), Nl>>>>> =
             val::<Append<()>, (
-                Cons<(), (), Cons<(), (), Nil>>,
-                Cons<(), (), Cons<(), (), Nil>>,
+                Cl<(), (), Cl<(), (), Nl>>,
+                Cl<(), (), Cl<(), (), Nl>>,
                 )>();
     }
 
@@ -102,7 +145,26 @@ mod tests {
     fn length() {
         let _: Val<_4n> =
             val::<Length<()>, (
-                Cons<(), (), Cons<(), (), Cons<(), (), Cons<(), (), Nil>>>>,
+                Cl<(), (), Cl<(), (), Cl<(), (), Cl<(), (), Nl>>>>,
+                )>();
+    }
+
+    #[test]
+    fn at() {
+        let _: Val<_2n> =
+            val::<At<nat::Nat>, (
+                Cl<nat::Nat, _4n, Cl<nat::Nat, _2n, Nl>>,
+                _1n,
+                )>();
+    }
+
+    #[test]
+    fn replace_at() {
+        let _: Val<Cl<nat::Nat, _4n, Cl<nat::Nat, _5n, Nl>>> =
+            val::<ReplaceAt<nat::Nat>, (
+                Cl<nat::Nat, _4n, Cl<nat::Nat, _2n, Nl>>,
+                _1n,
+                _5n,
                 )>();
     }
 }
