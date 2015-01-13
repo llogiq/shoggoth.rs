@@ -65,8 +65,8 @@ impl fun::Fn<Not> for (True,) { type O = False; }
 #[derive(Show)]
 pub enum And {}
 impl fun::Sig for And { type Dom = (Bool, Bool,); type Cod = Bool; }
-impl<B1: Tm<Bool>> fun::Fn<And> for (False, B1,) { type O = False; }
-impl<B1: Tm<Bool>> fun::Fn<And> for (True, B1,) { type O = B1; }
+impl<B: Tm<Bool>> fun::Fn<And> for (False, B,) { type O = False; }
+impl<B: Tm<Bool>> fun::Fn<And> for (True, B,) { type O = B; }
 
 /// Type-level function for bool disjunction
 #[derive(Clone)]
@@ -79,8 +79,8 @@ impl<B1: Tm<Bool>> fun::Fn<And> for (True, B1,) { type O = B1; }
 #[derive(Show)]
 pub enum Or {}
 impl fun::Sig for Or { type Dom = (Bool, Bool,); type Cod = Bool; }
-impl<B1: Tm<Bool>> fun::Fn<Or> for (False, B1,) { type O = B1; }
-impl<B1: Tm<Bool>> fun::Fn<Or> for (True, B1,) { type O = True; }
+impl<B: Tm<Bool>> fun::Fn<Or> for (False, B,) { type O = B; }
+impl<B: Tm<Bool>> fun::Fn<Or> for (True, B,) { type O = True; }
 
 /// Type-level function for bool conditional
 #[derive(Clone)]
