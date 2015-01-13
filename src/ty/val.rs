@@ -15,4 +15,4 @@ pub struct Val<A>(());
 /// Compute a type-level expression by applying a "type-level
 /// function" `F` to a type-level argument `I`
 #[inline]
-pub fn val<F: fun::Fn<I>, I>() -> Val<fun::Ap<F, I>> { Val(()) }
+pub fn val<Fx: fun::Def, I: fun::Fn<Fx>>() -> Val<fun::Ap<Fx, I>> { Val(()) }

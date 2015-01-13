@@ -1,6 +1,21 @@
-use ty;
+use ty::{
+    Tm,
+    Ty,
+    fun,
+};
 
-/// Type-level boolean `false`
+#[derive(Clone)]
+#[derive(Copy)]
+#[derive(Eq)]
+#[derive(Hash)]
+#[derive(Ord)]
+#[derive(PartialEq)]
+#[derive(PartialOrd)]
+#[derive(Show)]
+pub enum Bool {}
+impl Ty for Bool {}
+
+/// Type-level boolean "false"
 #[derive(Clone)]
 #[derive(Copy)]
 #[derive(Eq)]
@@ -10,8 +25,9 @@ use ty;
 #[derive(PartialOrd)]
 #[derive(Show)]
 pub enum False {}
+impl Tm<Bool> for False {}
 
-/// Type-level boolean `true`
+/// Type-level boolean "true"
 #[derive(Clone)]
 #[derive(Copy)]
 #[derive(Eq)]
@@ -21,11 +37,7 @@ pub enum False {}
 #[derive(PartialOrd)]
 #[derive(Show)]
 pub enum True {}
-
-/// Predicate classifying type-level booleans
-pub trait Bool {}
-impl Bool for False {}
-impl Bool for True {}
+impl Tm<Bool> for True {}
 
 /// Type-level function for boolean negation
 #[derive(Clone)]
@@ -37,10 +49,11 @@ impl Bool for True {}
 #[derive(PartialOrd)]
 #[derive(Show)]
 pub enum Not {}
-impl ty::fun::Fn<(False,)> for Not { type Out = True; }
-impl ty::fun::Fn<(True,)> for Not { type Out = False; }
+impl fun::Sig for Not { type Dom = (Bool,); type Cod = Bool; }
+impl fun::Fn<Not> for (False,) { type O = True; }
+impl fun::Fn<Not> for (True,) { type O = False; }
 
-/// Type-level function for boolean conjunction
+// Type-level function for boolean conjunction
 #[derive(Clone)]
 #[derive(Copy)]
 #[derive(Eq)]
@@ -50,8 +63,9 @@ impl ty::fun::Fn<(True,)> for Not { type Out = False; }
 #[derive(PartialOrd)]
 #[derive(Show)]
 pub enum And {}
-impl<RHS: Bool> ty::fun::Fn<(False, RHS,)> for And { type Out = False; }
-impl<RHS: Bool> ty::fun::Fn<(True, RHS,)> for And { type Out = RHS; }
+impl fun::Sig for And { type Dom = (Bool, Bool,); type Cod = Bool; }
+impl<B1: Tm<Bool>> fun::Fn<And> for (False, B1,) { type O = False; }
+impl<B1: Tm<Bool>> fun::Fn<And> for (True, B1,) { type O = B1; }
 
 /// Type-level function for boolean disjunction
 #[derive(Clone)]
@@ -63,8 +77,9 @@ impl<RHS: Bool> ty::fun::Fn<(True, RHS,)> for And { type Out = RHS; }
 #[derive(PartialOrd)]
 #[derive(Show)]
 pub enum Or {}
-impl<RHS: Bool> ty::fun::Fn<(False, RHS,)> for Or { type Out = RHS; }
-impl<RHS: Bool> ty::fun::Fn<(True, RHS,)> for Or { type Out = True; }
+impl fun::Sig for Or { type Dom = (Bool, Bool,); type Cod = Bool; }
+impl<B1: Tm<Bool>> fun::Fn<Or> for (False, B1,) { type O = B1; }
+impl<B1: Tm<Bool>> fun::Fn<Or> for (True, B1,) { type O = True; }
 
 /// Type-level function for boolean conditional
 #[derive(Clone)]
@@ -75,12 +90,14 @@ impl<RHS: Bool> ty::fun::Fn<(True, RHS,)> for Or { type Out = True; }
 #[derive(PartialEq)]
 #[derive(PartialOrd)]
 #[derive(Show)]
-pub enum If {}
-impl<LHS, RHS> ty::fun::Fn<(True, LHS, RHS,)> for If { type Out = LHS; }
-impl<LHS, RHS> ty::fun::Fn<(False, LHS, RHS,)> for If { type Out = RHS; }
+pub enum If<A: Ty> {}
+impl<A: Ty> fun::Sig for If<A> { type Dom = (Bool, A, A,); type Cod = A; }
+impl<A: Ty, B0: Tm<A>, B1: Tm<A>> fun::Fn<If<A>> for (False, B0, B1,) { type O = B1; }
+impl<A: Ty, B0: Tm<A>, B1: Tm<A>> fun::Fn<If<A>> for (True, B0, B1,) { type O = B0; }
 
 #[cfg(test)]
 mod tests {
+    use ty;
     use ty::bool::*;
     use ty::literal::*;
     use ty::val::*;
@@ -95,8 +112,8 @@ mod tests {
 
     #[test]
     fn and_false() {
-        fn aux<RHS: Bool>() {
-            let _: Val<FF> = val::<And, (FF, RHS,)>();
+        fn aux<B1: ty::Tm<Bool>>() {
+            let _: Val<FF> = val::<And, (FF, B1,)>();
         }
         aux::<FF>();
         aux::<TT>();
@@ -104,8 +121,8 @@ mod tests {
 
     #[test]
     fn and_true() {
-        fn aux<RHS: Bool>() {
-            let _: Val<RHS> = val::<And, (TT, RHS,)>();
+        fn aux<B1: ty::Tm<Bool>>() {
+            let _: Val<B1> = val::<And, (TT, B1,)>();
         }
         aux::<FF>();
         aux::<TT>();
@@ -113,8 +130,8 @@ mod tests {
 
     #[test]
     fn or_false() {
-        fn aux<RHS: Bool>() {
-            let _: Val<RHS> = val::<Or, (FF, RHS,)>();
+        fn aux<B1: ty::Tm<Bool>>() {
+            let _: Val<B1> = val::<Or, (FF, B1,)>();
         }
         aux::<FF>();
         aux::<TT>();
@@ -122,29 +139,20 @@ mod tests {
 
     #[test]
     fn or_true() {
-        fn aux<RHS: Bool>() {
-            let _: Val<TT> = val::<Or, (TT, RHS,)>();
+        fn aux<B1: ty::Tm<Bool>>() {
+            let _: Val<TT> = val::<Or, (TT, B1,)>();
         }
         aux::<FF>();
-        aux::< TT>();
+        aux::<TT>();
     }
 
     #[test]
     fn if_false() {
-        fn aux<LHS, RHS>() {
-            let _: Val<RHS> = val::<If, (FF, LHS, RHS,)>();
-        }
-        aux::<(), bool>();
-        aux::<(), bool>();
+        let _: Val<TT> = val::<If<Bool>, (FF, FF, TT,)>();
     }
 
     #[test]
     fn if_true() {
-        fn aux<LHS, RHS>() {
-            let _: Val<LHS> = val::<If, (TT, LHS, RHS,)>();
-        }
-        aux::<(), bool>();
-        aux::<(), bool>();
+        let _: Val<FF> = val::<If<Bool>, (TT, FF, TT,)>();
     }
 }
-

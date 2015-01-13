@@ -1,10 +1,20 @@
-use ty::bool::{
-    Bool,
-    False,
-    If,
-    True,
+use ty::{
+    Tm,
+    Ty,
+    bool,
+    fun,
 };
-use ty::fun;
+
+#[derive(Clone)]
+#[derive(Copy)]
+#[derive(Eq)]
+#[derive(Hash)]
+#[derive(Ord)]
+#[derive(PartialEq)]
+#[derive(PartialOrd)]
+#[derive(Show)]
+pub enum Nat {}
+impl Ty for Nat {}
 
 /// Type-level natural number zero
 #[derive(Clone)]
@@ -16,6 +26,7 @@ use ty::fun;
 #[derive(PartialOrd)]
 #[derive(Show)]
 pub enum Zero {}
+impl Tm<Nat> for Zero {}
 
 /// Type-level natural number successor of n
 #[derive(Clone)]
@@ -26,12 +37,8 @@ pub enum Zero {}
 #[derive(PartialEq)]
 #[derive(PartialOrd)]
 #[derive(Show)]
-pub enum Succ<N: Nat> {}
-
-/// Predicate classifying type-level natural numbers
-pub trait Nat {}
-impl Nat for Zero {}
-impl<N: Nat> Nat for Succ<N> {}
+pub enum Succ<N: Tm<Nat>> {}
+impl<N: Tm<Nat>> Tm<Nat> for Succ<N> {}
 
 /// Type-level function for nat predecessor
 #[derive(Clone)]
@@ -43,9 +50,10 @@ impl<N: Nat> Nat for Succ<N> {}
 #[derive(PartialOrd)]
 #[derive(Show)]
 pub enum Pred {}
-impl<LHS: Nat> fun::Fn<(Succ<LHS>,)> for Pred
+impl fun::Sig for Pred { type Dom = (Nat,); type Cod = Nat; }
+impl<N: Tm<Nat>> fun::Fn<Pred> for (Succ<N>,)
 {
-    type Out = LHS;
+    type O = N;
 }
 
 /// Type-level function for nat addition
@@ -58,14 +66,16 @@ impl<LHS: Nat> fun::Fn<(Succ<LHS>,)> for Pred
 #[derive(PartialOrd)]
 #[derive(Show)]
 pub enum Add {}
-impl<RHS: Nat> fun::Fn<(Zero, RHS,)> for Add
+impl fun::Sig for Add { type Dom = (Nat, Nat,); type Cod = Nat; }
+impl<N1: Tm<Nat>> fun::Fn<Add> for (Zero, N1,)
 {
-    type Out = RHS;
+    type O = N1;
 }
-impl<LHS: Nat, RHS: Nat> fun::Fn<(Succ<LHS>, RHS,)> for Add where
-    Add: fun::Fn<(LHS, RHS,)>,
+impl<N0: Tm<Nat>, N1: Tm<Nat>> fun::Fn<Add> for (Succ<N0>, N1,) where
+    (N0, N1,): fun::Fn<Add>,
+    fun::Ap<Add, (N0, N1,)>: Tm<Nat>,
 {
-    type Out = Succ<fun::Ap<Add, (LHS, RHS,)>>;
+    type O = Succ<fun::Ap<Add, (N0, N1,)>>;
 }
 
 /// Type-level function for nat subtraction
@@ -78,14 +88,15 @@ impl<LHS: Nat, RHS: Nat> fun::Fn<(Succ<LHS>, RHS,)> for Add where
 #[derive(PartialOrd)]
 #[derive(Show)]
 pub enum Sub {}
-impl<LHS: Nat> fun::Fn<(LHS, Zero,)> for Sub
+impl fun::Sig for Sub { type Dom = (Nat, Nat,); type Cod = Nat; }
+impl<N0: Tm<Nat>> fun::Fn<Sub> for (N0, Zero,)
 {
-    type Out = LHS;
+    type O = N0;
 }
-impl<LHS: Nat, RHS: Nat, Rec: Nat> fun::Fn<(Succ<LHS>, Succ<RHS>,)> for Sub where
-    Sub: fun::Fn<(LHS, RHS,), Out = Rec>,
+impl<N0: Tm<Nat>, N1: Tm<Nat>, Rec: Tm<Nat>> fun::Fn<Sub> for (Succ<N0>, Succ<N1>,) where
+    (N0, N1,): fun::Fn<Sub, O = Rec>,
 {
-    type Out = Rec;
+    type O = Rec;
 }
 
 /// Type-level function for nat multiplication
@@ -98,15 +109,17 @@ impl<LHS: Nat, RHS: Nat, Rec: Nat> fun::Fn<(Succ<LHS>, Succ<RHS>,)> for Sub wher
 #[derive(PartialOrd)]
 #[derive(Show)]
 pub enum Mul {}
-impl<RHS: Nat> fun::Fn<(Zero, RHS,)> for Mul
+impl fun::Sig for Mul { type Dom = (Nat, Nat,); type Cod = Nat; }
+impl<N1: Tm<Nat>> fun::Fn<Mul> for (Zero, N1,)
 {
-    type Out = Zero;
+    type O = Zero;
 }
-impl<LHS: Nat, RHS: Nat, Rec: Nat> fun::Fn<(Succ<LHS>, RHS,)> for Mul where
-    Mul: fun::Fn<(LHS, RHS,), Out = Rec>,
-    Add: fun::Fn<(RHS, Rec,)>,
+impl<N0: Tm<Nat>, N1: Tm<Nat>, Rec: Tm<Nat>> fun::Fn<Mul> for (Succ<N0>, N1,) where
+    (N0, N1,): fun::Fn<Mul, O = Rec>,
+    (N1, Rec,): fun::Fn<Add>,
+    fun::Ap<Add, (N1, Rec,)>: Tm<Nat>,
 {
-    type Out = fun::Ap<Add, (RHS, Rec,)>;
+    type O = fun::Ap<Add, (N1, Rec,)>;
 }
 
 /// Type-level function for nat exponentiation
@@ -119,15 +132,17 @@ impl<LHS: Nat, RHS: Nat, Rec: Nat> fun::Fn<(Succ<LHS>, RHS,)> for Mul where
 #[derive(PartialOrd)]
 #[derive(Show)]
 pub enum Exp {}
-impl<RHS: Nat> fun::Fn<(Zero, RHS,)> for Exp
+impl fun::Sig for Exp { type Dom = (Nat, Nat,); type Cod = Nat; }
+impl<N1: Tm<Nat>> fun::Fn<Exp> for (Zero, N1,)
 {
-    type Out = Succ<Zero>;
+    type O = Succ<Zero>;
 }
-impl<LHS: Nat, RHS: Nat, Rec: Nat> fun::Fn<(Succ<LHS>, RHS,)> for Exp where
-    Exp: fun::Fn<(LHS, RHS,), Out = Rec>,
-    Mul: fun::Fn<(RHS, Rec,)>,
+impl<N0: Tm<Nat>, N1: Tm<Nat>, Rec: Tm<Nat>> fun::Fn<Exp> for (Succ<N0>, N1,) where
+    (N0, N1,): fun::Fn<Exp, O = Rec>,
+    (N1, Rec,): fun::Fn<Mul>,
+    fun::Ap<Mul, (N1, Rec,)>: Tm<Nat>,
 {
-    type Out = fun::Ap<Mul, (RHS, Rec,)>;
+    type O = fun::Ap<Mul, (N1, Rec,)>;
 }
 
 /// Type-level function for nat factorial
@@ -140,15 +155,17 @@ impl<LHS: Nat, RHS: Nat, Rec: Nat> fun::Fn<(Succ<LHS>, RHS,)> for Exp where
 #[derive(PartialOrd)]
 #[derive(Show)]
 pub enum Fac {}
-impl fun::Fn<(Zero,)> for Fac
+impl fun::Sig for Fac { type Dom = (Nat,); type Cod = Nat; }
+impl fun::Fn<Fac> for (Zero,)
 {
-    type Out = Succ<Zero>;
+    type O = Succ<Zero>;
 }
-impl<LHS: Nat, Rec: Nat> fun::Fn<(Succ<LHS>,)> for Fac where
-    Fac: fun::Fn<(LHS,), Out = Rec>,
-    Mul: fun::Fn<(Succ<LHS>, Rec,)>,
+impl<N0: Tm<Nat>, Rec: Tm<Nat>> fun::Fn<Fac> for (Succ<N0>,) where
+    (N0,): fun::Fn<Fac, O = Rec>,
+    (Succ<N0>, Rec,): fun::Fn<Mul>,
+    fun::Ap<Mul, (Succ<N0>, Rec,)>: Tm<Nat>,
 {
-    type Out = fun::Ap<Mul, (Succ<LHS>, Rec,)>;
+    type O = fun::Ap<Mul, (Succ<N0>, Rec,)>;
 }
 
 /// Type-level function for nat less-than
@@ -161,16 +178,18 @@ impl<LHS: Nat, Rec: Nat> fun::Fn<(Succ<LHS>,)> for Fac where
 #[derive(PartialOrd)]
 #[derive(Show)]
 pub enum LT {}
-impl<RHS: Nat> fun::Fn<(Zero, RHS,)> for LT {
-    type Out = True;
+impl fun::Sig for LT { type Dom = (Nat, Nat,); type Cod = bool::Bool; }
+impl<N1: Tm<Nat>> fun::Fn<LT> for (Zero, N1,) {
+    type O = bool::True;
 }
-impl<LHS: Nat> fun::Fn<(Succ<LHS>, Zero,)> for LT {
-    type Out = False;
+impl<N0: Tm<Nat>> fun::Fn<LT> for (Succ<N0>, Zero,) {
+    type O = bool::False;
 }
-impl<LHS: Nat, RHS: Nat> fun::Fn<(Succ<LHS>, Succ<RHS>,)> for LT where
-    LT: fun::Fn<(LHS, RHS,)>,
+impl<N0: Tm<Nat>, N1: Tm<Nat>> fun::Fn<LT> for (Succ<N0>, Succ<N1>,) where
+    (N0, N1,): fun::Fn<LT>,
+    fun::Ap<LT, (N0, N1,)>: Tm<bool::Bool>,
 {
-    type Out = fun::Ap<LT, (LHS, RHS,)>;
+    type O = fun::Ap<LT, (N0, N1,)>;
 }
 
 /// Type-level function for nat less-than-or-eq
@@ -183,37 +202,41 @@ impl<LHS: Nat, RHS: Nat> fun::Fn<(Succ<LHS>, Succ<RHS>,)> for LT where
 #[derive(PartialOrd)]
 #[derive(Show)]
 pub enum LTEq {}
-impl fun::Fn<(Zero, Zero,)> for LTEq {
-    type Out = True;
+impl fun::Sig for LTEq { type Dom = (Nat, Nat,); type Cod = bool::Bool; }
+impl fun::Fn<LTEq> for (Zero, Zero,) {
+    type O = bool::True;
 }
-impl<LHS: Nat> fun::Fn<(Succ<LHS>, Zero,)> for LTEq {
-    type Out = False;
+impl<N0: Tm<Nat>> fun::Fn<LTEq> for (Succ<N0>, Zero,) {
+    type O = bool::False;
 }
-impl<RHS: Nat> fun::Fn<(Zero, Succ<RHS>,)> for LTEq {
-    type Out = True;
+impl<N1: Tm<Nat>> fun::Fn<LTEq> for (Zero, Succ<N1>,) {
+    type O = bool::True;
 }
-impl<LHS: Nat, RHS: Nat> fun::Fn<(Succ<LHS>, Succ<RHS>,)> for LTEq where
-    LTEq: fun::Fn<(LHS, RHS,)>,
+impl<N0: Tm<Nat>, N1: Tm<Nat>> fun::Fn<LTEq> for (Succ<N0>, Succ<N1>,) where
+    (N0, N1,): fun::Fn<LTEq>,
+    fun::Ap<LTEq, (N0, N1,)>: Tm<bool::Bool>,
 {
-    type Out = fun::Ap<LTEq, (LHS, RHS,)>;
+    type O = fun::Ap<LTEq, (N0, N1,)>;
 }
 
-/// Type-level function for nat min
-#[derive(Clone)]
-#[derive(Copy)]
-#[derive(Eq)]
-#[derive(Hash)]
-#[derive(Ord)]
-#[derive(PartialEq)]
-#[derive(PartialOrd)]
-#[derive(Show)]
-pub enum Min {}
-impl<LHS: Nat, RHS: Nat, Rec: Bool> fun::Fn<(LHS, RHS,)> for Min where
-    LTEq: fun::Fn<(LHS, RHS), Out = Rec>,
-    If: fun::Fn<(Rec, LHS, RHS,)>,
-{
-    type Out = fun::Ap<If, (Rec, LHS, RHS,)>;
-}
+// /// Type-level function for nat min
+// #[derive(Clone)]
+// #[derive(Copy)]
+// #[derive(Eq)]
+// #[derive(Hash)]
+// #[derive(Ord)]
+// #[derive(PartialEq)]
+// #[derive(PartialOrd)]
+// #[derive(Show)]
+// pub enum Min {}
+// impl fun::Sig for Min { type Dom = (Nat, Nat,); type Cod = Nat; }
+// impl<N0: Tm<Nat>, N1: Tm<Nat>, Rec: Tm<bool::Bool>> fun::Fn<Min> for (N0, N1,) where
+//     (N0, N1): fun::Fn<LTEq, O = Rec>,
+//     (Rec, N0, N1,): fun::Fn<bool::If<Nat>>,
+//     fun::Ap<bool::If<Nat>, (Rec, N0, N1,)>: Tm<Nat>,
+// {
+//     type O = fun::Ap<bool::If<Nat>, (Rec, N0, N1,)>;
+// }
 
 #[cfg(test)]
 mod tests {
@@ -255,9 +278,9 @@ mod tests {
     #[test]
     fn lteq_true_01() { let _: Val<True> = val::<LTEq, (_2n, _4n,)>(); }
 
-    #[test]
-    fn min_lhs() { let _: Val<_2n> = val::<Min, (_2n, _4n,)>(); }
+    // #[test]
+    // fn min_lhs() { let _: Val<_2n> = val::<Min, (_2n, _4n,)>(); }
 
-    #[test]
-    fn min_rhs() { let _: Val<_2n> = val::<Min, (_4n, _2n,)>(); }
+    // #[test]
+    // fn min_rhs() { let _: Val<_2n> = val::<Min, (_4n, _2n,)>(); }
 }

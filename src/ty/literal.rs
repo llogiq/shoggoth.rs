@@ -1,5 +1,5 @@
 use ty::bool;
-use ty::list;
+// use ty::list;
 use ty::nat;
 
 pub type FF = bool::False;
@@ -106,5 +106,5 @@ pub type _97n = nat::Succ<_96n>;
 pub type _98n = nat::Succ<_97n>;
 pub type _99n = nat::Succ<_98n>;
 
-pub type Nl = list::Nil;
-pub type Cl<H, T> = list::Cons<H, T>;
+// pub type Nl = list::Nil;
+// pub type Cl<H, T> = list::Cons<H, T>;

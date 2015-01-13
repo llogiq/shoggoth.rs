@@ -1,6 +1,22 @@
-use ty;
+use ty::{
+    Tm,
+    Ty,
+    fun,
+    nat,
+};
 
-/// Type-level empty list
+#[derive(Clone)]
+#[derive(Copy)]
+#[derive(Eq)]
+#[derive(Hash)]
+#[derive(Ord)]
+#[derive(PartialEq)]
+#[derive(PartialOrd)]
+#[derive(Show)]
+pub enum List<A: Ty> {}
+impl<A: Ty> Ty for List<A> {}
+
+/// Type-level nil list
 #[derive(Clone)]
 #[derive(Copy)]
 #[derive(Eq)]
@@ -10,6 +26,7 @@ use ty;
 #[derive(PartialOrd)]
 #[derive(Show)]
 pub enum Nil {}
+impl<A: Ty> Tm<List<A>> for Nil {}
 
 /// Type-level cons list
 #[derive(Clone)]
@@ -20,12 +37,8 @@ pub enum Nil {}
 #[derive(PartialEq)]
 #[derive(PartialOrd)]
 #[derive(Show)]
-pub enum Cons<H, T: List> {}
-
-/// Predicate classifying type-level lists
-pub trait List {}
-impl List for Nil {}
-impl<H, T: List> List for Cons<H, T> {}
+pub enum Cons<A: Ty, H: Tm<A>, T: Tm<List<A>>> {}
+impl<A: Ty, H: Tm<A>, T: Tm<List<A>>> Tm<List<A>> for Cons<A, H, T> {}
 
 /// Type-level function for list append
 #[derive(Clone)]
@@ -36,15 +49,17 @@ impl<H, T: List> List for Cons<H, T> {}
 #[derive(PartialEq)]
 #[derive(PartialOrd)]
 #[derive(Show)]
-pub enum Append {}
-impl<RHS: List> ty::fun::Fn<(Nil, RHS,)> for Append
+pub enum Append<A: Ty> {}
+impl<A: Ty> fun::Sig for Append<A> { type Dom = (List<A>, List<A>,); type Cod = List<A>; }
+impl<A: Ty, N1: Tm<List<A>>> fun::Fn<Append<A>> for (Nil, N1,)
 {
-    type Out = RHS;
+    type O = N1;
 }
-impl<H, LHS: List, RHS: List> ty::fun::Fn<(Cons<H, LHS>, RHS,)> for Append where
-    Append: ty::fun::Fn<(LHS, RHS,)>,
+impl<A: Ty, H: Tm<A>, N0: Tm<List<A>>, N1: Tm<List<A>>> fun::Fn<Append<A>> for (Cons<A, H, N0>, N1,) where
+    (N0, N1,): fun::Fn<Append<A>>,
+    fun::Ap<Append<A>, (N0, N1,)>: Tm<List<A>>,
 {
-    type Out = Cons<H, ty::fun::Ap<Append, (LHS, RHS,)>>;
+    type O = Cons<A, H, fun::Ap<Append<A>, (N0, N1,)>>;
 }
 
 /// Type-level function for list length
@@ -56,14 +71,16 @@ impl<H, LHS: List, RHS: List> ty::fun::Fn<(Cons<H, LHS>, RHS,)> for Append where
 #[derive(PartialEq)]
 #[derive(PartialOrd)]
 #[derive(Show)]
-pub enum Length {}
-impl ty::fun::Fn<(Nil,)> for Length {
-    type Out = ty::nat::Zero;
+pub enum Length<A: Ty> {}
+impl<A: Ty> fun::Sig for Length<A> { type Dom = (List<A>,); type Cod = nat::Nat; }
+impl<A: Ty> fun::Fn<Length<A>> for (Nil,) {
+    type O = nat::Zero;
 }
-impl<H, T: List> ty::fun::Fn<(Cons<H, T>,)> for Length where
-    Length: ty::fun::Fn<(T,)>,
+impl<A: Ty, H: Tm<A>, T: Tm<List<A>>> fun::Fn<Length<A>> for (Cons<A, H, T>,) where
+    (T,): fun::Fn<Length<A>>,
+    fun::Ap<Length<A>, (T,)>: Tm<nat::Nat>,
 {
-    type Out = ty::nat::Succ<ty::fun::Ap<Length, (T,)>>;
+    type O = nat::Succ<fun::Ap<Length<A>, (T,)>>;
 }
 
 #[cfg(test)]
@@ -74,24 +91,18 @@ mod tests {
 
     #[test]
     fn append() {
-        fn aux<A0, A1, A2, A3>() {
-            let _: Val<Cons<A0, Cons<A1, Cons<A2, Cons<A3, Nil>>>>> =
-                val::<Append, (
-                    Cons<A0, Cons<A1, Nil>>,
-                    Cons<A2, Cons<A3, Nil>>,
-                    )>();
-        }
-        aux::<(), bool, u8, u16>();
+        let _: Val<Cons<(), (), Cons<(), (), Cons<(), (), Cons<(), (), Nil>>>>> =
+            val::<Append<()>, (
+                Cons<(), (), Cons<(), (), Nil>>,
+                Cons<(), (), Cons<(), (), Nil>>,
+                )>();
     }
 
     #[test]
     fn length() {
-        fn aux<A0, A1, A2, A3>() {
-            let _: Val<_4n> =
-                val::<Length, (
-                    Cons<A0, Cons<A1, Cons<A2, Cons<A3, Nil>>>>,
-                    )>();
-        }
-        aux::<(), bool, u8, u16>();
+        let _: Val<_4n> =
+            val::<Length<()>, (
+                Cons<(), (), Cons<(), (), Cons<(), (), Cons<(), (), Nil>>>>,
+                )>();
     }
 }
