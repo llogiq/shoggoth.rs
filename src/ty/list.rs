@@ -5,6 +5,7 @@ use ty::{
     nat,
 };
 
+/// Type-level list
 #[derive(Clone)]
 #[derive(Copy)]
 #[derive(Eq)]
@@ -83,6 +84,7 @@ impl<A: Ty, H: Tm<A>, T: Tm<List<A>>> fun::Fn<Length<A>> for (Cons<A, H, T>,) wh
     type O = nat::Succ<fun::Ap<Length<A>, (T,)>>;
 }
 
+/// Type-level function for list look up at index
 #[derive(Clone)]
 #[derive(Copy)]
 #[derive(Eq)]
@@ -103,6 +105,7 @@ impl<A: Ty, H: Tm<A>, T: Tm<List<A>>, N: Tm<nat::Nat>> fun::Fn<At<A>> for (Cons<
     type O = fun::Ap<At<A>, (T, N,)>;
 }
 
+/// Type-level function for list replace at index
 #[derive(Clone)]
 #[derive(Copy)]
 #[derive(Eq)]

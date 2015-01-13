@@ -4,6 +4,7 @@ use ty::{
     fun,
 };
 
+/// Type-level bool
 #[derive(Clone)]
 #[derive(Copy)]
 #[derive(Eq)]
@@ -15,7 +16,7 @@ use ty::{
 pub enum Bool {}
 impl Ty for Bool {}
 
-/// Type-level boolean "false"
+/// Type-level false
 #[derive(Clone)]
 #[derive(Copy)]
 #[derive(Eq)]
@@ -27,7 +28,7 @@ impl Ty for Bool {}
 pub enum False {}
 impl Tm<Bool> for False {}
 
-/// Type-level boolean "true"
+/// Type-level true
 #[derive(Clone)]
 #[derive(Copy)]
 #[derive(Eq)]
@@ -39,7 +40,7 @@ impl Tm<Bool> for False {}
 pub enum True {}
 impl Tm<Bool> for True {}
 
-/// Type-level function for boolean negation
+/// Type-level function for bool negation
 #[derive(Clone)]
 #[derive(Copy)]
 #[derive(Eq)]
@@ -53,7 +54,7 @@ impl fun::Sig for Not { type Dom = (Bool,); type Cod = Bool; }
 impl fun::Fn<Not> for (False,) { type O = True; }
 impl fun::Fn<Not> for (True,) { type O = False; }
 
-// Type-level function for boolean conjunction
+// Type-level function for bool conjunction
 #[derive(Clone)]
 #[derive(Copy)]
 #[derive(Eq)]
@@ -67,7 +68,7 @@ impl fun::Sig for And { type Dom = (Bool, Bool,); type Cod = Bool; }
 impl<B1: Tm<Bool>> fun::Fn<And> for (False, B1,) { type O = False; }
 impl<B1: Tm<Bool>> fun::Fn<And> for (True, B1,) { type O = B1; }
 
-/// Type-level function for boolean disjunction
+/// Type-level function for bool disjunction
 #[derive(Clone)]
 #[derive(Copy)]
 #[derive(Eq)]
@@ -81,7 +82,7 @@ impl fun::Sig for Or { type Dom = (Bool, Bool,); type Cod = Bool; }
 impl<B1: Tm<Bool>> fun::Fn<Or> for (False, B1,) { type O = B1; }
 impl<B1: Tm<Bool>> fun::Fn<Or> for (True, B1,) { type O = True; }
 
-/// Type-level function for boolean conditional
+/// Type-level function for bool conditional
 #[derive(Clone)]
 #[derive(Copy)]
 #[derive(Eq)]

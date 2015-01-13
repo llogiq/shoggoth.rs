@@ -11,6 +11,7 @@ pub trait Ty {}
 /// Predicate classifying "typed" type-level "terms"
 pub trait Tm<A: Ty> {}
 
+/// `Star` classifies normal Rust types
 #[derive(Clone)]
 #[derive(Copy)]
 #[derive(Eq)]
@@ -21,6 +22,7 @@ pub trait Tm<A: Ty> {}
 #[derive(Show)]
 pub enum Star {}
 
+/// `Rust<A>` makes a normal Rust type into a type-level term
 #[derive(Clone)]
 #[derive(Copy)]
 #[derive(Eq)]
