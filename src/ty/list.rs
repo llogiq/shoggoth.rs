@@ -56,11 +56,10 @@ impl<A: Ty, L1: Tm<List<A>>> fun::Fn<Append<A>> for (Nil, L1,)
 {
     type O = L1;
 }
-impl<A: Ty, H: Tm<A>, L0: Tm<List<A>>, L1: Tm<List<A>>> fun::Fn<Append<A>> for (Cons<H, L0>, L1,) where
-    (L0, L1,): fun::Fn<Append<A>>,
-    fun::Ap<Append<A>, (L0, L1,)>: Tm<List<A>>,
+impl<A: Ty, H: Tm<A>, L0: Tm<List<A>>, L1: Tm<List<A>>, Rec: Tm<List<A>>> fun::Fn<Append<A>> for (Cons<H, L0>, L1,) where
+    (L0, L1,): fun::Fn<Append<A>, O = Rec>,
 {
-    type O = Cons<H, fun::Ap<Append<A>, (L0, L1,)>>;
+    type O = Cons<H, Rec>;
 }
 
 /// Type-level function for list length
@@ -77,11 +76,10 @@ impl<A: Ty> fun::Sig for Length<A> { type Dom = (List<A>,); type Cod = nat::Nat;
 impl<A: Ty> fun::Fn<Length<A>> for (Nil,) {
     type O = nat::Zero;
 }
-impl<A: Ty, H: Tm<A>, T: Tm<List<A>>> fun::Fn<Length<A>> for (Cons<H, T>,) where
-    (T,): fun::Fn<Length<A>>,
-    fun::Ap<Length<A>, (T,)>: Tm<nat::Nat>,
+impl<A: Ty, H: Tm<A>, T: Tm<List<A>>, Rec: Tm<nat::Nat>> fun::Fn<Length<A>> for (Cons<H, T>,) where
+    (T,): fun::Fn<Length<A>, O = Rec>,
 {
-    type O = nat::Succ<fun::Ap<Length<A>, (T,)>>;
+    type O = nat::Succ<Rec>;
 }
 
 /// Type-level function for list look up at index
@@ -98,11 +96,10 @@ impl<A: Ty> fun::Sig for At<A> { type Dom = (List<A>, nat::Nat,); type Cod = A; 
 impl<A: Ty, H: Tm<A>, T: Tm<List<A>>> fun::Fn<At<A>> for (Cons<H, T>, nat::Zero,) {
     type O = H;
 }
-impl<A: Ty, H: Tm<A>, T: Tm<List<A>>, N: Tm<nat::Nat>> fun::Fn<At<A>> for (Cons<H, T>, nat::Succ<N>,) where
-    (T, N,): fun::Fn<At<A>>,
-    fun::Ap<At<A>, (T, N,)>: Tm<A>,
+impl<A: Ty, H: Tm<A>, T: Tm<List<A>>, N: Tm<nat::Nat>, Rec: Tm<A>> fun::Fn<At<A>> for (Cons<H, T>, nat::Succ<N>,) where
+    (T, N,): fun::Fn<At<A>, O = Rec>,
 {
-    type O = fun::Ap<At<A>, (T, N,)>;
+    type O = Rec;
 }
 
 /// Type-level function for list replace at index
@@ -119,11 +116,10 @@ impl<A: Ty> fun::Sig for ReplaceAt<A> { type Dom = (List<A>, nat::Nat, A); type 
 impl<A: Ty, H: Tm<A>, T: Tm<List<A>>, X: Tm<A>> fun::Fn<ReplaceAt<A>> for (Cons<H, T>, nat::Zero, X,) {
     type O = Cons<X, T>;
 }
-impl<A: Ty, H: Tm<A>, T: Tm<List<A>>, N: Tm<nat::Nat>, X: Tm<A>> fun::Fn<ReplaceAt<A>> for (Cons<H, T>, nat::Succ<N>, X,) where
-    (T, N, X,): fun::Fn<ReplaceAt<A>>,
-    fun::Ap<ReplaceAt<A>, (T, N, X)>: Tm<List<A>>,
+impl<A: Ty, H: Tm<A>, T: Tm<List<A>>, N: Tm<nat::Nat>, X: Tm<A>, Rec: Tm<List<A>>> fun::Fn<ReplaceAt<A>> for (Cons<H, T>, nat::Succ<N>, X,) where
+    (T, N, X,): fun::Fn<ReplaceAt<A>, O = Rec>,
 {
-    type O = Cons<H, fun::Ap<ReplaceAt<A>, (T, N, X)>>;
+    type O = Cons<H, Rec>;
 }
 
 #[cfg(test)]

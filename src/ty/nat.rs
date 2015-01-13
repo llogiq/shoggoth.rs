@@ -71,11 +71,10 @@ impl<N1: Tm<Nat>> fun::Fn<Add> for (Zero, N1,)
 {
     type O = N1;
 }
-impl<N0: Tm<Nat>, N1: Tm<Nat>> fun::Fn<Add> for (Succ<N0>, N1,) where
-    (N0, N1,): fun::Fn<Add>,
-    fun::Ap<Add, (N0, N1,)>: Tm<Nat>,
+impl<N0: Tm<Nat>, N1: Tm<Nat>, Rec: Tm<Nat>> fun::Fn<Add> for (Succ<N0>, N1,) where
+    (N0, N1,): fun::Fn<Add, O = Rec>,
 {
-    type O = Succ<fun::Ap<Add, (N0, N1,)>>;
+    type O = Succ<Rec>;
 }
 
 /// Type-level function for nat subtraction
@@ -114,12 +113,11 @@ impl<N1: Tm<Nat>> fun::Fn<Mul> for (Zero, N1,)
 {
     type O = Zero;
 }
-impl<N0: Tm<Nat>, N1: Tm<Nat>, Rec: Tm<Nat>> fun::Fn<Mul> for (Succ<N0>, N1,) where
-    (N0, N1,): fun::Fn<Mul, O = Rec>,
-    (N1, Rec,): fun::Fn<Add>,
-    fun::Ap<Add, (N1, Rec,)>: Tm<Nat>,
+impl<N0: Tm<Nat>, N1: Tm<Nat>, Rec0: Tm<Nat>, Rec1: Tm<Nat>> fun::Fn<Mul> for (Succ<N0>, N1,) where
+    (N0, N1,): fun::Fn<Mul, O = Rec0>,
+    (N1, Rec0,): fun::Fn<Add, O = Rec1>,
 {
-    type O = fun::Ap<Add, (N1, Rec,)>;
+    type O = Rec1;
 }
 
 /// Type-level function for nat exponentiation
@@ -137,12 +135,11 @@ impl<N1: Tm<Nat>> fun::Fn<Exp> for (Zero, N1,)
 {
     type O = Succ<Zero>;
 }
-impl<N0: Tm<Nat>, N1: Tm<Nat>, Rec: Tm<Nat>> fun::Fn<Exp> for (Succ<N0>, N1,) where
-    (N0, N1,): fun::Fn<Exp, O = Rec>,
-    (N1, Rec,): fun::Fn<Mul>,
-    fun::Ap<Mul, (N1, Rec,)>: Tm<Nat>,
+impl<N0: Tm<Nat>, N1: Tm<Nat>, Rec0: Tm<Nat>, Rec1: Tm<Nat>> fun::Fn<Exp> for (Succ<N0>, N1,) where
+    (N0, N1,): fun::Fn<Exp, O = Rec0>,
+    (N1, Rec0,): fun::Fn<Mul, O = Rec1>,
 {
-    type O = fun::Ap<Mul, (N1, Rec,)>;
+    type O = Rec1;
 }
 
 /// Type-level function for nat factorial
@@ -160,12 +157,11 @@ impl fun::Fn<Fac> for (Zero,)
 {
     type O = Succ<Zero>;
 }
-impl<N0: Tm<Nat>, Rec: Tm<Nat>> fun::Fn<Fac> for (Succ<N0>,) where
-    (N0,): fun::Fn<Fac, O = Rec>,
-    (Succ<N0>, Rec,): fun::Fn<Mul>,
-    fun::Ap<Mul, (Succ<N0>, Rec,)>: Tm<Nat>,
+impl<N0: Tm<Nat>, Rec0: Tm<Nat>, Rec1: Tm<Nat>> fun::Fn<Fac> for (Succ<N0>,) where
+    (N0,): fun::Fn<Fac, O = Rec0>,
+    (Succ<N0>, Rec0,): fun::Fn<Mul, O = Rec1>,
 {
-    type O = fun::Ap<Mul, (Succ<N0>, Rec,)>;
+    type O = Rec1;
 }
 
 /// Type-level function for nat less-than
@@ -185,11 +181,10 @@ impl<N1: Tm<Nat>> fun::Fn<LT> for (Zero, N1,) {
 impl<N0: Tm<Nat>> fun::Fn<LT> for (Succ<N0>, Zero,) {
     type O = bool::False;
 }
-impl<N0: Tm<Nat>, N1: Tm<Nat>> fun::Fn<LT> for (Succ<N0>, Succ<N1>,) where
-    (N0, N1,): fun::Fn<LT>,
-    fun::Ap<LT, (N0, N1,)>: Tm<bool::Bool>,
+impl<N0: Tm<Nat>, N1: Tm<Nat>, Rec: Tm<bool::Bool>> fun::Fn<LT> for (Succ<N0>, Succ<N1>,) where
+    (N0, N1,): fun::Fn<LT, O = Rec>,
 {
-    type O = fun::Ap<LT, (N0, N1,)>;
+    type O = Rec;
 }
 
 /// Type-level function for nat less-than-or-eq
@@ -212,11 +207,10 @@ impl<N0: Tm<Nat>> fun::Fn<LTEq> for (Succ<N0>, Zero,) {
 impl<N1: Tm<Nat>> fun::Fn<LTEq> for (Zero, Succ<N1>,) {
     type O = bool::True;
 }
-impl<N0: Tm<Nat>, N1: Tm<Nat>> fun::Fn<LTEq> for (Succ<N0>, Succ<N1>,) where
-    (N0, N1,): fun::Fn<LTEq>,
-    fun::Ap<LTEq, (N0, N1,)>: Tm<bool::Bool>,
+impl<N0: Tm<Nat>, N1: Tm<Nat>, Rec: Tm<bool::Bool>> fun::Fn<LTEq> for (Succ<N0>, Succ<N1>,) where
+    (N0, N1,): fun::Fn<LTEq, O = Rec>,
 {
-    type O = fun::Ap<LTEq, (N0, N1,)>;
+    type O = Rec;
 }
 
 // /// Type-level function for nat min
