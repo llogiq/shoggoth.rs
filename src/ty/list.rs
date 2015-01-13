@@ -130,6 +130,7 @@ impl<A: Ty, H: Tm<A>, T: Tm<List<A>>, N: Tm<nat::Nat>, X: Tm<A>> fun::Fn<Replace
 mod tests {
     use ty::{
         nat,
+        self,
     };
     use ty::list::*;
     use ty::literal::*;
@@ -158,6 +159,15 @@ mod tests {
             val::<At<nat::Nat>, (
                 Cl<nat::Nat, _4n, Cl<nat::Nat, _2n, Nl>>,
                 _1n,
+                )>();
+    }
+
+    #[test]
+    fn at_star() {
+        let _: Val<ty::Rust<Option<u8>>> =
+            val::<At<ty::Star>, (
+                Cl<ty::Star, ty::Rust<Option<u8>>, Cl<ty::Star, ty::Rust<Vec<()>>, Nl>>,
+                _0n,
                 )>();
     }
 
