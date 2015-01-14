@@ -1,3 +1,9 @@
+pub use self::bit::{
+    Bit,
+    _0,
+    _1,
+};
+
 pub use self::bool::{
     And,
     Bool,
@@ -31,6 +37,7 @@ pub use self::val::{
     val,
 };
 
+mod bit;
 mod bool;
 mod fun;
 mod list;
