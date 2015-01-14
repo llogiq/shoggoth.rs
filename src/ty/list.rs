@@ -2,8 +2,8 @@ use ty::{
     Tm,
     Ty,
     fun,
-    nat,
 };
+use ty::nat;
 
 /// Type-level list
 #[derive(Clone)]
@@ -72,14 +72,14 @@ impl<A: Ty, H: Tm<A>, L0: Tm<List<A>>, L1: Tm<List<A>>, Rec: Tm<List<A>>> fun::F
 #[derive(PartialOrd)]
 #[derive(Show)]
 pub enum Length<A: Ty> {}
-impl<A: Ty> fun::Sig for Length<A> { type Dom = (List<A>,); type Cod = nat::Nat; }
+impl<A: Ty> fun::Sig for Length<A> { type Dom = (List<A>,); type Cod = nat::peano::Nat; }
 impl<A: Ty> fun::Fn<Length<A>> for (Nil,) {
-    type O = nat::Zero;
+    type O = nat::peano::Zero;
 }
-impl<A: Ty, H: Tm<A>, T: Tm<List<A>>, Rec: Tm<nat::Nat>> fun::Fn<Length<A>> for (Cons<H, T>,) where
+impl<A: Ty, H: Tm<A>, T: Tm<List<A>>, Rec: Tm<nat::peano::Nat>> fun::Fn<Length<A>> for (Cons<H, T>,) where
     (T,): fun::Fn<Length<A>, O = Rec>,
 {
-    type O = nat::Succ<Rec>;
+    type O = nat::peano::Succ<Rec>;
 }
 
 /// Type-level function for list look up at index
@@ -92,11 +92,11 @@ impl<A: Ty, H: Tm<A>, T: Tm<List<A>>, Rec: Tm<nat::Nat>> fun::Fn<Length<A>> for 
 #[derive(PartialOrd)]
 #[derive(Show)]
 pub enum At<A: Ty> {}
-impl<A: Ty> fun::Sig for At<A> { type Dom = (List<A>, nat::Nat,); type Cod = A; }
-impl<A: Ty, H: Tm<A>, T: Tm<List<A>>> fun::Fn<At<A>> for (Cons<H, T>, nat::Zero,) {
+impl<A: Ty> fun::Sig for At<A> { type Dom = (List<A>, nat::peano::Nat,); type Cod = A; }
+impl<A: Ty, H: Tm<A>, T: Tm<List<A>>> fun::Fn<At<A>> for (Cons<H, T>, nat::peano::Zero,) {
     type O = H;
 }
-impl<A: Ty, H: Tm<A>, T: Tm<List<A>>, N: Tm<nat::Nat>, Rec: Tm<A>> fun::Fn<At<A>> for (Cons<H, T>, nat::Succ<N>,) where
+impl<A: Ty, H: Tm<A>, T: Tm<List<A>>, N: Tm<nat::peano::Nat>, Rec: Tm<A>> fun::Fn<At<A>> for (Cons<H, T>, nat::peano::Succ<N>,) where
     (T, N,): fun::Fn<At<A>, O = Rec>,
 {
     type O = Rec;
@@ -112,11 +112,11 @@ impl<A: Ty, H: Tm<A>, T: Tm<List<A>>, N: Tm<nat::Nat>, Rec: Tm<A>> fun::Fn<At<A>
 #[derive(PartialOrd)]
 #[derive(Show)]
 pub enum ReplaceAt<A: Ty> {}
-impl<A: Ty> fun::Sig for ReplaceAt<A> { type Dom = (List<A>, nat::Nat, A); type Cod = List<A>; }
-impl<A: Ty, H: Tm<A>, T: Tm<List<A>>, X: Tm<A>> fun::Fn<ReplaceAt<A>> for (Cons<H, T>, nat::Zero, X,) {
+impl<A: Ty> fun::Sig for ReplaceAt<A> { type Dom = (List<A>, nat::peano::Nat, A); type Cod = List<A>; }
+impl<A: Ty, H: Tm<A>, T: Tm<List<A>>, X: Tm<A>> fun::Fn<ReplaceAt<A>> for (Cons<H, T>, nat::peano::Zero, X,) {
     type O = Cons<X, T>;
 }
-impl<A: Ty, H: Tm<A>, T: Tm<List<A>>, N: Tm<nat::Nat>, X: Tm<A>, Rec: Tm<List<A>>> fun::Fn<ReplaceAt<A>> for (Cons<H, T>, nat::Succ<N>, X,) where
+impl<A: Ty, H: Tm<A>, T: Tm<List<A>>, N: Tm<nat::peano::Nat>, X: Tm<A>, Rec: Tm<List<A>>> fun::Fn<ReplaceAt<A>> for (Cons<H, T>, nat::peano::Succ<N>, X,) where
     (T, N, X,): fun::Fn<ReplaceAt<A>, O = Rec>,
 {
     type O = Cons<H, Rec>;
@@ -130,7 +130,7 @@ mod tests {
     };
     use ty::list::*;
     use ty::literal::*;
-    use ty::nat::*;
+    use ty::nat::peano::*;
     use ty::val::*;
 
     #[test]

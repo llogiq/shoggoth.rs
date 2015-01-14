@@ -26,21 +26,6 @@ pub use self::list::{
     ReplaceAt,
 };
 
-pub use self::nat::{
-    Add,
-    Exp,
-    Fac,
-    LT,
-    LTEq,
-    Min,
-    Mul,
-    Nat,
-    Pred,
-    Sub,
-    Succ,
-    Zero,
-};
-
 pub use self::val::{
     Val,
     val,
@@ -50,7 +35,7 @@ mod bool;
 mod fun;
 mod list;
 pub mod literal;
-mod nat;
+pub mod nat;
 mod val;
 
 /// Predicate classifying type-level "types"

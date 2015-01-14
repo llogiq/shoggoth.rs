@@ -235,8 +235,8 @@ impl<N0: Tm<Nat>, N1: Tm<Nat>, Rec0: Tm<bool::Bool>, Rec1: Tm<Nat>> fun::Fn<Min>
 
 #[cfg(test)]
 mod tests {
+    use super::*;
     use ty::literal::*;
-    use ty::nat::*;
     use ty::val::*;
 
     #[test]
