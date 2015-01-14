@@ -4,14 +4,13 @@ use ty::{
 };
 
 use ty::nat;
-pub use ty::nat::bin::{
-    _0b,
-    _1b,
-};
+use ty::bit;
 
 pub type FF = bool::False;
 pub type TT = bool::True;
 
+pub type     _0b = bit::_0;
+pub type     _1b = bit::_1;
 pub type     _2b = (    _1b, _0b);
 pub type     _4b = (    _2b, _0b);
 pub type     _8b = (    _4b, _0b);
