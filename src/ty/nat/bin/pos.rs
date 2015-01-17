@@ -195,6 +195,24 @@ impl<P0: Tm<Pos>, P1: Tm<Pos>, Rec: Tm<Pos>> fun::Fn<AddCarry> for ((P0, _1,), (
 #[derive(PartialEq)]
 #[derive(PartialOrd)]
 #[derive(Show)]
+pub enum PredDouble {}
+impl fun::Sig for PredDouble { type Dom = (Pos,); type Cod = Pos; }
+// 1 => 1
+impl fun::Fn<PredDouble> for ((_1),)
+{
+    type O = _1;
+}
+// p:0 => pred_double(p):1
+impl<P: Tm<Pos>, Rec: Tm<Pos>> fun::Fn<PredDouble> for ((P, _0,),) where
+    (P,): fun::Fn<PredDouble, O = Rec>,
+{
+    type O = (Rec, _1,);
+}
+// p:1 => p:0:1
+impl<P: Tm<Pos>> fun::Fn<PredDouble> for ((P, _1,),)
+{
+    type O = ((P, _0,), _1,);
+}
 pub enum Mul {}
 impl fun::Sig for Mul { type Dom = (Pos, Pos,); type Cod = Pos; }
 // 1, q => q
