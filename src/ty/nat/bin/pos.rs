@@ -240,6 +240,15 @@ impl<P: Tm<Pos>> fun::Fn<Pred> for ((P, _1,),)
 {
     type O = (P, _0,);
 }
+
+#[derive(Clone)]
+#[derive(Copy)]
+#[derive(Eq)]
+#[derive(Hash)]
+#[derive(Ord)]
+#[derive(PartialEq)]
+#[derive(PartialOrd)]
+#[derive(Show)]
 pub enum Mul {}
 impl fun::Sig for Mul { type Dom = (Pos, Pos,); type Cod = Pos; }
 // 1, q => q
