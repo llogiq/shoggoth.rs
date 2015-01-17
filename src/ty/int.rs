@@ -95,3 +95,30 @@ impl<P: Tm<npos::Pos>> fun::Fn<SuccDouble> for (Pz<P>,)
 {
     type O = Pz<(P, _1,)>;
 }
+
+#[derive(Clone)]
+#[derive(Copy)]
+#[derive(Eq)]
+#[derive(Hash)]
+#[derive(Ord)]
+#[derive(PartialEq)]
+#[derive(PartialOrd)]
+#[derive(Show)]
+pub enum PredDouble {}
+impl fun::Sig for PredDouble { type Dom = (Int,); type Cod = Int; }
+// 0 => 0
+impl fun::Fn<PredDouble> for ((_0),)
+{
+    type O = Nz<_1>;
+}
+// -p => -p:0
+impl<P: Tm<npos::Pos>> fun::Fn<PredDouble> for (Nz<P>,)
+{
+    type O = Nz<(P, _1,)>;
+}
+// +p => +p:0
+impl<P: Tm<npos::Pos>, Rec: Tm<npos::Pos>> fun::Fn<PredDouble> for (Pz<P>,) where
+    (P,): fun::Fn<npos::Pos, O = Rec>,
+{
+    type O = Pz<Rec>;
+}
