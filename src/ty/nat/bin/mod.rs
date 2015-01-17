@@ -1,11 +1,14 @@
 use self::pos::{
     Pos,
 };
-use ty::bit::*;
 use ty::{
     Tm,
     Ty,
     fun,
+};
+pub use ty::bit::{
+    _0,
+    _1,
 };
 
 /// Binary positive natural numbers
