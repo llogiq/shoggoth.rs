@@ -40,6 +40,7 @@ pub use self::val::{
 mod bit;
 mod bool;
 mod fun;
+pub mod int;
 mod list;
 pub mod literal;
 pub mod nat;
