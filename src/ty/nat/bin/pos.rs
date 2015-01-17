@@ -197,19 +197,19 @@ impl<P0: Tm<Pos>, P1: Tm<Pos>, Rec: Tm<Pos>> fun::Fn<AddCarry> for ((P0, _1,), (
 #[derive(Show)]
 pub enum Mul {}
 impl fun::Sig for Mul { type Dom = (Pos, Pos,); type Cod = Pos; }
-impl<P1: Tm<Pos>> fun::Fn<Mul> for ((_1), P1,)
 // 1, q => q
+impl<P1: Tm<Pos>> fun::Fn<Mul> for ((_1), (P1),)
 {
     type O = P1;
 }
-impl<P0: Tm<Pos>, P1: Tm<Pos>, Rec: Tm<Pos>> fun::Fn<Mul> for ((P0, _0,), P1,) where
 // p:0, q => (p * q):0
+impl<P0: Tm<Pos>, P1: Tm<Pos>, Rec: Tm<Pos>> fun::Fn<Mul> for ((P0, _0,), (P1),) where
     ((P0), (P1),): fun::Fn<Mul, O = Rec>,
 {
     type O = (Rec, _0,);
 }
-impl<P0: Tm<Pos>, P1: Tm<Pos>, Rec0: Tm<Pos>, Rec1: Tm<Pos>> fun::Fn<Mul> for ((P0, _1,), P1,) where
 // p:1, q => (q + (p * q)):0
+impl<P0: Tm<Pos>, P1: Tm<Pos>, Rec0: Tm<Pos>, Rec1: Tm<Pos>> fun::Fn<Mul> for ((P0, _1,), (P1),) where
     ((P0), (P1),): fun::Fn<Mul, O = Rec0>,
     ((P1), (Rec0),): fun::Fn<Add, O = Rec1>,
 {
