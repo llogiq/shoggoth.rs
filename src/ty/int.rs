@@ -51,6 +51,7 @@ impl<N: Tm<npos::Pos>> Tm<Int> for Pz<N> {}
 #[derive(PartialEq)]
 #[derive(PartialOrd)]
 #[derive(Show)]
+#[doc(hidden)]
 pub enum Double {}
 impl fun::Sig for Double { type Dom = (Int,); type Cod = Int; }
 // 0 => 0
@@ -77,6 +78,7 @@ impl<P: Tm<npos::Pos>> fun::Fn<Double> for (Pz<P>,)
 #[derive(PartialEq)]
 #[derive(PartialOrd)]
 #[derive(Show)]
+#[doc(hidden)]
 pub enum SuccDouble {}
 impl fun::Sig for SuccDouble { type Dom = (Int,); type Cod = Int; }
 // 0 => 0
@@ -104,6 +106,7 @@ impl<P: Tm<npos::Pos>> fun::Fn<SuccDouble> for (Pz<P>,)
 #[derive(PartialEq)]
 #[derive(PartialOrd)]
 #[derive(Show)]
+#[doc(hidden)]
 pub enum PredDouble {}
 impl fun::Sig for PredDouble { type Dom = (Int,); type Cod = Int; }
 // 0 => 0
