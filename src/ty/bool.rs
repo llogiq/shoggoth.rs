@@ -101,20 +101,20 @@ mod tests {
     use ty;
     use ty::bool::*;
     use ty::literal::*;
-    use ty::val::*;
+    use ty::wit::*;
 
     // FIXME: implement tests corresponding to boolean algebras
 
     #[test]
-    fn not_false() { let _: Val<TT> = val::<Not, (FF,)>(); }
+    fn not_false() { let _: Wit<TT> = wit::<Not, (FF,)>(); }
 
     #[test]
-    fn not_true () { let _: Val<FF> = val::<Not, (TT,)>(); }
+    fn not_true () { let _: Wit<FF> = wit::<Not, (TT,)>(); }
 
     #[test]
     fn and_false() {
         fn aux<B1: ty::Tm<Bool>>() {
-            let _: Val<FF> = val::<And, (FF, B1,)>();
+            let _: Wit<FF> = wit::<And, (FF, B1,)>();
         }
         aux::<FF>();
         aux::<TT>();
@@ -123,7 +123,7 @@ mod tests {
     #[test]
     fn and_true() {
         fn aux<B1: ty::Tm<Bool>>() {
-            let _: Val<B1> = val::<And, (TT, B1,)>();
+            let _: Wit<B1> = wit::<And, (TT, B1,)>();
         }
         aux::<FF>();
         aux::<TT>();
@@ -132,7 +132,7 @@ mod tests {
     #[test]
     fn or_false() {
         fn aux<B1: ty::Tm<Bool>>() {
-            let _: Val<B1> = val::<Or, (FF, B1,)>();
+            let _: Wit<B1> = wit::<Or, (FF, B1,)>();
         }
         aux::<FF>();
         aux::<TT>();
@@ -141,7 +141,7 @@ mod tests {
     #[test]
     fn or_true() {
         fn aux<B1: ty::Tm<Bool>>() {
-            let _: Val<TT> = val::<Or, (TT, B1,)>();
+            let _: Wit<TT> = wit::<Or, (TT, B1,)>();
         }
         aux::<FF>();
         aux::<TT>();
@@ -149,11 +149,11 @@ mod tests {
 
     #[test]
     fn if_false() {
-        let _: Val<TT> = val::<If<Bool>, (FF, FF, TT,)>();
+        let _: Wit<TT> = wit::<If<Bool>, (FF, FF, TT,)>();
     }
 
     #[test]
     fn if_true() {
-        let _: Val<FF> = val::<If<Bool>, (TT, FF, TT,)>();
+        let _: Wit<FF> = wit::<If<Bool>, (TT, FF, TT,)>();
     }
 }

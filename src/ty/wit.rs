@@ -10,9 +10,9 @@ use ty::fun;
 #[derive(PartialOrd)]
 #[derive(Rand)]
 #[derive(Show)]
-pub struct Val<A>(());
+pub struct Wit<A>(());
 
 /// Compute a type-level expression by applying a "type-level
 /// function" `F` to a type-level argument `I`
 #[inline]
-pub fn val<Fx: fun::Def, I: fun::Fn<Fx>>() -> Val<fun::Ap<Fx, I>> { Val(()) }
+pub fn wit<Fx: fun::Def, I: fun::Fn<Fx>>() -> Wit<fun::Ap<Fx, I>> { Wit(()) }

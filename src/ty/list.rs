@@ -131,12 +131,12 @@ mod tests {
     use ty::list::*;
     use ty::literal::*;
     use ty::nat::peano::*;
-    use ty::val::*;
+    use ty::wit::*;
 
     #[test]
     fn append() {
-        let _: Val<Cl<(), Cl<(), Cl<(), Cl<(), Nl>>>>> =
-            val::<Append<_>, (
+        let _: Wit<Cl<(), Cl<(), Cl<(), Cl<(), Nl>>>>> =
+            wit::<Append<_>, (
                 Cl<(), Cl<(), Nl>>,
                 Cl<(), Cl<(), Nl>>,
                 )>();
@@ -144,16 +144,16 @@ mod tests {
 
     #[test]
     fn length() {
-        let _: Val<_4n> =
-            val::<Length<_>, (
+        let _: Wit<_4n> =
+            wit::<Length<_>, (
                 Cl<(), Cl<(), Cl<(), Cl<(), Nl>>>>,
                 )>();
     }
 
     #[test]
     fn at() {
-        let _: Val<_2n> =
-            val::<At<Nat>, (
+        let _: Wit<_2n> =
+            wit::<At<Nat>, (
                 Cl<_4n, Cl<_2n, Nl>>,
                 _1n,
                 )>();
@@ -161,8 +161,8 @@ mod tests {
 
     #[test]
     fn at_star() {
-        let _: Val<Rust<Option<u8>>> =
-            val::<At<Star>, (
+        let _: Wit<Rust<Option<u8>>> =
+            wit::<At<Star>, (
                 Cl<Rust<Option<u8>>, Cl<Rust<Vec<()>>, Nl>>,
                 _0n,
                 )>();
@@ -170,8 +170,8 @@ mod tests {
 
     #[test]
     fn replace_at() {
-        let _: Val<Cl<_4n, Cl<_5n, Nl>>> =
-            val::<ReplaceAt<Nat>, (
+        let _: Wit<Cl<_4n, Cl<_5n, Nl>>> =
+            wit::<ReplaceAt<Nat>, (
                 Cl<_4n, Cl<_2n, Nl>>,
                 _1n,
                 _5n,

@@ -237,44 +237,44 @@ impl<N0: Tm<Nat>, N1: Tm<Nat>, Rec0: Tm<bool::Bool>, Rec1: Tm<Nat>> fun::Fn<Min>
 mod tests {
     use super::*;
     use ty::literal::*;
-    use ty::val::*;
+    use ty::wit::*;
 
     #[test]
-    fn pred() { let _: Val<_1n> = val::<Pred, (_2n,)>(); }
+    fn pred() { let _: Wit<_1n> = wit::<Pred, (_2n,)>(); }
 
     #[test]
-    fn add() { let _: Val<_5n> = val::<Add, (_3n, _2n,)>(); }
+    fn add() { let _: Wit<_5n> = wit::<Add, (_3n, _2n,)>(); }
 
     #[test]
-    fn sub() { let _: Val<_3n> = val::<Sub, (_5n, _2n,)>(); }
+    fn sub() { let _: Wit<_3n> = wit::<Sub, (_5n, _2n,)>(); }
 
     #[test]
-    fn mul() { let _: Val<_6n> = val::<Mul, (_3n, _2n,)>(); }
+    fn mul() { let _: Wit<_6n> = wit::<Mul, (_3n, _2n,)>(); }
 
     #[test]
-    fn exp() { let _: Val<_8n> = val::<Exp, (_3n, _2n,)>(); }
+    fn exp() { let _: Wit<_8n> = wit::<Exp, (_3n, _2n,)>(); }
 
     #[test]
-    fn fac() { let _: Val<_24n> = val::<Fac, (_4n,) >(); }
+    fn fac() { let _: Wit<_24n> = wit::<Fac, (_4n,) >(); }
 
     #[test]
-    fn lt_false() { let _: Val<FF> = val::<LT, (_4n, _2n,)>(); }
+    fn lt_false() { let _: Wit<FF> = wit::<LT, (_4n, _2n,)>(); }
 
     #[test]
-    fn lt_true() { let _: Val<TT> = val::<LT, (_2n, _4n,)>(); }
+    fn lt_true() { let _: Wit<TT> = wit::<LT, (_2n, _4n,)>(); }
 
     #[test]
-    fn lteq_false() { let _: Val<FF> = val::<LTEq, (_4n, _2n,)>(); }
+    fn lteq_false() { let _: Wit<FF> = wit::<LTEq, (_4n, _2n,)>(); }
 
     #[test]
-    fn lteq_true_00() { let _: Val<TT> = val::<LTEq, (_2n, _2n,)>(); }
+    fn lteq_true_00() { let _: Wit<TT> = wit::<LTEq, (_2n, _2n,)>(); }
 
     #[test]
-    fn lteq_true_01() { let _: Val<TT> = val::<LTEq, (_2n, _4n,)>(); }
+    fn lteq_true_01() { let _: Wit<TT> = wit::<LTEq, (_2n, _4n,)>(); }
 
     #[test]
-    fn min_lhs() { let _: Val<_2n> = val::<Min, (_2n, _4n,)>(); }
+    fn min_lhs() { let _: Wit<_2n> = wit::<Min, (_2n, _4n,)>(); }
 
     #[test]
-    fn min_rhs() { let _: Val<_2n> = val::<Min, (_4n, _2n,)>(); }
+    fn min_rhs() { let _: Wit<_2n> = wit::<Min, (_4n, _2n,)>(); }
 }

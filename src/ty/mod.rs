@@ -32,9 +32,9 @@ pub use self::list::{
     ReplaceAt,
 };
 
-pub use self::val::{
-    Val,
-    val,
+pub use self::wit::{
+    Wit,
+    wit,
 };
 
 mod bit;
@@ -42,9 +42,9 @@ mod bool;
 mod fun;
 pub mod int;
 mod list;
+mod wit;
 pub mod literal;
 pub mod nat;
-mod val;
 
 /// Predicate classifying type-level "types"
 pub trait Ty {}
