@@ -135,10 +135,10 @@ mod tests {
 
     #[test]
     fn append() {
-        let _: Wit<Cl<(), Cl<(), Cl<(), Cl<(), Nl>>>>> =
+        let _: Wit<LC<(), LC<(), LC<(), LC<(), LN>>>>> =
             wit::<Append<_>, (
-                Cl<(), Cl<(), Nl>>,
-                Cl<(), Cl<(), Nl>>,
+                LC<(), LC<(), LN>>,
+                LC<(), LC<(), LN>>,
                 )>();
     }
 
@@ -146,7 +146,7 @@ mod tests {
     fn length() {
         let _: Wit<_4n> =
             wit::<Length<_>, (
-                Cl<(), Cl<(), Cl<(), Cl<(), Nl>>>>,
+                LC<(), LC<(), LC<(), LC<(), LN>>>>,
                 )>();
     }
 
@@ -154,7 +154,7 @@ mod tests {
     fn at() {
         let _: Wit<_2n> =
             wit::<At<Nat>, (
-                Cl<_4n, Cl<_2n, Nl>>,
+                LC<_4n, LC<_2n, LN>>,
                 _1n,
                 )>();
     }
@@ -163,16 +163,16 @@ mod tests {
     fn at_star() {
         let _: Wit<Rust<Option<u8>>> =
             wit::<At<Star>, (
-                Cl<Rust<Option<u8>>, Cl<Rust<Vec<()>>, Nl>>,
+                LC<Rust<Option<u8>>, LC<Rust<Vec<()>>, LN>>,
                 _0n,
                 )>();
     }
 
     #[test]
     fn replace_at() {
-        let _: Wit<Cl<_4n, Cl<_5n, Nl>>> =
+        let _: Wit<LC<_4n, LC<_5n, LN>>> =
             wit::<ReplaceAt<Nat>, (
-                Cl<_4n, Cl<_2n, Nl>>,
+                LC<_4n, LC<_2n, LN>>,
                 _1n,
                 _5n,
                 )>();
