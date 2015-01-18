@@ -2,7 +2,6 @@ use ty::{
     Tm,
     Ty,
 };
-use unify;
 
 /// Predicate classifying type-level "type signatures"
 pub trait Sig { type Dom: Ty + ::IsComposite; type Cod: Ty; }
@@ -21,5 +20,5 @@ pub type Ap<Fx: Def, I: self::Fn<Fx>> = <I as self::Fn<Fx>>::O;
 /// type depends on the input type, driven by a type-level "function"
 pub trait DepFn<Fx: Def>: self::Fn<Fx> {
     #[inline(always)]
-    fn call<X>(self) -> Ap<Fx, Self> where X: unify::Eq<Self>;
+    fn call(self) -> Ap<Fx, Self>;
 }
