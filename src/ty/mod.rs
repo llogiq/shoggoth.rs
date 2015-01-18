@@ -40,10 +40,16 @@ pub use self::wit::{
 mod bit;
 mod bool;
 mod fun;
-pub mod int;
 mod list;
 mod wit;
+
+/// Type-level binary integers
+pub mod int;
+
+/// Type-level literals
 pub mod literal;
+
+/// Type-level natural numbers
 pub mod nat;
 
 /// Predicate classifying type-level "types"
