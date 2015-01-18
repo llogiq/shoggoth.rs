@@ -2,9 +2,10 @@ use self::pos::{
     Pos,
 };
 use ty::{
+    FnTm,
+    Sig,
     Tm,
     Ty,
-    fun,
 };
 pub use ty::bit::{
     _0,
@@ -39,15 +40,15 @@ impl<P: Tm<Pos>> Tm<Nat> for P {}
 #[derive(PartialOrd)]
 #[derive(Show)]
 pub enum Succ {}
-impl fun::Sig for Succ { type Dom = (Nat,); type Cod = Nat; }
+impl Sig for Succ { type Dom = (Nat,); type Cod = Nat; }
 // 0 => 1
-impl fun::Fn<Succ> for (_0,)
+impl FnTm<Succ> for (_0,)
 {
     type O = _1;
 }
 // p => succ(p)
-impl<P: Tm<Pos>, Rec: Tm<Nat>> fun::Fn<Succ> for (P,) where
-    (P,): fun::Fn<pos::Succ, O = Rec>,
+impl<P: Tm<Pos>, Rec: Tm<Nat>> FnTm<Succ> for (P,) where
+    (P,): FnTm<pos::Succ, O = Rec>,
 {
     type O = Rec;
 }
@@ -62,20 +63,20 @@ impl<P: Tm<Pos>, Rec: Tm<Nat>> fun::Fn<Succ> for (P,) where
 #[derive(PartialOrd)]
 #[derive(Show)]
 pub enum Add {}
-impl fun::Sig for Add { type Dom = (Nat, Nat,); type Cod = Nat; }
-impl<P1: Tm<Pos>> fun::Fn<Add> for ((_0), (P1),)
+impl Sig for Add { type Dom = (Nat, Nat,); type Cod = Nat; }
+impl<P1: Tm<Pos>> FnTm<Add> for ((_0), (P1),)
 // 0, n => n
 {
     type O = P1;
 }
-impl<P0: Tm<Pos>> fun::Fn<Add> for (P0, (_0),)
+impl<P0: Tm<Pos>> FnTm<Add> for (P0, (_0),)
 // m, 0 => m
 {
     type O = P0;
 }
 // p, q => p + q
-impl<P0: Tm<Pos>, P1: Tm<Pos>, Rec: Tm<Nat>> fun::Fn<Add> for ((P0), (P1),) where
-    ((P0), (P1),): fun::Fn<pos::Add, O = Rec>,
+impl<P0: Tm<Pos>, P1: Tm<Pos>, Rec: Tm<Nat>> FnTm<Add> for ((P0), (P1),) where
+    ((P0), (P1),): FnTm<pos::Add, O = Rec>,
 {
     type O = Rec;
 }
@@ -90,20 +91,20 @@ impl<P0: Tm<Pos>, P1: Tm<Pos>, Rec: Tm<Nat>> fun::Fn<Add> for ((P0), (P1),) wher
 #[derive(PartialOrd)]
 #[derive(Show)]
 pub enum Mul {}
-impl fun::Sig for Mul { type Dom = (Nat, Nat,); type Cod = Nat; }
+impl Sig for Mul { type Dom = (Nat, Nat,); type Cod = Nat; }
 // 0, n => 0
-impl<P1: Tm<Pos>> fun::Fn<Mul> for ((_0), (P1),)
+impl<P1: Tm<Pos>> FnTm<Mul> for ((_0), (P1),)
 {
     type O = _0;
 }
 // m, 0 => 0
-impl<P0: Tm<Pos>> fun::Fn<Mul> for (P0, (_0),)
+impl<P0: Tm<Pos>> FnTm<Mul> for (P0, (_0),)
 {
     type O = _0;
 }
 // p, q => p * q
-impl<P0: Tm<Pos>, P1: Tm<Pos>, Rec: Tm<Nat>> fun::Fn<Mul> for ((P0), (P1),) where
-    ((P0), (P1),): fun::Fn<pos::Mul, O = Rec>,
+impl<P0: Tm<Pos>, P1: Tm<Pos>, Rec: Tm<Nat>> FnTm<Mul> for ((P0), (P1),) where
+    ((P0), (P1),): FnTm<pos::Mul, O = Rec>,
 {
     type O = Rec;
 }

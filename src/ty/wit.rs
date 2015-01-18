@@ -1,4 +1,8 @@
-use ty::fun;
+use ty::{
+    Ap,
+    FnTm,
+    Sig,
+};
 
 /// A structure for witnessing a type-level computation
 #[derive(Clone)]
@@ -15,4 +19,4 @@ pub struct Wit<A>(());
 /// Compute a type-level expression by applying a "type-level
 /// function" `F` to a type-level argument `I`
 #[inline]
-pub fn wit<Fx: fun::Def, I: fun::Fn<Fx>>() -> Wit<fun::Ap<Fx, I>> { Wit(()) }
+pub fn wit<S: Sig, I: FnTm<S>>() -> Wit<Ap<S, I>> { Wit(()) }

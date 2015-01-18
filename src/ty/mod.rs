@@ -16,9 +16,8 @@ pub use self::bool::{
 
 pub use self::fun::{
     Ap,
-    Def,
-    DepFn,
-    Fn,
+    FnDep,
+    FnTm,
     Sig,
 };
 
