@@ -1,4 +1,5 @@
 #![allow(unstable)]
+#![feature(on_unimplemented)]
 
 extern crate unify;
 

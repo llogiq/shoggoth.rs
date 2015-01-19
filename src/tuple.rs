@@ -1,4 +1,5 @@
 /// Predicate implemented when `Self` has a concept of `head` and `tail`
+#[rustc_on_unimplemented = "`{Self}` is not a composite type"]
 pub trait IsComposite {
     type H;
     type T;
@@ -58,6 +59,7 @@ impl<A0, A1, A2, A3,> IsComposite for (A0, A1, A2, A3) {
 }
 
 /// Operations on `Tuples`
+#[rustc_on_unimplemented = "Tuple operations are not specified for `{Self}`"]
 pub trait TupleOps {
     #[inline]
     fn head(self) -> <Self as IsComposite>::H where Self: Sized + IsComposite,

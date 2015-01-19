@@ -1,4 +1,5 @@
-/// Heterogeneous Lists
+/// Heterogeneous lists
+#[rustc_on_unimplemented = "`{Self}` is not a heterogeneous list"]
 pub trait HList {}
 
 /// Empty `HList`
@@ -13,7 +14,7 @@ pub trait HList {}
 pub struct HNil;
 impl HList for HNil {}
 
-/// Cons for `HList`
+/// Cons for heterogeneous lists
 #[derive(Clone)]
 #[derive(Copy)]
 #[derive(Eq)]
@@ -26,7 +27,8 @@ impl HList for HNil {}
 pub struct HCons<H, T: HList>(pub H, pub T);
 impl<H, T: HList> HList for HCons<H, T> {}
 
-/// `HList` predicate implemented when `Self` is an `HCons`
+/// `HList` predicate implemented when `Self` is heterogeneous cons
+#[rustc_on_unimplemented = "`{Self}` is not a heterogeneous cons"]
 pub trait IsHCons: HList {
     type H;
     type T: HList;

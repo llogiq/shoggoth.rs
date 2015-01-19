@@ -1,6 +1,7 @@
 use hlist::*;
 
 /// Trait for converting things to a `Tuple`
+#[rustc_on_unimplemented = "`{Self}` cannot be converted to a tuple"]
 pub trait ToTuple {
     type Out;
     #[inline]
@@ -8,6 +9,7 @@ pub trait ToTuple {
 }
 
 /// Trait for converting things to an `HList`
+#[rustc_on_unimplemented = "`{Self}` cannot be converted to a heterogeneous list"]
 pub trait ToHList {
     type Out: HList;
     #[inline]
@@ -15,6 +17,7 @@ pub trait ToHList {
 }
 
 /// Operations on `Products`
+#[rustc_on_unimplemented = "Product operations are not specified for `{Self}`"]
 pub trait ProductOps {
     #[inline]
     fn to_hlist(self) -> <Self as ToHList>::Out where

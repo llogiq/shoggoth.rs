@@ -52,9 +52,11 @@ pub mod literal;
 pub mod nat;
 
 /// Predicate classifying type-level "types"
+#[rustc_on_unimplemented = "`{Self}` is not a valid type-level type"]
 pub trait Ty {}
 
 /// Predicate classifying "typed" type-level "terms"
+#[rustc_on_unimplemented = "`{Self}` is not a valid type-level term"]
 pub trait Tm<A: Ty> {}
 
 /// `Star` classifies normal Rust types
