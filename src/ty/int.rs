@@ -54,21 +54,21 @@ impl<N: Tm<npos::Pos>> Tm<Int> for Pz<N> {}
 #[derive(Show)]
 #[doc(hidden)]
 pub enum Double {}
-impl Sig for Double { type Dom = (Int,); type Cod = Int; }
+impl Sig for Double { type Dom = Int; type Cod = Int; }
 // 0 => 0
-impl FnTm<Double> for ((_0),)
+impl FnTm<Double> for _0
 {
     type O = _0;
 }
 // -p => -p:0
-impl<P: Tm<npos::Pos>> FnTm<Double> for (Nz<P>,)
+impl<P: Tm<npos::Pos>> FnTm<Double> for Nz<P>
 {
-    type O = Nz<(P, _0,)>;
+    type O = Nz<(P, _0)>;
 }
 // +p => +p:0
-impl<P: Tm<npos::Pos>> FnTm<Double> for (Pz<P>,)
+impl<P: Tm<npos::Pos>> FnTm<Double> for Pz<P>
 {
-    type O = Pz<(P, _0,)>;
+    type O = Pz<(P, _0)>;
 }
 
 #[derive(Clone)]
@@ -81,22 +81,22 @@ impl<P: Tm<npos::Pos>> FnTm<Double> for (Pz<P>,)
 #[derive(Show)]
 #[doc(hidden)]
 pub enum SuccDouble {}
-impl Sig for SuccDouble { type Dom = (Int,); type Cod = Int; }
+impl Sig for SuccDouble { type Dom = Int; type Cod = Int; }
 // 0 => 0
-impl FnTm<SuccDouble> for ((_0),)
+impl FnTm<SuccDouble> for _0
 {
     type O = Pz<_1>;
 }
 // -p => -p:0
-impl<P: Tm<npos::Pos>, Rec: Tm<npos::Pos>> FnTm<SuccDouble> for (Nz<P>,) where
-    (P,): FnTm<npos::Pos, O = Rec>,
+impl<P: Tm<npos::Pos>, Rec: Tm<npos::Pos>> FnTm<SuccDouble> for Nz<P> where
+    P: FnTm<npos::Pos, O = Rec>,
 {
     type O = Nz<Rec>;
 }
 // +p => +p:0
-impl<P: Tm<npos::Pos>> FnTm<SuccDouble> for (Pz<P>,)
+impl<P: Tm<npos::Pos>> FnTm<SuccDouble> for Pz<P>
 {
-    type O = Pz<(P, _1,)>;
+    type O = Pz<(P, _1)>;
 }
 
 #[derive(Clone)]
@@ -109,19 +109,19 @@ impl<P: Tm<npos::Pos>> FnTm<SuccDouble> for (Pz<P>,)
 #[derive(Show)]
 #[doc(hidden)]
 pub enum PredDouble {}
-impl Sig for PredDouble { type Dom = (Int,); type Cod = Int; }
+impl Sig for PredDouble { type Dom = Int; type Cod = Int; }
 // 0 => 0
-impl FnTm<PredDouble> for ((_0),)
+impl FnTm<PredDouble> for _0
 {
     type O = Nz<_1>;
 }
 // -p => -p:0
-impl<P: Tm<npos::Pos>> FnTm<PredDouble> for (Nz<P>,)
+impl<P: Tm<npos::Pos>> FnTm<PredDouble> for Nz<P>
 {
-    type O = Nz<(P, _1,)>;
+    type O = Nz<(P, _1)>;
 }
 // +p => +p:0
-impl<P: Tm<npos::Pos>, Rec: Tm<npos::Pos>> FnTm<PredDouble> for (Pz<P>,) where
+impl<P: Tm<npos::Pos>, Rec: Tm<npos::Pos>> FnTm<PredDouble> for Pz<P> where
     (P,): FnTm<npos::Pos, O = Rec>,
 {
     type O = Pz<Rec>;

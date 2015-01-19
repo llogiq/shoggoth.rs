@@ -52,13 +52,13 @@ impl<A: Ty, H: Tm<A>, T: Tm<List<A>>> Tm<List<A>> for Cons<H, T> {}
 #[derive(PartialOrd)]
 #[derive(Show)]
 pub enum Append<A: Ty> {}
-impl<A: Ty> Sig for Append<A> { type Dom = (List<A>, List<A>,); type Cod = List<A>; }
-impl<A: Ty, L1: Tm<List<A>>> FnTm<Append<A>> for (Nil, L1,)
+impl<A: Ty> Sig for Append<A> { type Dom = (List<A>, List<A>); type Cod = List<A>; }
+impl<A: Ty, L1: Tm<List<A>>> FnTm<Append<A>> for (Nil, L1)
 {
     type O = L1;
 }
-impl<A: Ty, H: Tm<A>, L0: Tm<List<A>>, L1: Tm<List<A>>, Rec: Tm<List<A>>> FnTm<Append<A>> for (Cons<H, L0>, L1,) where
-    (L0, L1,): FnTm<Append<A>, O = Rec>,
+impl<A: Ty, H: Tm<A>, L0: Tm<List<A>>, L1: Tm<List<A>>, Rec: Tm<List<A>>> FnTm<Append<A>> for (Cons<H, L0>, L1) where
+    (L0, L1): FnTm<Append<A>, O = Rec>,
 {
     type O = Cons<H, Rec>;
 }
@@ -73,12 +73,12 @@ impl<A: Ty, H: Tm<A>, L0: Tm<List<A>>, L1: Tm<List<A>>, Rec: Tm<List<A>>> FnTm<A
 #[derive(PartialOrd)]
 #[derive(Show)]
 pub enum Length<A: Ty> {}
-impl<A: Ty> Sig for Length<A> { type Dom = (List<A>,); type Cod = nat::peano::Nat; }
-impl<A: Ty> FnTm<Length<A>> for (Nil,) {
+impl<A: Ty> Sig for Length<A> { type Dom = List<A>; type Cod = nat::peano::Nat; }
+impl<A: Ty> FnTm<Length<A>> for Nil {
     type O = nat::peano::Zero;
 }
-impl<A: Ty, H: Tm<A>, T: Tm<List<A>>, Rec: Tm<nat::peano::Nat>> FnTm<Length<A>> for (Cons<H, T>,) where
-    (T,): FnTm<Length<A>, O = Rec>,
+impl<A: Ty, H: Tm<A>, T: Tm<List<A>>, Rec: Tm<nat::peano::Nat>> FnTm<Length<A>> for (Cons<H, T>) where
+    T: FnTm<Length<A>, O = Rec>,
 {
     type O = nat::peano::Succ<Rec>;
 }
@@ -93,12 +93,12 @@ impl<A: Ty, H: Tm<A>, T: Tm<List<A>>, Rec: Tm<nat::peano::Nat>> FnTm<Length<A>> 
 #[derive(PartialOrd)]
 #[derive(Show)]
 pub enum At<A: Ty> {}
-impl<A: Ty> Sig for At<A> { type Dom = (List<A>, nat::peano::Nat,); type Cod = A; }
-impl<A: Ty, H: Tm<A>, T: Tm<List<A>>> FnTm<At<A>> for (Cons<H, T>, nat::peano::Zero,) {
+impl<A: Ty> Sig for At<A> { type Dom = (List<A>, nat::peano::Nat); type Cod = A; }
+impl<A: Ty, H: Tm<A>, T: Tm<List<A>>> FnTm<At<A>> for (Cons<H, T>, nat::peano::Zero) {
     type O = H;
 }
-impl<A: Ty, H: Tm<A>, T: Tm<List<A>>, N: Tm<nat::peano::Nat>, Rec: Tm<A>> FnTm<At<A>> for (Cons<H, T>, nat::peano::Succ<N>,) where
-    (T, N,): FnTm<At<A>, O = Rec>,
+impl<A: Ty, H: Tm<A>, T: Tm<List<A>>, N: Tm<nat::peano::Nat>, Rec: Tm<A>> FnTm<At<A>> for (Cons<H, T>, nat::peano::Succ<N>) where
+    (T, N): FnTm<At<A>, O = Rec>,
 {
     type O = Rec;
 }
@@ -114,11 +114,11 @@ impl<A: Ty, H: Tm<A>, T: Tm<List<A>>, N: Tm<nat::peano::Nat>, Rec: Tm<A>> FnTm<A
 #[derive(Show)]
 pub enum ReplaceAt<A: Ty> {}
 impl<A: Ty> Sig for ReplaceAt<A> { type Dom = (List<A>, nat::peano::Nat, A); type Cod = List<A>; }
-impl<A: Ty, H: Tm<A>, T: Tm<List<A>>, X: Tm<A>> FnTm<ReplaceAt<A>> for (Cons<H, T>, nat::peano::Zero, X,) {
+impl<A: Ty, H: Tm<A>, T: Tm<List<A>>, X: Tm<A>> FnTm<ReplaceAt<A>> for (Cons<H, T>, nat::peano::Zero, X) {
     type O = Cons<X, T>;
 }
-impl<A: Ty, H: Tm<A>, T: Tm<List<A>>, N: Tm<nat::peano::Nat>, X: Tm<A>, Rec: Tm<List<A>>> FnTm<ReplaceAt<A>> for (Cons<H, T>, nat::peano::Succ<N>, X,) where
-    (T, N, X,): FnTm<ReplaceAt<A>, O = Rec>,
+impl<A: Ty, H: Tm<A>, T: Tm<List<A>>, N: Tm<nat::peano::Nat>, X: Tm<A>, Rec: Tm<List<A>>> FnTm<ReplaceAt<A>> for (Cons<H, T>, nat::peano::Succ<N>, X) where
+    (T, N, X): FnTm<ReplaceAt<A>, O = Rec>,
 {
     type O = Cons<H, Rec>;
 }
@@ -137,7 +137,7 @@ mod tests {
     #[test]
     fn append() {
         let _: Wit<LC<(), LC<(), LC<(), LC<(), LN>>>>> =
-            wit::<Append<_>, (
+            wit::<Append<Star>, (
                 LC<(), LC<(), LN>>,
                 LC<(), LC<(), LN>>,
                 )>();
@@ -146,18 +146,13 @@ mod tests {
     #[test]
     fn length() {
         let _: Wit<_4n> =
-            wit::<Length<_>, (
-                LC<(), LC<(), LC<(), LC<(), LN>>>>,
-                )>();
+            wit::<Length<Star>, LC<(), LC<(), LC<(), LC<(), LN>>>>>();
     }
 
     #[test]
     fn at() {
         let _: Wit<_2n> =
-            wit::<At<Nat>, (
-                LC<_4n, LC<_2n, LN>>,
-                _1n,
-                )>();
+            wit::<At<Nat>, (LC<_4n, LC<_2n, LN>>, _1n)>();
     }
 
     #[test]

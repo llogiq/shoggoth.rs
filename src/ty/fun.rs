@@ -4,7 +4,7 @@ use ty::{
 };
 
 /// Predicate classifying type-level "type signatures"
-pub trait Sig { type Dom: Ty + ::IsComposite; type Cod: Ty; }
+pub trait Sig { type Dom: Ty; type Cod: Ty; }
 
 /// Predicate classifying type-level "relations as functions"
 pub trait FnTm<S: Sig>: Tm<<S as Sig>::Dom> { type O: Tm<<S as Sig>::Cod>; }

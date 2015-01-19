@@ -18,42 +18,42 @@ impl<A0,> IsComposite for (A0,) {
     type T = ();
 
     #[inline]
-    fn split(self) -> (A0, (),) {
+    fn split(self) -> (A0, ()) {
         let (a0,) = self;
-        (a0, (),)
+        (a0, ())
     }
 }
 
-impl<A0, A1,> IsComposite for (A0, A1,) {
+impl<A0, A1,> IsComposite for (A0, A1) {
     type H = A0;
     type T = (A1,);
 
     #[inline]
-    fn split(self) -> (A0, (A1,),) {
-        let (a0, a1,) = self;
-        (a0, (a1,),)
+    fn split(self) -> (A0, (A1,)) {
+        let (a0, a1) = self;
+        (a0, (a1,))
     }
 }
 
-impl<A0, A1, A2,> IsComposite for (A0, A1, A2,) {
+impl<A0, A1, A2,> IsComposite for (A0, A1, A2) {
     type H = A0;
-    type T = (A1, A2,);
+    type T = (A1, A2);
 
     #[inline]
-    fn split(self) -> (A0, (A1, A2,),) {
-        let (a0, a1, a2,) = self;
-        (a0, (a1, a2,),)
+    fn split(self) -> (A0, (A1, A2)) {
+        let (a0, a1, a2) = self;
+        (a0, (a1, a2))
     }
 }
 
-impl<A0, A1, A2, A3,> IsComposite for (A0, A1, A2, A3,) {
+impl<A0, A1, A2, A3,> IsComposite for (A0, A1, A2, A3) {
     type H = A0;
-    type T = (A1, A2, A3,);
+    type T = (A1, A2, A3);
 
     #[inline]
-    fn split(self) -> (A0, (A1, A2, A3,),) {
-        let (a0, a1, a2, a3,) = self;
-        (a0, (a1, a2, a3,),)
+    fn split(self) -> (A0, (A1, A2, A3)) {
+        let (a0, a1, a2, a3) = self;
+        (a0, (a1, a2, a3))
     }
 }
 

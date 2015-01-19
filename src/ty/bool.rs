@@ -51,9 +51,9 @@ impl Tm<Bool> for True {}
 #[derive(PartialOrd)]
 #[derive(Show)]
 pub enum Not {}
-impl Sig for Not { type Dom = (Bool,); type Cod = Bool; }
-impl FnTm<Not> for (False,) { type O = True; }
-impl FnTm<Not> for (True,) { type O = False; }
+impl Sig for Not { type Dom = Bool; type Cod = Bool; }
+impl FnTm<Not> for False { type O = True; }
+impl FnTm<Not> for True { type O = False; }
 
 /// Type-level function for bool conjunction
 #[derive(Clone)]
@@ -65,9 +65,9 @@ impl FnTm<Not> for (True,) { type O = False; }
 #[derive(PartialOrd)]
 #[derive(Show)]
 pub enum And {}
-impl Sig for And { type Dom = (Bool, Bool,); type Cod = Bool; }
-impl<B: Tm<Bool>> FnTm<And> for (False, B,) { type O = False; }
-impl<B: Tm<Bool>> FnTm<And> for (True, B,) { type O = B; }
+impl Sig for And { type Dom = (Bool, Bool); type Cod = Bool; }
+impl<B: Tm<Bool>> FnTm<And> for (False, B) { type O = False; }
+impl<B: Tm<Bool>> FnTm<And> for (True, B) { type O = B; }
 
 /// Type-level function for bool disjunction
 #[derive(Clone)]
@@ -79,9 +79,9 @@ impl<B: Tm<Bool>> FnTm<And> for (True, B,) { type O = B; }
 #[derive(PartialOrd)]
 #[derive(Show)]
 pub enum Or {}
-impl Sig for Or { type Dom = (Bool, Bool,); type Cod = Bool; }
-impl<B: Tm<Bool>> FnTm<Or> for (False, B,) { type O = B; }
-impl<B: Tm<Bool>> FnTm<Or> for (True, B,) { type O = True; }
+impl Sig for Or { type Dom = (Bool, Bool); type Cod = Bool; }
+impl<B: Tm<Bool>> FnTm<Or> for (False, B) { type O = B; }
+impl<B: Tm<Bool>> FnTm<Or> for (True, B) { type O = True; }
 
 /// Type-level function for bool conditional
 #[derive(Clone)]
@@ -93,9 +93,9 @@ impl<B: Tm<Bool>> FnTm<Or> for (True, B,) { type O = True; }
 #[derive(PartialOrd)]
 #[derive(Show)]
 pub enum If<A: Ty> {}
-impl<A: Ty> Sig for If<A> { type Dom = (Bool, A, A,); type Cod = A; }
-impl<A: Ty, B0: Tm<A>, B1: Tm<A>> FnTm<If<A>> for (False, B0, B1,) { type O = B1; }
-impl<A: Ty, B0: Tm<A>, B1: Tm<A>> FnTm<If<A>> for (True, B0, B1,) { type O = B0; }
+impl<A: Ty> Sig for If<A> { type Dom = (Bool, A, A); type Cod = A; }
+impl<A: Ty, B0: Tm<A>, B1: Tm<A>> FnTm<If<A>> for (False, B0, B1) { type O = B1; }
+impl<A: Ty, B0: Tm<A>, B1: Tm<A>> FnTm<If<A>> for (True, B0, B1) { type O = B0; }
 
 #[cfg(test)]
 mod tests {
@@ -107,15 +107,15 @@ mod tests {
     // FIXME: implement tests corresponding to boolean algebras
 
     #[test]
-    fn not_false() { let _: Wit<TT> = wit::<Not, (FF,)>(); }
+    fn not_false() { let _: Wit<TT> = wit::<Not, FF>(); }
 
     #[test]
-    fn not_true () { let _: Wit<FF> = wit::<Not, (TT,)>(); }
+    fn not_true () { let _: Wit<FF> = wit::<Not, TT>(); }
 
     #[test]
     fn and_false() {
         fn aux<B1: ty::Tm<Bool>>() {
-            let _: Wit<FF> = wit::<And, (FF, B1,)>();
+            let _: Wit<FF> = wit::<And, (FF, B1)>();
         }
         aux::<FF>();
         aux::<TT>();
@@ -124,7 +124,7 @@ mod tests {
     #[test]
     fn and_true() {
         fn aux<B1: ty::Tm<Bool>>() {
-            let _: Wit<B1> = wit::<And, (TT, B1,)>();
+            let _: Wit<B1> = wit::<And, (TT, B1)>();
         }
         aux::<FF>();
         aux::<TT>();
@@ -133,7 +133,7 @@ mod tests {
     #[test]
     fn or_false() {
         fn aux<B1: ty::Tm<Bool>>() {
-            let _: Wit<B1> = wit::<Or, (FF, B1,)>();
+            let _: Wit<B1> = wit::<Or, (FF, B1)>();
         }
         aux::<FF>();
         aux::<TT>();
@@ -142,7 +142,7 @@ mod tests {
     #[test]
     fn or_true() {
         fn aux<B1: ty::Tm<Bool>>() {
-            let _: Wit<TT> = wit::<Or, (TT, B1,)>();
+            let _: Wit<TT> = wit::<Or, (TT, B1)>();
         }
         aux::<FF>();
         aux::<TT>();
@@ -150,11 +150,11 @@ mod tests {
 
     #[test]
     fn if_false() {
-        let _: Wit<TT> = wit::<If<Bool>, (FF, FF, TT,)>();
+        let _: Wit<TT> = wit::<If<Bool>, (FF, FF, TT)>();
     }
 
     #[test]
     fn if_true() {
-        let _: Wit<FF> = wit::<If<Bool>, (TT, FF, TT,)>();
+        let _: Wit<FF> = wit::<If<Bool>, (TT, FF, TT)>();
     }
 }
