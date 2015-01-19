@@ -4,7 +4,7 @@ use ty::{
     Tm,
     Ty,
 };
-use ty::nat::bin::pos as npos;
+use ty::nat::pos as npos;
 use ty::bit::{
     _0,
     _1,

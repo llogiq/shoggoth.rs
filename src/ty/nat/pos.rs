@@ -10,14 +10,14 @@ use ty::{
     Ty,
 };
 
-/// Positive binary natural numbers
+/// Positive natural numbers (binary)
 pub enum Pos {}
 impl Ty for Pos {}
 
 impl Tm<Pos> for _1 {}
 impl<P: Tm<Pos>, B: Tm<Bit>> Tm<Pos> for (P, B) {}
 
-/// Successor for type-level positive binary natural numbers
+/// Successor for type-level positive natural numbers
 pub enum Succ {}
 impl Sig for Succ { type Dom = Pos; type Cod = Pos; }
 // 1 => 1:0
@@ -37,7 +37,7 @@ impl<P: Tm<Pos>, Rec: Tm<Pos>> FnTm<Succ> for (P, _1) where
     type O = (Rec, _0);
 }
 
-/// Addition for type-level positive binary natural numbers
+/// Addition for type-level positive natural numbers
 pub enum Add {}
 impl Sig for Add { type Dom = HC<Pos, HC<Pos, HN>>; type Cod = Pos; }
 // 1, 1 => 1:0
@@ -92,7 +92,7 @@ impl<P0: Tm<Pos>, P1: Tm<Pos>, Rec: Tm<Pos>> FnTm<Add> for HC<(P0, _1), HC<(P1, 
     type O = (Rec, _0);
 }
 
-// Addition with carry for type-level positive binary natural numbers
+// Addition with carry for type-level positive natural numbers
 #[doc(hidden)]
 pub enum AddCarry {}
 #[doc(hidden)]
