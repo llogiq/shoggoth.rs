@@ -1,6 +1,7 @@
 use ty::{
-    Ap,
-    FnTm,
+    App,
+    Fun,
+    Rule,
     Sig,
 };
 
@@ -19,4 +20,4 @@ pub struct Wit<A>(());
 /// Compute a type-level expression by applying a "type-level
 /// function" `F` to a type-level argument `I`
 #[inline]
-pub fn wit<S: Sig, I: FnTm<S>>() -> Wit<Ap<S, I>> { Wit(()) }
+pub fn app<Op: Sig, X: Rule<Op>>() -> Wit<App<Fun<Op>, X>> { Wit(()) }

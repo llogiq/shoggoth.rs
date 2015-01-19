@@ -1,17 +1,14 @@
-use hlist::{
-    HC,
-    HN,
-};
+use hlist::*;
 use self::pos::{
     Pos,
 };
 use ty::{
-    FnTm,
+    Rule,
     Sig,
     Tm,
     Ty,
 };
-pub use ty::bit::{
+use ty::bit::{
     _0,
     _1,
 };
@@ -30,13 +27,13 @@ impl<P: Tm<Pos>> Tm<Nat> for P {}
 pub enum Succ {}
 impl Sig for Succ { type Dom = Nat; type Cod = Nat; }
 // 0 => 1
-impl FnTm<Succ> for _0
+impl Rule<Succ> for _0
 {
     type O = _1;
 }
 // p => succ(p)
-impl<P: Tm<Pos>, Rec: Tm<Nat>> FnTm<Succ> for P where
-    P: FnTm<pos::Succ, O = Rec>,
+impl<P: Tm<Pos>, Rec: Tm<Nat>> Rule<Succ> for P where
+    P: Rule<pos::Succ, O = Rec>,
 {
     type O = Rec;
 }
@@ -44,19 +41,19 @@ impl<P: Tm<Pos>, Rec: Tm<Nat>> FnTm<Succ> for P where
 /// Type-level addition for natural numbers
 pub enum Add {}
 impl Sig for Add { type Dom = HC<Nat, HC<Nat, HN>>; type Cod = Nat; }
-impl<P1: Tm<Pos>> FnTm<Add> for HC<_0, HC<P1, HN>>
+impl<P1: Tm<Pos>> Rule<Add> for HC<_0, HC<P1, HN>>
 // 0, n => n
 {
     type O = P1;
 }
-impl<P0: Tm<Pos>> FnTm<Add> for HC<P0, HC<_0, HN>>
+impl<P0: Tm<Pos>> Rule<Add> for HC<P0, HC<_0, HN>>
 // m, 0 => m
 {
     type O = P0;
 }
 // p, q => p + q
-impl<P0: Tm<Pos>, P1: Tm<Pos>, Rec: Tm<Nat>> FnTm<Add> for HC<P0, HC<P1, HN>> where
-    HC<P0, HC<P1, HN>>: FnTm<pos::Add, O = Rec>,
+impl<P0: Tm<Pos>, P1: Tm<Pos>, Rec: Tm<Nat>> Rule<Add> for HC<P0, HC<P1, HN>> where
+    HC<P0, HC<P1, HN>>: Rule<pos::Add, O = Rec>,
 {
     type O = Rec;
 }
@@ -65,42 +62,42 @@ impl<P0: Tm<Pos>, P1: Tm<Pos>, Rec: Tm<Nat>> FnTm<Add> for HC<P0, HC<P1, HN>> wh
 pub enum Mul {}
 impl Sig for Mul { type Dom = HC<Nat, HC<Nat, HN>>; type Cod = Nat; }
 // 0, n => 0
-impl<P1: Tm<Pos>> FnTm<Mul> for HC<_0, HC<P1, HN>>
+impl<P1: Tm<Pos>> Rule<Mul> for HC<_0, HC<P1, HN>>
 {
     type O = _0;
 }
 // m, 0 => 0
-impl<P0: Tm<Pos>> FnTm<Mul> for HC<P0, HC<_0, HN>>
+impl<P0: Tm<Pos>> Rule<Mul> for HC<P0, HC<_0, HN>>
 {
     type O = _0;
 }
 // p, q => p * q
-impl<P0: Tm<Pos>, P1: Tm<Pos>, Rec: Tm<Nat>> FnTm<Mul> for HC<P0, HC<P1, HN>> where
-    HC<P0, HC<P1, HN>>: FnTm<pos::Mul, O = Rec>,
+impl<P0: Tm<Pos>, P1: Tm<Pos>, Rec: Tm<Nat>> Rule<Mul> for HC<P0, HC<P1, HN>> where
+    HC<P0, HC<P1, HN>>: Rule<pos::Mul, O = Rec>,
 {
     type O = Rec;
 }
 
 #[cfg(test)]
 mod tests {
+    use hlist::*;
     use super::*;
-    use ty::literal::*;
-    use ty::wit::*;
+    use ty::*;
 
     // FIXME: add algebraic tests
 
     #[test]
-    fn add_0() { let _: Wit<_16384b> = wit::<Add, HC<_0b, HC<_16384b, HN>>>(); }
+    fn add_0() { let _: Wit<_16384b> = app::<Add, HC<_0b, HC<_16384b, HN>>>(); }
 
     #[test]
-    fn add() { let _: Wit<_16384b> = wit::<Add, HC<_8192b, HC<_8192b, HN>>>(); }
+    fn add() { let _: Wit<_16384b> = app::<Add, HC<_8192b, HC<_8192b, HN>>>(); }
 
     #[test]
-    fn mul_0() { let _: Wit<_0b> = wit::<Mul, HC<_0b, HC<_16384b, HN>>>(); }
+    fn mul_0() { let _: Wit<_0b> = app::<Mul, HC<_0b, HC<_16384b, HN>>>(); }
 
     #[test]
-    fn mul_1() { let _: Wit<_16384b> = wit::<Mul, HC<_1b, HC<_16384b, HN>>>(); }
+    fn mul_1() { let _: Wit<_16384b> = app::<Mul, HC<_1b, HC<_16384b, HN>>>(); }
 
     #[test]
-    fn mul() { let _: Wit<_65536b> = wit::<Mul, HC<_32b, HC<_2048b, HN>>>(); }
+    fn mul() { let _: Wit<_65536b> = app::<Mul, HC<_32b, HC<_2048b, HN>>>(); }
 }
