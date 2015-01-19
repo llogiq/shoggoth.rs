@@ -5,7 +5,6 @@ pub use hlist::{
 };
 use ty::{
     bool,
-    list,
 };
 use ty::bit;
 use ty::nat;
@@ -134,6 +133,3 @@ pub type _96n = _Sn<_95n>;
 pub type _97n = _Sn<_96n>;
 pub type _98n = _Sn<_97n>;
 pub type _99n = _Sn<_98n>;
-
-pub type LN = list::Nil;
-pub type LC<H, T> = list::Cons<H, T>;

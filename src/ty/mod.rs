@@ -21,16 +21,6 @@ pub use self::fun::{
     Sig,
 };
 
-pub use self::list::{
-    Append,
-    At,
-    Cons,
-    Length,
-    List,
-    Nil,
-    ReplaceAt,
-};
-
 pub use self::wit::{
     Wit,
     wit,
@@ -45,7 +35,6 @@ use hlist::{
 mod bit;
 mod bool;
 mod fun;
-mod list;
 mod wit;
 
 /// Type-level binary integers
