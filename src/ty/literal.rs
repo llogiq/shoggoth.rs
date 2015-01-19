@@ -1,5 +1,4 @@
 use ty::{
-    Tm,
     bool,
     list,
 };
@@ -30,7 +29,8 @@ pub type _32768b = (_16384b, _0b);
 pub type _65536b = (_32768b, _0b);
 
 pub type  _0n = nat::peano::Zero;
-pub type  _Sn<N: Tm<nat::peano::Nat>> = nat::peano::Succ<N>;
+// FIXME: pub type  _Sn<N: Tm<nat::peano::Nat>> = nat::peano::Succ<N>;
+pub type  _Sn<N> = nat::peano::Succ<N>;
 pub type  _1n = _Sn< _0n>;
 pub type  _2n = _Sn< _1n>;
 pub type  _3n = _Sn< _2n>;
