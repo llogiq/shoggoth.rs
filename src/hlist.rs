@@ -2,7 +2,7 @@
 #[rustc_on_unimplemented = "`{Self}` is not a heterogeneous list"]
 pub trait HList {}
 
-/// Empty `HList`
+/// Empty heterogeneous list
 #[derive(Clone)]
 #[derive(Copy)]
 #[derive(Eq)]
@@ -14,7 +14,7 @@ pub trait HList {}
 pub struct HN;
 impl HList for HN {}
 
-/// Cons for heterogeneous lists
+/// Cons heterogeneous list
 #[derive(Clone)]
 #[derive(Copy)]
 #[derive(Eq)]
