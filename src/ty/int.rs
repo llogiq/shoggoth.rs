@@ -10,48 +10,16 @@ use ty::bit::{
     _1,
 };
 
-#[derive(Clone)]
-#[derive(Copy)]
-#[derive(Eq)]
-#[derive(Hash)]
-#[derive(Ord)]
-#[derive(PartialEq)]
-#[derive(PartialOrd)]
-#[derive(Show)]
 pub enum Int {}
 impl Ty for Int {}
 
-#[derive(Clone)]
-#[derive(Copy)]
-#[derive(Eq)]
-#[derive(Hash)]
-#[derive(Ord)]
-#[derive(PartialEq)]
-#[derive(PartialOrd)]
-#[derive(Show)]
 pub enum Nz<P: Tm<npos::Pos>> {}
-#[derive(Clone)]
-#[derive(Copy)]
-#[derive(Eq)]
-#[derive(Hash)]
-#[derive(Ord)]
-#[derive(PartialEq)]
-#[derive(PartialOrd)]
-#[derive(Show)]
 pub enum Pz<P: Tm<npos::Pos>> {}
 
 impl Tm<Int> for _0 {}
 impl<N: Tm<npos::Pos>> Tm<Int> for Nz<N> {}
 impl<N: Tm<npos::Pos>> Tm<Int> for Pz<N> {}
 
-#[derive(Clone)]
-#[derive(Copy)]
-#[derive(Eq)]
-#[derive(Hash)]
-#[derive(Ord)]
-#[derive(PartialEq)]
-#[derive(PartialOrd)]
-#[derive(Show)]
 #[doc(hidden)]
 pub enum Double {}
 impl Sig for Double { type Dom = Int; type Cod = Int; }
@@ -71,14 +39,6 @@ impl<P: Tm<npos::Pos>> FnTm<Double> for Pz<P>
     type O = Pz<(P, _0)>;
 }
 
-#[derive(Clone)]
-#[derive(Copy)]
-#[derive(Eq)]
-#[derive(Hash)]
-#[derive(Ord)]
-#[derive(PartialEq)]
-#[derive(PartialOrd)]
-#[derive(Show)]
 #[doc(hidden)]
 pub enum SuccDouble {}
 impl Sig for SuccDouble { type Dom = Int; type Cod = Int; }
@@ -99,14 +59,6 @@ impl<P: Tm<npos::Pos>> FnTm<SuccDouble> for Pz<P>
     type O = Pz<(P, _1)>;
 }
 
-#[derive(Clone)]
-#[derive(Copy)]
-#[derive(Eq)]
-#[derive(Hash)]
-#[derive(Ord)]
-#[derive(PartialEq)]
-#[derive(PartialOrd)]
-#[derive(Show)]
 #[doc(hidden)]
 pub enum PredDouble {}
 impl Sig for PredDouble { type Dom = Int; type Cod = Int; }

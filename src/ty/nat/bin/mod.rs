@@ -20,14 +20,6 @@ pub use ty::bit::{
 pub mod pos;
 
 /// Binary natural numbers
-#[derive(Clone)]
-#[derive(Copy)]
-#[derive(Eq)]
-#[derive(Hash)]
-#[derive(Ord)]
-#[derive(PartialEq)]
-#[derive(PartialOrd)]
-#[derive(Show)]
 pub enum Nat {}
 impl Ty for Nat {}
 
@@ -35,14 +27,6 @@ impl Tm<Nat> for _0 {}
 impl<P: Tm<Pos>> Tm<Nat> for P {}
 
 /// Type-level successor for binary natural numbers
-#[derive(Clone)]
-#[derive(Copy)]
-#[derive(Eq)]
-#[derive(Hash)]
-#[derive(Ord)]
-#[derive(PartialEq)]
-#[derive(PartialOrd)]
-#[derive(Show)]
 pub enum Succ {}
 impl Sig for Succ { type Dom = Nat; type Cod = Nat; }
 // 0 => 1
@@ -58,14 +42,6 @@ impl<P: Tm<Pos>, Rec: Tm<Nat>> FnTm<Succ> for P where
 }
 
 /// Type-level addition for binary natural numbers
-#[derive(Clone)]
-#[derive(Copy)]
-#[derive(Eq)]
-#[derive(Hash)]
-#[derive(Ord)]
-#[derive(PartialEq)]
-#[derive(PartialOrd)]
-#[derive(Show)]
 pub enum Add {}
 impl Sig for Add { type Dom = HC<Nat, HC<Nat, HN>>; type Cod = Nat; }
 impl<P1: Tm<Pos>> FnTm<Add> for HC<_0, HC<P1, HN>>
@@ -86,14 +62,6 @@ impl<P0: Tm<Pos>, P1: Tm<Pos>, Rec: Tm<Nat>> FnTm<Add> for HC<P0, HC<P1, HN>> wh
 }
 
 /// Type-level multiplication for binary natural numbers
-#[derive(Clone)]
-#[derive(Copy)]
-#[derive(Eq)]
-#[derive(Hash)]
-#[derive(Ord)]
-#[derive(PartialEq)]
-#[derive(PartialOrd)]
-#[derive(Show)]
 pub enum Mul {}
 impl Sig for Mul { type Dom = HC<Nat, HC<Nat, HN>>; type Cod = Nat; }
 // 0, n => 0

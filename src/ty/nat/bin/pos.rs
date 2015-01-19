@@ -11,14 +11,6 @@ use ty::{
 };
 
 /// Positive binary natural numbers
-#[derive(Clone)]
-#[derive(Copy)]
-#[derive(Eq)]
-#[derive(Hash)]
-#[derive(Ord)]
-#[derive(PartialEq)]
-#[derive(PartialOrd)]
-#[derive(Show)]
 pub enum Pos {}
 impl Ty for Pos {}
 
@@ -26,14 +18,6 @@ impl Tm<Pos> for _1 {}
 impl<P: Tm<Pos>, B: Tm<Bit>> Tm<Pos> for (P, B) {}
 
 /// Successor for type-level positive binary natural numbers
-#[derive(Clone)]
-#[derive(Copy)]
-#[derive(Eq)]
-#[derive(Hash)]
-#[derive(Ord)]
-#[derive(PartialEq)]
-#[derive(PartialOrd)]
-#[derive(Show)]
 pub enum Succ {}
 impl Sig for Succ { type Dom = Pos; type Cod = Pos; }
 // 1 => 1:0
@@ -54,14 +38,6 @@ impl<P: Tm<Pos>, Rec: Tm<Pos>> FnTm<Succ> for (P, _1) where
 }
 
 /// Addition for type-level positive binary natural numbers
-#[derive(Clone)]
-#[derive(Copy)]
-#[derive(Eq)]
-#[derive(Hash)]
-#[derive(Ord)]
-#[derive(PartialEq)]
-#[derive(PartialOrd)]
-#[derive(Show)]
 pub enum Add {}
 impl Sig for Add { type Dom = HC<Pos, HC<Pos, HN>>; type Cod = Pos; }
 // 1, 1 => 1:0
@@ -117,14 +93,6 @@ impl<P0: Tm<Pos>, P1: Tm<Pos>, Rec: Tm<Pos>> FnTm<Add> for HC<(P0, _1), HC<(P1, 
 }
 
 // Addition with carry for type-level positive binary natural numbers
-#[derive(Clone)]
-#[derive(Copy)]
-#[derive(Eq)]
-#[derive(Hash)]
-#[derive(Ord)]
-#[derive(PartialEq)]
-#[derive(PartialOrd)]
-#[derive(Show)]
 #[doc(hidden)]
 pub enum AddCarry {}
 #[doc(hidden)]
@@ -192,14 +160,6 @@ impl<P0: Tm<Pos>, P1: Tm<Pos>, Rec: Tm<Pos>> FnTm<AddCarry> for HC<(P0, _1), HC<
     type O = (Rec, _1);
 }
 
-#[derive(Clone)]
-#[derive(Copy)]
-#[derive(Eq)]
-#[derive(Hash)]
-#[derive(Ord)]
-#[derive(PartialEq)]
-#[derive(PartialOrd)]
-#[derive(Show)]
 pub enum PredDouble {}
 impl Sig for PredDouble { type Dom = Pos; type Cod = Pos; }
 // 1 => 1
@@ -219,14 +179,6 @@ impl<P: Tm<Pos>> FnTm<PredDouble> for (P, _1)
     type O = ((P, _0), _1);
 }
 
-#[derive(Clone)]
-#[derive(Copy)]
-#[derive(Eq)]
-#[derive(Hash)]
-#[derive(Ord)]
-#[derive(PartialEq)]
-#[derive(PartialOrd)]
-#[derive(Show)]
 pub enum Pred {}
 impl Sig for Pred { type Dom = Pos; type Cod = Pos; }
 // p:1 => p:0
@@ -246,14 +198,6 @@ impl<P: Tm<Pos>> FnTm<Pred> for (P, _1)
     type O = (P, _0);
 }
 
-#[derive(Clone)]
-#[derive(Copy)]
-#[derive(Eq)]
-#[derive(Hash)]
-#[derive(Ord)]
-#[derive(PartialEq)]
-#[derive(PartialOrd)]
-#[derive(Show)]
 pub enum Mul {}
 impl Sig for Mul { type Dom = HC<Pos, HC<Pos, HN>>; type Cod = Pos; }
 // 1, q => q

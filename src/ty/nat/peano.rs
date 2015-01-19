@@ -11,50 +11,18 @@ use ty::{
 };
 
 /// Type-level nat
-#[derive(Clone)]
-#[derive(Copy)]
-#[derive(Eq)]
-#[derive(Hash)]
-#[derive(Ord)]
-#[derive(PartialEq)]
-#[derive(PartialOrd)]
-#[derive(Show)]
 pub enum Nat {}
 impl Ty for Nat {}
 
 /// Type-level natural number zero
-#[derive(Clone)]
-#[derive(Copy)]
-#[derive(Eq)]
-#[derive(Hash)]
-#[derive(Ord)]
-#[derive(PartialEq)]
-#[derive(PartialOrd)]
-#[derive(Show)]
 pub enum Zero {}
 impl Tm<Nat> for Zero {}
 
 /// Type-level natural number successor of n
-#[derive(Clone)]
-#[derive(Copy)]
-#[derive(Eq)]
-#[derive(Hash)]
-#[derive(Ord)]
-#[derive(PartialEq)]
-#[derive(PartialOrd)]
-#[derive(Show)]
 pub enum Succ<N: Tm<Nat>> {}
 impl<N: Tm<Nat>> Tm<Nat> for Succ<N> {}
 
 /// Type-level function for nat predecessor
-#[derive(Clone)]
-#[derive(Copy)]
-#[derive(Eq)]
-#[derive(Hash)]
-#[derive(Ord)]
-#[derive(PartialEq)]
-#[derive(PartialOrd)]
-#[derive(Show)]
 pub enum Pred {}
 impl Sig for Pred { type Dom = Nat; type Cod = Nat; }
 impl<N: Tm<Nat>> FnTm<Pred> for Succ<N>
@@ -63,14 +31,6 @@ impl<N: Tm<Nat>> FnTm<Pred> for Succ<N>
 }
 
 /// Type-level function for nat addition
-#[derive(Clone)]
-#[derive(Copy)]
-#[derive(Eq)]
-#[derive(Hash)]
-#[derive(Ord)]
-#[derive(PartialEq)]
-#[derive(PartialOrd)]
-#[derive(Show)]
 pub enum Add {}
 impl Sig for Add { type Dom = HC<Nat, HC<Nat, HN>>; type Cod = Nat; }
 impl<N1: Tm<Nat>> FnTm<Add> for HC<Zero, HC<N1, HN>>
@@ -84,14 +44,6 @@ impl<N0: Tm<Nat>, N1: Tm<Nat>, Rec: Tm<Nat>> FnTm<Add> for HC<Succ<N0>, HC<N1, H
 }
 
 /// Type-level function for nat subtraction
-#[derive(Clone)]
-#[derive(Copy)]
-#[derive(Eq)]
-#[derive(Hash)]
-#[derive(Ord)]
-#[derive(PartialEq)]
-#[derive(PartialOrd)]
-#[derive(Show)]
 pub enum Sub {}
 impl Sig for Sub { type Dom = HC<Nat, HC<Nat, HN>>; type Cod = Nat; }
 impl<N0: Tm<Nat>> FnTm<Sub> for HC<N0, HC<Zero, HN>>
@@ -105,14 +57,6 @@ impl<N0: Tm<Nat>, N1: Tm<Nat>, Rec: Tm<Nat>> FnTm<Sub> for HC<Succ<N0>, HC<Succ<
 }
 
 /// Type-level function for nat multiplication
-#[derive(Clone)]
-#[derive(Copy)]
-#[derive(Eq)]
-#[derive(Hash)]
-#[derive(Ord)]
-#[derive(PartialEq)]
-#[derive(PartialOrd)]
-#[derive(Show)]
 pub enum Mul {}
 impl Sig for Mul { type Dom = HC<Nat, HC<Nat, HN>>; type Cod = Nat; }
 impl<N1: Tm<Nat>> FnTm<Mul> for HC<Zero, HC<N1, HN>>
@@ -127,14 +71,6 @@ impl<N0: Tm<Nat>, N1: Tm<Nat>, Rec0: Tm<Nat>, Rec1: Tm<Nat>> FnTm<Mul> for HC<Su
 }
 
 /// Type-level function for nat exponentiation
-#[derive(Clone)]
-#[derive(Copy)]
-#[derive(Eq)]
-#[derive(Hash)]
-#[derive(Ord)]
-#[derive(PartialEq)]
-#[derive(PartialOrd)]
-#[derive(Show)]
 pub enum Exp {}
 impl Sig for Exp { type Dom = HC<Nat, HC<Nat, HN>>; type Cod = Nat; }
 impl<N1: Tm<Nat>> FnTm<Exp> for HC<Zero, HC<N1, HN>>
@@ -149,14 +85,6 @@ impl<N0: Tm<Nat>, N1: Tm<Nat>, Rec0: Tm<Nat>, Rec1: Tm<Nat>> FnTm<Exp> for HC<Su
 }
 
 /// Type-level function for nat factorial
-#[derive(Clone)]
-#[derive(Copy)]
-#[derive(Eq)]
-#[derive(Hash)]
-#[derive(Ord)]
-#[derive(PartialEq)]
-#[derive(PartialOrd)]
-#[derive(Show)]
 pub enum Fac {}
 impl Sig for Fac { type Dom = Nat; type Cod = Nat; }
 impl FnTm<Fac> for Zero
@@ -171,14 +99,6 @@ impl<N0: Tm<Nat>, Rec0: Tm<Nat>, Rec1: Tm<Nat>> FnTm<Fac> for Succ<N0> where
 }
 
 /// Type-level function for nat less-than
-#[derive(Clone)]
-#[derive(Copy)]
-#[derive(Eq)]
-#[derive(Hash)]
-#[derive(Ord)]
-#[derive(PartialEq)]
-#[derive(PartialOrd)]
-#[derive(Show)]
 pub enum LT {}
 impl Sig for LT { type Dom = HC<Nat, HC<Nat, HN>>; type Cod = bool::Bool; }
 impl<N1: Tm<Nat>> FnTm<LT> for HC<Zero, HC<N1, HN>> {
@@ -194,14 +114,6 @@ impl<N0: Tm<Nat>, N1: Tm<Nat>, Rec: Tm<bool::Bool>> FnTm<LT> for HC<Succ<N0>, HC
 }
 
 /// Type-level function for nat less-than-or-eq
-#[derive(Clone)]
-#[derive(Copy)]
-#[derive(Eq)]
-#[derive(Hash)]
-#[derive(Ord)]
-#[derive(PartialEq)]
-#[derive(PartialOrd)]
-#[derive(Show)]
 pub enum LTEq {}
 impl Sig for LTEq { type Dom = HC<Nat, HC<Nat, HN>>; type Cod = bool::Bool; }
 impl FnTm<LTEq> for HC<Zero, HC<Zero, HN>> {
@@ -220,14 +132,6 @@ impl<N0: Tm<Nat>, N1: Tm<Nat>, Rec: Tm<bool::Bool>> FnTm<LTEq> for HC<Succ<N0>, 
 }
 
 /// Type-level function for nat min
-#[derive(Clone)]
-#[derive(Copy)]
-#[derive(Eq)]
-#[derive(Hash)]
-#[derive(Ord)]
-#[derive(PartialEq)]
-#[derive(PartialOrd)]
-#[derive(Show)]
 pub enum Min {}
 impl Sig for Min { type Dom = HC<Nat, HC<Nat, HN>>; type Cod = Nat; }
 impl<N0: Tm<Nat>, N1: Tm<Nat>, Rec0: Tm<bool::Bool>, Rec1: Tm<Nat>> FnTm<Min> for HC<N0, HC<N1, HN>> where

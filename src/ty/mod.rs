@@ -66,25 +66,9 @@ pub trait Ty {}
 pub trait Tm<A: Ty> {}
 
 /// `Star` classifies normal Rust types
-#[derive(Clone)]
-#[derive(Copy)]
-#[derive(Eq)]
-#[derive(Hash)]
-#[derive(Ord)]
-#[derive(PartialEq)]
-#[derive(PartialOrd)]
-#[derive(Show)]
 pub enum Star {}
 
 /// `Rust<A>` makes a normal Rust type into a type-level term
-#[derive(Clone)]
-#[derive(Copy)]
-#[derive(Eq)]
-#[derive(Hash)]
-#[derive(Ord)]
-#[derive(PartialEq)]
-#[derive(PartialOrd)]
-#[derive(Show)]
 pub enum Rust<A> {}
 
 // `Star` is a type

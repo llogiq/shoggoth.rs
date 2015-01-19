@@ -11,50 +11,18 @@ use ty::{
 use ty::nat;
 
 /// Type-level list
-#[derive(Clone)]
-#[derive(Copy)]
-#[derive(Eq)]
-#[derive(Hash)]
-#[derive(Ord)]
-#[derive(PartialEq)]
-#[derive(PartialOrd)]
-#[derive(Show)]
 pub enum List<A: Ty> {}
 impl<A: Ty> Ty for List<A> {}
 
 /// Type-level nil list
-#[derive(Clone)]
-#[derive(Copy)]
-#[derive(Eq)]
-#[derive(Hash)]
-#[derive(Ord)]
-#[derive(PartialEq)]
-#[derive(PartialOrd)]
-#[derive(Show)]
 pub enum Nil {}
 impl<A: Ty> Tm<List<A>> for Nil {}
 
 /// Type-level cons list
-#[derive(Clone)]
-#[derive(Copy)]
-#[derive(Eq)]
-#[derive(Hash)]
-#[derive(Ord)]
-#[derive(PartialEq)]
-#[derive(PartialOrd)]
-#[derive(Show)]
 pub enum Cons<H, T> {}
 impl<A: Ty, H: Tm<A>, T: Tm<List<A>>> Tm<List<A>> for Cons<H, T> {}
 
 /// Type-level function for list append
-#[derive(Clone)]
-#[derive(Copy)]
-#[derive(Eq)]
-#[derive(Hash)]
-#[derive(Ord)]
-#[derive(PartialEq)]
-#[derive(PartialOrd)]
-#[derive(Show)]
 pub enum Append<A: Ty> {}
 impl<A: Ty> Sig for Append<A> { type Dom = HC<List<A>, HC<List<A>, HN>>; type Cod = List<A>; }
 impl<A: Ty, L1: Tm<List<A>>> FnTm<Append<A>> for HC<Nil, HC<L1, HN>>
@@ -68,14 +36,6 @@ impl<A: Ty, H: Tm<A>, L0: Tm<List<A>>, L1: Tm<List<A>>, Rec: Tm<List<A>>> FnTm<A
 }
 
 /// Type-level function for list length
-#[derive(Clone)]
-#[derive(Copy)]
-#[derive(Eq)]
-#[derive(Hash)]
-#[derive(Ord)]
-#[derive(PartialEq)]
-#[derive(PartialOrd)]
-#[derive(Show)]
 pub enum Length<A: Ty> {}
 impl<A: Ty> Sig for Length<A> { type Dom = List<A>; type Cod = nat::peano::Nat; }
 impl<A: Ty> FnTm<Length<A>> for Nil {
@@ -88,14 +48,6 @@ impl<A: Ty, H: Tm<A>, T: Tm<List<A>>, Rec: Tm<nat::peano::Nat>> FnTm<Length<A>> 
 }
 
 /// Type-level function for list look up at index
-#[derive(Clone)]
-#[derive(Copy)]
-#[derive(Eq)]
-#[derive(Hash)]
-#[derive(Ord)]
-#[derive(PartialEq)]
-#[derive(PartialOrd)]
-#[derive(Show)]
 pub enum At<A: Ty> {}
 impl<A: Ty> Sig for At<A> { type Dom = HC<List<A>, HC<nat::peano::Nat, HN>>; type Cod = A; }
 impl<A: Ty, H: Tm<A>, T: Tm<List<A>>> FnTm<At<A>> for HC<Cons<H, T>, HC<nat::peano::Zero, HN>> {
@@ -108,14 +60,6 @@ impl<A: Ty, H: Tm<A>, T: Tm<List<A>>, N: Tm<nat::peano::Nat>, Rec: Tm<A>> FnTm<A
 }
 
 /// Type-level function for list replace at index
-#[derive(Clone)]
-#[derive(Copy)]
-#[derive(Eq)]
-#[derive(Hash)]
-#[derive(Ord)]
-#[derive(PartialEq)]
-#[derive(PartialOrd)]
-#[derive(Show)]
 pub enum ReplaceAt<A: Ty> {}
 impl<A: Ty> Sig for ReplaceAt<A> { type Dom = HC<List<A>, HC<nat::peano::Nat, HC<A, HN>>>; type Cod = List<A>; }
 impl<A: Ty, H: Tm<A>, T: Tm<List<A>>, X: Tm<A>> FnTm<ReplaceAt<A>> for HC<Cons<H, T>, HC<nat::peano::Zero, HC<X, HN>>> {
