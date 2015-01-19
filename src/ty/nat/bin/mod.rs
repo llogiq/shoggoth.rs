@@ -1,3 +1,7 @@
+use hlist::{
+    HC,
+    HN,
+};
 use self::pos::{
     Pos,
 };
@@ -63,20 +67,20 @@ impl<P: Tm<Pos>, Rec: Tm<Nat>> FnTm<Succ> for P where
 #[derive(PartialOrd)]
 #[derive(Show)]
 pub enum Add {}
-impl Sig for Add { type Dom = (Nat, Nat); type Cod = Nat; }
-impl<P1: Tm<Pos>> FnTm<Add> for ((_0), (P1))
+impl Sig for Add { type Dom = HC<Nat, HC<Nat, HN>>; type Cod = Nat; }
+impl<P1: Tm<Pos>> FnTm<Add> for HC<_0, HC<P1, HN>>
 // 0, n => n
 {
     type O = P1;
 }
-impl<P0: Tm<Pos>> FnTm<Add> for (P0, (_0))
+impl<P0: Tm<Pos>> FnTm<Add> for HC<P0, HC<_0, HN>>
 // m, 0 => m
 {
     type O = P0;
 }
 // p, q => p + q
-impl<P0: Tm<Pos>, P1: Tm<Pos>, Rec: Tm<Nat>> FnTm<Add> for ((P0), (P1)) where
-    ((P0), (P1)): FnTm<pos::Add, O = Rec>,
+impl<P0: Tm<Pos>, P1: Tm<Pos>, Rec: Tm<Nat>> FnTm<Add> for HC<P0, HC<P1, HN>> where
+    HC<P0, HC<P1, HN>>: FnTm<pos::Add, O = Rec>,
 {
     type O = Rec;
 }
@@ -91,20 +95,20 @@ impl<P0: Tm<Pos>, P1: Tm<Pos>, Rec: Tm<Nat>> FnTm<Add> for ((P0), (P1)) where
 #[derive(PartialOrd)]
 #[derive(Show)]
 pub enum Mul {}
-impl Sig for Mul { type Dom = (Nat, Nat); type Cod = Nat; }
+impl Sig for Mul { type Dom = HC<Nat, HC<Nat, HN>>; type Cod = Nat; }
 // 0, n => 0
-impl<P1: Tm<Pos>> FnTm<Mul> for ((_0), (P1))
+impl<P1: Tm<Pos>> FnTm<Mul> for HC<_0, HC<P1, HN>>
 {
     type O = _0;
 }
 // m, 0 => 0
-impl<P0: Tm<Pos>> FnTm<Mul> for (P0, (_0))
+impl<P0: Tm<Pos>> FnTm<Mul> for HC<P0, HC<_0, HN>>
 {
     type O = _0;
 }
 // p, q => p * q
-impl<P0: Tm<Pos>, P1: Tm<Pos>, Rec: Tm<Nat>> FnTm<Mul> for ((P0), (P1)) where
-    ((P0), (P1)): FnTm<pos::Mul, O = Rec>,
+impl<P0: Tm<Pos>, P1: Tm<Pos>, Rec: Tm<Nat>> FnTm<Mul> for HC<P0, HC<P1, HN>> where
+    HC<P0, HC<P1, HN>>: FnTm<pos::Mul, O = Rec>,
 {
     type O = Rec;
 }
@@ -118,17 +122,17 @@ mod tests {
     // FIXME: add algebraic tests
 
     #[test]
-    fn add_0() { let _: Wit<_16384b> = wit::<Add, (_0b, _16384b)>(); }
+    fn add_0() { let _: Wit<_16384b> = wit::<Add, HC<_0b, HC<_16384b, HN>>>(); }
 
     #[test]
-    fn add() { let _: Wit<_16384b> = wit::<Add, (_8192b, _8192b)>(); }
+    fn add() { let _: Wit<_16384b> = wit::<Add, HC<_8192b, HC<_8192b, HN>>>(); }
 
     #[test]
-    fn mul_0() { let _: Wit<_0b> = wit::<Mul, (_0b, _16384b)>(); }
+    fn mul_0() { let _: Wit<_0b> = wit::<Mul, HC<_0b, HC<_16384b, HN>>>(); }
 
     #[test]
-    fn mul_1() { let _: Wit<_16384b> = wit::<Mul, (_1b, _16384b)>(); }
+    fn mul_1() { let _: Wit<_16384b> = wit::<Mul, HC<_1b, HC<_16384b, HN>>>(); }
 
     #[test]
-    fn mul() { let _: Wit<_65536b> = wit::<Mul, (_32b, _2048b)>(); }
+    fn mul() { let _: Wit<_65536b> = wit::<Mul, HC<_32b, HC<_2048b, HN>>>(); }
 }

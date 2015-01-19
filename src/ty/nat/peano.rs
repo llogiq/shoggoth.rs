@@ -1,3 +1,7 @@
+use hlist::{
+    HC,
+    HN,
+};
 use ty::{
     FnTm,
     Sig,
@@ -68,13 +72,13 @@ impl<N: Tm<Nat>> FnTm<Pred> for Succ<N>
 #[derive(PartialOrd)]
 #[derive(Show)]
 pub enum Add {}
-impl Sig for Add { type Dom = (Nat, Nat); type Cod = Nat; }
-impl<N1: Tm<Nat>> FnTm<Add> for (Zero, N1)
+impl Sig for Add { type Dom = HC<Nat, HC<Nat, HN>>; type Cod = Nat; }
+impl<N1: Tm<Nat>> FnTm<Add> for HC<Zero, HC<N1, HN>>
 {
     type O = N1;
 }
-impl<N0: Tm<Nat>, N1: Tm<Nat>, Rec: Tm<Nat>> FnTm<Add> for (Succ<N0>, N1) where
-    (N0, N1): FnTm<Add, O = Rec>,
+impl<N0: Tm<Nat>, N1: Tm<Nat>, Rec: Tm<Nat>> FnTm<Add> for HC<Succ<N0>, HC<N1, HN>> where
+    HC<N0, HC<N1, HN>>: FnTm<Add, O = Rec>,
 {
     type O = Succ<Rec>;
 }
@@ -89,13 +93,13 @@ impl<N0: Tm<Nat>, N1: Tm<Nat>, Rec: Tm<Nat>> FnTm<Add> for (Succ<N0>, N1) where
 #[derive(PartialOrd)]
 #[derive(Show)]
 pub enum Sub {}
-impl Sig for Sub { type Dom = (Nat, Nat); type Cod = Nat; }
-impl<N0: Tm<Nat>> FnTm<Sub> for (N0, Zero)
+impl Sig for Sub { type Dom = HC<Nat, HC<Nat, HN>>; type Cod = Nat; }
+impl<N0: Tm<Nat>> FnTm<Sub> for HC<N0, HC<Zero, HN>>
 {
     type O = N0;
 }
-impl<N0: Tm<Nat>, N1: Tm<Nat>, Rec: Tm<Nat>> FnTm<Sub> for (Succ<N0>, Succ<N1>) where
-    (N0, N1): FnTm<Sub, O = Rec>,
+impl<N0: Tm<Nat>, N1: Tm<Nat>, Rec: Tm<Nat>> FnTm<Sub> for HC<Succ<N0>, HC<Succ<N1>, HN>> where
+    HC<N0, HC<N1, HN>>: FnTm<Sub, O = Rec>,
 {
     type O = Rec;
 }
@@ -110,14 +114,14 @@ impl<N0: Tm<Nat>, N1: Tm<Nat>, Rec: Tm<Nat>> FnTm<Sub> for (Succ<N0>, Succ<N1>) 
 #[derive(PartialOrd)]
 #[derive(Show)]
 pub enum Mul {}
-impl Sig for Mul { type Dom = (Nat, Nat); type Cod = Nat; }
-impl<N1: Tm<Nat>> FnTm<Mul> for (Zero, N1)
+impl Sig for Mul { type Dom = HC<Nat, HC<Nat, HN>>; type Cod = Nat; }
+impl<N1: Tm<Nat>> FnTm<Mul> for HC<Zero, HC<N1, HN>>
 {
     type O = Zero;
 }
-impl<N0: Tm<Nat>, N1: Tm<Nat>, Rec0: Tm<Nat>, Rec1: Tm<Nat>> FnTm<Mul> for (Succ<N0>, N1) where
-    (N0, N1): FnTm<Mul, O = Rec0>,
-    (N1, Rec0): FnTm<Add, O = Rec1>,
+impl<N0: Tm<Nat>, N1: Tm<Nat>, Rec0: Tm<Nat>, Rec1: Tm<Nat>> FnTm<Mul> for HC<Succ<N0>, HC<N1, HN>> where
+    HC<N0, HC<N1, HN>>: FnTm<Mul, O = Rec0>,
+    HC<N1, HC<Rec0, HN>>: FnTm<Add, O = Rec1>,
 {
     type O = Rec1;
 }
@@ -132,14 +136,14 @@ impl<N0: Tm<Nat>, N1: Tm<Nat>, Rec0: Tm<Nat>, Rec1: Tm<Nat>> FnTm<Mul> for (Succ
 #[derive(PartialOrd)]
 #[derive(Show)]
 pub enum Exp {}
-impl Sig for Exp { type Dom = (Nat, Nat); type Cod = Nat; }
-impl<N1: Tm<Nat>> FnTm<Exp> for (Zero, N1)
+impl Sig for Exp { type Dom = HC<Nat, HC<Nat, HN>>; type Cod = Nat; }
+impl<N1: Tm<Nat>> FnTm<Exp> for HC<Zero, HC<N1, HN>>
 {
     type O = Succ<Zero>;
 }
-impl<N0: Tm<Nat>, N1: Tm<Nat>, Rec0: Tm<Nat>, Rec1: Tm<Nat>> FnTm<Exp> for (Succ<N0>, N1) where
-    (N0, N1): FnTm<Exp, O = Rec0>,
-    (N1, Rec0): FnTm<Mul, O = Rec1>,
+impl<N0: Tm<Nat>, N1: Tm<Nat>, Rec0: Tm<Nat>, Rec1: Tm<Nat>> FnTm<Exp> for HC<Succ<N0>, HC<N1, HN>> where
+    HC<N0, HC<N1, HN>>: FnTm<Exp, O = Rec0>,
+    HC<N1, HC<Rec0, HN>>: FnTm<Mul, O = Rec1>,
 {
     type O = Rec1;
 }
@@ -161,7 +165,7 @@ impl FnTm<Fac> for Zero
 }
 impl<N0: Tm<Nat>, Rec0: Tm<Nat>, Rec1: Tm<Nat>> FnTm<Fac> for Succ<N0> where
     N0: FnTm<Fac, O = Rec0>,
-    (Succ<N0>, Rec0): FnTm<Mul, O = Rec1>,
+    HC<Succ<N0>, HC<Rec0, HN>>: FnTm<Mul, O = Rec1>,
 {
     type O = Rec1;
 }
@@ -176,15 +180,15 @@ impl<N0: Tm<Nat>, Rec0: Tm<Nat>, Rec1: Tm<Nat>> FnTm<Fac> for Succ<N0> where
 #[derive(PartialOrd)]
 #[derive(Show)]
 pub enum LT {}
-impl Sig for LT { type Dom = (Nat, Nat); type Cod = bool::Bool; }
-impl<N1: Tm<Nat>> FnTm<LT> for (Zero, N1) {
+impl Sig for LT { type Dom = HC<Nat, HC<Nat, HN>>; type Cod = bool::Bool; }
+impl<N1: Tm<Nat>> FnTm<LT> for HC<Zero, HC<N1, HN>> {
     type O = bool::True;
 }
-impl<N0: Tm<Nat>> FnTm<LT> for (Succ<N0>, Zero) {
+impl<N0: Tm<Nat>> FnTm<LT> for HC<Succ<N0>, HC<Zero, HN>> {
     type O = bool::False;
 }
-impl<N0: Tm<Nat>, N1: Tm<Nat>, Rec: Tm<bool::Bool>> FnTm<LT> for (Succ<N0>, Succ<N1>) where
-    (N0, N1): FnTm<LT, O = Rec>,
+impl<N0: Tm<Nat>, N1: Tm<Nat>, Rec: Tm<bool::Bool>> FnTm<LT> for HC<Succ<N0>, HC<Succ<N1>, HN>> where
+    HC<N0, HC<N1, HN>>: FnTm<LT, O = Rec>,
 {
     type O = Rec;
 }
@@ -199,18 +203,18 @@ impl<N0: Tm<Nat>, N1: Tm<Nat>, Rec: Tm<bool::Bool>> FnTm<LT> for (Succ<N0>, Succ
 #[derive(PartialOrd)]
 #[derive(Show)]
 pub enum LTEq {}
-impl Sig for LTEq { type Dom = (Nat, Nat); type Cod = bool::Bool; }
-impl FnTm<LTEq> for (Zero, Zero) {
+impl Sig for LTEq { type Dom = HC<Nat, HC<Nat, HN>>; type Cod = bool::Bool; }
+impl FnTm<LTEq> for HC<Zero, HC<Zero, HN>> {
     type O = bool::True;
 }
-impl<N0: Tm<Nat>> FnTm<LTEq> for (Succ<N0>, Zero) {
+impl<N0: Tm<Nat>> FnTm<LTEq> for HC<Succ<N0>, HC<Zero, HN>> {
     type O = bool::False;
 }
-impl<N1: Tm<Nat>> FnTm<LTEq> for (Zero, Succ<N1>) {
+impl<N1: Tm<Nat>> FnTm<LTEq> for HC<Zero, HC<Succ<N1>, HN>> {
     type O = bool::True;
 }
-impl<N0: Tm<Nat>, N1: Tm<Nat>, Rec: Tm<bool::Bool>> FnTm<LTEq> for (Succ<N0>, Succ<N1>) where
-    (N0, N1): FnTm<LTEq, O = Rec>,
+impl<N0: Tm<Nat>, N1: Tm<Nat>, Rec: Tm<bool::Bool>> FnTm<LTEq> for HC<Succ<N0>, HC<Succ<N1>, HN>> where
+    HC<N0, HC<N1, HN>>: FnTm<LTEq, O = Rec>,
 {
     type O = Rec;
 }
@@ -225,11 +229,11 @@ impl<N0: Tm<Nat>, N1: Tm<Nat>, Rec: Tm<bool::Bool>> FnTm<LTEq> for (Succ<N0>, Su
 #[derive(PartialOrd)]
 #[derive(Show)]
 pub enum Min {}
-impl Sig for Min { type Dom = (Nat, Nat); type Cod = Nat; }
-impl<N0: Tm<Nat>, N1: Tm<Nat>, Rec0: Tm<bool::Bool>, Rec1: Tm<Nat>> FnTm<Min> for (N0, N1) where
-    (N0, N1): Tm<(Nat, Nat)>, // FIXME: coherence failed to report ambiguity
-    (N0, N1): FnTm<LTEq, O = Rec0>,
-    (Rec0, N0, N1): FnTm<bool::If<Nat>, O = Rec1>,
+impl Sig for Min { type Dom = HC<Nat, HC<Nat, HN>>; type Cod = Nat; }
+impl<N0: Tm<Nat>, N1: Tm<Nat>, Rec0: Tm<bool::Bool>, Rec1: Tm<Nat>> FnTm<Min> for HC<N0, HC<N1, HN>> where
+    HC<N0, HC<N1, HN>>: Tm<HC<Nat, HC<Nat, HN>>>, // FIXME: coherence failed to report ambiguity
+    HC<N0, HC<N1, HN>>: FnTm<LTEq, O = Rec0>,
+    HC<Rec0, HC<N0, HC<N1, HN>>>: FnTm<bool::If<Nat>, O = Rec1>,
 {
     type O = Rec1;
 }
@@ -244,38 +248,38 @@ mod tests {
     fn pred() { let _: Wit<_1n> = wit::<Pred, _2n>(); }
 
     #[test]
-    fn add() { let _: Wit<_5n> = wit::<Add, (_3n, _2n)>(); }
+    fn add() { let _: Wit<_5n> = wit::<Add, HC<_3n, HC<_2n, HN>>>(); }
 
     #[test]
-    fn sub() { let _: Wit<_3n> = wit::<Sub, (_5n, _2n)>(); }
+    fn sub() { let _: Wit<_3n> = wit::<Sub, HC<_5n, HC<_2n, HN>>>(); }
 
     #[test]
-    fn mul() { let _: Wit<_6n> = wit::<Mul, (_3n, _2n)>(); }
+    fn mul() { let _: Wit<_6n> = wit::<Mul, HC<_3n, HC<_2n, HN>>>(); }
 
     #[test]
-    fn exp() { let _: Wit<_8n> = wit::<Exp, (_3n, _2n)>(); }
+    fn exp() { let _: Wit<_8n> = wit::<Exp, HC<_3n, HC<_2n, HN>>>(); }
 
     #[test]
-    fn fac() { let _: Wit<_24n> = wit::<Fac, _4n >(); }
+    fn fac() { let _: Wit<_24n> = wit::<Fac, _4n>(); }
 
     #[test]
-    fn lt_false() { let _: Wit<FF> = wit::<LT, (_4n, _2n)>(); }
+    fn lt_false() { let _: Wit<FF> = wit::<LT, HC<_4n, HC<_2n, HN>>>(); }
 
     #[test]
-    fn lt_true() { let _: Wit<TT> = wit::<LT, (_2n, _4n)>(); }
+    fn lt_true() { let _: Wit<TT> = wit::<LT, HC<_2n, HC<_4n, HN>>>(); }
 
     #[test]
-    fn lteq_false() { let _: Wit<FF> = wit::<LTEq, (_4n, _2n)>(); }
+    fn lteq_false() { let _: Wit<FF> = wit::<LTEq, HC<_4n, HC<_2n, HN>>>(); }
 
     #[test]
-    fn lteq_true_00() { let _: Wit<TT> = wit::<LTEq, (_2n, _2n)>(); }
+    fn lteq_true_00() { let _: Wit<TT> = wit::<LTEq, HC<_2n, HC<_2n, HN>>>(); }
 
     #[test]
-    fn lteq_true_01() { let _: Wit<TT> = wit::<LTEq, (_2n, _4n)>(); }
+    fn lteq_true_01() { let _: Wit<TT> = wit::<LTEq, HC<_2n, HC<_4n, HN>>>(); }
 
     #[test]
-    fn min_lhs() { let _: Wit<_2n> = wit::<Min, (_2n, _4n)>(); }
+    fn min_lhs() { let _: Wit<_2n> = wit::<Min, HC<_2n, HC<_4n, HN>>>(); }
 
     #[test]
-    fn min_rhs() { let _: Wit<_2n> = wit::<Min, (_4n, _2n)>(); }
+    fn min_rhs() { let _: Wit<_2n> = wit::<Min, HC<_4n, HC<_2n, HN>>>(); }
 }

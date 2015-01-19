@@ -1,10 +1,14 @@
+pub use hlist::{
+    HC,
+    HList,
+    HN,
+};
 use ty::{
     bool,
     list,
 };
-
-use ty::nat;
 use ty::bit;
+use ty::nat;
 
 pub type FF = bool::False;
 pub type TT = bool::True;

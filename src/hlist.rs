@@ -11,8 +11,8 @@ pub trait HList {}
 #[derive(PartialOrd)]
 #[derive(Rand)]
 #[derive(Show)]
-pub struct HNil;
-impl HList for HNil {}
+pub struct HN;
+impl HList for HN {}
 
 /// Cons for heterogeneous lists
 #[derive(Clone)]
@@ -24,8 +24,8 @@ impl HList for HNil {}
 #[derive(PartialOrd)]
 #[derive(Rand)]
 #[derive(Show)]
-pub struct HCons<H, T: HList>(pub H, pub T);
-impl<H, T: HList> HList for HCons<H, T> {}
+pub struct HC<H, T: HList>(pub H, pub T);
+impl<H, T: HList> HList for HC<H, T> {}
 
 /// `HList` predicate implemented when `Self` is heterogeneous cons
 #[rustc_on_unimplemented = "`{Self}` is not a heterogeneous cons"]
@@ -40,7 +40,7 @@ pub trait IsHCons: HList {
     fn tail(self) -> Self::T;
 }
 
-impl<H, T: HList> IsHCons for HCons<H, T> {
+impl<H, T: HList> IsHCons for HC<H, T> {
     type H = H;
     type T = T;
 

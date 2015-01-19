@@ -4,9 +4,9 @@
 extern crate unify;
 
 pub use self::hlist::{
-    HCons,
+    HC,
     HList,
-    HNil,
+    HN,
     IsHCons,
 };
 

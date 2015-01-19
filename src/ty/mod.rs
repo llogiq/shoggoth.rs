@@ -36,6 +36,12 @@ pub use self::wit::{
     wit,
 };
 
+use hlist::{
+    HC,
+    HList,
+    HN,
+};
+
 mod bit;
 mod bool;
 mod fun;
@@ -84,22 +90,31 @@ pub enum Rust<A> {}
 // `Star` is a type
 impl Ty for Star {}
 
-// `()` is a type
-impl Ty for () {}
+// HNil is a type
+impl Ty for HN {}
 
-// Tuples comprised of types are types
-impl<HTy: Ty, TTy: Ty, CTy> Ty for CTy where
-    CTy: ::IsComposite<H = HTy, T = TTy>,
+// HCons is a type
+impl<HTy, TTy> Ty for HC<HTy, TTy> where
+    HTy: Ty,
+    TTy: Ty + HList,
 {}
 
 // `Rust<A>` is a type-level term of type `Star`
 impl<A> Tm<Star> for Rust<A> {}
 
-// `()` is a type-level term of type `()`
-impl Tm<()> for () {}
+// HNil is a type-level term of type Star
+impl Tm<Star> for HN {}
 
-// Tuples comprised of type-level terms are terms
-impl<HTy: Ty, HTm: Tm<HTy>, TTy: Ty, TTm: Tm<TTy>, CTy, CTm> Tm<CTy> for CTm where
-    CTy: ::IsComposite<H = HTy, T = TTy>,
-    CTm: ::IsComposite<H = HTm, T = TTm>,
+// HCons is a type-level term of type Star
+impl<HTm: Tm<Star>, TTm: Tm<Star> + HList> Tm<Star> for HC<HTm, TTm> {}
+
+// HNil is a term
+impl Tm<HN> for HN {}
+
+// HCons is a type-level term
+impl<HTy, TTy, HTm, TTm> Tm<HC<HTy, TTy>> for HC<HTm, TTm> where
+    HTy: Ty,
+    TTy: Ty + HList,
+    HTm: Tm<HTy>,
+    TTm: Tm<TTy> + HList,
 {}
