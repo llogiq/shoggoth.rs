@@ -21,6 +21,10 @@ pub use self::fun::{
     Rule,
     Sig,
 };
+pub use self::list::{
+    Append,
+    List,
+};
 pub use self::wit::{
     Wit,
 };
@@ -34,6 +38,7 @@ use hlist::{
 mod bit;
 mod bool;
 mod fun;
+mod list;
 mod wit;
 
 /// Type-level binary integers
