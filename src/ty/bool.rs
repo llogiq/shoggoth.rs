@@ -8,39 +8,62 @@ use ty::{
 
 /// Type-level bool
 pub enum Bool {}
+
 impl Ty for Bool {}
 
 /// Type-level false
 pub enum FF {}
+
 impl Tm<Bool> for FF {}
 
 /// Type-level true
 pub enum TT {}
+
 impl Tm<Bool> for TT {}
 
 /// Type-level function for bool negation
+
+
 pub enum Not {}
 impl Sig for Not { type Dom = Bool; type Cod = Bool; }
 impl Rule<Not> for FF { type O = TT; }
 impl Rule<Not> for TT { type O = FF; }
 
 /// Type-level function for bool conjunction
+
+
+
+
+
 pub enum And {}
 impl Sig for And { type Dom = HC<Bool, HC<Bool, HN>>; type Cod = Bool; }
 impl<B: Tm<Bool>> Rule<And> for HC<FF, HC<B, HN>> { type O = FF; }
 impl<B: Tm<Bool>> Rule<And> for HC<TT, HC<B, HN>> { type O = B; }
 
 /// Type-level function for bool disjunction
+
+
+
+
+
 pub enum Or {}
 impl Sig for Or { type Dom = HC<Bool, HC<Bool, HN>>; type Cod = Bool; }
 impl<B: Tm<Bool>> Rule<Or> for HC<FF, HC<B, HN>> { type O = B; }
 impl<B: Tm<Bool>> Rule<Or> for HC<TT, HC<B, HN>> { type O = TT; }
 
 /// Type-level function for bool conditional
+
+
+
+
+
 pub enum If<A: Ty> {}
 impl<A: Ty> Sig for If<A> { type Dom = HC<Bool, HC<A, HC<A, HN>>>; type Cod = A; }
 impl<A: Ty, B0: Tm<A>, B1: Tm<A>> Rule<If<A>> for HC<FF, HC<B0, HC<B1, HN>>> { type O = B1; }
 impl<A: Ty, B0: Tm<A>, B1: Tm<A>> Rule<If<A>> for HC<TT, HC<B0, HC<B1, HN>>> { type O = B0; }
+
+
+
 
 #[cfg(test)]
 mod tests {

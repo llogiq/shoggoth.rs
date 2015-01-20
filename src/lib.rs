@@ -10,13 +10,11 @@ pub use self::hlist::{
     HN,
     IsHCons,
 };
-
 pub use self::product::{
     ProductOps,
     ToHList,
     ToTuple,
 };
-
 pub use self::tuple::{
     IsComposite,
     TupleOps,

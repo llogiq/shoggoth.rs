@@ -18,6 +18,7 @@ pub mod pos;
 
 /// Natural numbers (binary)
 pub enum Nat {}
+
 impl Ty for Nat {}
 
 impl Tm<Nat> for _0 {}
