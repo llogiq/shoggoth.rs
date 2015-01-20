@@ -28,6 +28,15 @@ pub use self::list::{
 pub use self::wit::{
     Wit,
 };
+pub use self::zipper::{
+    Get,
+    Left,
+    Put,
+    Right,
+    Unzip,
+    ZC,
+    Zip,
+    Zipper,
 };
 use hlist::{
     HC,
@@ -40,6 +49,7 @@ mod bool;
 mod fun;
 mod list;
 mod wit;
+mod zipper;
 
 /// Type-level binary integers
 pub mod int;
