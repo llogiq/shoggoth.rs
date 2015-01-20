@@ -22,7 +22,6 @@ impl Tm<Int> for _0 {}
 impl<N: Tm<npos::Pos>> Tm<Int> for Nz<N> {}
 impl<N: Tm<npos::Pos>> Tm<Int> for Pz<N> {}
 
-#[doc(hidden)]
 
 
 
@@ -49,7 +48,6 @@ impl<P: Tm<npos::Pos>> Rule<Double> for Pz<P>
     type O = Pz<(P, _0)>;
 }
 
-#[doc(hidden)]
 
 
 pub enum SuccDouble {}
@@ -75,7 +73,6 @@ impl<P: Tm<npos::Pos>> Rule<SuccDouble> for Pz<P>
     type O = Pz<(P, _1)>;
 }
 
-#[doc(hidden)]
 
 
 pub enum PredDouble {}

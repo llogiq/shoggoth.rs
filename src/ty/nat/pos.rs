@@ -113,22 +113,18 @@ impl<P0: Tm<Pos>, P1: Tm<Pos>, Rec: Tm<Pos>> Rule<Add> for HC<(P0, _1), HC<(P1, 
 }
 
 // Addition with carry for type-level positive natural numbers
-#[doc(hidden)]
 
 
 pub enum AddCarry {}
-#[doc(hidden)]
 
 impl Sig for AddCarry { type Dom = HC<Pos, HC<Pos, HN>>; type Cod = Pos; }
 // 1, 1 => 1:1
-#[doc(hidden)]
 
 impl Rule<AddCarry> for HC<_1, HC<_1, HN>>
 {
     type O = (_1, _1);
 }
 // 1, q:0 => succ(q):0
-#[doc(hidden)]
 impl<P1: Tm<Pos>, Rec: Tm<Pos>> Rule<AddCarry> for HC<_1, HC<(P1, _0), HN>> where
 
     P1: Rule<Succ, O = Rec>,
@@ -136,7 +132,6 @@ impl<P1: Tm<Pos>, Rec: Tm<Pos>> Rule<AddCarry> for HC<_1, HC<(P1, _0), HN>> wher
     type O = (Rec, _0);
 }
 // 1, q:1 => succ(q):1
-#[doc(hidden)]
 impl<P1: Tm<Pos>, Rec: Tm<Pos>> Rule<AddCarry> for HC<_1, HC<(P1, _1), HN>> where
 
     P1: Rule<Succ, O = Rec>,
@@ -144,7 +139,6 @@ impl<P1: Tm<Pos>, Rec: Tm<Pos>> Rule<AddCarry> for HC<_1, HC<(P1, _1), HN>> wher
     type O = (Rec, _1);
 }
 // p:0, 1 => p:1
-#[doc(hidden)]
 impl<P0: Tm<Pos>, Rec: Tm<Pos>> Rule<AddCarry> for HC<(P0, _0), HC<_1, HN>> where
 
     P0: Rule<Succ, O = Rec>,
@@ -152,7 +146,6 @@ impl<P0: Tm<Pos>, Rec: Tm<Pos>> Rule<AddCarry> for HC<(P0, _0), HC<_1, HN>> wher
     type O = (P0, _0);
 }
 // p:0, q:0 => (p + q):1
-#[doc(hidden)]
 impl<P0: Tm<Pos>, P1: Tm<Pos>, Rec: Tm<Pos>> Rule<AddCarry> for HC<(P0, _0), HC<(P1, _0), HN>> where
 
     HC<P0, HC<P1, HN>>: Rule<Add, O = Rec>,
@@ -160,7 +153,6 @@ impl<P0: Tm<Pos>, P1: Tm<Pos>, Rec: Tm<Pos>> Rule<AddCarry> for HC<(P0, _0), HC<
     type O = (Rec, _1);
 }
 // p:0, q:1 => (p +carry q):0
-#[doc(hidden)]
 impl<P0: Tm<Pos>, P1: Tm<Pos>, Rec: Tm<Pos>> Rule<AddCarry> for HC<(P0, _0), HC<(P1, _1), HN>> where
 
     HC<P0, HC<P1, HN>>: Rule<AddCarry, O = Rec>,
@@ -168,7 +160,6 @@ impl<P0: Tm<Pos>, P1: Tm<Pos>, Rec: Tm<Pos>> Rule<AddCarry> for HC<(P0, _0), HC<
     type O = (Rec, _0);
 }
 // p:1, 1 => succ(p):1
-#[doc(hidden)]
 
 impl<P0: Tm<Pos>, Rec: Tm<Pos>> Rule<AddCarry> for HC<(P0, _1), HC<_1, HN>> where
     P0: Rule<Succ, O = Rec>,
@@ -176,7 +167,6 @@ impl<P0: Tm<Pos>, Rec: Tm<Pos>> Rule<AddCarry> for HC<(P0, _1), HC<_1, HN>> wher
     type O = (Rec, _1);
 }
 // p:1, q:0 => (p +carry q):0
-#[doc(hidden)]
 impl<P0: Tm<Pos>, P1: Tm<Pos>, Rec: Tm<Pos>> Rule<AddCarry> for HC<(P0, _1), HC<(P1, _0), HN>> where
 
     HC<P0, HC<P1, HN>>: Rule<AddCarry, O = Rec>,
@@ -184,7 +174,6 @@ impl<P0: Tm<Pos>, P1: Tm<Pos>, Rec: Tm<Pos>> Rule<AddCarry> for HC<(P0, _1), HC<
     type O = (Rec, _0);
 }
 // p:1, q:1 => (p +carry q):1
-#[doc(hidden)]
 impl<P0: Tm<Pos>, P1: Tm<Pos>, Rec: Tm<Pos>> Rule<AddCarry> for HC<(P0, _1), HC<(P1, _1), HN>> where
 
     HC<P0, HC<P1, HN>>: Rule<AddCarry, O = Rec>,
