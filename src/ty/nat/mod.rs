@@ -13,67 +13,126 @@ use ty::bit::{
     _1,
 };
 
-/// Positive natural numbers (binary)
+/// Type-level positive natural numbers (binary)
 pub mod pos;
 
-/// Natural numbers (binary)
+/// Type-level natural numbers (binary)
 pub enum Nat {}
 
+/// ```
+/// ---------
+/// Nat :: Ty
+/// ```
 impl Ty for Nat {}
 
+/// ```
+/// -------
+/// 0 : Nat
+/// ```
 impl Tm<Nat> for _0 {}
+
+/// ```
+/// p : Pos
+/// -------
+/// p : Nat
+/// ```
 impl<P: Tm<Pos>> Tm<Nat> for P {}
+
+
 
 /// Type-level successor for natural numbers
 pub enum Succ {}
+
+/// ```
+/// n : Nat
+/// -------------
+/// succ(n) : Nat
+/// ```
 impl Sig for Succ { type Dom = Nat; type Cod = Nat; }
-// 0 => 1
+
+/// `succ(0) => 1`
 impl Rule<Succ> for _0
 {
     type O = _1;
 }
-// p => succ(p)
-impl<P: Tm<Pos>, Rec: Tm<Nat>> Rule<Succ> for P where
+
+/// `succ[nat](p) => succ[pos](p)`
+impl<Rec, P> Rule<Succ> for P where
+    Rec: Tm<Nat>,
     P: Rule<pos::Succ, O = Rec>,
 {
     type O = Rec;
 }
 
+
+
 /// Type-level addition for natural numbers
 pub enum Add {}
+
+/// ```
+/// m : Nat
+/// n : Nat
+/// -------------
+/// add(m, n) : Nat
+/// ```
 impl Sig for Add { type Dom = HC<Nat, HC<Nat, HN>>; type Cod = Nat; }
-impl<P1: Tm<Pos>> Rule<Add> for HC<_0, HC<P1, HN>>
-// 0, n => n
+
+/// `add(0, n) => n`
+impl<P1> Rule<Add> for HC<_0, HC<P1, HN>> where
+    P1: Tm<Pos>,
 {
     type O = P1;
 }
-impl<P0: Tm<Pos>> Rule<Add> for HC<P0, HC<_0, HN>>
-// m, 0 => m
+
+/// `add(m, 0) => m`
+impl<P0> Rule<Add> for HC<P0, HC<_0, HN>> where
+    P0: Tm<Pos>,
 {
     type O = P0;
 }
-// p, q => p + q
-impl<P0: Tm<Pos>, P1: Tm<Pos>, Rec: Tm<Nat>> Rule<Add> for HC<P0, HC<P1, HN>> where
+
+/// `add[nat](p, q) => add[pos](p, q)`
+impl<P0, P1, Rec> Rule<Add> for HC<P0, HC<P1, HN>> where
+    P0: Tm<Pos>,
+    P1: Tm<Pos>,
+    Rec: Tm<Nat>,
     HC<P0, HC<P1, HN>>: Rule<pos::Add, O = Rec>,
 {
     type O = Rec;
 }
 
+
+
 /// Type-level multiplication for natural numbers
 pub enum Mul {}
+
+/// ```
+/// m : Nat
+/// n : Nat
+/// -------------
+/// mul(m, n) : Nat
+/// ```
 impl Sig for Mul { type Dom = HC<Nat, HC<Nat, HN>>; type Cod = Nat; }
-// 0, n => 0
-impl<P1: Tm<Pos>> Rule<Mul> for HC<_0, HC<P1, HN>>
+
+/// `mul(0, n) => 0`
+impl<P1> Rule<Mul> for HC<_0, HC<P1, HN>> where
+    P1: Tm<Pos>,
 {
     type O = _0;
 }
-// m, 0 => 0
-impl<P0: Tm<Pos>> Rule<Mul> for HC<P0, HC<_0, HN>>
+
+/// `mul(m, 0) => 0`
+impl<P0> Rule<Mul> for HC<P0, HC<_0, HN>> where
+    P0: Tm<Pos>,
 {
     type O = _0;
 }
-// p, q => p * q
-impl<P0: Tm<Pos>, P1: Tm<Pos>, Rec: Tm<Nat>> Rule<Mul> for HC<P0, HC<P1, HN>> where
+
+/// `mul[nat](p, q) => mul[pos](p, q)`
+impl<P0, P1, Rec> Rule<Mul> for HC<P0, HC<P1, HN>> where
+    P0: Tm<Pos>,
+    P1: Tm<Pos>,
+    Rec: Tm<Nat>,
     HC<P0, HC<P1, HN>>: Rule<pos::Mul, O = Rec>,
 {
     type O = Rec;
@@ -88,17 +147,32 @@ mod test {
     // FIXME: add algebraic tests
 
     #[test]
-    fn add_0() { let _: Wit<_16384b> = app::<Add, HC<_0b, HC<_16384b, HN>>>(); }
+    fn add_0() {
+        let x: Wit<HC<_0b, HC<_16384b, HN>>> = Wit;
+        let _: Wit<_16384b> = x.app::<Add>();
+    }
 
     #[test]
-    fn add() { let _: Wit<_16384b> = app::<Add, HC<_8192b, HC<_8192b, HN>>>(); }
+    fn add() {
+        let x: Wit<HC<_8192b, HC<_8192b, HN>>> = Wit;
+        let _: Wit<_16384b> = x.app::<Add>();
+    }
 
     #[test]
-    fn mul_0() { let _: Wit<_0b> = app::<Mul, HC<_0b, HC<_16384b, HN>>>(); }
+    fn mul_0() {
+        let x: Wit<HC<_0b, HC<_16384b, HN>>> = Wit;
+        let _: Wit<_0b> = x.app::<Mul>();
+    }
 
     #[test]
-    fn mul_1() { let _: Wit<_16384b> = app::<Mul, HC<_1b, HC<_16384b, HN>>>(); }
+    fn mul_1() {
+        let x: Wit<HC<_1b, HC<_16384b, HN>>> = Wit;
+        let _: Wit<_16384b> = x.app::<Mul>();
+    }
 
     #[test]
-    fn mul() { let _: Wit<_65536b> = app::<Mul, HC<_32b, HC<_2048b, HN>>>(); }
+    fn mul() {
+        let x: Wit<HC<_32b, HC<_2048b, HN>>> = Wit;
+        let _: Wit<_65536b> = x.app::<Mul>();
+    }
 }

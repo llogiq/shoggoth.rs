@@ -1,6 +1,6 @@
 use ty::{
-    App,
-    Fun,
+    Act,
+    Eval,
     Rule,
     Sig,
 };
@@ -15,9 +15,16 @@ use ty::{
 #[derive(PartialOrd)]
 #[derive(Rand)]
 #[derive(Show)]
-pub struct Wit<A>(());
+pub struct Wit<A>;
 
-/// Compute a type-level expression by applying a "type-level
-/// function" `F` to a type-level argument `I`
-#[inline]
-pub fn app<Op: Sig, X: Rule<Op>>() -> Wit<App<Fun<Op>, X>> { Wit(()) }
+impl<X> Wit<X> {
+    /// Compute a type-level expression by applying a type-level partial
+    /// operation `Op` to input term given as `X`
+    #[inline]
+    pub fn app<Op>(self) -> Wit<Eval<Act<Op>, X>> where
+        Op: Sig,
+        X: Rule<Op>,
+    {
+        Wit
+    }
+}
