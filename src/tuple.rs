@@ -77,5 +77,5 @@ pub trait TupleOps {
 
 
 #[cfg(test)]
-mod tests {
+mod test {
 }

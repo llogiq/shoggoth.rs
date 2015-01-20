@@ -66,7 +66,7 @@ impl<A: Ty, B0: Tm<A>, B1: Tm<A>> Rule<If<A>> for HC<TT, HC<B0, HC<B1, HN>>> { t
 
 
 #[cfg(test)]
-mod tests {
+mod test {
     use hlist::*;
     use ty::*;
 

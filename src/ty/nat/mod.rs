@@ -80,7 +80,7 @@ impl<P0: Tm<Pos>, P1: Tm<Pos>, Rec: Tm<Nat>> Rule<Mul> for HC<P0, HC<P1, HN>> wh
 }
 
 #[cfg(test)]
-mod tests {
+mod test {
     use hlist::*;
     use super::*;
     use ty::*;
