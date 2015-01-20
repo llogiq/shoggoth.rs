@@ -13,19 +13,19 @@ use ty::{
 /// Type-level positive natural numbers (binary)
 pub enum Pos {}
 
-/// ```
+/// ```ignore
 /// ---------
 /// Pos :: Ty
 /// ```
 impl Ty for Pos {}
 
-/// ```
+/// ```ignore
 /// -------
 /// 1 : Pos
 /// ```
 impl Tm<Pos> for _1 {}
 
-/// ```
+/// ```ignore
 /// p : Pos
 /// b : Bit
 /// ------------
@@ -41,7 +41,7 @@ impl<P, B> Tm<Pos> for (P, B) where
 /// Type-level successor for positive natural numbers
 pub enum Succ {}
 
-/// ```
+/// ```ignore
 /// p : Pos
 /// -------------
 /// succ(p) : Pos
@@ -75,7 +75,7 @@ impl<P, Rec> Rule<Succ> for (P, _1) where
 /// Type-level addition for positive natural numbers
 pub enum Add {}
 
-/// ```
+/// ```ignore
 /// p : Pos
 /// q : Pos
 /// ---------------
@@ -165,7 +165,7 @@ impl<P0, P1, Rec> Rule<Add> for HC<(P0, _1), HC<(P1, _1), HN>> where
 /// Type-level addition with carry for positive natural numbers
 pub enum AddCarry {}
 
-/// ```
+/// ```ignore
 /// p : Pos
 /// q : Pos
 /// ---------------------
@@ -257,7 +257,7 @@ impl<P0, P1, Rec> Rule<AddCarry> for HC<(P0, _1), HC<(P1, _1), HN>> where
 
 pub enum PredDouble {}
 
-/// ```
+/// ```ignore
 /// p : Pos
 /// -------------------
 /// pred_carry(p) : Pos
@@ -291,7 +291,7 @@ impl<P> Rule<PredDouble> for (P, _1) where
 /// Type-level predecessor for positive natural numbers
 pub enum Pred {}
 
-/// ```
+/// ```ignore
 /// p : Pos
 /// -------------
 /// pred(p) : Pos
@@ -325,7 +325,7 @@ impl<P> Rule<Pred> for (P, _1) where
 /// Type-level multiplication for positive natural numbers
 pub enum Mul {}
 
-/// ```
+/// ```ignore
 /// p : Pos
 /// q : Pos
 /// ---------------

@@ -13,7 +13,7 @@ use ty::bit::{
 /// Type-level integers
 pub enum Int {}
 
-/// ```
+/// ```ignore
 /// ---------
 /// Int :: Ty
 /// ```
@@ -32,7 +32,7 @@ pub enum Zp<P> where
 /// `0 : Int`
 impl Tm<Int> for _0 {}
 
-/// ```
+/// ```ignore
 /// p : Pos
 /// --------
 /// -p : Int
@@ -41,7 +41,7 @@ impl<N> Tm<Int> for Zn<N> where
     N: Tm<pos::Pos>,
 {}
 
-/// ```
+/// ```ignore
 /// p : Pos
 /// --------
 /// +p : Int
@@ -53,12 +53,12 @@ impl<N> Tm<Int> for Zp<N> where
 
 
 /// Type-level doubling for binary integers:
-/// ```
+/// ```ignore
 /// λx:int. 2 * x
 /// ```
 pub enum Double {}
 
-/// ```
+/// ```ignore
 /// i : Int
 /// ---------------
 /// double(i) : Int
@@ -91,12 +91,12 @@ impl<P> Rule<Double> for Zp<P> where
 
 
 /// Type-level doubling with successor for binary integers:
-/// ```
+/// ```ignore
 /// λx:int. 2 * x + 1
 /// ```
 pub enum SuccDouble {}
 
-/// ```
+/// ```ignore
 /// i : Int
 /// --------------------
 /// succ_double(i) : Int
@@ -128,12 +128,12 @@ impl<P> Rule<SuccDouble> for Zp<P> where
 
 
 /// Type-level doubling with predecessor for binary integers:
-/// ```
+/// ```ignore
 /// λx:int. 2 * x - 1
 /// ```
 pub enum PredDouble {}
 
-/// ```
+/// ```ignore
 /// i : Int
 /// --------------------
 /// pred_double(i) : Int

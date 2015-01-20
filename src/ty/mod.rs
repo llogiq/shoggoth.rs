@@ -73,19 +73,19 @@ pub enum Lift<A> {}
 trait Rust { type O; }
 impl<A> Rust for Lift<A> { type O = A; }
 
-/// ```
+/// ```ignore
 /// ----------
 /// Star :: Ty
 /// ```
 impl Ty for Star {}
 
-/// ```
+/// ```ignore
 /// ----------
 /// HNil :: Ty
 /// ```
 impl Ty for HN {}
 
-/// ```
+/// ```ignore
 /// HTy :: Ty
 /// TTy :: HList
 /// TTy :: Ty
@@ -97,20 +97,20 @@ impl<HTy, TTy> Ty for HC<HTy, TTy> where
     TTy: HList + Ty,
 {}
 
-/// ```
+/// ```ignore
 /// A : Rust
 /// --------------
 /// Lift<A> : Star
 /// ```
 impl<A> Tm<Star> for Lift<A> {}
 
-/// ```
+/// ```ignore
 /// -----------
 /// HNil : Star
 /// ```
 impl Tm<Star> for HN {}
 
-/// ```
+/// ```ignore
 /// HTm : Star
 /// TTm :: HList, TTm : Star
 /// ----------------------
@@ -121,13 +121,13 @@ impl<HTm, TTm> Tm<Star> for HC<HTm, TTm> where
     TTm: Tm<Star> + HList,
 {}
 
-/// ```
+/// ```ignore
 /// -----------
 /// HNil : HNil
 /// ```
 impl Tm<HN> for HN {}
 
-/// ```
+/// ```ignore
 /// HTy :: Ty
 /// TTy :: HList, TTy :: Ty
 /// HTm : HTy

@@ -13,7 +13,7 @@ pub enum Zipper<A> where
     A: Ty,
 {}
 
-/// ```
+/// ```ignore
 /// A :: Ty
 /// ---------------
 /// Zipper[A] :: Ty
@@ -27,7 +27,7 @@ impl<A> Ty for Zipper<A> where
 /// Zipper constructor
 pub struct ZC<L, R>(L, R);
 
-/// ```
+/// ```ignore
 /// A :: Ty
 /// l : List[A]
 /// r : List[A]
@@ -45,7 +45,7 @@ impl<A, L, YS> Tm<Zipper<A>> for ZC<L, YS> where
 /// Type-level list to zipper
 pub enum Zip<A: Ty> {}
 
-/// ```
+/// ```ignore
 /// A :: Ty
 /// xs : List[A]
 /// -------------------
@@ -71,7 +71,7 @@ pub enum Unzip<A> where
     A: Ty,
 {}
 
-/// ```
+/// ```ignore
 /// A :: Ty
 /// zs : Zipper[A]
 /// -------------------
@@ -102,7 +102,7 @@ pub enum Right<A> where
     A: Ty,
 {}
 
-/// ```
+/// ```ignore
 /// A :: Ty
 /// zs : Zipper[A]
 /// ---------------------
@@ -132,7 +132,7 @@ pub enum Left<A> where
     A: Ty,
 {}
 
-/// ```
+/// ```ignore
 /// A :: Ty
 /// zs : Zipper[A]
 /// --------------------
@@ -162,7 +162,7 @@ pub enum Get<A> where
     A: Ty,
 {}
 
-/// ```
+/// ```ignore
 /// A :: Ty
 /// zs : Zipper[A]
 /// -----------
@@ -192,7 +192,7 @@ pub enum Put<A> where
     A: Ty,
 {}
 
-/// ```
+/// ```ignore
 /// A :: Ty
 /// zs : Zipper[A]
 /// e : A

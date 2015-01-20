@@ -31,7 +31,7 @@ pub trait Rule<Op: Sig>: Tm<<Op as Sig>::Dom> {
 /// actions from type A to type B
 pub enum Arr<A: Ty, B: Ty> {}
 
-/// ```
+/// ```ignore
 /// A :: Ty
 /// B :: Ty
 /// ---------------
@@ -48,7 +48,7 @@ pub enum Act<Op: Sig> {}
 // `Act<Op>` has the same `Sig` as `Op`
 impl<Op: Sig> Sig for Act<Op> { type Dom = <Op as Sig>::Dom; type Cod = <Op as Sig>::Cod; }
 
-/// ```
+/// ```ignore
 /// A :: Ty
 /// B :: Ty
 /// x : A |- op(x) : B
@@ -63,7 +63,7 @@ impl<A: Ty, B: Ty, Op> Tm<Arr<A, B>> for Act<Op> where
 /// partial operation referred to by an action term
 enum EvalAt<A: Ty, B: Ty> {}
 
-/// ```
+/// ```ignore
 /// A :: Ty
 /// B :: Ty
 /// f : A -> B

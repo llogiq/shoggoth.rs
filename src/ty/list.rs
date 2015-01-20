@@ -11,7 +11,7 @@ pub enum List<A> where
     A: Ty,
 {}
 
-/// ```
+/// ```ignore
 /// A :: Ty
 /// -------------
 /// List[A] :: Ty
@@ -20,7 +20,7 @@ impl<A> Ty for List<A> where
     A: Ty,
 {}
 
-/// ```
+/// ```ignore
 /// A :: Ty
 /// -------------
 /// nil : List[A]
@@ -29,7 +29,7 @@ impl<A> Tm<List<A>> for HN where
     A: Ty,
 {}
 
-/// ```
+/// ```ignore
 /// A :: Ty
 /// h : A
 /// t : List[A]
@@ -47,7 +47,7 @@ impl<A, H, T> Tm<List<A>> for HC<H, T> where
 /// Type-level append for lists
 pub enum Append<A: Ty> {}
 
-/// ```
+/// ```ignore
 /// A :: Ty
 /// l : List[A]
 /// r : List[A]

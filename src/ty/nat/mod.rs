@@ -19,19 +19,19 @@ pub mod pos;
 /// Type-level natural numbers (binary)
 pub enum Nat {}
 
-/// ```
+/// ```ignore
 /// ---------
 /// Nat :: Ty
 /// ```
 impl Ty for Nat {}
 
-/// ```
+/// ```ignore
 /// -------
 /// 0 : Nat
 /// ```
 impl Tm<Nat> for _0 {}
 
-/// ```
+/// ```ignore
 /// p : Pos
 /// -------
 /// p : Nat
@@ -43,7 +43,7 @@ impl<P: Tm<Pos>> Tm<Nat> for P {}
 /// Type-level successor for natural numbers
 pub enum Succ {}
 
-/// ```
+/// ```ignore
 /// n : Nat
 /// -------------
 /// succ(n) : Nat
@@ -69,10 +69,10 @@ impl<Rec, P> Rule<Succ> for P where
 /// Type-level addition for natural numbers
 pub enum Add {}
 
-/// ```
+/// ```ignore
 /// m : Nat
 /// n : Nat
-/// -------------
+/// ---------------
 /// add(m, n) : Nat
 /// ```
 impl Sig for Add { type Dom = HC<Nat, HC<Nat, HN>>; type Cod = Nat; }
@@ -106,10 +106,10 @@ impl<P0, P1, Rec> Rule<Add> for HC<P0, HC<P1, HN>> where
 /// Type-level multiplication for natural numbers
 pub enum Mul {}
 
-/// ```
+/// ```ignore
 /// m : Nat
 /// n : Nat
-/// -------------
+/// ---------------
 /// mul(m, n) : Nat
 /// ```
 impl Sig for Mul { type Dom = HC<Nat, HC<Nat, HN>>; type Cod = Nat; }

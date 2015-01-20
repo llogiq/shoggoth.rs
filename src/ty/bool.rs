@@ -9,7 +9,7 @@ use ty::{
 /// Type-level booleans
 pub enum Bool {}
 
-/// ```
+/// ```ignore
 /// ----------
 /// Bool :: Ty
 /// ```
@@ -18,7 +18,7 @@ impl Ty for Bool {}
 /// Type-level false
 pub enum FF {}
 
-/// ```
+/// ```ignore
 /// ---------
 /// ff : Bool
 /// ```
@@ -27,7 +27,7 @@ impl Tm<Bool> for FF {}
 /// Type-level true
 pub enum TT {}
 
-/// ```
+/// ```ignore
 /// ---------
 /// tt : Bool
 /// ```
@@ -38,7 +38,7 @@ impl Tm<Bool> for TT {}
 /// Type-level partial operation for bool negation
 pub enum Not {}
 
-/// ```
+/// ```ignore
 /// p : Bool
 /// -------------
 /// not(p) : Bool
@@ -63,7 +63,7 @@ impl Rule<Not> for TT {
 /// Type-level partial operation for bool conjunction
 pub enum And {}
 
-/// ```
+/// ```ignore
 /// p : Bool
 /// q : Bool
 /// ----------------
@@ -93,7 +93,7 @@ impl<B> Rule<And> for HC<TT, HC<B, HN>> where
 /// Type-level partial operation for bool disjunction
 pub enum Or {}
 
-/// ```
+/// ```ignore
 /// p : Bool
 /// q : Bool
 /// ---------------
@@ -123,7 +123,7 @@ impl<B> Rule<Or> for HC<TT, HC<B, HN>> where
 /// Type-level partial operation for bool conditional
 pub enum If<A: Ty> {}
 
-/// ```
+/// ```ignore
 /// A :: Ty
 /// b : Bool
 /// xt : A
