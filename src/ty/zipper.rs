@@ -34,10 +34,10 @@ pub struct ZC<L, R>(L, R);
 /// -----------------------
 /// zcons(l, r) : Zipper[A]
 /// ```
-impl<A, L, YS> Tm<Zipper<A>> for ZC<L, YS> where
+impl<A, L, R> Tm<Zipper<A>> for ZC<L, R> where
     A: Ty,
     L: Tm<List<A>>,
-    YS: Tm<List<A>>,
+    R: Tm<List<A>>,
 {}
 
 
