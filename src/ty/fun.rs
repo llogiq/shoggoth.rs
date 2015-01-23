@@ -35,7 +35,7 @@ pub enum Arr<A: Ty, B: Ty> {}
 /// A :: Ty
 /// B :: Ty
 /// ---------------
-/// Arr[A, B] :: Ty
+/// A -> B :: Ty
 /// ```
 impl<A: Ty, B: Ty> Ty for Arr<A, B> {}
 
