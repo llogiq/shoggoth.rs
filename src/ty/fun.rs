@@ -46,7 +46,10 @@ impl<A: Ty, B: Ty> Ty for Arr<A, B> {}
 pub enum Act<Op: Sig> {}
 
 // `Act<Op>` has the same `Sig` as `Op`
-impl<Op: Sig> Sig for Act<Op> { type Dom = <Op as Sig>::Dom; type Cod = <Op as Sig>::Cod; }
+impl<Op: Sig> Sig for Act<Op> {
+    type Dom = <Op as Sig>::Dom;
+    type Cod = <Op as Sig>::Cod;
+}
 
 /// ```ignore
 /// A :: Ty
