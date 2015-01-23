@@ -71,21 +71,21 @@ impl Sig for Double {
 /// `double(0) => 0`
 impl Rule<Double> for _0
 {
-    type O = _0;
+    type Out = _0;
 }
 
 /// `double(-p) => -(p:0)`
 impl<P> Rule<Double> for Zn<P> where
     P: Tm<pos::Pos>,
 {
-    type O = Zn<(P, _0)>;
+    type Out = Zn<(P, _0)>;
 }
 
 /// `double(+p) => +(p:0)`
 impl<P> Rule<Double> for Zp<P> where
     P: Tm<pos::Pos>,
 {
-    type O = Zp<(P, _0)>;
+    type Out = Zp<(P, _0)>;
 }
 
 
@@ -106,23 +106,23 @@ impl Sig for SuccDouble { type Dom = Int; type Cod = Int; }
 /// `succ_double(0) => 1`
 impl Rule<SuccDouble> for _0
 {
-    type O = Zp<_1>;
+    type Out = Zp<_1>;
 }
 
 /// `succ_double[int](-p) => -(pred_double[pos](p))`
 impl<P, Rec> Rule<SuccDouble> for Zn<P> where
     P: Tm<pos::Pos>,
     Rec: Tm<pos::Pos>,
-    P: Rule<pos::PredDouble, O = Rec>,
+    P: Rule<pos::PredDouble, Out = Rec>,
 {
-    type O = Zn<Rec>;
+    type Out = Zn<Rec>;
 }
 
 /// `succ_double(+p) => +(p:1)`
 impl<P> Rule<SuccDouble> for Zp<P> where
     P: Tm<pos::Pos>,
 {
-    type O = Zp<(P, _1)>;
+    type Out = Zp<(P, _1)>;
 }
 
 
@@ -146,21 +146,21 @@ impl Sig for PredDouble {
 /// `pred_double(0) => -1`
 impl Rule<PredDouble> for _0
 {
-    type O = Zn<_1>;
+    type Out = Zn<_1>;
 }
 
 /// `pred_double(-p) => -(p:1)`
 impl<P> Rule<PredDouble> for Zn<P> where
     P: Tm<pos::Pos>,
 {
-    type O = Zn<(P, _1)>;
+    type Out = Zn<(P, _1)>;
 }
 
 /// `pred_double[int](+p) => +(pred_double[pos](p))`
 impl<P, Rec> Rule<PredDouble> for Zp<P> where
     P: Tm<pos::Pos>,
     Rec: Tm<pos::Pos>,
-    P: Rule<pos::PredDouble, O = Rec>,
+    P: Rule<pos::PredDouble, Out = Rec>,
 {
-    type O = Zp<Rec>;
+    type Out = Zp<Rec>;
 }

@@ -1,6 +1,6 @@
 use hlist::{
-    HC,
-    HN,
+    HCons,
+    HNil,
 };
 use ty::{
     Lift,
@@ -22,7 +22,7 @@ pub trait Sig {
 /// input term given as `Self`
 #[rustc_on_unimplemented = "Type operation `{Op}` must be defined for input term `{Self}`"]
 pub trait Rule<Op: Sig>: Tm<<Op as Sig>::Dom> {
-    type O: Tm<<Op as Sig>::Cod>;
+    type Out: Tm<<Op as Sig>::Cod>;
 }
 
 
@@ -71,23 +71,23 @@ enum EvalAt<A: Ty, B: Ty> {}
 /// ----------------------
 /// evalAt[A, B](f, x) : B
 /// ```
-impl<A: Ty, B: Ty> Sig for EvalAt<A, B> { type Dom = HC<Arr<A, B>, HC<A, HN>>; type Cod = B; }
+impl<A: Ty, B: Ty> Sig for EvalAt<A, B> { type Dom = HCons<Arr<A, B>, HCons<A, HNil>>; type Cod = B; }
 
 /// `evalAt[A, B](f, x) = <eval f at x>`
-impl<A, B, Op, Rec, X> Rule<EvalAt<A, B>> for HC<Act<Op>, HC<X, HN>> where
+impl<A, B, Op, Rec, X> Rule<EvalAt<A, B>> for HCons<Act<Op>, HCons<X, HNil>> where
     A: Ty,
     B: Ty,
     Op: Sig<Dom = A, Cod = B>,
     Rec: Tm<B>,
-    X: Rule<Op, O = Rec>,
+    X: Rule<Op, Out = Rec>,
 {
-    type O = Rec;
+    type Out = Rec;
 }
 
 
 
 /// Convenience alias for evaluating type-level partial operations
-pub type Eval<Fx, X> = <HC<Fx, HC<X, HN>> as Rule<EvalAt<<Fx as Sig>::Dom, <Fx as Sig>::Cod>>>::O;
+pub type Eval<Fx, X> = <HCons<Fx, HCons<X, HNil>> as Rule<EvalAt<<Fx as Sig>::Dom, <Fx as Sig>::Cod>>>::Out;
 
 /// Convenience alias for type-level partial operations with
 /// automatic lifting and lowering.

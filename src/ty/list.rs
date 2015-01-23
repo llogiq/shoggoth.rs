@@ -25,7 +25,7 @@ impl<A> Ty for List<A> where
 /// -------------
 /// nil : List[A]
 /// ```
-impl<A> Tm<List<A>> for HN where
+impl<A> Tm<List<A>> for HNil where
     A: Ty,
 {}
 
@@ -36,7 +36,7 @@ impl<A> Tm<List<A>> for HN where
 /// --------------------
 /// cons(h, t) : List[A]
 /// ```
-impl<A, H, T> Tm<List<A>> for HC<H, T> where
+impl<A, H, T> Tm<List<A>> for HCons<H, T> where
     A: Ty,
     H: Tm<A>,
     T: Tm<List<A>>,
@@ -55,26 +55,26 @@ pub enum Append<A: Ty> {}
 /// append(l, r) : List[A]
 /// ```
 impl<A: Ty> Sig for Append<A> {
-    type Dom = HC<List<A>, HC<List<A>, HN>>;
+    type Dom = HCons<List<A>, HCons<List<A>, HNil>>;
     type Cod = List<A>;
 }
 
 /// `append(nil, r) => r`
-impl<A, R> Rule<Append<A>> for HC<HN, HC<R, HN>> where
+impl<A, R> Rule<Append<A>> for HCons<HNil, HCons<R, HNil>> where
     A: Ty,
     R: Tm<List<A>>,
 {
-    type O = R;
+    type Out = R;
 }
 
 /// `append(cons(lh, lt), r) => cons(lh, append(lt, r))`
-impl<A, LH, LT, R, Rec> Rule<Append<A>> for HC<HC<LH, LT>, HC<R, HN>> where
+impl<A, LH, LT, R, Rec> Rule<Append<A>> for HCons<HCons<LH, LT>, HCons<R, HNil>> where
     A: Ty,
     LH: Tm<A>,
     LT: Tm<List<A>> + HList,
     R: Tm<List<A>>,
     Rec: Tm<List<A>>,
-    HC<LT, HC<R, HN>>: Rule<Append<A>, O = Rec>,
+    HCons<LT, HCons<R, HNil>>: Rule<Append<A>, Out = Rec>,
 {
-    type O = HC<LH, Rec>;
+    type Out = HCons<LH, Rec>;
 }

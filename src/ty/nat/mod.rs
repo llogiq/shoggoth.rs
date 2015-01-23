@@ -53,15 +53,15 @@ impl Sig for Succ { type Dom = Nat; type Cod = Nat; }
 /// `succ(0) => 1`
 impl Rule<Succ> for _0
 {
-    type O = _1;
+    type Out = _1;
 }
 
 /// `succ[nat](p) => succ[pos](p)`
 impl<Rec, P> Rule<Succ> for P where
     Rec: Tm<Nat>,
-    P: Rule<pos::Succ, O = Rec>,
+    P: Rule<pos::Succ, Out = Rec>,
 {
-    type O = Rec;
+    type Out = Rec;
 }
 
 
@@ -75,30 +75,30 @@ pub enum Add {}
 /// ---------------
 /// add(m, n) : Nat
 /// ```
-impl Sig for Add { type Dom = HC<Nat, HC<Nat, HN>>; type Cod = Nat; }
+impl Sig for Add { type Dom = HCons<Nat, HCons<Nat, HNil>>; type Cod = Nat; }
 
 /// `add(0, n) => n`
-impl<P1> Rule<Add> for HC<_0, HC<P1, HN>> where
+impl<P1> Rule<Add> for HCons<_0, HCons<P1, HNil>> where
     P1: Tm<Pos>,
 {
-    type O = P1;
+    type Out = P1;
 }
 
 /// `add(m, 0) => m`
-impl<P0> Rule<Add> for HC<P0, HC<_0, HN>> where
+impl<P0> Rule<Add> for HCons<P0, HCons<_0, HNil>> where
     P0: Tm<Pos>,
 {
-    type O = P0;
+    type Out = P0;
 }
 
 /// `add[nat](p, q) => add[pos](p, q)`
-impl<P0, P1, Rec> Rule<Add> for HC<P0, HC<P1, HN>> where
+impl<P0, P1, Rec> Rule<Add> for HCons<P0, HCons<P1, HNil>> where
     P0: Tm<Pos>,
     P1: Tm<Pos>,
     Rec: Tm<Nat>,
-    HC<P0, HC<P1, HN>>: Rule<pos::Add, O = Rec>,
+    HCons<P0, HCons<P1, HNil>>: Rule<pos::Add, Out = Rec>,
 {
-    type O = Rec;
+    type Out = Rec;
 }
 
 
@@ -112,30 +112,30 @@ pub enum Mul {}
 /// ---------------
 /// mul(m, n) : Nat
 /// ```
-impl Sig for Mul { type Dom = HC<Nat, HC<Nat, HN>>; type Cod = Nat; }
+impl Sig for Mul { type Dom = HCons<Nat, HCons<Nat, HNil>>; type Cod = Nat; }
 
 /// `mul(0, n) => 0`
-impl<P1> Rule<Mul> for HC<_0, HC<P1, HN>> where
+impl<P1> Rule<Mul> for HCons<_0, HCons<P1, HNil>> where
     P1: Tm<Pos>,
 {
-    type O = _0;
+    type Out = _0;
 }
 
 /// `mul(m, 0) => 0`
-impl<P0> Rule<Mul> for HC<P0, HC<_0, HN>> where
+impl<P0> Rule<Mul> for HCons<P0, HCons<_0, HNil>> where
     P0: Tm<Pos>,
 {
-    type O = _0;
+    type Out = _0;
 }
 
 /// `mul[nat](p, q) => mul[pos](p, q)`
-impl<P0, P1, Rec> Rule<Mul> for HC<P0, HC<P1, HN>> where
+impl<P0, P1, Rec> Rule<Mul> for HCons<P0, HCons<P1, HNil>> where
     P0: Tm<Pos>,
     P1: Tm<Pos>,
     Rec: Tm<Nat>,
-    HC<P0, HC<P1, HN>>: Rule<pos::Mul, O = Rec>,
+    HCons<P0, HCons<P1, HNil>>: Rule<pos::Mul, Out = Rec>,
 {
-    type O = Rec;
+    type Out = Rec;
 }
 
 #[cfg(test)]
@@ -148,31 +148,31 @@ mod test {
 
     #[test]
     fn add_0() {
-        let x: Wit<HC<_0b, HC<_16384b, HN>>> = Wit;
+        let x: Wit<HCons<_0b, HCons<_16384b, HNil>>> = Wit;
         let _: Wit<_16384b> = x.app::<Add>();
     }
 
     #[test]
     fn add() {
-        let x: Wit<HC<_8192b, HC<_8192b, HN>>> = Wit;
+        let x: Wit<HCons<_8192b, HCons<_8192b, HNil>>> = Wit;
         let _: Wit<_16384b> = x.app::<Add>();
     }
 
     #[test]
     fn mul_0() {
-        let x: Wit<HC<_0b, HC<_16384b, HN>>> = Wit;
+        let x: Wit<HCons<_0b, HCons<_16384b, HNil>>> = Wit;
         let _: Wit<_0b> = x.app::<Mul>();
     }
 
     #[test]
     fn mul_1() {
-        let x: Wit<HC<_1b, HC<_16384b, HN>>> = Wit;
+        let x: Wit<HCons<_1b, HCons<_16384b, HNil>>> = Wit;
         let _: Wit<_16384b> = x.app::<Mul>();
     }
 
     #[test]
     fn mul() {
-        let x: Wit<HC<_32b, HC<_2048b, HN>>> = Wit;
+        let x: Wit<HCons<_32b, HCons<_2048b, HNil>>> = Wit;
         let _: Wit<_65536b> = x.app::<Mul>();
     }
 }

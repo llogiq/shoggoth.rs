@@ -25,7 +25,7 @@ impl<A> Ty for Zipper<A> where
 
 
 /// Zipper constructor
-pub struct ZC<L, R>(L, R);
+pub struct ZCons<L, R>(L, R);
 
 /// ```ignore
 /// A :: Ty
@@ -34,7 +34,7 @@ pub struct ZC<L, R>(L, R);
 /// -----------------------
 /// zcons(l, r) : Zipper[A]
 /// ```
-impl<A, L, R> Tm<Zipper<A>> for ZC<L, R> where
+impl<A, L, R> Tm<Zipper<A>> for ZCons<L, R> where
     A: Ty,
     L: Tm<List<A>>,
     R: Tm<List<A>>,
@@ -61,7 +61,7 @@ impl<A, XS> Rule<Zip<A>> for XS where
     A: Ty,
     XS: Tm<List<A>>,
 {
-    type O = ZC<HN, XS>;
+    type Out = ZCons<HNil, XS>;
 }
 
 
@@ -85,14 +85,14 @@ impl<A> Sig for Unzip<A> where
 }
 
 /// `unzip(zcons(l, r)) => append(l, r)`
-impl<A, L, YS, Rec> Rule<Unzip<A>> for ZC<L, YS> where
+impl<A, L, YS, Rec> Rule<Unzip<A>> for ZCons<L, YS> where
     A: Ty,
     L: Tm<List<A>>,
     YS: Tm<List<A>>,
     Rec: Tm<List<A>>,
-    HC<L, HC<YS, HN>>: Rule<Append<A>, O = Rec>,
+    HCons<L, HCons<YS, HNil>>: Rule<Append<A>, Out = Rec>,
 {
-    type O = Rec;
+    type Out = Rec;
 }
 
 
@@ -116,13 +116,13 @@ impl<A> Sig for Right<A> where
 }
 
 /// `right(zcons(l, cons(rh, rt))) => zcons(cons(rh, l), rt)`
-impl<A, L, RH, RT> Rule<Right<A>> for ZC<L, HC<RH, RT>> where
+impl<A, L, RH, RT> Rule<Right<A>> for ZCons<L, HCons<RH, RT>> where
     A: Ty,
     L: Tm<List<A>>,
     RH: Tm<A>,
     RT: Tm<List<A>> + HList,
 {
-    type O = ZC<HC<RH, L>, RT>;
+    type Out = ZCons<HCons<RH, L>, RT>;
 }
 
 
@@ -146,13 +146,13 @@ impl<A> Sig for Left<A> where
 }
 
 /// `left(zcons(cons(lh, lt), r)) => zcons(lt, cons(lh, r))`
-impl<A, LH, LT, R> Rule<Left<A>> for ZC<HC<LH, LT>, R> where
+impl<A, LH, LT, R> Rule<Left<A>> for ZCons<HCons<LH, LT>, R> where
     A: Ty,
     LH: Tm<A>,
     LT: Tm<List<A>>,
     R: Tm<List<A>> + HList,
 {
-    type O = ZC<LT, HC<LH, R>>;
+    type Out = ZCons<LT, HCons<LH, R>>;
 }
 
 
@@ -176,13 +176,13 @@ impl<A> Sig for Get<A> where
 }
 
 /// `get(zcons(l, cons(rh, rt))) => rh`
-impl<A, L, RH, RT> Rule<Get<A>> for ZC<L, HC<RH, RT>> where
+impl<A, L, RH, RT> Rule<Get<A>> for ZCons<L, HCons<RH, RT>> where
     A: Ty,
     L: Tm<List<A>>,
     RH: Tm<A>,
     RT: Tm<List<A>> + HList,
 {
-    type O = RH;
+    type Out = RH;
 }
 
 
@@ -202,19 +202,19 @@ pub enum Put<A> where
 impl<A> Sig for Put<A> where
     A: Ty,
 {
-    type Dom = HC<Zipper<A>, HC<A, HN>>;
+    type Dom = HCons<Zipper<A>, HCons<A, HNil>>;
     type Cod = Zipper<A>;
 }
 
 /// `put(zcons(l, cons(rh, rt)), e) => zcons(l, cons(e, rt))`
-impl<A, L, RH, RT, E> Rule<Put<A>> for HC<ZC<L, HC<RH, RT>>, HC<E, HN>> where
+impl<A, L, RH, RT, E> Rule<Put<A>> for HCons<ZCons<L, HCons<RH, RT>>, HCons<E, HNil>> where
     A: Ty,
     L: Tm<List<A>>,
     RH: Tm<A>,
     RT: Tm<List<A>> + HList,
     E: Tm<A>,
 {
-    type O = ZC<L, HC<E, RT>>;
+    type Out = ZCons<L, HCons<E, RT>>;
 }
 
 
@@ -226,8 +226,8 @@ mod test {
 
     #[test]
     fn put() {
-        let x: Wit<HC<ZC<HC<Lift<bool>, HN>, HC<Lift<u8>, HN>>, HC<Lift<u16>, HN>>> = Wit;
-        let x: Wit<ZC<HC<Lift<bool>, HN>, HC<Lift<u16>, HN>>> = x.app::<Put<Star>>();
-        let _: Wit<HC<Lift<bool>, HC<Lift<u16>, HN>>> = x.app::<Unzip<Star>>();
+        let x: Wit<HCons<ZCons<HCons<Lift<bool>, HNil>, HCons<Lift<u8>, HNil>>, HCons<Lift<u16>, HNil>>> = Wit;
+        let x: Wit<ZCons<HCons<Lift<bool>, HNil>, HCons<Lift<u16>, HNil>>> = x.app::<Put<Star>>();
+        let _: Wit<HCons<Lift<bool>, HCons<Lift<u16>, HNil>>> = x.app::<Unzip<Star>>();
     }
 }

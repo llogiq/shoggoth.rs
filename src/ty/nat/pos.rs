@@ -1,6 +1,6 @@
 use hlist::{
-    HC,
-    HN,
+    HCons,
+    HNil,
 };
 use ty::bit::*;
 use ty::{
@@ -51,23 +51,23 @@ impl Sig for Succ { type Dom = Pos; type Cod = Pos; }
 /// `succ(1) => 1:0`
 impl Rule<Succ> for _1
 {
-    type O = (_1, _0,);
+    type Out = (_1, _0,);
 }
 
 /// `succ(p:0) => p:1`
 impl<P> Rule<Succ> for (P, _0) where
     P: Tm<Pos>,
 {
-    type O = (P, _1);
+    type Out = (P, _1);
 }
 
 /// `p:1 => succ(p):0`
 impl<P, Rec> Rule<Succ> for (P, _1) where
     P: Tm<Pos>,
     Rec: Tm<Pos>,
-    P: Rule<Succ, O = Rec>,
+    P: Rule<Succ, Out = Rec>,
 {
-    type O = (Rec, _0);
+    type Out = (Rec, _0);
 }
 
 
@@ -81,83 +81,83 @@ pub enum Add {}
 /// ---------------
 /// add(p, q) : Pos
 /// ```
-impl Sig for Add { type Dom = HC<Pos, HC<Pos, HN>>; type Cod = Pos; }
+impl Sig for Add { type Dom = HCons<Pos, HCons<Pos, HNil>>; type Cod = Pos; }
 
 /// `add(1, 1) => 1:0`
-impl Rule<Add> for HC<_1, HC<_1, HN>>
+impl Rule<Add> for HCons<_1, HCons<_1, HNil>>
 {
-    type O = (_1, _0);
+    type Out = (_1, _0);
 }
 
 /// `add(1, q:0) => q:1`
-impl<P1: Tm<Pos>> Rule<Add> for HC<_1, HC<(P1, _0), HN>>
+impl<P1: Tm<Pos>> Rule<Add> for HCons<_1, HCons<(P1, _0), HNil>>
 {
-    type O = (P1, _1);
+    type Out = (P1, _1);
 }
 
 /// `add(1, q:1) => succ(q):0`
-impl<P1, Rec> Rule<Add> for HC<_1, HC<(P1, _1), HN>> where
+impl<P1, Rec> Rule<Add> for HCons<_1, HCons<(P1, _1), HNil>> where
     P1: Tm<Pos>,
     Rec: Tm<Pos>,
-    P1: Rule<Succ, O = Rec>,
+    P1: Rule<Succ, Out = Rec>,
 {
-    type O = (Rec, _0);
+    type Out = (Rec, _0);
 }
 
 /// `add(p:0, 1) => p:1`
-impl<P0> Rule<Add> for HC<(P0, _0), HC<_1, HN>> where
+impl<P0> Rule<Add> for HCons<(P0, _0), HCons<_1, HNil>> where
     P0: Tm<Pos>,
 {
-    type O = (P0, _1);
+    type Out = (P0, _1);
 }
 
 /// `add(p:0, q:0) => add(p, q):0`
-impl<P0, P1, Rec> Rule<Add> for HC<(P0, _0), HC<(P1, _0), HN>> where
+impl<P0, P1, Rec> Rule<Add> for HCons<(P0, _0), HCons<(P1, _0), HNil>> where
     P0: Tm<Pos>,
     P1: Tm<Pos>,
     Rec: Tm<Pos>,
-    HC<P0, HC<P1, HN>>: Rule<Add, O = Rec>,
+    HCons<P0, HCons<P1, HNil>>: Rule<Add, Out = Rec>,
 {
-    type O = (Rec, _0);
+    type Out = (Rec, _0);
 }
 
 /// `add(p:0, q:1) => add(p, q):1`
-impl<P0, P1, Rec> Rule<Add> for HC<(P0, _0), HC<(P1, _1), HN>> where
+impl<P0, P1, Rec> Rule<Add> for HCons<(P0, _0), HCons<(P1, _1), HNil>> where
     P0: Tm<Pos>,
     P1: Tm<Pos>,
     Rec: Tm<Pos>,
-    HC<P0, HC<P1, HN>>: Rule<Add, O = Rec>,
+    HCons<P0, HCons<P1, HNil>>: Rule<Add, Out = Rec>,
 {
-    type O = (Rec, _1);
+    type Out = (Rec, _1);
 }
 
 /// `add(p:1, 1) => succ(p):0`
-impl<P0, Rec> Rule<Add> for HC<(P0, _1), HC<_1, HN>> where
+impl<P0, Rec> Rule<Add> for HCons<(P0, _1), HCons<_1, HNil>> where
     P0: Tm<Pos>,
     Rec: Tm<Pos>,
-    P0: Rule<Succ, O = Rec>,
+    P0: Rule<Succ, Out = Rec>,
 {
-    type O = (Rec, _0);
+    type Out = (Rec, _0);
 }
 
 /// `add(p:1, q:0) => add(p, q):1`
-impl<P0, P1, Rec> Rule<Add> for HC<(P0, _1), HC<(P1, _0), HN>> where
+impl<P0, P1, Rec> Rule<Add> for HCons<(P0, _1), HCons<(P1, _0), HNil>> where
     P0: Tm<Pos>,
     P1: Tm<Pos>,
     Rec: Tm<Pos>,
-    HC<P0, HC<P1, HN>>: Rule<Add, O = Rec>,
+    HCons<P0, HCons<P1, HNil>>: Rule<Add, Out = Rec>,
 {
-    type O = (Rec, _1);
+    type Out = (Rec, _1);
 }
 
 /// `add(p:1, q:1) => add_carry(p, q):1`
-impl<P0, P1, Rec> Rule<Add> for HC<(P0, _1), HC<(P1, _1), HN>> where
+impl<P0, P1, Rec> Rule<Add> for HCons<(P0, _1), HCons<(P1, _1), HNil>> where
     P0: Tm<Pos>,
     P1: Tm<Pos>,
     Rec: Tm<Pos>,
-    HC<P0, HC<P1, HN>>: Rule<AddCarry, O = Rec>,
+    HCons<P0, HCons<P1, HNil>>: Rule<AddCarry, Out = Rec>,
 {
-    type O = (Rec, _0);
+    type Out = (Rec, _0);
 }
 
 
@@ -171,86 +171,86 @@ pub enum AddCarry {}
 /// ---------------------
 /// add_carry(p, q) : Pos
 /// ```
-impl Sig for AddCarry { type Dom = HC<Pos, HC<Pos, HN>>; type Cod = Pos; }
+impl Sig for AddCarry { type Dom = HCons<Pos, HCons<Pos, HNil>>; type Cod = Pos; }
 
 /// `add_carry(1, 1) => 1:1`
-impl Rule<AddCarry> for HC<_1, HC<_1, HN>>
+impl Rule<AddCarry> for HCons<_1, HCons<_1, HNil>>
 {
-    type O = (_1, _1);
+    type Out = (_1, _1);
 }
 
 /// `add_carry(1, q:0) => succ(q):0`
-impl<P1, Rec> Rule<AddCarry> for HC<_1, HC<(P1, _0), HN>> where
+impl<P1, Rec> Rule<AddCarry> for HCons<_1, HCons<(P1, _0), HNil>> where
     P1: Tm<Pos>,
     Rec: Tm<Pos>,
-    P1: Rule<Succ, O = Rec>,
+    P1: Rule<Succ, Out = Rec>,
 {
-    type O = (Rec, _0);
+    type Out = (Rec, _0);
 }
 
 /// `add_carry(1, q:1) => succ(q):1`
-impl<P1, Rec> Rule<AddCarry> for HC<_1, HC<(P1, _1), HN>> where
+impl<P1, Rec> Rule<AddCarry> for HCons<_1, HCons<(P1, _1), HNil>> where
     P1: Tm<Pos>,
     Rec: Tm<Pos>,
-    P1: Rule<Succ, O = Rec>,
+    P1: Rule<Succ, Out = Rec>,
 {
-    type O = (Rec, _1);
+    type Out = (Rec, _1);
 }
 
 /// `add_carry(p:0, 1) => p:1`
-impl<P0, Rec> Rule<AddCarry> for HC<(P0, _0), HC<_1, HN>> where
+impl<P0, Rec> Rule<AddCarry> for HCons<(P0, _0), HCons<_1, HNil>> where
     P0: Tm<Pos>,
     Rec: Tm<Pos>,
-    P0: Rule<Succ, O = Rec>,
+    P0: Rule<Succ, Out = Rec>,
 {
-    type O = (P0, _0);
+    type Out = (P0, _0);
 }
 
 /// `add_carry(p:0, q:0) => add(p, q):1`
-impl<P0, P1, Rec> Rule<AddCarry> for HC<(P0, _0), HC<(P1, _0), HN>> where
+impl<P0, P1, Rec> Rule<AddCarry> for HCons<(P0, _0), HCons<(P1, _0), HNil>> where
     P0: Tm<Pos>,
     P1: Tm<Pos>,
     Rec: Tm<Pos>,
-    HC<P0, HC<P1, HN>>: Rule<Add, O = Rec>,
+    HCons<P0, HCons<P1, HNil>>: Rule<Add, Out = Rec>,
 {
-    type O = (Rec, _1);
+    type Out = (Rec, _1);
 }
 
 /// `add_carry(p:0, q:1) => add_carry(p, q):0`
-impl<P0, P1, Rec> Rule<AddCarry> for HC<(P0, _0), HC<(P1, _1), HN>> where
+impl<P0, P1, Rec> Rule<AddCarry> for HCons<(P0, _0), HCons<(P1, _1), HNil>> where
     P0: Tm<Pos>,
     P1: Tm<Pos>,
     Rec: Tm<Pos>,
-    HC<P0, HC<P1, HN>>: Rule<AddCarry, O = Rec>,
+    HCons<P0, HCons<P1, HNil>>: Rule<AddCarry, Out = Rec>,
 {
-    type O = (Rec, _0);
+    type Out = (Rec, _0);
 }
 
 /// `add_carry(p:1, 1) => succ(p):1`
-impl<P0: Tm<Pos>, Rec: Tm<Pos>> Rule<AddCarry> for HC<(P0, _1), HC<_1, HN>> where
-    P0: Rule<Succ, O = Rec>,
+impl<P0: Tm<Pos>, Rec: Tm<Pos>> Rule<AddCarry> for HCons<(P0, _1), HCons<_1, HNil>> where
+    P0: Rule<Succ, Out = Rec>,
 {
-    type O = (Rec, _1);
+    type Out = (Rec, _1);
 }
 
 /// `add_carry(p:1, q:0) => add_carry(p, q):0`
-impl<P0, P1, Rec> Rule<AddCarry> for HC<(P0, _1), HC<(P1, _0), HN>> where
+impl<P0, P1, Rec> Rule<AddCarry> for HCons<(P0, _1), HCons<(P1, _0), HNil>> where
     P0: Tm<Pos>,
     P1: Tm<Pos>,
     Rec: Tm<Pos>,
-    HC<P0, HC<P1, HN>>: Rule<AddCarry, O = Rec>,
+    HCons<P0, HCons<P1, HNil>>: Rule<AddCarry, Out = Rec>,
 {
-    type O = (Rec, _0);
+    type Out = (Rec, _0);
 }
 
 /// `add_carry(p:1, q:1) => add_carry(p, q):1`
-impl<P0, P1, Rec> Rule<AddCarry> for HC<(P0, _1), HC<(P1, _1), HN>> where
+impl<P0, P1, Rec> Rule<AddCarry> for HCons<(P0, _1), HCons<(P1, _1), HNil>> where
     P0: Tm<Pos>,
     P1: Tm<Pos>,
     Rec: Tm<Pos>,
-    HC<P0, HC<P1, HN>>: Rule<AddCarry, O = Rec>,
+    HCons<P0, HCons<P1, HNil>>: Rule<AddCarry, Out = Rec>,
 {
-    type O = (Rec, _1);
+    type Out = (Rec, _1);
 }
 
 
@@ -267,23 +267,23 @@ impl Sig for PredDouble { type Dom = Pos; type Cod = Pos; }
 /// `pred_carry(1) => 1`
 impl Rule<PredDouble> for _1
 {
-    type O = _1;
+    type Out = _1;
 }
 
 /// `pred_carry(p:0) => pred_double(p):1`
 impl<P, Rec> Rule<PredDouble> for (P, _0) where
     P: Tm<Pos>,
     Rec: Tm<Pos>,
-    P: Rule<PredDouble, O = Rec>,
+    P: Rule<PredDouble, Out = Rec>,
 {
-    type O = (Rec, _1);
+    type Out = (Rec, _1);
 }
 
 /// `pred_carry(p:1) => p:0:1`
 impl<P> Rule<PredDouble> for (P, _1) where
     P: Tm<Pos>,
 {
-    type O = ((P, _0), _1);
+    type Out = ((P, _0), _1);
 }
 
 
@@ -301,23 +301,23 @@ impl Sig for Pred { type Dom = Pos; type Cod = Pos; }
 /// `pred(p:1) => p:0`
 impl Rule<Pred> for _1
 {
-    type O = _1;
+    type Out = _1;
 }
 
 /// `p:0 => pred_double(p)`
 impl<P, Rec> Rule<Pred> for (P, _0) where
     P: Tm<Pos>,
     Rec: Tm<Pos>,
-    P: Rule<PredDouble, O = Rec>,
+    P: Rule<PredDouble, Out = Rec>,
 {
-    type O = Rec;
+    type Out = Rec;
 }
 
 /// `p:1 => p:0`
 impl<P> Rule<Pred> for (P, _1) where
     P: Tm<Pos>,
 {
-    type O = (P, _0);
+    type Out = (P, _0);
 }
 
 
@@ -331,33 +331,33 @@ pub enum Mul {}
 /// ---------------
 /// mul(p, q) : Pos
 /// ```
-impl Sig for Mul { type Dom = HC<Pos, HC<Pos, HN>>; type Cod = Pos; }
+impl Sig for Mul { type Dom = HCons<Pos, HCons<Pos, HNil>>; type Cod = Pos; }
 
 /// `mul(1, q) => q`
-impl<P1> Rule<Mul> for HC<_1, HC<P1, HN>> where
+impl<P1> Rule<Mul> for HCons<_1, HCons<P1, HNil>> where
     P1: Tm<Pos>
 {
-    type O = P1;
+    type Out = P1;
 }
 
 /// `mul(p:0, q) => mul(p, q):0`
-impl<P0, P1, Rec> Rule<Mul> for HC<(P0, _0), HC<P1, HN>> where
+impl<P0, P1, Rec> Rule<Mul> for HCons<(P0, _0), HCons<P1, HNil>> where
     P0: Tm<Pos>,
     P1: Tm<Pos>,
     Rec: Tm<Pos>,
-    HC<P0, HC<P1, HN>>: Rule<Mul, O = Rec>,
+    HCons<P0, HCons<P1, HNil>>: Rule<Mul, Out = Rec>,
 {
-    type O = (Rec, _0);
+    type Out = (Rec, _0);
 }
 
 /// `mul(p:1, q) => add(q, mul(p, q)):0`
-impl<P0, P1, Rec0, Rec1> Rule<Mul> for HC<(P0, _1), HC<P1, HN>> where
+impl<P0, P1, Rec0, Rec1> Rule<Mul> for HCons<(P0, _1), HCons<P1, HNil>> where
     P0: Tm<Pos>,
     P1: Tm<Pos>,
     Rec0: Tm<Pos>,
     Rec1: Tm<Pos>,
-    HC<P0, HC<P1, HN>>: Rule<Mul, O = Rec0>,
-    HC<P1, HC<Rec0, HN>>: Rule<Add, O = Rec1>,
+    HCons<P0, HCons<P1, HNil>>: Rule<Mul, Out = Rec0>,
+    HCons<P1, HCons<Rec0, HNil>>: Rule<Add, Out = Rec1>,
 {
-    type O = Rec1;
+    type Out = Rec1;
 }

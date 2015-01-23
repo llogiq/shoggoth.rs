@@ -50,12 +50,12 @@ impl Sig for Not {
 
 /// `not(ff) => tt`
 impl Rule<Not> for FF {
-    type O = TT;
+    type Out = TT;
 }
 
 /// `not(tt) => ff`
 impl Rule<Not> for TT {
-    type O = FF;
+    type Out = FF;
 }
 
 
@@ -70,22 +70,22 @@ pub enum And {}
 /// and(p, q) : Bool
 /// ```
 impl Sig for And {
-    type Dom = HC<Bool, HC<Bool, HN>>;
+    type Dom = HCons<Bool, HCons<Bool, HNil>>;
     type Cod = Bool;
 }
 
 /// `and(ff, q) => ff`
-impl<B> Rule<And> for HC<FF, HC<B, HN>> where
+impl<B> Rule<And> for HCons<FF, HCons<B, HNil>> where
     B: Tm<Bool>,
 {
-    type O = FF;
+    type Out = FF;
 }
 
 /// `and(tt, q) => q`
-impl<B> Rule<And> for HC<TT, HC<B, HN>> where
+impl<B> Rule<And> for HCons<TT, HCons<B, HNil>> where
     B: Tm<Bool>,
 {
-    type O = B;
+    type Out = B;
 }
 
 
@@ -100,22 +100,22 @@ pub enum Or {}
 /// or(p, q) : Bool
 /// ```
 impl Sig for Or {
-    type Dom = HC<Bool, HC<Bool, HN>>;
+    type Dom = HCons<Bool, HCons<Bool, HNil>>;
     type Cod = Bool;
 }
 
 /// `or(ff, q) => q`
-impl<B> Rule<Or> for HC<FF, HC<B, HN>> where
+impl<B> Rule<Or> for HCons<FF, HCons<B, HNil>> where
     B: Tm<Bool>,
 {
-    type O = B;
+    type Out = B;
 }
 
 /// `or(tt, q) => tt`
-impl<B> Rule<Or> for HC<TT, HC<B, HN>> where
+impl<B> Rule<Or> for HCons<TT, HCons<B, HNil>> where
     B: Tm<Bool>,
 {
-    type O = TT;
+    type Out = TT;
 }
 
 
@@ -132,26 +132,26 @@ pub enum If<A: Ty> {}
 /// if(b, xt, xf) : A
 /// ```
 impl<A: Ty> Sig for If<A> {
-    type Dom = HC<Bool, HC<A, HC<A, HN>>>;
+    type Dom = HCons<Bool, HCons<A, HCons<A, HNil>>>;
     type Cod = A;
 }
 
 /// `if(ff, xt, xf) => xf`
-impl<A, B0, B1> Rule<If<A>> for HC<FF, HC<B0, HC<B1, HN>>> where
+impl<A, B0, B1> Rule<If<A>> for HCons<FF, HCons<B0, HCons<B1, HNil>>> where
     A: Ty,
     B0: Tm<A>,
     B1: Tm<A>,
 {
-    type O = B1;
+    type Out = B1;
 }
 
 /// `if(tt, xt, xf) => xt`
-impl<A, B0, B1> Rule<If<A>> for HC<TT, HC<B0, HC<B1, HN>>> where
+impl<A, B0, B1> Rule<If<A>> for HCons<TT, HCons<B0, HCons<B1, HNil>>> where
     A: Ty,
     B0: Tm<A>,
     B1: Tm<A>,
 {
-    type O = B0;
+    type Out = B0;
 }
 
 
@@ -178,7 +178,7 @@ mod test {
     #[test]
     fn and_false() {
         fn aux<B1: Tm<Bool>>() {
-            let x: Wit<HC<FF, HC<B1, HN>>> = Wit;
+            let x: Wit<HCons<FF, HCons<B1, HNil>>> = Wit;
             let _: Wit<FF> = x.app::<And>();
         }
         aux::<FF>();
@@ -188,7 +188,7 @@ mod test {
     #[test]
     fn and_true() {
         fn aux<B1: Tm<Bool>>() {
-            let x: Wit<HC<TT, HC<B1, HN>>> = Wit;
+            let x: Wit<HCons<TT, HCons<B1, HNil>>> = Wit;
             let _: Wit<B1> = x.app::<And>();
         }
         aux::<FF>();
@@ -198,7 +198,7 @@ mod test {
     #[test]
     fn or_false() {
         fn aux<B1: Tm<Bool>>() {
-            let x: Wit<HC<FF, HC<B1, HN>>> = Wit;
+            let x: Wit<HCons<FF, HCons<B1, HNil>>> = Wit;
             let _: Wit<B1> = x.app::<Or>();
         }
         aux::<FF>();
@@ -208,7 +208,7 @@ mod test {
     #[test]
     fn or_true() {
         fn aux<B1: Tm<Bool>>() {
-            let x: Wit<HC<TT, HC<B1, HN>>> = Wit;
+            let x: Wit<HCons<TT, HCons<B1, HNil>>> = Wit;
             let _: Wit<TT> = x.app::<Or>();
         }
         aux::<FF>();
@@ -217,13 +217,13 @@ mod test {
 
     #[test]
     fn if_false() {
-        let x: Wit<HC<FF, HC<FF, HC<TT, HN>>>> = Wit;
+        let x: Wit<HCons<FF, HCons<FF, HCons<TT, HNil>>>> = Wit;
         let _: Wit<TT> = x.app::<If<Bool>>();
     }
 
     #[test]
     fn if_true() {
-        let x: Wit<HC<TT, HC<FF, HC<TT, HN>>>> = Wit;
+        let x: Wit<HCons<TT, HCons<FF, HCons<TT, HNil>>>> = Wit;
         let _: Wit<FF> = x.app::<If<Bool>>();
     }
 }

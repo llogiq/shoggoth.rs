@@ -34,14 +34,14 @@ pub use self::zipper::{
     Put,
     Right,
     Unzip,
-    ZC,
+    ZCons,
     Zip,
     Zipper,
 };
 use hlist::{
-    HC,
+    HCons,
     HList,
-    HN,
+    HNil,
 };
 
 mod bit;
@@ -70,8 +70,8 @@ pub enum Star {}
 
 /// Normal Rust types lifted to terms as the type-level
 pub enum Lift<A> {}
-trait Rust { type O; }
-impl<A> Rust for Lift<A> { type O = A; }
+trait Rust { type Out; }
+impl<A> Rust for Lift<A> { type Out = A; }
 
 /// ```ignore
 /// ----------
@@ -83,7 +83,7 @@ impl Ty for Star {}
 /// ----------
 /// HNil :: Ty
 /// ```
-impl Ty for HN {}
+impl Ty for HNil {}
 
 /// ```ignore
 /// HTy :: Ty
@@ -92,7 +92,7 @@ impl Ty for HN {}
 /// ---------------------
 /// HCons<HTy, TTy> :: Ty
 /// ```
-impl<HTy, TTy> Ty for HC<HTy, TTy> where
+impl<HTy, TTy> Ty for HCons<HTy, TTy> where
     HTy: Ty,
     TTy: HList + Ty,
 {}
@@ -108,7 +108,7 @@ impl<A> Tm<Star> for Lift<A> {}
 /// -----------
 /// HNil : Star
 /// ```
-impl Tm<Star> for HN {}
+impl Tm<Star> for HNil {}
 
 /// ```ignore
 /// HTm : Star
@@ -116,7 +116,7 @@ impl Tm<Star> for HN {}
 /// ----------------------
 /// HCons<HTm, TTm> : Star
 /// ```
-impl<HTm, TTm> Tm<Star> for HC<HTm, TTm> where
+impl<HTm, TTm> Tm<Star> for HCons<HTm, TTm> where
     HTm: Tm<Star>,
     TTm: Tm<Star> + HList,
 {}
@@ -125,7 +125,7 @@ impl<HTm, TTm> Tm<Star> for HC<HTm, TTm> where
 /// -----------
 /// HNil : HNil
 /// ```
-impl Tm<HN> for HN {}
+impl Tm<HNil> for HNil {}
 
 /// ```ignore
 /// HTy :: Ty
@@ -135,7 +135,7 @@ impl Tm<HN> for HN {}
 /// ---------------------------------
 /// HCons<HTm, TTm> : HCons<HTy, TTy>
 /// ```
-impl<HTy, TTy, HTm, TTm> Tm<HC<HTy, TTy>> for HC<HTm, TTm> where
+impl<HTy, TTy, HTm, TTm> Tm<HCons<HTy, TTy>> for HCons<HTm, TTm> where
     HTy: Ty,
     TTy: Ty + HList,
     HTm: Tm<HTy>,
