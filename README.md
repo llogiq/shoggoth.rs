@@ -19,9 +19,6 @@ See the API documentation [here](http://epsilonz.github.io/shoggoth.rs/doc/shogg
 ## Requirements
 
 1.   [Rust](http://www.rust-lang.org/)
-
-     **NOTE**: For the time being, a Rust [fork supporting type macros](https://github.com/darinmorrison/rust/tree/feature/type_macros) is required to build this crate.
-
 2.   [Cargo](http://crates.io/)
 
 You can install both with the following:
