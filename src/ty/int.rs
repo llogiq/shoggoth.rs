@@ -11,33 +11,53 @@ use ty::bit::{
 };
 
 /// Type-level integers
-pub enum Int {}
+pub enum
+    Int
+{}
 
 /// ```ignore
 /// ---------
 /// Int :: Ty
 /// ```
-impl Ty for Int {}
+impl
+    Ty
+for
+    Int
+{}
 
 /// Type-level negative integers
-pub enum Zn<P> where
+pub enum
+    Zn<P>
+where
     P: Tm<pos::Pos>,
 {}
 
 /// Type-level positive integers
-pub enum Zp<P> where
+pub enum
+    Zp<P>
+where
     P: Tm<pos::Pos>,
 {}
 
 /// `0 : Int`
-impl Tm<Int> for _0 {}
+impl
+    Tm<Int>
+for
+    _0
+{}
 
 /// ```ignore
 /// p : Pos
 /// --------
 /// -p : Int
 /// ```
-impl<N> Tm<Int> for Zn<N> where
+impl<
+    N,
+>
+    Tm<Int>
+for
+    Zn<N>
+where
     N: Tm<pos::Pos>,
 {}
 
@@ -46,7 +66,13 @@ impl<N> Tm<Int> for Zn<N> where
 /// --------
 /// +p : Int
 /// ```
-impl<N> Tm<Int> for Zp<N> where
+impl<
+    N,
+>
+    Tm<Int>
+for
+    Zp<N>
+where
     N: Tm<pos::Pos>,
 {}
 
@@ -56,33 +82,54 @@ impl<N> Tm<Int> for Zp<N> where
 /// ```ignore
 /// λx:int. 2 * x
 /// ```
-pub enum Double {}
+pub enum
+    Double
+{}
 
 /// ```ignore
 /// i : Int
 /// ---------------
 /// double(i) : Int
 /// ```
-impl Sig for Double {
+impl
+    Sig
+for
+    Double
+{
     type Dom = Int;
     type Cod = Int;
 }
 
 /// `double(0) => 0`
-impl Rule<Double> for _0
+impl
+    Rule<Double>
+for
+    _0
 {
     type Out = _0;
 }
 
 /// `double(-p) => -(p:0)`
-impl<P> Rule<Double> for Zn<P> where
+impl<
+    P,
+>
+    Rule<Double>
+for
+    Zn<P>
+where
     P: Tm<pos::Pos>,
 {
     type Out = Zn<(P, _0)>;
 }
 
 /// `double(+p) => +(p:0)`
-impl<P> Rule<Double> for Zp<P> where
+impl<
+    P,
+>
+    Rule<Double>
+for
+    Zp<P>
+where
     P: Tm<pos::Pos>,
 {
     type Out = Zp<(P, _0)>;
@@ -94,32 +141,57 @@ impl<P> Rule<Double> for Zp<P> where
 /// ```ignore
 /// λx:int. 2 * x + 1
 /// ```
-pub enum SuccDouble {}
+pub enum
+    SuccDouble
+{}
 
 /// ```ignore
 /// i : Int
 /// --------------------
 /// succ_double(i) : Int
 /// ```
-impl Sig for SuccDouble { type Dom = Int; type Cod = Int; }
+impl
+    Sig
+for
+    SuccDouble
+{
+    type Dom = Int;
+    type Cod = Int;
+}
 
 /// `succ_double(0) => 1`
-impl Rule<SuccDouble> for _0
+impl
+    Rule<SuccDouble>
+for
+    _0
 {
     type Out = Zp<_1>;
 }
 
 /// `succ_double[int](-p) => -(pred_double[pos](p))`
-impl<P, Rec> Rule<SuccDouble> for Zn<P> where
+impl<
+    P,
+    Rec,
+>
+    Rule<SuccDouble>
+for
+    Zn<P>
+where
+    P: Rule<pos::PredDouble, Out = Rec>,
     P: Tm<pos::Pos>,
     Rec: Tm<pos::Pos>,
-    P: Rule<pos::PredDouble, Out = Rec>,
 {
     type Out = Zn<Rec>;
 }
 
 /// `succ_double(+p) => +(p:1)`
-impl<P> Rule<SuccDouble> for Zp<P> where
+impl<
+    P,
+>
+    Rule<SuccDouble>
+for
+    Zp<P>
+where
     P: Tm<pos::Pos>,
 {
     type Out = Zp<(P, _1)>;
@@ -131,36 +203,58 @@ impl<P> Rule<SuccDouble> for Zp<P> where
 /// ```ignore
 /// λx:int. 2 * x - 1
 /// ```
-pub enum PredDouble {}
+pub enum
+    PredDouble
+{}
 
 /// ```ignore
 /// i : Int
 /// --------------------
 /// pred_double(i) : Int
 /// ```
-impl Sig for PredDouble {
+impl
+    Sig
+for
+    PredDouble
+{
     type Dom = Int;
     type Cod = Int;
 }
 
 /// `pred_double(0) => -1`
-impl Rule<PredDouble> for _0
+impl
+    Rule<PredDouble>
+for
+    _0
 {
     type Out = Zn<_1>;
 }
 
 /// `pred_double(-p) => -(p:1)`
-impl<P> Rule<PredDouble> for Zn<P> where
+impl<
+    P,
+>
+    Rule<PredDouble>
+for
+    Zn<P>
+where
     P: Tm<pos::Pos>,
 {
     type Out = Zn<(P, _1)>;
 }
 
 /// `pred_double[int](+p) => +(pred_double[pos](p))`
-impl<P, Rec> Rule<PredDouble> for Zp<P> where
+impl<
+    P,
+    Rec,
+>
+    Rule<PredDouble>
+for
+    Zp<P>
+where
+    P: Rule<pos::PredDouble, Out = Rec>,
     P: Tm<pos::Pos>,
     Rec: Tm<pos::Pos>,
-    P: Rule<pos::PredDouble, Out = Rec>,
 {
     type Out = Zp<Rec>;
 }

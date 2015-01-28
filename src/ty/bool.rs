@@ -7,61 +7,95 @@ use ty::{
 };
 
 /// Type-level booleans
-pub enum Bool {}
+pub enum
+    Bool
+{}
 
 /// ```ignore
 /// ----------
 /// Bool :: Ty
 /// ```
-impl Ty for Bool {}
+impl
+    Ty
+for
+    Bool
+{}
 
 /// Type-level false
-pub enum FF {}
+pub enum
+    FF
+{}
 
 /// ```ignore
 /// ---------
 /// ff : Bool
 /// ```
-impl Tm<Bool> for FF {}
+impl
+    Tm<Bool>
+for
+    FF
+{}
 
 /// Type-level true
-pub enum TT {}
+pub enum
+    TT
+{}
 
 /// ```ignore
 /// ---------
 /// tt : Bool
 /// ```
-impl Tm<Bool> for TT {}
+impl
+    Tm<Bool>
+for
+    TT
+{}
 
 
 
 /// Type-level partial operation for bool negation
-pub enum Not {}
+pub enum
+    Not
+{}
 
 /// ```ignore
 /// p : Bool
 /// -------------
 /// not(p) : Bool
 /// ```
-impl Sig for Not {
+impl
+    Sig
+for
+    Not
+{
     type Dom = Bool;
     type Cod = Bool;
 }
 
 /// `not(ff) => tt`
-impl Rule<Not> for FF {
+impl
+    Rule<Not>
+for
+    FF
+{
     type Out = TT;
 }
 
 /// `not(tt) => ff`
-impl Rule<Not> for TT {
+impl
+    Rule<Not>
+for
+    TT
+{
     type Out = FF;
 }
 
 
 
 /// Type-level partial operation for bool conjunction
-pub enum And {}
+pub enum
+    And
+{}
 
 /// ```ignore
 /// p : Bool
@@ -69,20 +103,36 @@ pub enum And {}
 /// ----------------
 /// and(p, q) : Bool
 /// ```
-impl Sig for And {
+impl
+    Sig
+for
+    And
+{
     type Dom = HCons<Bool, HCons<Bool, HNil>>;
     type Cod = Bool;
 }
 
 /// `and(ff, q) => ff`
-impl<B> Rule<And> for HCons<FF, HCons<B, HNil>> where
+impl<
+    B,
+>
+    Rule<And>
+for
+    HCons<FF, HCons<B, HNil>>
+where
     B: Tm<Bool>,
 {
     type Out = FF;
 }
 
 /// `and(tt, q) => q`
-impl<B> Rule<And> for HCons<TT, HCons<B, HNil>> where
+impl<
+    B,
+>
+    Rule<And>
+for
+    HCons<TT, HCons<B, HNil>>
+where
     B: Tm<Bool>,
 {
     type Out = B;
@@ -91,7 +141,9 @@ impl<B> Rule<And> for HCons<TT, HCons<B, HNil>> where
 
 
 /// Type-level partial operation for bool disjunction
-pub enum Or {}
+pub enum
+    Or
+{}
 
 /// ```ignore
 /// p : Bool
@@ -99,20 +151,36 @@ pub enum Or {}
 /// ---------------
 /// or(p, q) : Bool
 /// ```
-impl Sig for Or {
+impl
+    Sig
+for
+    Or
+{
     type Dom = HCons<Bool, HCons<Bool, HNil>>;
     type Cod = Bool;
 }
 
 /// `or(ff, q) => q`
-impl<B> Rule<Or> for HCons<FF, HCons<B, HNil>> where
+impl<
+    B,
+>
+    Rule<Or>
+for
+    HCons<FF, HCons<B, HNil>>
+where
     B: Tm<Bool>,
 {
     type Out = B;
 }
 
 /// `or(tt, q) => tt`
-impl<B> Rule<Or> for HCons<TT, HCons<B, HNil>> where
+impl<
+    B,
+>
+    Rule<Or>
+for
+    HCons<TT, HCons<B, HNil>>
+where
     B: Tm<Bool>,
 {
     type Out = TT;
@@ -121,7 +189,11 @@ impl<B> Rule<Or> for HCons<TT, HCons<B, HNil>> where
 
 
 /// Type-level partial operation for bool conditional
-pub enum If<A: Ty> {}
+pub enum
+    If<A>
+where
+    A: Ty,
+{}
 
 /// ```ignore
 /// A :: Ty
@@ -131,13 +203,29 @@ pub enum If<A: Ty> {}
 /// ------------------
 /// if(b, xt, xf) : A
 /// ```
-impl<A: Ty> Sig for If<A> {
+impl<
+    A,
+>
+    Sig
+for
+    If<A>
+where
+    A: Ty,
+{
     type Dom = HCons<Bool, HCons<A, HCons<A, HNil>>>;
     type Cod = A;
 }
 
 /// `if(ff, xt, xf) => xf`
-impl<A, B0, B1> Rule<If<A>> for HCons<FF, HCons<B0, HCons<B1, HNil>>> where
+impl<
+    A,
+    B0,
+    B1,
+>
+    Rule<If<A>>
+for
+    HCons<FF, HCons<B0, HCons<B1, HNil>>>
+where
     A: Ty,
     B0: Tm<A>,
     B1: Tm<A>,
@@ -146,7 +234,15 @@ impl<A, B0, B1> Rule<If<A>> for HCons<FF, HCons<B0, HCons<B1, HNil>>> where
 }
 
 /// `if(tt, xt, xf) => xt`
-impl<A, B0, B1> Rule<If<A>> for HCons<TT, HCons<B0, HCons<B1, HNil>>> where
+impl<
+    A,
+    B0,
+    B1,
+>
+    Rule<If<A>>
+for
+    HCons<TT, HCons<B0, HCons<B1, HNil>>>
+where
     A: Ty,
     B0: Tm<A>,
     B1: Tm<A>,

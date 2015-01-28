@@ -7,7 +7,9 @@ use ty::{
 };
 
 /// Type-level lists
-pub enum List<A> where
+pub enum
+    List<A>
+where
     A: Ty,
 {}
 
@@ -16,7 +18,13 @@ pub enum List<A> where
 /// -------------
 /// List[A] :: Ty
 /// ```
-impl<A> Ty for List<A> where
+impl<
+    A,
+>
+    Ty
+for
+    List<A>
+where
     A: Ty,
 {}
 
@@ -25,7 +33,13 @@ impl<A> Ty for List<A> where
 /// -------------
 /// nil : List[A]
 /// ```
-impl<A> Tm<List<A>> for HNil where
+impl<
+    A,
+>
+    Tm<List<A>>
+for
+    HNil
+where
     A: Ty,
 {}
 
@@ -36,7 +50,15 @@ impl<A> Tm<List<A>> for HNil where
 /// --------------------
 /// cons(h, t) : List[A]
 /// ```
-impl<A, H, T> Tm<List<A>> for HCons<H, T> where
+impl<
+    A,
+    H,
+    T,
+>
+    Tm<List<A>>
+for
+    HCons<H, T>
+where
     A: Ty,
     H: Tm<A>,
     T: Tm<List<A>>,
@@ -45,7 +67,11 @@ impl<A, H, T> Tm<List<A>> for HCons<H, T> where
 
 
 /// Type-level append for lists
-pub enum Append<A: Ty> {}
+pub enum
+    Append<A>
+where
+    A: Ty,
+{}
 
 /// ```ignore
 /// A :: Ty
@@ -54,13 +80,28 @@ pub enum Append<A: Ty> {}
 /// ----------------------
 /// append(l, r) : List[A]
 /// ```
-impl<A: Ty> Sig for Append<A> {
+impl<
+    A,
+>
+    Sig
+for
+    Append<A>
+where
+    A: Ty,
+{
     type Dom = HCons<List<A>, HCons<List<A>, HNil>>;
     type Cod = List<A>;
 }
 
 /// `append(nil, r) => r`
-impl<A, R> Rule<Append<A>> for HCons<HNil, HCons<R, HNil>> where
+impl<
+    A,
+    R,
+>
+    Rule<Append<A>>
+for
+    HCons<HNil, HCons<R, HNil>>
+where
     A: Ty,
     R: Tm<List<A>>,
 {
@@ -68,7 +109,17 @@ impl<A, R> Rule<Append<A>> for HCons<HNil, HCons<R, HNil>> where
 }
 
 /// `append(cons(lh, lt), r) => cons(lh, append(lt, r))`
-impl<A, LH, LT, R, Rec> Rule<Append<A>> for HCons<HCons<LH, LT>, HCons<R, HNil>> where
+impl<
+    A,
+    LH,
+    LT,
+    R,
+    Rec,
+>
+    Rule<Append<A>>
+for
+    HCons<HCons<LH, LT>, HCons<R, HNil>>
+where
     A: Ty,
     LH: Tm<A>,
     LT: Tm<List<A>> + HList,

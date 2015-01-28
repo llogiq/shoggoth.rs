@@ -59,31 +59,63 @@ pub mod nat;
 
 /// Predicate classifying type-level "types"
 #[rustc_on_unimplemented = "`{Self}` is not a valid type-level type"]
-pub trait Ty {}
+pub trait
+    Ty
+{}
 
 /// Predicate classifying "typed" type-level "terms"
 #[rustc_on_unimplemented = "`{Self}` is not a valid type-level term"]
-pub trait Tm<A: Ty> {}
+pub trait
+    Tm<A>
+where
+    A: Ty,
+{}
 
 /// Type-level type of normal Rust types
-pub enum Star {}
+pub enum
+    Star
+{}
 
 /// Normal Rust types lifted to terms as the type-level
-pub enum Lift<A> {}
-trait Rust { type Out; }
-impl<A> Rust for Lift<A> { type Out = A; }
+pub enum
+    Lift<A>
+{}
+
+trait
+    Rust
+{
+    type Out;
+}
+
+impl<
+    A,
+>
+    Rust
+for
+    Lift<A>
+{
+    type Out = A;
+}
 
 /// ```ignore
 /// ----------
 /// Star :: Ty
 /// ```
-impl Ty for Star {}
+impl
+    Ty
+for
+    Star
+{}
 
 /// ```ignore
 /// ----------
 /// HNil :: Ty
 /// ```
-impl Ty for HNil {}
+impl
+    Ty
+for
+    HNil
+{}
 
 /// ```ignore
 /// HTy :: Ty
@@ -92,7 +124,14 @@ impl Ty for HNil {}
 /// ---------------------
 /// HCons<HTy, TTy> :: Ty
 /// ```
-impl<HTy, TTy> Ty for HCons<HTy, TTy> where
+impl<
+    HTy,
+    TTy,
+>
+    Ty
+for
+    HCons<HTy, TTy>
+where
     HTy: Ty,
     TTy: HList + Ty,
 {}
@@ -102,13 +141,23 @@ impl<HTy, TTy> Ty for HCons<HTy, TTy> where
 /// --------------
 /// Lift<A> : Star
 /// ```
-impl<A> Tm<Star> for Lift<A> {}
+impl<
+    A,
+>
+    Tm<Star>
+for
+    Lift<A>
+{}
 
 /// ```ignore
 /// -----------
 /// HNil : Star
 /// ```
-impl Tm<Star> for HNil {}
+impl 
+    Tm<Star>
+for
+    HNil
+{}
 
 /// ```ignore
 /// HTm : Star
@@ -116,7 +165,14 @@ impl Tm<Star> for HNil {}
 /// ----------------------
 /// HCons<HTm, TTm> : Star
 /// ```
-impl<HTm, TTm> Tm<Star> for HCons<HTm, TTm> where
+impl<
+    HTm,
+    TTm,
+>
+    Tm<Star>
+for
+    HCons<HTm, TTm>
+where
     HTm: Tm<Star>,
     TTm: Tm<Star> + HList,
 {}
@@ -125,7 +181,11 @@ impl<HTm, TTm> Tm<Star> for HCons<HTm, TTm> where
 /// -----------
 /// HNil : HNil
 /// ```
-impl Tm<HNil> for HNil {}
+impl
+    Tm<HNil>
+for
+    HNil
+{}
 
 /// ```ignore
 /// HTy :: Ty
@@ -135,7 +195,16 @@ impl Tm<HNil> for HNil {}
 /// ---------------------------------
 /// HCons<HTm, TTm> : HCons<HTy, TTy>
 /// ```
-impl<HTy, TTy, HTm, TTm> Tm<HCons<HTy, TTy>> for HCons<HTm, TTm> where
+impl<
+    HTy,
+    TTy,
+    HTm,
+    TTm,
+>
+    Tm<HCons<HTy, TTy>>
+for
+    HCons<HTm, TTm>
+where
     HTy: Ty,
     TTy: Ty + HList,
     HTm: Tm<HTy>,

@@ -3,6 +3,7 @@ use ty::{
     Eval,
     Rule,
     Sig,
+    Tm,
 };
 
 /// A structure for witnessing a type-level computation
@@ -15,15 +16,21 @@ use ty::{
 #[derive(PartialOrd)]
 #[derive(Rand)]
 #[derive(Show)]
-pub struct Wit<A>;
+pub struct
+    Wit<A>;
 
-impl<X> Wit<X> {
+impl<
+    X,
+>
+    Wit<X>
+{
     /// Compute a type-level expression by applying a type-level partial
     /// operation `Op` to input term given as `X`
     #[inline]
     pub fn app<Op>(self) -> Wit<Eval<Act<Op>, X>> where
         Op: Sig,
         X: Rule<Op>,
+        X: Tm<<Op as Sig>::Dom>,
     {
         Wit
     }

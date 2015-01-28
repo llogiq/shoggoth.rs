@@ -13,7 +13,9 @@ use ty::{
 /// Signature for a type-level partial operation from domain
 /// `Self::Dom` to codomain `Self::Cod`
 #[rustc_on_unimplemented = "`{Self}` is missing a type-level signature"]
-pub trait Sig {
+pub trait
+    Sig
+{
     type Dom: Ty;
     type Cod: Ty;
 }
@@ -21,7 +23,12 @@ pub trait Sig {
 /// Individual rule for a type-level partial operation `Op` for the
 /// input term given as `Self`
 #[rustc_on_unimplemented = "Type operation `{Op}` must be defined for input term `{Self}`"]
-pub trait Rule<Op: Sig>: Tm<<Op as Sig>::Dom> {
+pub trait
+    Rule<Op>
+where
+    Op: Sig,
+    Self: Tm<<Op as Sig>::Dom>,
+{
     type Out: Tm<<Op as Sig>::Cod>;
 }
 
@@ -29,7 +36,12 @@ pub trait Rule<Op: Sig>: Tm<<Op as Sig>::Dom> {
 
 /// `Arr<A, B>` classifies type-level partial operation as partial
 /// actions from type A to type B
-pub enum Arr<A: Ty, B: Ty> {}
+pub enum
+    Arr<A, B>
+where
+    A: Ty,
+    B: Ty,
+{}
 
 /// ```ignore
 /// A :: Ty
@@ -37,16 +49,35 @@ pub enum Arr<A: Ty, B: Ty> {}
 /// ---------------
 /// A -> B :: Ty
 /// ```
-impl<A: Ty, B: Ty> Ty for Arr<A, B> {}
+impl<A, B>
+    Ty
+for
+    Arr<A, B>
+where
+    A: Ty,
+    B: Ty,
+{}
 
 
 
 /// `Act<Op>` is a type-level term standing for a type-level partial
 /// operation `Op`
-pub enum Act<Op: Sig> {}
+pub enum
+    Act<Op>
+where
+    Op: Sig,
+{}
 
 // `Act<Op>` has the same `Sig` as `Op`
-impl<Op: Sig> Sig for Act<Op> {
+impl<
+    Op,
+>
+    Sig
+for
+    Act<Op>
+where
+    Op: Sig,
+{
     type Dom = <Op as Sig>::Dom;
     type Cod = <Op as Sig>::Cod;
 }
@@ -58,13 +89,28 @@ impl<Op: Sig> Sig for Act<Op> {
 /// ----------------
 /// act(op) : A -> B
 /// ```
-impl<A: Ty, B: Ty, Op> Tm<Arr<A, B>> for Act<Op> where
+impl<
+    A,
+    B,
+    Op,
+>
+    Tm<Arr<A, B>>
+for
+    Act<Op>
+where
+    A: Ty,
+    B: Ty,
     Op: Sig<Dom = A, Cod = B>,
 {}
 
 /// Type-level partial operation for evaluating another type-level
 /// partial operation referred to by an action term
-enum EvalAt<A: Ty, B: Ty> {}
+enum
+    EvalAt<A, B>
+where
+    A: Ty,
+    B: Ty,
+{}
 
 /// ```ignore
 /// A :: Ty
@@ -74,15 +120,39 @@ enum EvalAt<A: Ty, B: Ty> {}
 /// ----------------------
 /// evalAt[A, B](f, x) : B
 /// ```
-impl<A: Ty, B: Ty> Sig for EvalAt<A, B> { type Dom = HCons<Arr<A, B>, HCons<A, HNil>>; type Cod = B; }
+impl<
+    A,
+    B,
+>
+    Sig
+for
+    EvalAt<A, B>
+where
+    A: Ty,
+    B: Ty,
+{
+    type Dom = HCons<Arr<A, B>, HCons<A, HNil>>;
+    type Cod = B;
+}
 
 /// `evalAt[A, B](f, x) = <eval f at x>`
-impl<A, B, Op, Rec, X> Rule<EvalAt<A, B>> for HCons<Act<Op>, HCons<X, HNil>> where
+impl<
+    A,
+    B,
+    Op,
+    Rec,
+    X,
+>
+    Rule<EvalAt<A, B>>
+for
+    HCons<Act<Op>, HCons<X, HNil>>
+where
     A: Ty,
     B: Ty,
     Op: Sig<Dom = A, Cod = B>,
     Rec: Tm<B>,
     X: Rule<Op, Out = Rec>,
+    X: Tm<A>,
 {
     type Out = Rec;
 }
@@ -90,11 +160,17 @@ impl<A, B, Op, Rec, X> Rule<EvalAt<A, B>> for HCons<Act<Op>, HCons<X, HNil>> whe
 
 
 /// Convenience alias for evaluating type-level partial operations
-pub type Eval<Fx, X> = <HCons<Fx, HCons<X, HNil>> as Rule<EvalAt<<Fx as Sig>::Dom, <Fx as Sig>::Cod>>>::Out;
+pub type
+    Eval<Fx, X> =
+        <HCons<Fx, HCons<X, HNil>> as
+            Rule<EvalAt<<Fx as Sig>::Dom, <Fx as Sig>::Cod>>
+        >::Out;
 
 /// Convenience alias for type-level partial operations with
 /// automatic lifting and lowering.
-pub type Lower<Fx, X> = <Eval<Fx, Lift<X>> as Rust>::O;
+pub type
+    Lower<Fx, X> =
+        <Eval<Fx, Lift<X>> as Rust>::O;
 
 pub trait Dep<Fx: Tm<Arr<Star, Star>>> where Lift<Self>: Tm<Star>
 {

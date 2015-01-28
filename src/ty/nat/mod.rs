@@ -17,49 +17,87 @@ use ty::bit::{
 pub mod pos;
 
 /// Type-level natural numbers (binary)
-pub enum Nat {}
+pub enum
+    Nat
+{}
 
 /// ```ignore
 /// ---------
 /// Nat :: Ty
 /// ```
-impl Ty for Nat {}
+impl
+    Ty
+for
+    Nat
+{}
 
 /// ```ignore
 /// -------
 /// 0 : Nat
 /// ```
-impl Tm<Nat> for _0 {}
+impl
+    Tm<Nat>
+for
+    _0
+{}
 
 /// ```ignore
 /// p : Pos
 /// -------
 /// p : Nat
 /// ```
-impl<P: Tm<Pos>> Tm<Nat> for P {}
+impl<
+    P,
+>
+    Tm<Nat>
+for
+    P
+where
+    P: Tm<Pos>,
+{}
 
 
 
 /// Type-level successor for natural numbers
-pub enum Succ {}
+pub enum
+    Succ
+{}
 
 /// ```ignore
 /// n : Nat
 /// -------------
 /// succ(n) : Nat
 /// ```
-impl Sig for Succ { type Dom = Nat; type Cod = Nat; }
+impl
+    Sig
+for
+    Succ
+{
+    type Dom = Nat;
+    type Cod = Nat;
+}
 
 /// `succ(0) => 1`
-impl Rule<Succ> for _0
+impl
+    Rule<Succ>
+for
+    _0
 {
     type Out = _1;
 }
 
 /// `succ[nat](p) => succ[pos](p)`
-impl<Rec, P> Rule<Succ> for P where
-    Rec: Tm<Nat>,
+impl<
+    Rec,
+    P,
+>
+    Rule<Succ>
+for
+    P
+where
     P: Rule<pos::Succ, Out = Rec>,
+    P: Tm<Pos>,
+    Rec: Tm<Nat>,
 {
     type Out = Rec;
 }
@@ -67,7 +105,9 @@ impl<Rec, P> Rule<Succ> for P where
 
 
 /// Type-level addition for natural numbers
-pub enum Add {}
+pub enum
+    Add
+{}
 
 /// ```ignore
 /// m : Nat
@@ -75,28 +115,55 @@ pub enum Add {}
 /// ---------------
 /// add(m, n) : Nat
 /// ```
-impl Sig for Add { type Dom = HCons<Nat, HCons<Nat, HNil>>; type Cod = Nat; }
+impl
+    Sig
+for
+    Add
+{
+    type Dom = HCons<Nat, HCons<Nat, HNil>>;
+    type Cod = Nat;
+}
 
 /// `add(0, n) => n`
-impl<P1> Rule<Add> for HCons<_0, HCons<P1, HNil>> where
+impl<
+    P1,
+>
+    Rule<Add>
+for
+    HCons<_0, HCons<P1, HNil>>
+where
     P1: Tm<Pos>,
 {
     type Out = P1;
 }
 
 /// `add(m, 0) => m`
-impl<P0> Rule<Add> for HCons<P0, HCons<_0, HNil>> where
+impl<
+    P0,
+>
+    Rule<Add>
+for
+    HCons<P0, HCons<_0, HNil>>
+where
     P0: Tm<Pos>,
 {
     type Out = P0;
 }
 
 /// `add[nat](p, q) => add[pos](p, q)`
-impl<P0, P1, Rec> Rule<Add> for HCons<P0, HCons<P1, HNil>> where
+impl<
+    P0,
+    P1,
+    Rec,
+>
+    Rule<Add>
+for
+    HCons<P0, HCons<P1, HNil>>
+where
+    HCons<P0, HCons<P1, HNil>>: Rule<pos::Add, Out = Rec>,
     P0: Tm<Pos>,
     P1: Tm<Pos>,
     Rec: Tm<Nat>,
-    HCons<P0, HCons<P1, HNil>>: Rule<pos::Add, Out = Rec>,
 {
     type Out = Rec;
 }
@@ -104,7 +171,9 @@ impl<P0, P1, Rec> Rule<Add> for HCons<P0, HCons<P1, HNil>> where
 
 
 /// Type-level multiplication for natural numbers
-pub enum Mul {}
+pub enum
+    Mul
+{}
 
 /// ```ignore
 /// m : Nat
@@ -112,28 +181,55 @@ pub enum Mul {}
 /// ---------------
 /// mul(m, n) : Nat
 /// ```
-impl Sig for Mul { type Dom = HCons<Nat, HCons<Nat, HNil>>; type Cod = Nat; }
+impl
+    Sig
+for
+    Mul
+{
+    type Dom = HCons<Nat, HCons<Nat, HNil>>;
+    type Cod = Nat;
+}
 
 /// `mul(0, n) => 0`
-impl<P1> Rule<Mul> for HCons<_0, HCons<P1, HNil>> where
+impl<
+    P1,
+>
+    Rule<Mul>
+for
+    HCons<_0, HCons<P1, HNil>>
+where
     P1: Tm<Pos>,
 {
     type Out = _0;
 }
 
 /// `mul(m, 0) => 0`
-impl<P0> Rule<Mul> for HCons<P0, HCons<_0, HNil>> where
+impl<
+    P0,
+>
+    Rule<Mul>
+for
+    HCons<P0, HCons<_0, HNil>>
+where
     P0: Tm<Pos>,
 {
     type Out = _0;
 }
 
 /// `mul[nat](p, q) => mul[pos](p, q)`
-impl<P0, P1, Rec> Rule<Mul> for HCons<P0, HCons<P1, HNil>> where
+impl<
+    P0,
+    P1,
+    Rec,
+>
+    Rule<Mul>
+for
+    HCons<P0, HCons<P1, HNil>>
+where
+    HCons<P0, HCons<P1, HNil>>: Rule<pos::Mul, Out = Rec>,
     P0: Tm<Pos>,
     P1: Tm<Pos>,
     Rec: Tm<Nat>,
-    HCons<P0, HCons<P1, HNil>>: Rule<pos::Mul, Out = Rec>,
 {
     type Out = Rec;
 }
