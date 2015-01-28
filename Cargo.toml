@@ -15,5 +15,3 @@ name = "shoggoth"
 path = "src/lib.rs"
 
 [dependencies]
-
-unify = "*"
