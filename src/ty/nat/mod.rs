@@ -279,36 +279,36 @@ mod test {
 
     #[test]
     fn add_0() {
-        let x0: Wit<Ap<Add, HC<_0b, HC<_16384b, HN>>>> = Wit;
-        let x1: Wit<_16384b> = Wit;
+        let x0: Witness<Ap<Add, HC<_0b, HC<_16384b, HN>>>> = Witness;
+        let x1: Witness<_16384b> = Witness;
         x0 == x1;
     }
 
     #[test]
     fn add() {
-        let x0: Wit<Ap<Add, HC<_8192b, HC<_8192b, HN>>>> = Wit;
-        let x1: Wit<_16384b> = Wit;
+        let x0: Witness<Ap<Add, HC<_8192b, HC<_8192b, HN>>>> = Witness;
+        let x1: Witness<_16384b> = Witness;
         x0 == x1;
     }
 
     #[test]
     fn mul_0() {
-        let x0: Wit<Ap<Mul, HC<_0b, HC<_16384b, HN>>>> = Wit;
-        let x1: Wit<_0b> = Wit;
+        let x0: Witness<Ap<Mul, HC<_0b, HC<_16384b, HN>>>> = Witness;
+        let x1: Witness<_0b> = Witness;
         x0 == x1;
     }
 
     #[test]
     fn mul_1() {
-        let x0: Wit<Ap<Mul, HC<_1b, HC<_16384b, HN>>>> = Wit;
-        let x1: Wit<_16384b> = Wit;
+        let x0: Witness<Ap<Mul, HC<_1b, HC<_16384b, HN>>>> = Witness;
+        let x1: Witness<_16384b> = Witness;
         x0 == x1;
     }
 
     #[test]
     fn mul() {
-        let x0: Wit<Ap<Mul, HC<_32b, HC<_2048b, HN>>>> = Wit;
-        let x1: Wit<_65536b> = Wit;
+        let x0: Witness<Ap<Mul, HC<_32b, HC<_2048b, HN>>>> = Witness;
+        let x1: Witness<_65536b> = Witness;
         x0 == x1;
     }
 }

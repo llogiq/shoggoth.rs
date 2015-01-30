@@ -348,8 +348,8 @@ mod test {
 
     #[test]
     fn put() {
-        let x: Wit<HCons<ZCons<HCons<Lift<bool>, HNil>, HCons<Lift<u8>, HNil>>, HCons<Lift<u16>, HNil>>> = Wit;
-        let x: Wit<ZCons<HCons<Lift<bool>, HNil>, HCons<Lift<u16>, HNil>>> = x.app::<Put<Star>>();
-        let _: Wit<HCons<Lift<bool>, HCons<Lift<u16>, HNil>>> = x.app::<Unzip<Star>>();
+        let x: Witness<HCons<ZCons<HCons<Lift<bool>, HNil>, HCons<Lift<u8>, HNil>>, HCons<Lift<u16>, HNil>>> = Witness;
+        let x: Witness<ZCons<HCons<Lift<bool>, HNil>, HCons<Lift<u16>, HNil>>> = x.app::<Put<Star>>();
+        let _: Witness<HCons<Lift<bool>, HCons<Lift<u16>, HNil>>> = x.app::<Unzip<Star>>();
     }
 }

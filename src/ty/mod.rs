@@ -45,8 +45,8 @@ pub use self::star::{
     Lower,
     Star,
 };
-pub use self::wit::{
-    Wit,
+pub use self::witness::{
+    Witness,
 };
 // pub use self::zipper::{
 //     Get,
@@ -67,7 +67,7 @@ mod kind;
 mod list;
 mod op;
 mod star;
-mod wit;
+mod witness;
 // mod zipper;
 
 /// Type-level type-inferrable terms

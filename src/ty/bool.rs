@@ -320,23 +320,23 @@ mod test {
 
     #[test]
     fn not_false() {
-        let x0: Wit<Ap1<Not, FF>> = Wit;
-        let x1: Wit<TT> = Wit;
+        let x0: Witness<Ap1<Not, FF>> = Witness;
+        let x1: Witness<TT> = Witness;
         x0 == x1;
     }
 
     #[test]
     fn not_true () {
-        let x0: Wit<Ap1<Not, TT>> = Wit;
-        let x1: Wit<FF> = Wit;
+        let x0: Witness<Ap1<Not, TT>> = Witness;
+        let x1: Witness<FF> = Witness;
         x0 == x1;
     }
 
     #[test]
     fn and_false() {
         fn aux<B: Tm<Bool> + Eq>() {
-            let x0: Wit<Ap<And, HC<FF, HC<B, HN>>>> = Wit;
-            let x1: Wit<FF> = Wit;
+            let x0: Witness<Ap<And, HC<FF, HC<B, HN>>>> = Witness;
+            let x1: Witness<FF> = Witness;
             x0 == x1;
         }
         aux::<FF>();
@@ -346,8 +346,8 @@ mod test {
     #[test]
     fn and_true() {
         fn aux<B: Tm<Bool> + Eq>() {
-            let x0: Wit<Ap<And, HC<TT, HC<B, HN>>>> = Wit;
-            let x1: Wit<B> = Wit;
+            let x0: Witness<Ap<And, HC<TT, HC<B, HN>>>> = Witness;
+            let x1: Witness<B> = Witness;
             x0 == x1;
         }
         aux::<FF>();
@@ -357,8 +357,8 @@ mod test {
     #[test]
     fn or_false() {
         fn aux<B: Tm<Bool> + Eq>() {
-            let x0: Wit<Ap<Or, HC<FF, HC<B, HN>>>> = Wit;
-            let x1: Wit<B> = Wit;
+            let x0: Witness<Ap<Or, HC<FF, HC<B, HN>>>> = Witness;
+            let x1: Witness<B> = Witness;
             x0 == x1;
         }
         aux::<FF>();
@@ -368,8 +368,8 @@ mod test {
     #[test]
     fn or_true() {
         fn aux<B: Tm<Bool> + Eq>() {
-            let x0: Wit<Ap<Or, HC<TT, HC<B, HN>>>> = Wit;
-            let x1: Wit<TT> = Wit;
+            let x0: Witness<Ap<Or, HC<TT, HC<B, HN>>>> = Witness;
+            let x1: Witness<TT> = Witness;
             x0 == x1;
         }
         aux::<FF>();
@@ -378,15 +378,15 @@ mod test {
 
     #[test]
     fn if_false() {
-        let x0: Wit<Ap<If<Bool>, HC<FF, HC<FF, HC<TT, HN>>>>> = Wit;
-        let x1: Wit<TT> = Wit;
+        let x0: Witness<Ap<If<Bool>, HC<FF, HC<FF, HC<TT, HN>>>>> = Witness;
+        let x1: Witness<TT> = Witness;
         x0 == x1;
     }
 
     #[test]
     fn if_true() {
-        let x0: Wit<Ap<If<Bool>, HC<TT, HC<FF, HC<TT, HN>>>>> = Wit;
-        let x1: Wit<FF> = Wit;
+        let x0: Witness<Ap<If<Bool>, HC<TT, HC<FF, HC<TT, HN>>>>> = Witness;
+        let x1: Witness<FF> = Witness;
         x0 == x1;
     }
 }

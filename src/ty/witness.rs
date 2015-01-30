@@ -9,4 +9,4 @@
 #[derive(Rand)]
 #[derive(Show)]
 pub struct
-    Wit<A>;
+    Witness<A>;
