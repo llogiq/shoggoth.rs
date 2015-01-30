@@ -1,5 +1,6 @@
-#![allow(unstable)]
-#![allow(missing_copy_implementations)]
+#![feature(core)]
+#![feature(hash)]
+#![feature(rand)]
 #![feature(on_unimplemented)]
 
 pub use self::hlist::{
