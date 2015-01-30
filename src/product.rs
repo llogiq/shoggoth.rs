@@ -41,9 +41,3 @@ pub trait
         ToTuple::apply(self)
     }
 }
-
-
-
-#[cfg(test)]
-mod test {
-}

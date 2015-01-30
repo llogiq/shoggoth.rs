@@ -119,9 +119,3 @@ pub trait
         IsComposite::tail(self)
     }
 }
-
-
-
-#[cfg(test)]
-mod test {
-}
