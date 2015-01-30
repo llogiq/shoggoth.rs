@@ -4,6 +4,13 @@ use ty::{
 };
 
 /// Type-level bits
+#[derive(Clone)]
+#[derive(Copy)]
+#[derive(Eq)]
+#[derive(Ord)]
+#[derive(PartialEq)]
+#[derive(PartialOrd)]
+#[derive(Show)]
 pub enum
     Bit
 {}
@@ -21,6 +28,13 @@ for
 
 
 /// Type-level bit `0`
+#[derive(Clone)]
+#[derive(Copy)]
+#[derive(Eq)]
+#[derive(Ord)]
+#[derive(PartialEq)]
+#[derive(PartialOrd)]
+#[derive(Show)]
 pub enum
     _0
 {}
@@ -38,6 +52,13 @@ for
 
 
 /// Type-level bit `1`
+#[derive(Clone)]
+#[derive(Copy)]
+#[derive(Eq)]
+#[derive(Ord)]
+#[derive(PartialEq)]
+#[derive(PartialOrd)]
+#[derive(Show)]
 pub enum
     _1
 {}

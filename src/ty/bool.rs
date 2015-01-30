@@ -7,6 +7,14 @@ use ty::{
 };
 
 /// Type-level booleans
+#[derive(Clone)]
+#[derive(Copy)]
+#[derive(Eq)]
+#[derive(Hash)]
+#[derive(Ord)]
+#[derive(PartialEq)]
+#[derive(PartialOrd)]
+#[derive(Show)]
 pub enum
     Bool
 {}
@@ -22,6 +30,14 @@ for
 {}
 
 /// Type-level false
+#[derive(Clone)]
+#[derive(Copy)]
+#[derive(Eq)]
+#[derive(Hash)]
+#[derive(Ord)]
+#[derive(PartialEq)]
+#[derive(PartialOrd)]
+#[derive(Show)]
 pub enum
     FF
 {}
@@ -37,6 +53,14 @@ for
 {}
 
 /// Type-level true
+#[derive(Clone)]
+#[derive(Copy)]
+#[derive(Eq)]
+#[derive(Hash)]
+#[derive(Ord)]
+#[derive(PartialEq)]
+#[derive(PartialOrd)]
+#[derive(Show)]
 pub enum
     TT
 {}
@@ -54,6 +78,14 @@ for
 
 
 /// Type-level partial operation for bool negation
+#[derive(Clone)]
+#[derive(Copy)]
+#[derive(Eq)]
+#[derive(Hash)]
+#[derive(Ord)]
+#[derive(PartialEq)]
+#[derive(PartialOrd)]
+#[derive(Show)]
 pub enum
     Not
 {}
@@ -93,6 +125,14 @@ for
 
 
 /// Type-level partial operation for bool conjunction
+#[derive(Clone)]
+#[derive(Copy)]
+#[derive(Eq)]
+#[derive(Hash)]
+#[derive(Ord)]
+#[derive(PartialEq)]
+#[derive(PartialOrd)]
+#[derive(Show)]
 pub enum
     And
 {}
@@ -144,6 +184,14 @@ where
 pub enum
     Or
 {}
+#[derive(Clone)]
+#[derive(Copy)]
+#[derive(Eq)]
+#[derive(Hash)]
+#[derive(Ord)]
+#[derive(PartialEq)]
+#[derive(PartialOrd)]
+#[derive(Show)]
 
 /// ```ignore
 /// p : Bool
@@ -189,6 +237,14 @@ where
 
 
 /// Type-level partial operation for bool conditional
+#[derive(Clone)]
+#[derive(Copy)]
+#[derive(Eq)]
+#[derive(Hash)]
+#[derive(Ord)]
+#[derive(PartialEq)]
+#[derive(PartialOrd)]
+#[derive(Show)]
 pub enum
     If<A>
 where

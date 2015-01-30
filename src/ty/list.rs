@@ -7,6 +7,14 @@ use ty::{
 };
 
 /// Type-level lists
+#[derive(Clone)]
+#[derive(Copy)]
+#[derive(Eq)]
+#[derive(Hash)]
+#[derive(Ord)]
+#[derive(PartialEq)]
+#[derive(PartialOrd)]
+#[derive(Show)]
 pub enum
     List<A>
 where
@@ -67,6 +75,14 @@ where
 
 
 /// Type-level append for lists
+#[derive(Clone)]
+#[derive(Copy)]
+#[derive(Eq)]
+#[derive(Hash)]
+#[derive(Ord)]
+#[derive(PartialEq)]
+#[derive(PartialOrd)]
+#[derive(Show)]
 pub enum
     Append<A>
 where
