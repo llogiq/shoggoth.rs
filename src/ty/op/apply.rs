@@ -6,9 +6,9 @@ use ty::{
     infer,
 };
 use ty::op::{
-    Arr,
+    Arrow,
     Eval,
-    IsArr,
+    IsArrow,
     Thunk,
 };
 
@@ -19,11 +19,11 @@ pub trait
         Fx,
     >
 where
-    <Fx as Infer>::Ty: IsArr<Dom = FxDTy>,
+    <Fx as Infer>::Ty: IsArrow<Dom = FxDTy>,
     Fx: Infer,
     M: infer::mode::Mode,
     Self: Prefix<
-        <<Fx as Infer>::Ty as IsArr>::Dom
+        <<Fx as Infer>::Ty as IsArrow>::Dom
     >,
     Self: HList,
 {
@@ -52,7 +52,7 @@ where
     >,
     Args: Prefix<CxDTy>,
     Args: HList,
-    Cx: Infer<Ty = Arr<CxDTy, CxCTy>>,
+    Cx: Infer<Ty = Arrow<CxDTy, CxCTy>>,
     CxCTy: Ty,
     CxDTy: HList,
     CxDTy: Ty,
@@ -81,10 +81,10 @@ impl<
 for
     HN
 where
-    Fx: Infer<Ty = Arr<FxDTy, TxCTy>>,
+    Fx: Infer<Ty = Arrow<FxDTy, TxCTy>>,
     FxDTy: HList,
     FxDTy: Ty,
-    Thunk<Fx, Xs>: Infer<Ty = Arr<HN, TxCTy>>,
+    Thunk<Fx, Xs>: Infer<Ty = Arrow<HN, TxCTy>>,
     TxCTy: Ty,
     Xs: Eval<Fx>,
     Xs: HList,
@@ -107,7 +107,7 @@ impl<
 for
     HN
 where
-    Tx: Infer<Ty = Arr<HC<TxDHTy, TxDTTy>, TxCTy>>,
+    Tx: Infer<Ty = Arrow<HC<TxDHTy, TxDTTy>, TxCTy>>,
     TxCTy: Ty,
     TxDHTy: Ty,
     TxDTTy: HList,
@@ -141,7 +141,7 @@ where
         Thunk<Fx, HS<Xs, ArgsHTm>>
     >,
     ArgsTTm: HList,
-    Fx: Infer<Ty = Arr<HC<FxDHTy, FxDTTy>, TxCTy>>,
+    Fx: Infer<Ty = Arrow<HC<FxDHTy, FxDTTy>, TxCTy>>,
     FxDHTy: Ty,
     FxDTTy: HList,
     FxDTTy: Ty,

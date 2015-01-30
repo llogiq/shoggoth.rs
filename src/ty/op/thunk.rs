@@ -5,8 +5,8 @@ use ty::{
     infer,
 };
 use ty::op::{
-    Arr,
-    IsArr,
+    Arrow,
+    IsArrow,
 };
 
 #[derive(Clone)]
@@ -20,11 +20,11 @@ use ty::op::{
 pub enum
     Thunk<Fx, Xs>
 where
-    <Fx as Infer>::Ty: IsArr,
+    <Fx as Infer>::Ty: IsArrow,
     Fx: Infer,
     Xs: HList,
     Xs: Prefix<
-        <<Fx as Infer>::Ty as IsArr>::Dom
+        <<Fx as Infer>::Ty as IsArrow>::Dom
     >,
 {}
 
@@ -36,21 +36,21 @@ impl<
 for
     Thunk<Fx, Xs>
 where
-    <Fx as Infer>::Ty: IsArr,
+    <Fx as Infer>::Ty: IsArrow,
     <Xs as Prefix<
-        <<Fx as Infer>::Ty as IsArr>::Dom>
+        <<Fx as Infer>::Ty as IsArrow>::Dom>
     >::Out: HList,
     Fx: Infer,
     Xs: Prefix<
-        <<Fx as Infer>::Ty as IsArr>::Dom
+        <<Fx as Infer>::Ty as IsArrow>::Dom
     >,
 {
     type Mode = infer::mode::Thunk;
     type Ty =
-        Arr<
+        Arrow<
             <Xs as Prefix<
-                <<Fx as Infer>::Ty as IsArr>::Dom>
+                <<Fx as Infer>::Ty as IsArrow>::Dom>
             >::Out,
-                <<Fx as Infer>::Ty as IsArr>::Cod,
+                <<Fx as Infer>::Ty as IsArrow>::Cod,
         >;
 }

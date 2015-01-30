@@ -1,8 +1,8 @@
 use hlist::*;
 use ty::bit::*;
 use ty::{
-    Arr,
-    Arr1,
+    Arrow,
+    Arrow1,
     Eval,
     Infer,
     Tm,
@@ -87,7 +87,7 @@ for
     Succ
 {
     type Mode = infer::mode::Constant;
-    type Ty = Arr1<Pos, Pos>;
+    type Ty = Arrow1<Pos, Pos>;
 }
 
 /// `succ(1) => 1:0`
@@ -155,7 +155,7 @@ for
     Add
 {
     type Mode = infer::mode::Constant;
-    type Ty = Arr<HC<Pos, HC<Pos, HN>>, Pos>;
+    type Ty = Arrow<HC<Pos, HC<Pos, HN>>, Pos>;
 }
 
 /// `add(1, 1) => 1:0`
@@ -324,7 +324,7 @@ for
     AddCarry
 {
     type Mode = infer::mode::Constant;
-    type Ty = Arr<HC<Pos, HC<Pos, HN>>, Pos>;
+    type Ty = Arrow<HC<Pos, HC<Pos, HN>>, Pos>;
 }
 
 /// `add_carry(1, 1) => 1:1`
@@ -497,7 +497,7 @@ for
     PredDouble
 {
     type Mode = infer::mode::Constant;
-    type Ty = Arr1<Pos, Pos>;
+    type Ty = Arrow1<Pos, Pos>;
 }
 
 /// `pred_carry(1) => 1`
@@ -564,7 +564,7 @@ for
     Pred
 {
     type Mode = infer::mode::Constant;
-    type Ty = Arr1<Pos, Pos>;
+    type Ty = Arrow1<Pos, Pos>;
 }
 
 /// `pred(p:1) => p:0`
@@ -632,7 +632,7 @@ for
     Mul
 {
     type Mode = infer::mode::Constant;
-    type Ty = Arr<HC<Pos, HC<Pos, HN>>, Pos>;
+    type Ty = Arrow<HC<Pos, HC<Pos, HN>>, Pos>;
 }
 
 /// `mul(1, q) => q`

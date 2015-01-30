@@ -1,6 +1,6 @@
 use hlist::*;
 use ty::{
-    Arr1,
+    Arrow1,
     Eval,
     Infer,
     Tm,
@@ -132,7 +132,7 @@ for
     Double
 {
     type Mode = infer::mode::Constant;
-    type Ty = Arr1<Int, Int>;
+    type Ty = Arrow1<Int, Int>;
 }
 
 /// `double(0) ==> 0`
@@ -199,7 +199,7 @@ for
     SuccDouble
 {
     type Mode = infer::mode::Constant;
-    type Ty = Arr1<Int, Int>;
+    type Ty = Arrow1<Int, Int>;
 }
 
 /// `succ_double(0) ==> 1`
@@ -269,7 +269,7 @@ for
     PredDouble
 {
     type Mode = infer::mode::Constant;
-    type Ty = Arr1<Int, Int>;
+    type Ty = Arrow1<Int, Int>;
 }
 
 /// `pred_double(0) ==> -1`

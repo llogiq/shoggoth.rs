@@ -26,7 +26,7 @@ mod thunk;
 #[derive(PartialOrd)]
 #[derive(Show)]
 pub enum
-    Arr<D, C>
+    Arrow<D, C>
 where
     C: Ty,
     D: HList,
@@ -39,7 +39,7 @@ impl<
 >
     Ty
 for
-    Arr<D, C>
+    Arrow<D, C>
 where
     C: Ty,
     D: HList,
@@ -48,7 +48,7 @@ where
 
 #[rustc_on_unimplemented = "`{Self}` is not a valid type-level arrow type"]
 pub trait
-    IsArr
+    IsArrow
 where
     Self: Ty,
 {
@@ -60,9 +60,9 @@ impl<
     C,
     D,
 >
-    IsArr
+    IsArrow
 for
-    Arr<D, C>
+    Arrow<D, C>
 where
     C: Ty,
     D: HList,
@@ -72,13 +72,13 @@ where
     type Cod = C;
 }
 
-pub type Arr0   <C> = Arr<HN, C>;
-pub type Arr1<D, C> = Arr<HC<D, HN>, C>;
+pub type Arrow0   <C> = Arrow<HN, C>;
+pub type Arrow1<D, C> = Arrow<HC<D, HN>, C>;
 pub type Ap<Fx, Xs> =
     <Xs as
         AppEval<
              <Fx as Infer>::Mode,
-            <<Fx as Infer>::Ty as IsArr>::Dom,
+            <<Fx as Infer>::Ty as IsArrow>::Dom,
             Fx,
         >
     >::Out;

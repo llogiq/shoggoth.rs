@@ -33,11 +33,11 @@ pub use self::op::{
     Ap,
     Ap1,
     AppEval,
-    Arr,
-    Arr0,
-    Arr1,
+    Arrow,
+    Arrow0,
+    Arrow1,
     Eval,
-    IsArr,
+    IsArrow,
     Thunk,
 };
 pub use self::star::{
