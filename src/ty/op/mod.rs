@@ -17,6 +17,7 @@ mod apply;
 mod eval;
 mod thunk;
 
+/// Type-level operations
 #[derive(Clone)]
 #[derive(Copy)]
 #[derive(Eq)]
@@ -46,6 +47,7 @@ where
     D: Ty,
 {}
 
+/// Predicate providing access to (co)domain of type-level arrows
 #[rustc_on_unimplemented = "`{Self}` is not a valid type-level arrow type"]
 pub trait
     IsArrow
@@ -72,8 +74,14 @@ where
     type Cod = C;
 }
 
-pub type Arrow0   <C> = Arrow<HN, C>;
+/// Alias for arrow types with a nullary domain
+pub type Arrow0 <C> = Arrow<HN, C>;
+
+/// Alias for arrow types with a unary domain
 pub type Arrow1<D, C> = Arrow<HC<D, HN>, C>;
+
+/// Alias for partially applying terms of arrow types to many
+/// arguments
 pub type Ap<Fx, Xs> =
     <Xs as
         AppEval<
@@ -82,4 +90,7 @@ pub type Ap<Fx, Xs> =
             Fx,
         >
     >::Out;
+
+/// Alias for partially applying terms of arrow types to a single
+/// argument
 pub type Ap1<Fx, X> = Ap<Fx, HC<X, HN>>;

@@ -150,7 +150,7 @@ where
 
 
 
-// Type-level map for lists
+/// Type-level operation mapping operations over lists
 #[derive(Clone)]
 #[derive(Copy)]
 #[derive(Eq)]

@@ -80,7 +80,7 @@ for
 
 
 
-/// Type-level partial operation for bool negation
+/// Type-level operation for bool negation
 #[derive(Clone)]
 #[derive(Copy)]
 #[derive(Eq)]
@@ -127,7 +127,7 @@ for
 
 
 
-/// Type-level partial operation for bool conjunction
+/// Type-level operation for bool conjunction
 #[derive(Clone)]
 #[derive(Copy)]
 #[derive(Eq)]
@@ -183,7 +183,7 @@ where
 
 
 
-/// Type-level partial operation for bool disjunction
+/// Type-level operation for bool disjunction
 #[derive(Clone)]
 #[derive(Copy)]
 #[derive(Eq)]
@@ -239,7 +239,7 @@ where
 
 
 
-/// Type-level partial operation for bool conditional
+/// Type-level operation for bool conditional
 #[derive(Clone)]
 #[derive(Copy)]
 #[derive(Eq)]

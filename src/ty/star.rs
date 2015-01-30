@@ -30,7 +30,7 @@ pub enum
     Lift<A>
 {}
 
-/// Type-level operation to project
+/// Lower Rust types lifted to type-level terms; inverse of `Lift`
 #[rustc_on_unimplemented = "`{Self}` is not a lifted Rust type"]
 pub trait
     Lower

@@ -9,6 +9,7 @@ use ty::op::{
     IsArrow,
 };
 
+/// Partially applied type-level operations
 #[derive(Clone)]
 #[derive(Copy)]
 #[derive(Eq)]

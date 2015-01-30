@@ -7,6 +7,8 @@ use ty::op::{
     IsArrow,
 };
 
+/// Interpret constants (i.e., operation symbols) at a given input
+/// (i.e., `Self`)
 pub trait
     Eval<Fx>
 where

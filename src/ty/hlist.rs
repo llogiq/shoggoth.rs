@@ -73,29 +73,50 @@ where
 
 
 
+/// ```ignore
+/// n <= m
+/// forall k. k <= n -> M_k : Tm<A_k>
+/// ---------------------------------------------
+/// [ M_0, ..., M_n ] : Prefix<[ A_0, ..., A_m ]>
+/// ```
 pub trait
-    Prefix<T>
+    Prefix<A>
 where
     Self: HList,
-    T: HList,
-    T: Ty,
+    A: HList,
+    A: Ty,
 {
     type Out: Ty;
 }
 
+/// ```ignore
+/// A :: Ty
+/// A :: HList (i.e., is a product type)
+/// ---------------
+/// Nil : Prefix<A>
+/// ```
 impl<
-    T,
+    A,
 >
-    Prefix<T>
+    Prefix<A>
 for
     HN
 where
-    T: HList,
-    T: Ty,
+    A: HList,
+    A: Ty,
 {
-    type Out = T;
+    type Out = A;
 }
 
+/// ```ignore
+/// HTy :: Ty
+/// TTy :: Ty      + HList (i.e., is a product type)
+/// HTm :: Tm<HTy>
+/// TTm :: Tm<TTy> + HList (i.e., is a product term)
+/// Prefix<TTy> holds for TTm
+/// ---------------------------------
+/// Cons<HTm, TTm> : Prefix<HTy, TTy>
+/// ```
 impl<
     HTm,
     HTy,

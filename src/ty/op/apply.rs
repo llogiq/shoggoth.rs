@@ -12,6 +12,8 @@ use ty::op::{
     Thunk,
 };
 
+/// Partially apply a thunk to an argument or evaluate a constant
+/// (i.e., operation symbol)
 pub trait
     AppEval<
         M,
