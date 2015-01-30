@@ -5,6 +5,7 @@ use ty::{
     Ty,
 };
 
+/// Infer modes for controlling `AppEval` behavior
 pub mod mode;
 
 /// Predicate classifying type-level type-inferrable terms

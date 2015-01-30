@@ -1,7 +1,9 @@
+/// Predicate classifying Infer modes
 pub trait
     Mode
 {}
 
+/// Infer mode for operations
 #[derive(Clone)]
 #[derive(Copy)]
 #[derive(Eq)]
@@ -14,6 +16,7 @@ pub enum
     Constant
 {}
 
+/// Infer mode for thunks
 #[derive(Clone)]
 #[derive(Copy)]
 #[derive(Eq)]
