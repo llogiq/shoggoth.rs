@@ -1,9 +1,12 @@
 use hlist::*;
 use ty::{
-    Rule,
-    Sig,
+    Arr,
+    Arr1,
+    Eval,
+    Infer,
     Tm,
     Ty,
+    infer,
 };
 
 /// Type-level booleans
@@ -96,28 +99,28 @@ pub enum
 /// not(b) : Bool
 /// ```
 impl
-    Sig
+    Infer
 for
     Not
 {
-    type Dom = Bool;
-    type Cod = Bool;
+    type Mode = infer::mode::Constant;
+    type Ty = Arr1<Bool, Bool>;
 }
 
 /// `not(ff) ==> tt`
 impl
-    Rule<Not>
+    Eval<Not>
 for
-    FF
+    HC<FF, HN>
 {
     type Out = TT;
 }
 
 /// `not(tt) ==> ff`
 impl
-    Rule<Not>
+    Eval<Not>
 for
-    TT
+    HC<TT, HN>
 {
     type Out = FF;
 }
@@ -144,46 +147,43 @@ pub enum
 /// and(b0, b1) : Bool
 /// ```
 impl
-    Sig
+    Infer
 for
     And
 {
-    type Dom = HCons<Bool, HCons<Bool, HNil>>;
-    type Cod = Bool;
+    type Mode = infer::mode::Constant;
+    type Ty = Arr<HC<Bool, HC<Bool, HN>>, Bool>;
 }
 
 /// `and(ff, b1) ==> ff`
 impl<
-    B,
+    B1,
 >
-    Rule<And>
+    Eval<And>
 for
-    HCons<FF, HCons<B, HNil>>
+    HC<FF, HC<B1, HN>>
 where
-    B: Tm<Bool>,
+    B1: Tm<Bool>,
 {
     type Out = FF;
 }
 
 /// `and(tt, b1) ==> b1`
 impl<
-    B,
+    B1,
 >
-    Rule<And>
+    Eval<And>
 for
-    HCons<TT, HCons<B, HNil>>
+    HC<TT, HC<B1, HN>>
 where
-    B: Tm<Bool>,
+    B1: Tm<Bool>,
 {
-    type Out = B;
+    type Out = B1;
 }
 
 
 
 /// Type-level partial operation for bool disjunction
-pub enum
-    Or
-{}
 #[derive(Clone)]
 #[derive(Copy)]
 #[derive(Eq)]
@@ -192,6 +192,9 @@ pub enum
 #[derive(PartialEq)]
 #[derive(PartialOrd)]
 #[derive(Show)]
+pub enum
+    Or
+{}
 
 /// ```ignore
 /// b0 : Bool
@@ -200,36 +203,36 @@ pub enum
 /// or(b0, b1) : Bool
 /// ```
 impl
-    Sig
+    Infer
 for
     Or
 {
-    type Dom = HCons<Bool, HCons<Bool, HNil>>;
-    type Cod = Bool;
+    type Mode = infer::mode::Constant;
+    type Ty = Arr<HC<Bool, HC<Bool, HN>>, Bool>;
 }
 
 /// `or(ff, b1) ==> b1`
 impl<
-    B,
+    B1,
 >
-    Rule<Or>
+    Eval<Or>
 for
-    HCons<FF, HCons<B, HNil>>
+    HC<FF, HC<B1, HN>>
 where
-    B: Tm<Bool>,
+    B1: Tm<Bool>,
 {
-    type Out = B;
+    type Out = B1;
 }
 
 /// `or(tt, b1) ==> tt`
 impl<
-    B,
+    B1,
 >
-    Rule<Or>
+    Eval<Or>
 for
-    HCons<TT, HCons<B, HNil>>
+    HC<TT, HC<B1, HN>>
 where
-    B: Tm<Bool>,
+    B1: Tm<Bool>,
 {
     type Out = TT;
 }
@@ -262,48 +265,48 @@ where
 impl<
     A,
 >
-    Sig
+    Infer
 for
     If<A>
 where
     A: Ty,
 {
-    type Dom = HCons<Bool, HCons<A, HCons<A, HNil>>>;
-    type Cod = A;
+    type Mode = infer::mode::Constant;
+    type Ty = Arr<HC<Bool, HC<A, HC<A, HN>>>, A>;
 }
 
 /// `if(ff, m0, m1) ==> m1`
 impl<
     A,
-    B0,
-    B1,
+    M0,
+    M1,
 >
-    Rule<If<A>>
+    Eval<If<A>>
 for
-    HCons<FF, HCons<B0, HCons<B1, HNil>>>
+    HC<FF, HC<M0, HC<M1, HN>>>
 where
     A: Ty,
-    B0: Tm<A>,
-    B1: Tm<A>,
+    M0: Tm<A>,
+    M1: Tm<A>,
 {
-    type Out = B1;
+    type Out = M1;
 }
 
 /// `if(tt, m0, m1) ==> m0`
 impl<
     A,
-    B0,
-    B1,
+    M0,
+    M1,
 >
-    Rule<If<A>>
+    Eval<If<A>>
 for
-    HCons<TT, HCons<B0, HCons<B1, HNil>>>
+    HC<TT, HC<M0, HC<M1, HN>>>
 where
     A: Ty,
-    B0: Tm<A>,
-    B1: Tm<A>,
+    M0: Tm<A>,
+    M1: Tm<A>,
 {
-    type Out = B0;
+    type Out = M0;
 }
 
 
@@ -317,21 +320,24 @@ mod test {
 
     #[test]
     fn not_false() {
-        let x: Wit<FF> = Wit;
-        let _: Wit<TT> = x.app::<Not>();
+        let x0: Wit<Ap1<Not, FF>> = Wit;
+        let x1: Wit<TT> = Wit;
+        x0 == x1;
     }
 
     #[test]
     fn not_true () {
-        let x: Wit<TT> = Wit;
-        let _: Wit<FF> = x.app::<Not>();
+        let x0: Wit<Ap1<Not, TT>> = Wit;
+        let x1: Wit<FF> = Wit;
+        x0 == x1;
     }
 
     #[test]
     fn and_false() {
-        fn aux<B1: Tm<Bool>>() {
-            let x: Wit<HCons<FF, HCons<B1, HNil>>> = Wit;
-            let _: Wit<FF> = x.app::<And>();
+        fn aux<B: Tm<Bool> + Eq>() {
+            let x0: Wit<Ap<And, HC<FF, HC<B, HN>>>> = Wit;
+            let x1: Wit<FF> = Wit;
+            x0 == x1;
         }
         aux::<FF>();
         aux::<TT>();
@@ -339,9 +345,10 @@ mod test {
 
     #[test]
     fn and_true() {
-        fn aux<B1: Tm<Bool>>() {
-            let x: Wit<HCons<TT, HCons<B1, HNil>>> = Wit;
-            let _: Wit<B1> = x.app::<And>();
+        fn aux<B: Tm<Bool> + Eq>() {
+            let x0: Wit<Ap<And, HC<TT, HC<B, HN>>>> = Wit;
+            let x1: Wit<B> = Wit;
+            x0 == x1;
         }
         aux::<FF>();
         aux::<TT>();
@@ -349,9 +356,10 @@ mod test {
 
     #[test]
     fn or_false() {
-        fn aux<B1: Tm<Bool>>() {
-            let x: Wit<HCons<FF, HCons<B1, HNil>>> = Wit;
-            let _: Wit<B1> = x.app::<Or>();
+        fn aux<B: Tm<Bool> + Eq>() {
+            let x0: Wit<Ap<Or, HC<FF, HC<B, HN>>>> = Wit;
+            let x1: Wit<B> = Wit;
+            x0 == x1;
         }
         aux::<FF>();
         aux::<TT>();
@@ -359,9 +367,10 @@ mod test {
 
     #[test]
     fn or_true() {
-        fn aux<B1: Tm<Bool>>() {
-            let x: Wit<HCons<TT, HCons<B1, HNil>>> = Wit;
-            let _: Wit<TT> = x.app::<Or>();
+        fn aux<B: Tm<Bool> + Eq>() {
+            let x0: Wit<Ap<Or, HC<TT, HC<B, HN>>>> = Wit;
+            let x1: Wit<TT> = Wit;
+            x0 == x1;
         }
         aux::<FF>();
         aux::<TT>();
@@ -369,13 +378,15 @@ mod test {
 
     #[test]
     fn if_false() {
-        let x: Wit<HCons<FF, HCons<FF, HCons<TT, HNil>>>> = Wit;
-        let _: Wit<TT> = x.app::<If<Bool>>();
+        let x0: Wit<Ap<If<Bool>, HC<FF, HC<FF, HC<TT, HN>>>>> = Wit;
+        let x1: Wit<TT> = Wit;
+        x0 == x1;
     }
 
     #[test]
     fn if_true() {
-        let x: Wit<HCons<TT, HCons<FF, HCons<TT, HNil>>>> = Wit;
-        let _: Wit<FF> = x.app::<If<Bool>>();
+        let x0: Wit<Ap<If<Bool>, HC<TT, HC<FF, HC<TT, HN>>>>> = Wit;
+        let x1: Wit<FF> = Wit;
+        x0 == x1;
     }
 }

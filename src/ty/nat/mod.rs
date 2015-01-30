@@ -3,10 +3,13 @@ use self::pos::{
     Pos,
 };
 use ty::{
-    Rule,
-    Sig,
+    Arr,
+    Arr1,
+    Eval,
+    Infer,
     Tm,
     Ty,
+    infer,
 };
 use ty::bit::{
     _0,
@@ -85,19 +88,19 @@ pub enum
 /// succ(n) : Nat
 /// ```
 impl
-    Sig
+    Infer
 for
     Succ
 {
-    type Dom = Nat;
-    type Cod = Nat;
+    type Mode = infer::mode::Constant;
+    type Ty = Arr1<Nat, Nat>;
 }
 
 /// `succ(0) ==> 1`
 impl
-    Rule<Succ>
+    Eval<Succ>
 for
-    _0
+    HC<_0, HN>
 {
     type Out = _1;
 }
@@ -107,11 +110,11 @@ impl<
     Rec,
     P,
 >
-    Rule<Succ>
+    Eval<Succ>
 for
-    P
+    HC<P, HN>
 where
-    P: Rule<pos::Succ, Out = Rec>,
+    P: Eval<pos::Succ, Out = Rec>,
     P: Tm<Pos>,
     Rec: Tm<Nat>,
 {
@@ -140,21 +143,21 @@ pub enum
 /// add(m, n) : Nat
 /// ```
 impl
-    Sig
+    Infer
 for
     Add
 {
-    type Dom = HCons<Nat, HCons<Nat, HNil>>;
-    type Cod = Nat;
+    type Mode = infer::mode::Constant;
+    type Ty = Arr<HC<Nat, HC<Nat, HN>>, Nat>;
 }
 
 /// `add(0, n) ==> n`
 impl<
     P1,
 >
-    Rule<Add>
+    Eval<Add>
 for
-    HCons<_0, HCons<P1, HNil>>
+    HC<_0, HC<P1, HN>>
 where
     P1: Tm<Pos>,
 {
@@ -165,9 +168,9 @@ where
 impl<
     P0,
 >
-    Rule<Add>
+    Eval<Add>
 for
-    HCons<P0, HCons<_0, HNil>>
+    HC<P0, HC<_0, HN>>
 where
     P0: Tm<Pos>,
 {
@@ -180,11 +183,11 @@ impl<
     P1,
     Rec,
 >
-    Rule<Add>
+    Eval<Add>
 for
-    HCons<P0, HCons<P1, HNil>>
+    HC<P0, HC<P1, HN>>
 where
-    HCons<P0, HCons<P1, HNil>>: Rule<pos::Add, Out = Rec>,
+    HC<P0, HC<P1, HN>>: Eval<pos::Add, Out = Rec>,
     P0: Tm<Pos>,
     P1: Tm<Pos>,
     Rec: Tm<Nat>,
@@ -214,21 +217,21 @@ pub enum
 /// mul(m, n) : Nat
 /// ```
 impl
-    Sig
+    Infer
 for
     Mul
 {
-    type Dom = HCons<Nat, HCons<Nat, HNil>>;
-    type Cod = Nat;
+    type Mode = infer::mode::Constant;
+    type Ty = Arr<HC<Nat, HC<Nat, HN>>, Nat>;
 }
 
 /// `mul(0, n) ==> 0`
 impl<
     P1,
 >
-    Rule<Mul>
+    Eval<Mul>
 for
-    HCons<_0, HCons<P1, HNil>>
+    HC<_0, HC<P1, HN>>
 where
     P1: Tm<Pos>,
 {
@@ -239,9 +242,9 @@ where
 impl<
     P0,
 >
-    Rule<Mul>
+    Eval<Mul>
 for
-    HCons<P0, HCons<_0, HNil>>
+    HC<P0, HC<_0, HN>>
 where
     P0: Tm<Pos>,
 {
@@ -254,11 +257,11 @@ impl<
     P1,
     Rec,
 >
-    Rule<Mul>
+    Eval<Mul>
 for
-    HCons<P0, HCons<P1, HNil>>
+    HC<P0, HC<P1, HN>>
 where
-    HCons<P0, HCons<P1, HNil>>: Rule<pos::Mul, Out = Rec>,
+    HC<P0, HC<P1, HN>>: Eval<pos::Mul, Out = Rec>,
     P0: Tm<Pos>,
     P1: Tm<Pos>,
     Rec: Tm<Nat>,
@@ -276,31 +279,36 @@ mod test {
 
     #[test]
     fn add_0() {
-        let x: Wit<HCons<_0b, HCons<_16384b, HNil>>> = Wit;
-        let _: Wit<_16384b> = x.app::<Add>();
+        let x0: Wit<Ap<Add, HC<_0b, HC<_16384b, HN>>>> = Wit;
+        let x1: Wit<_16384b> = Wit;
+        x0 == x1;
     }
 
     #[test]
     fn add() {
-        let x: Wit<HCons<_8192b, HCons<_8192b, HNil>>> = Wit;
-        let _: Wit<_16384b> = x.app::<Add>();
+        let x0: Wit<Ap<Add, HC<_8192b, HC<_8192b, HN>>>> = Wit;
+        let x1: Wit<_16384b> = Wit;
+        x0 == x1;
     }
 
     #[test]
     fn mul_0() {
-        let x: Wit<HCons<_0b, HCons<_16384b, HNil>>> = Wit;
-        let _: Wit<_0b> = x.app::<Mul>();
+        let x0: Wit<Ap<Mul, HC<_0b, HC<_16384b, HN>>>> = Wit;
+        let x1: Wit<_0b> = Wit;
+        x0 == x1;
     }
 
     #[test]
     fn mul_1() {
-        let x: Wit<HCons<_1b, HCons<_16384b, HNil>>> = Wit;
-        let _: Wit<_16384b> = x.app::<Mul>();
+        let x0: Wit<Ap<Mul, HC<_1b, HC<_16384b, HN>>>> = Wit;
+        let x1: Wit<_16384b> = Wit;
+        x0 == x1;
     }
 
     #[test]
     fn mul() {
-        let x: Wit<HCons<_32b, HCons<_2048b, HNil>>> = Wit;
-        let _: Wit<_65536b> = x.app::<Mul>();
+        let x0: Wit<Ap<Mul, HC<_32b, HC<_2048b, HN>>>> = Wit;
+        let x1: Wit<_65536b> = Wit;
+        x0 == x1;
     }
 }

@@ -1,13 +1,13 @@
-use hlist::{
-    HCons,
-    HNil,
-};
+use hlist::*;
 use ty::bit::*;
 use ty::{
-    Rule,
-    Sig,
+    Arr,
+    Arr1,
+    Eval,
+    Infer,
     Tm,
     Ty,
+    infer,
 };
 
 /// Type-level positive natural numbers (binary)
@@ -82,19 +82,19 @@ pub enum
 /// succ(p) : Pos
 /// ```
 impl
-    Sig
+    Infer
 for
     Succ
 {
-    type Dom = Pos;
-    type Cod = Pos;
+    type Mode = infer::mode::Constant;
+    type Ty = Arr1<Pos, Pos>;
 }
 
 /// `succ(1) => 1:0`
 impl
-    Rule<Succ>
+    Eval<Succ>
 for
-    _1
+    HC<_1, HN>
 {
     type Out = (_1, _0,);
 }
@@ -103,9 +103,9 @@ for
 impl<
     P,
 >
-    Rule<Succ>
+    Eval<Succ>
 for
-    (P, _0)
+    HC<(P, _0), HN>
 where
     P: Tm<Pos>,
 {
@@ -117,11 +117,11 @@ impl<
     P,
     Rec,
 >
-    Rule<Succ>
+    Eval<Succ>
 for
-    (P, _1)
+    HC<(P, _1), HN>
 where
-    P: Rule<Succ, Out = Rec>,
+    P: Eval<Succ, Out = Rec>,
     P: Tm<Pos>,
     Rec: Tm<Pos>,
 {
@@ -150,19 +150,19 @@ pub enum
 /// add(p, q) : Pos
 /// ```
 impl
-    Sig
+    Infer
 for
     Add
 {
-    type Dom = HCons<Pos, HCons<Pos, HNil>>;
-    type Cod = Pos;
+    type Mode = infer::mode::Constant;
+    type Ty = Arr<HC<Pos, HC<Pos, HN>>, Pos>;
 }
 
 /// `add(1, 1) => 1:0`
 impl
-    Rule<Add>
+    Eval<Add>
 for
-    HCons<_1, HCons<_1, HNil>>
+    HC<_1, HC<_1, HN>>
 {
     type Out = (_1, _0);
 }
@@ -171,9 +171,9 @@ for
 impl<
     P1,
 >
-    Rule<Add>
+    Eval<Add>
 for
-    HCons<_1, HCons<(P1, _0), HNil>>
+    HC<_1, HC<(P1, _0), HN>>
 where
     P1: Tm<Pos>,
 {
@@ -185,11 +185,11 @@ impl<
     P1,
     Rec,
 >
-    Rule<Add>
+    Eval<Add>
 for
-    HCons<_1, HCons<(P1, _1), HNil>>
+    HC<_1, HC<(P1, _1), HN>>
 where
-    P1: Rule<Succ, Out = Rec>,
+    P1: Eval<Succ, Out = Rec>,
     P1: Tm<Pos>,
     Rec: Tm<Pos>,
 {
@@ -200,9 +200,9 @@ where
 impl<
     P0,
 >
-    Rule<Add>
+    Eval<Add>
 for
-    HCons<(P0, _0), HCons<_1, HNil>>
+    HC<(P0, _0), HC<_1, HN>>
 where
     P0: Tm<Pos>,
 {
@@ -215,11 +215,11 @@ impl<
     P1,
     Rec,
 >
-    Rule<Add>
+    Eval<Add>
 for
-    HCons<(P0, _0), HCons<(P1, _0), HNil>>
+    HC<(P0, _0), HC<(P1, _0), HN>>
 where
-    HCons<P0, HCons<P1, HNil>>: Rule<Add, Out = Rec>,
+    HC<P0, HC<P1, HN>>: Eval<Add, Out = Rec>,
     P0: Tm<Pos>,
     P1: Tm<Pos>,
     Rec: Tm<Pos>,
@@ -233,11 +233,11 @@ impl<
     P1,
     Rec,
 >
-    Rule<Add>
+    Eval<Add>
 for
-    HCons<(P0, _0), HCons<(P1, _1), HNil>>
+    HC<(P0, _0), HC<(P1, _1), HN>>
 where
-    HCons<P0, HCons<P1, HNil>>: Rule<Add, Out = Rec>,
+    HC<P0, HC<P1, HN>>: Eval<Add, Out = Rec>,
     P0: Tm<Pos>,
     P1: Tm<Pos>,
     Rec: Tm<Pos>,
@@ -250,11 +250,11 @@ impl<
     P0,
     Rec,
 >
-    Rule<Add>
+    Eval<Add>
 for
-    HCons<(P0, _1), HCons<_1, HNil>>
+    HC<(P0, _1), HC<_1, HN>>
 where
-    P0: Rule<Succ, Out = Rec>,
+    P0: Eval<Succ, Out = Rec>,
     P0: Tm<Pos>,
     Rec: Tm<Pos>,
 {
@@ -267,11 +267,11 @@ impl<
     P1,
     Rec,
 >
-    Rule<Add>
+    Eval<Add>
 for
-    HCons<(P0, _1), HCons<(P1, _0), HNil>>
+    HC<(P0, _1), HC<(P1, _0), HN>>
 where
-    HCons<P0, HCons<P1, HNil>>: Rule<Add, Out = Rec>,
+    HC<P0, HC<P1, HN>>: Eval<Add, Out = Rec>,
     P0: Tm<Pos>,
     P1: Tm<Pos>,
     Rec: Tm<Pos>,
@@ -285,11 +285,11 @@ impl<
     P1,
     Rec,
 >
-    Rule<Add>
+    Eval<Add>
 for
-    HCons<(P0, _1), HCons<(P1, _1), HNil>>
+    HC<(P0, _1), HC<(P1, _1), HN>>
 where
-    HCons<P0, HCons<P1, HNil>>: Rule<AddCarry, Out = Rec>,
+    HC<P0, HC<P1, HN>>: Eval<AddCarry, Out = Rec>,
     P0: Tm<Pos>,
     P1: Tm<Pos>,
     Rec: Tm<Pos>,
@@ -319,19 +319,19 @@ pub enum
 /// add_carry(p, q) : Pos
 /// ```
 impl
-    Sig
+    Infer
 for
     AddCarry
 {
-    type Dom = HCons<Pos, HCons<Pos, HNil>>;
-    type Cod = Pos;
+    type Mode = infer::mode::Constant;
+    type Ty = Arr<HC<Pos, HC<Pos, HN>>, Pos>;
 }
 
 /// `add_carry(1, 1) => 1:1`
 impl
-    Rule<AddCarry>
+    Eval<AddCarry>
 for
-    HCons<_1, HCons<_1, HNil>>
+    HC<_1, HC<_1, HN>>
 {
     type Out = (_1, _1);
 }
@@ -341,11 +341,11 @@ impl<
     P1,
     Rec,
 >
-    Rule<AddCarry>
+    Eval<AddCarry>
 for
-    HCons<_1, HCons<(P1, _0), HNil>>
+    HC<_1, HC<(P1, _0), HN>>
 where
-    P1: Rule<Succ, Out = Rec>,
+    P1: Eval<Succ, Out = Rec>,
     P1: Tm<Pos>,
     Rec: Tm<Pos>,
 {
@@ -357,11 +357,11 @@ impl<
     P1,
     Rec
 >
-    Rule<AddCarry>
+    Eval<AddCarry>
 for
-    HCons<_1, HCons<(P1, _1), HNil>>
+    HC<_1, HC<(P1, _1), HN>>
 where
-    P1: Rule<Succ, Out = Rec>,
+    P1: Eval<Succ, Out = Rec>,
     P1: Tm<Pos>,
     Rec: Tm<Pos>,
 {
@@ -373,11 +373,11 @@ impl<
     P0,
     Rec,
 >
-    Rule<AddCarry>
+    Eval<AddCarry>
 for
-    HCons<(P0, _0), HCons<_1, HNil>>
+    HC<(P0, _0), HC<_1, HN>>
 where
-    P0: Rule<Succ, Out = Rec>,
+    P0: Eval<Succ, Out = Rec>,
     P0: Tm<Pos>,
     Rec: Tm<Pos>,
 {
@@ -390,11 +390,11 @@ impl<
     P1,
     Rec,
 >
-    Rule<AddCarry>
+    Eval<AddCarry>
 for
-    HCons<(P0, _0), HCons<(P1, _0), HNil>>
+    HC<(P0, _0), HC<(P1, _0), HN>>
 where
-    HCons<P0, HCons<P1, HNil>>: Rule<Add, Out = Rec>,
+    HC<P0, HC<P1, HN>>: Eval<Add, Out = Rec>,
     P0: Tm<Pos>,
     P1: Tm<Pos>,
     Rec: Tm<Pos>,
@@ -408,11 +408,11 @@ impl<
     P1,
     Rec,
 >
-    Rule<AddCarry>
+    Eval<AddCarry>
 for
-    HCons<(P0, _0), HCons<(P1, _1), HNil>>
+    HC<(P0, _0), HC<(P1, _1), HN>>
 where
-    HCons<P0, HCons<P1, HNil>>: Rule<AddCarry, Out = Rec>,
+    HC<P0, HC<P1, HN>>: Eval<AddCarry, Out = Rec>,
     P0: Tm<Pos>,
     P1: Tm<Pos>,
     Rec: Tm<Pos>,
@@ -425,12 +425,12 @@ impl<
     P0,
     Rec,
 >
-    Rule<AddCarry>
+    Eval<AddCarry>
 for
-    HCons<(P0, _1), HCons<_1, HNil>>
+    HC<(P0, _1), HC<_1, HN>>
 where
     P0: Tm<Pos>,
-    P0: Rule<Succ, Out = Rec>,
+    P0: Eval<Succ, Out = Rec>,
     Rec: Tm<Pos>,
 {
     type Out = (Rec, _1);
@@ -442,11 +442,11 @@ impl<
     P1,
     Rec,
 >
-    Rule<AddCarry>
+    Eval<AddCarry>
 for
-    HCons<(P0, _1), HCons<(P1, _0), HNil>>
+    HC<(P0, _1), HC<(P1, _0), HN>>
 where
-    HCons<P0, HCons<P1, HNil>>: Rule<AddCarry, Out = Rec>,
+    HC<P0, HC<P1, HN>>: Eval<AddCarry, Out = Rec>,
     P0: Tm<Pos>,
     P1: Tm<Pos>,
     Rec: Tm<Pos>,
@@ -460,11 +460,11 @@ impl<
     P1,
     Rec,
 >
-    Rule<AddCarry>
+    Eval<AddCarry>
 for
-    HCons<(P0, _1), HCons<(P1, _1), HNil>>
+    HC<(P0, _1), HC<(P1, _1), HN>>
 where
-    HCons<P0, HCons<P1, HNil>>: Rule<AddCarry, Out = Rec>,
+    HC<P0, HC<P1, HN>>: Eval<AddCarry, Out = Rec>,
     P0: Tm<Pos>,
     P1: Tm<Pos>,
     Rec: Tm<Pos>,
@@ -492,19 +492,19 @@ pub enum
 /// pred_carry(p) : Pos
 /// ```
 impl
-    Sig
+    Infer
 for
     PredDouble
 {
-    type Dom = Pos;
-    type Cod = Pos;
+    type Mode = infer::mode::Constant;
+    type Ty = Arr1<Pos, Pos>;
 }
 
 /// `pred_carry(1) => 1`
 impl
-    Rule<PredDouble>
+    Eval<PredDouble>
 for
-    _1
+    HC<_1, HN>
 {
     type Out = _1;
 }
@@ -514,11 +514,11 @@ impl<
     P,
     Rec,
 >
-    Rule<PredDouble>
+    Eval<PredDouble>
 for
-    (P, _0)
+    HC<(P, _0), HN>
 where
-    P: Rule<PredDouble, Out = Rec>,
+    P: Eval<PredDouble, Out = Rec>,
     P: Tm<Pos>,
     Rec: Tm<Pos>,
 {
@@ -529,9 +529,9 @@ where
 impl<
     P,
 >
-    Rule<PredDouble>
+    Eval<PredDouble>
 for
-    (P, _1)
+    HC<(P, _1), HN>
 where
     P: Tm<Pos>,
 {
@@ -559,19 +559,19 @@ pub enum
 /// pred(p) : Pos
 /// ```
 impl
-    Sig
+    Infer
 for
     Pred
 {
-    type Dom = Pos;
-    type Cod = Pos;
+    type Mode = infer::mode::Constant;
+    type Ty = Arr1<Pos, Pos>;
 }
 
 /// `pred(p:1) => p:0`
 impl
-    Rule<Pred>
+    Eval<Pred>
 for
-    _1
+    HC<_1, HN>
 {
     type Out = _1;
 }
@@ -581,11 +581,11 @@ impl<
     P,
     Rec,
 >
-    Rule<Pred>
+    Eval<Pred>
 for
-    (P, _0)
+    HC<(P, _0), HN>
 where
-    P: Rule<PredDouble, Out = Rec>,
+    P: Eval<PredDouble, Out = Rec>,
     P: Tm<Pos>,
     Rec: Tm<Pos>,
 {
@@ -596,9 +596,9 @@ where
 impl<
     P,
 >
-    Rule<Pred>
+    Eval<Pred>
 for
-    (P, _1)
+    HC<(P, _1), HN>
 where
     P: Tm<Pos>,
 {
@@ -627,21 +627,21 @@ pub enum
 /// mul(p, q) : Pos
 /// ```
 impl
-    Sig
+    Infer
 for
     Mul
 {
-    type Dom = HCons<Pos, HCons<Pos, HNil>>;
-    type Cod = Pos;
+    type Mode = infer::mode::Constant;
+    type Ty = Arr<HC<Pos, HC<Pos, HN>>, Pos>;
 }
 
 /// `mul(1, q) => q`
 impl<
     P1,
 >
-    Rule<Mul>
+    Eval<Mul>
 for
-    HCons<_1, HCons<P1, HNil>>
+    HC<_1, HC<P1, HN>>
 where
     P1: Tm<Pos>
 {
@@ -654,11 +654,11 @@ impl<
     P1,
     Rec,
 >
-    Rule<Mul>
+    Eval<Mul>
 for
-    HCons<(P0, _0), HCons<P1, HNil>>
+    HC<(P0, _0), HC<P1, HN>>
 where
-    HCons<P0, HCons<P1, HNil>>: Rule<Mul, Out = Rec>,
+    HC<P0, HC<P1, HN>>: Eval<Mul, Out = Rec>,
     P0: Tm<Pos>,
     P1: Tm<Pos>,
     Rec: Tm<Pos>,
@@ -673,12 +673,12 @@ impl<
     Rec0,
     Rec1,
 >
-    Rule<Mul>
+    Eval<Mul>
 for
-    HCons<(P0, _1), HCons<P1, HNil>>
+    HC<(P0, _1), HC<P1, HN>>
 where
-    HCons<P0, HCons<P1, HNil>>: Rule<Mul, Out = Rec0>,
-    HCons<P1, HCons<Rec0, HNil>>: Rule<Add, Out = Rec1>,
+    HC<P0, HC<P1, HN>>: Eval<Mul, Out = Rec0>,
+    HC<P1, HC<Rec0, HN>>: Eval<Add, Out = Rec1>,
     P0: Tm<Pos>,
     P1: Tm<Pos>,
     Rec0: Tm<Pos>,

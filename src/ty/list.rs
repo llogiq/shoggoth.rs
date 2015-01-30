@@ -1,9 +1,11 @@
 use hlist::*;
 use ty::{
-    Rule,
-    Sig,
+    Arr,
+    Eval,
+    Infer,
     Tm,
     Ty,
+    infer,
 };
 
 /// Type-level lists
@@ -46,7 +48,7 @@ impl<
 >
     Tm<List<A>>
 for
-    HNil
+    HN
 where
     A: Ty,
 {}
@@ -65,7 +67,7 @@ impl<
 >
     Tm<List<A>>
 for
-    HCons<H, T>
+    HC<H, T>
 where
     A: Ty,
     H: Tm<A>,
@@ -99,14 +101,14 @@ where
 impl<
     A,
 >
-    Sig
+    Infer
 for
     Append<A>
 where
     A: Ty,
 {
-    type Dom = HCons<List<A>, HCons<List<A>, HNil>>;
-    type Cod = List<A>;
+    type Mode = infer::mode::Constant;
+    type Ty = Arr<HC<List<A>, HC<List<A>, HN>>, List<A>>;
 }
 
 /// `append(nil, r) => r`
@@ -114,9 +116,9 @@ impl<
     A,
     R,
 >
-    Rule<Append<A>>
+    Eval<Append<A>>
 for
-    HCons<HNil, HCons<R, HNil>>
+    HC<HN, HC<R, HN>>
 where
     A: Ty,
     R: Tm<List<A>>,
@@ -132,16 +134,97 @@ impl<
     R,
     Rec,
 >
-    Rule<Append<A>>
+    Eval<Append<A>>
 for
-    HCons<HCons<LH, LT>, HCons<R, HNil>>
+    HC<HC<LH, LT>, HC<R, HN>>
 where
     A: Ty,
     LH: Tm<A>,
     LT: Tm<List<A>> + HList,
     R: Tm<List<A>>,
     Rec: Tm<List<A>>,
-    HCons<LT, HCons<R, HNil>>: Rule<Append<A>, Out = Rec>,
+    HC<LT, HC<R, HN>>: Eval<Append<A>, Out = Rec>,
 {
-    type Out = HCons<LH, Rec>;
+    type Out = HC<LH, Rec>;
+}
+
+
+
+// Type-level map for lists
+#[derive(Clone)]
+#[derive(Copy)]
+#[derive(Eq)]
+#[derive(Hash)]
+#[derive(Ord)]
+#[derive(PartialEq)]
+#[derive(PartialOrd)]
+#[derive(Show)]
+pub enum
+    Map<A, B>
+where
+    A: Ty,
+    B: Ty,
+{}
+
+impl<
+    A,
+    B,
+>
+    Infer
+for
+    Map<A, B>
+where
+    A: Ty,
+    B: Ty,
+{
+    type Mode = infer::mode::Constant;
+    type Ty = Arr<HC<Arr<HC<A, HN>, B>, HC<List<A>, HN>>, List<B>>;
+}
+
+// `map(fx, nil) => nil`
+impl<
+    A,
+    B,
+    Fx,
+>
+    Eval<Map<A, B>>
+for
+    HC<Fx, HC<Nil, HN>>
+where
+    A: Ty,
+    B: Ty,
+    Fx: Infer<Ty = Arr<HC<A, HN>, B>>,
+{
+    type Out = Nil;
+}
+
+// `map(fx, cons(h, t)) => cons(fx(h), map(f, t))`
+impl<
+    A,
+    B,
+    Fx,
+    H,
+    T,
+    Rec0,
+    Rec1,
+>
+    Eval<Map<A, B>>
+for
+    HC<Fx, HC<Cons<H, T>, HN>>
+where
+    A: Ty,
+    B: Ty,
+    Fx: Infer<Ty = Arr<HC<A, HN>, B>>,
+    H: Tm<A>,
+    T: HList,
+    T: Tm<List<A>>,
+
+    // fx(h) => r0
+    HC<H, HN>: Eval<Fx, Out = Rec0>,
+    // map(fx, t) => r1
+    HC<Fx, HC<T, HN>>: Eval<Map<A, B>, Out = Rec1>,
+    // cons(r0, r1) => out
+    Cons<Rec0, Rec1>: Tm<List<B>>,
+{
+    type Out = Cons<Rec0, Rec1>;
 }

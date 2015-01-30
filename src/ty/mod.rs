@@ -12,204 +12,72 @@ pub use self::bool::{
     Or,
     TT,
 };
-pub use self::fun::{
-    Act,
-    Arr,
-    Dep,
-    Eval,
-    Lower,
-    Rule,
-    Sig,
+pub use self::check::{
+    Tm,
+};
+pub use self::kind::{
+    Ty,
+};
+pub use self::hlist::{
+    Prefix,
+};
+pub use self::infer::{
+    Infer,
 };
 pub use self::list::{
     Append,
     List,
+    Map,
+};
+pub use self::op::{
+    Ap,
+    Ap1,
+    AppEval,
+    Arr,
+    Arr0,
+    Arr1,
+    Eval,
+    IsArr,
+    Thunk,
+};
+pub use self::star::{
+    Lift,
+    Lower,
+    Star,
 };
 pub use self::wit::{
     Wit,
 };
-pub use self::zipper::{
-    Get,
-    Left,
-    Put,
-    Right,
-    Unzip,
-    ZCons,
-    Zip,
-    Zipper,
-};
-use hlist::{
-    HCons,
-    HList,
-    HNil,
-};
+// pub use self::zipper::{
+//     Get,
+//     Left,
+//     Put,
+//     Right,
+//     Unzip,
+//     ZCons,
+//     Zip,
+//     Zipper,
+// };
 
 mod bit;
 mod bool;
-mod fun;
+mod check;
+mod hlist;
+mod kind;
 mod list;
+mod op;
+mod star;
 mod wit;
-mod zipper;
+// mod zipper;
+
+/// Type-level type-inferrable terms
+pub mod infer;
 
 /// Type-level binary integers
 pub mod int;
 
 /// Type-level natural numbers
 pub mod nat;
-
-/// Predicate classifying type-level "types"
-#[rustc_on_unimplemented = "`{Self}` is not a valid type-level type"]
-pub trait
-    Ty
-{}
-
-/// Predicate classifying "typed" type-level "terms"
-#[rustc_on_unimplemented = "`{Self}` is not a valid type-level term"]
-pub trait
-    Tm<A>
-where
-    A: Ty,
-{}
-
-/// Type-level type of normal Rust types
-pub enum
-    Star
-{}
-
-/// Normal Rust types lifted to terms as the type-level
-pub enum
-    Lift<A>
-{}
-
-trait
-    Rust
-{
-    type Out;
-}
-
-impl<
-    A,
->
-    Rust
-for
-    Lift<A>
-{
-    type Out = A;
-}
-
-/// ```ignore
-/// ----------
-/// Star :: Ty
-/// ```
-impl
-    Ty
-for
-    Star
-{}
-
-/// ```ignore
-/// ----------
-/// HNil :: Ty
-/// ```
-impl
-    Ty
-for
-    HNil
-{}
-
-/// ```ignore
-/// HTy :: Ty
-/// TTy :: HList
-/// TTy :: Ty
-/// ---------------------
-/// HCons<HTy, TTy> :: Ty
-/// ```
-impl<
-    HTy,
-    TTy,
->
-    Ty
-for
-    HCons<HTy, TTy>
-where
-    HTy: Ty,
-    TTy: HList + Ty,
-{}
-
-/// ```ignore
-/// A : Rust
-/// --------------
-/// Lift<A> : Star
-/// ```
-impl<
-    A,
->
-    Tm<Star>
-for
-    Lift<A>
-{}
-
-/// ```ignore
-/// -----------
-/// HNil : Star
-/// ```
-impl 
-    Tm<Star>
-for
-    HNil
-{}
-
-/// ```ignore
-/// HTm : Star
-/// TTm :: HList, TTm : Star
-/// ----------------------
-/// HCons<HTm, TTm> : Star
-/// ```
-impl<
-    HTm,
-    TTm,
->
-    Tm<Star>
-for
-    HCons<HTm, TTm>
-where
-    HTm: Tm<Star>,
-    TTm: Tm<Star> + HList,
-{}
-
-/// ```ignore
-/// -----------
-/// HNil : HNil
-/// ```
-impl
-    Tm<HNil>
-for
-    HNil
-{}
-
-/// ```ignore
-/// HTy :: Ty
-/// TTy :: HList, TTy :: Ty
-/// HTm : HTy
-/// TTm :: HList, TTm : TTy
-/// ---------------------------------
-/// HCons<HTm, TTm> : HCons<HTy, TTy>
-/// ```
-impl<
-    HTy,
-    TTy,
-    HTm,
-    TTm,
->
-    Tm<HCons<HTy, TTy>>
-for
-    HCons<HTm, TTm>
-where
-    HTy: Ty,
-    TTy: Ty + HList,
-    HTm: Tm<HTy>,
-    TTm: Tm<TTy> + HList,
-{}
 
 /// 0
 pub type     _0b = bit::_0;

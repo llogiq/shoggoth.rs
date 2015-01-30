@@ -4,10 +4,12 @@
 #![feature(on_unimplemented)]
 
 pub use self::hlist::{
-    HCons,
+    Cons,
+    HC,
     HList,
-    HNil,
-    IsHCons,
+    HN,
+    IsCons,
+    Nil,
 };
 pub use self::product::{
     ProductOps,

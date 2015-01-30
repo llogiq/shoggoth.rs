@@ -14,12 +14,12 @@ pub trait
 #[derive(Rand)]
 #[derive(Show)]
 pub struct
-    HNil;
+    Nil;
 
 impl
     HList
 for
-    HNil
+    Nil
 {}
 
 /// Cons heterogeneous list
@@ -33,7 +33,7 @@ for
 #[derive(Rand)]
 #[derive(Show)]
 pub struct
-    HCons<H, T>
+    Cons<H, T>
 where
     T: HList
 {
@@ -44,7 +44,7 @@ where
 impl<H, T>
     HList
 for
-    HCons<H, T>
+    Cons<H, T>
 where
     T: HList
 {}
@@ -52,7 +52,7 @@ where
 /// `HList` predicate implemented when `Self` is heterogeneous cons
 #[rustc_on_unimplemented = "`{Self}` is not a heterogeneous cons"]
 pub trait
-    IsHCons
+    IsCons
 where
     Self: HList,
 {
@@ -70,9 +70,9 @@ impl<
     H,
     T,
 >
-    IsHCons
+    IsCons
 for
-    HCons<H, T>
+    Cons<H, T>
 where
     T: HList,
 {
@@ -89,3 +89,45 @@ where
         self.tail
     }
 }
+
+pub trait
+    Snoc<H>
+where
+    Self: HList,
+{
+    type Out: HList;
+}
+
+impl<
+    X,
+>
+    Snoc<X>
+for
+    Nil
+{
+    type Out = Cons<X, Nil>;
+}
+
+impl<
+    H,
+    T,
+    X,
+>
+    Snoc<X>
+for
+    Cons<H, T>
+where
+    T: HList,
+    T: Snoc<X>,
+{
+    type Out = Cons<H, <T as Snoc<X>>::Out>;
+}
+
+/// Convenience alias for heterogeneous nil
+pub type HN = Nil;
+
+/// Convenience alias for heterogeneous cons
+pub type HC<H, T> = Cons<H, T>;
+
+/// Convenience alias for heterogeneous snoc
+pub type HS<T, H> = <T as Snoc<H>>::Out;
