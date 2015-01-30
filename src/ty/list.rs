@@ -24,7 +24,7 @@ where
 /// ```ignore
 /// A :: Ty
 /// -------------
-/// List[A] :: Ty
+/// List<A> :: Ty
 /// ```
 impl<
     A,
@@ -39,7 +39,7 @@ where
 /// ```ignore
 /// A :: Ty
 /// -------------
-/// nil : List[A]
+/// nil : List<A>
 /// ```
 impl<
     A,
@@ -54,9 +54,9 @@ where
 /// ```ignore
 /// A :: Ty
 /// h : A
-/// t : List[A]
+/// t : List<A>
 /// --------------------
-/// cons(h, t) : List[A]
+/// cons(h, t) : List<A>
 /// ```
 impl<
     A,
@@ -91,10 +91,10 @@ where
 
 /// ```ignore
 /// A :: Ty
-/// l : List[A]
-/// r : List[A]
+/// l : List<A>
+/// r : List<A>
 /// ----------------------
-/// append(l, r) : List[A]
+/// append(l, r) : List<A>
 /// ```
 impl<
     A,

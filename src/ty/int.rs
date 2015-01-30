@@ -1,14 +1,17 @@
+use hlist::*;
 use ty::{
-    Rule,
-    Sig,
+    Arr1,
+    Eval,
+    Infer,
     Tm,
     Ty,
+    infer
 };
-use ty::nat::pos;
 use ty::bit::{
     _0,
     _1,
 };
+use ty::nat::pos;
 
 /// Type-level integers
 #[derive(Clone)]
@@ -104,7 +107,7 @@ where
 
 /// Type-level doubling for binary integers:
 /// ```ignore
-/// λx:int. 2 * x
+/// λx : Int. 2 * x
 /// ```
 #[derive(Clone)]
 #[derive(Copy)]
@@ -124,43 +127,43 @@ pub enum
 /// double(i) : Int
 /// ```
 impl
-    Sig
+    Infer
 for
     Double
 {
-    type Dom = Int;
-    type Cod = Int;
+    type Mode = infer::mode::Constant;
+    type Ty = Arr1<Int, Int>;
 }
 
-/// `double(0) => 0`
+/// `double(0) ==> 0`
 impl
-    Rule<Double>
+    Eval<Double>
 for
-    _0
+    HC<_0, HN>
 {
     type Out = _0;
 }
 
-/// `double(-p) => -(p:0)`
+/// `double(-p) ==> -(p:0)`
 impl<
     P,
 >
-    Rule<Double>
+    Eval<Double>
 for
-    Zn<P>
+    HC<Zn<P>, HN>
 where
     P: Tm<pos::Pos>,
 {
     type Out = Zn<(P, _0)>;
 }
 
-/// `double(+p) => +(p:0)`
+/// `double(+p) ==> +(p:0)`
 impl<
     P,
 >
-    Rule<Double>
+    Eval<Double>
 for
-    Zp<P>
+    HC<Zp<P>, HN>
 where
     P: Tm<pos::Pos>,
 {
@@ -171,7 +174,7 @@ where
 
 /// Type-level doubling with successor for binary integers:
 /// ```ignore
-/// λx:int. 2 * x + 1
+/// λx : Int. 2 * x + 1
 /// ```
 #[derive(Clone)]
 #[derive(Copy)]
@@ -191,46 +194,46 @@ pub enum
 /// succ_double(i) : Int
 /// ```
 impl
-    Sig
+    Infer
 for
     SuccDouble
 {
-    type Dom = Int;
-    type Cod = Int;
+    type Mode = infer::mode::Constant;
+    type Ty = Arr1<Int, Int>;
 }
 
-/// `succ_double(0) => 1`
+/// `succ_double(0) ==> 1`
 impl
-    Rule<SuccDouble>
+    Eval<SuccDouble>
 for
-    _0
+    HC<_0, HN>
 {
     type Out = Zp<_1>;
 }
 
-/// `succ_double[int](-p) => -(pred_double[pos](p))`
+/// `succ_double[Int](-p) ==> -(pred_double[Pos](p))`
 impl<
     P,
     Rec,
 >
-    Rule<SuccDouble>
+    Eval<SuccDouble>
 for
-    Zn<P>
+    HC<Zn<P>, HN>
 where
-    P: Rule<pos::PredDouble, Out = Rec>,
+    P: Eval<pos::PredDouble, Out = Rec>,
     P: Tm<pos::Pos>,
     Rec: Tm<pos::Pos>,
 {
     type Out = Zn<Rec>;
 }
 
-/// `succ_double(+p) => +(p:1)`
+/// `succ_double(+p) ==> +(p:1)`
 impl<
     P,
 >
-    Rule<SuccDouble>
+    Eval<SuccDouble>
 for
-    Zp<P>
+    HC<Zp<P>, HN>
 where
     P: Tm<pos::Pos>,
 {
@@ -241,7 +244,7 @@ where
 
 /// Type-level doubling with predecessor for binary integers:
 /// ```ignore
-/// λx:int. 2 * x - 1
+/// λx : Int. 2 * x - 1
 /// ```
 #[derive(Clone)]
 #[derive(Copy)]
@@ -261,46 +264,46 @@ pub enum
 /// pred_double(i) : Int
 /// ```
 impl
-    Sig
+    Infer
 for
     PredDouble
 {
-    type Dom = Int;
-    type Cod = Int;
+    type Mode = infer::mode::Constant;
+    type Ty = Arr1<Int, Int>;
 }
 
-/// `pred_double(0) => -1`
+/// `pred_double(0) ==> -1`
 impl
-    Rule<PredDouble>
+    Eval<PredDouble>
 for
-    _0
+    HC<_0, HN>
 {
     type Out = Zn<_1>;
 }
 
-/// `pred_double(-p) => -(p:1)`
+/// `pred_double(-p) ==> -(p:1)`
 impl<
     P,
 >
-    Rule<PredDouble>
+    Eval<PredDouble>
 for
-    Zn<P>
+    HC<Zn<P>, HN>
 where
     P: Tm<pos::Pos>,
 {
     type Out = Zn<(P, _1)>;
 }
 
-/// `pred_double[int](+p) => +(pred_double[pos](p))`
+/// `pred_double<Int>(+p) ==> +(pred_double<Pos>(p))`
 impl<
     P,
     Rec,
 >
-    Rule<PredDouble>
+    Eval<PredDouble>
 for
-    Zp<P>
+    HC<Zp<P>, HN>
 where
-    P: Rule<pos::PredDouble, Out = Rec>,
+    P: Eval<pos::PredDouble, Out = Rec>,
     P: Tm<pos::Pos>,
     Rec: Tm<pos::Pos>,
 {

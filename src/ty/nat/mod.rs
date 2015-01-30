@@ -93,7 +93,7 @@ for
     type Cod = Nat;
 }
 
-/// `succ(0) => 1`
+/// `succ(0) ==> 1`
 impl
     Rule<Succ>
 for
@@ -102,7 +102,7 @@ for
     type Out = _1;
 }
 
-/// `succ[nat](p) => succ[pos](p)`
+/// `succ<Nat>(p) ==> succ<Pos>(p)`
 impl<
     Rec,
     P,
@@ -148,7 +148,7 @@ for
     type Cod = Nat;
 }
 
-/// `add(0, n) => n`
+/// `add(0, n) ==> n`
 impl<
     P1,
 >
@@ -161,7 +161,7 @@ where
     type Out = P1;
 }
 
-/// `add(m, 0) => m`
+/// `add(m, 0) ==> m`
 impl<
     P0,
 >
@@ -174,7 +174,7 @@ where
     type Out = P0;
 }
 
-/// `add[nat](p, q) => add[pos](p, q)`
+/// `add<Nat>(p, q) ==> add<Pos>(p, q)`
 impl<
     P0,
     P1,
@@ -222,7 +222,7 @@ for
     type Cod = Nat;
 }
 
-/// `mul(0, n) => 0`
+/// `mul(0, n) ==> 0`
 impl<
     P1,
 >
@@ -235,7 +235,7 @@ where
     type Out = _0;
 }
 
-/// `mul(m, 0) => 0`
+/// `mul(m, 0) ==> 0`
 impl<
     P0,
 >
@@ -248,7 +248,7 @@ where
     type Out = _0;
 }
 
-/// `mul[nat](p, q) => mul[pos](p, q)`
+/// `mul<Nat>(p, q) ==> mul<Pos>(p, q)`
 impl<
     P0,
     P1,

@@ -18,7 +18,7 @@ where
 /// ```ignore
 /// A :: Ty
 /// ---------------
-/// Zipper[A] :: Ty
+/// Zipper<A> :: Ty
 /// ```
 impl<
     A,
@@ -38,10 +38,10 @@ pub struct
 
 /// ```ignore
 /// A :: Ty
-/// l : List[A]
-/// r : List[A]
+/// l : List<A>
+/// r : List<A>
 /// -----------------------
-/// zcons(l, r) : Zipper[A]
+/// zcons(l, r) : Zipper<A>
 /// ```
 impl<
     A,
@@ -68,9 +68,9 @@ where
 
 /// ```ignore
 /// A :: Ty
-/// xs : List[A]
+/// xs : List<A>
 /// -------------------
-/// zip(xs) : Zipper[A]
+/// zip(xs) : Zipper<A>
 /// ```
 impl<
     A,
@@ -85,7 +85,7 @@ where
     type Cod = Zipper<A>;
 }
 
-/// `zip(xs) => zcons(nil, xs)`
+/// `zip(xs) ==> zcons(nil, xs)`
 impl<
     A,
     XS,
@@ -111,9 +111,9 @@ where
 
 /// ```ignore
 /// A :: Ty
-/// zs : Zipper[A]
+/// zs : Zipper<A>
 /// -------------------
-/// unzip(zs) : List[A]
+/// unzip(zs) : List<A>
 /// ```
 impl<
     A,
@@ -128,7 +128,7 @@ where
     type Cod = List<A>;
 }
 
-/// `unzip(zcons(l, r)) => append(l, r)`
+/// `unzip(zcons(l, r)) ==> append(l, r)`
 impl<
     A,
     L,
@@ -159,9 +159,9 @@ where
 
 /// ```ignore
 /// A :: Ty
-/// zs : Zipper[A]
+/// zs : Zipper<A>
 /// ---------------------
-/// right(zs) : Zipper[A]
+/// right(zs) : Zipper<A>
 /// ```
 impl<
     A,
@@ -176,7 +176,7 @@ where
     type Cod = Zipper<A>;
 }
 
-/// `right(zcons(l, cons(rh, rt))) => zcons(cons(rh, l), rt)`
+/// `right(zcons(l, cons(rh, rt))) ==> zcons(cons(rh, l), rt)`
 impl<
     A,
     L,
@@ -206,9 +206,9 @@ where
 
 /// ```ignore
 /// A :: Ty
-/// zs : Zipper[A]
+/// zs : Zipper<A>
 /// --------------------
-/// left(zs) : Zipper[A]
+/// left(zs) : Zipper<A>
 /// ```
 impl<
     A,
@@ -223,7 +223,7 @@ where
     type Cod = Zipper<A>;
 }
 
-/// `left(zcons(cons(lh, lt), r)) => zcons(lt, cons(lh, r))`
+/// `left(zcons(cons(lh, lt), r)) ==> zcons(lt, cons(lh, r))`
 impl<
     A,
     LH,
@@ -253,7 +253,7 @@ where
 
 /// ```ignore
 /// A :: Ty
-/// zs : Zipper[A]
+/// zs : Zipper<A>
 /// -----------
 /// get(zs) : A
 /// ```
@@ -270,7 +270,7 @@ where
     type Cod = A;
 }
 
-/// `get(zcons(l, cons(rh, rt))) => rh`
+/// `get(zcons(l, cons(rh, rt))) ==> rh`
 impl<
     A,
     L,
@@ -300,10 +300,10 @@ where
 
 /// ```ignore
 /// A :: Ty
-/// zs : Zipper[A]
+/// zs : Zipper<A>
 /// e : A
 /// ----------------------
-/// put(zs, e) : Zipper[A]
+/// put(zs, e) : Zipper<A>
 /// ```
 impl<
     A,
@@ -318,7 +318,7 @@ where
     type Cod = Zipper<A>;
 }
 
-/// `put(zcons(l, cons(rh, rt)), e) => zcons(l, cons(e, rt))`
+/// `put(zcons(l, cons(rh, rt)), e) ==> zcons(l, cons(e, rt))`
 impl<
     A,
     E,

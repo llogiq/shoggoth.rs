@@ -91,9 +91,9 @@ pub enum
 {}
 
 /// ```ignore
-/// p : Bool
+/// b : Bool
 /// -------------
-/// not(p) : Bool
+/// not(b) : Bool
 /// ```
 impl
     Sig
@@ -104,7 +104,7 @@ for
     type Cod = Bool;
 }
 
-/// `not(ff) => tt`
+/// `not(ff) ==> tt`
 impl
     Rule<Not>
 for
@@ -113,7 +113,7 @@ for
     type Out = TT;
 }
 
-/// `not(tt) => ff`
+/// `not(tt) ==> ff`
 impl
     Rule<Not>
 for
@@ -138,10 +138,10 @@ pub enum
 {}
 
 /// ```ignore
-/// p : Bool
-/// q : Bool
-/// ----------------
-/// and(p, q) : Bool
+/// b0 : Bool
+/// b1 : Bool
+/// ------------------
+/// and(b0, b1) : Bool
 /// ```
 impl
     Sig
@@ -152,7 +152,7 @@ for
     type Cod = Bool;
 }
 
-/// `and(ff, q) => ff`
+/// `and(ff, b1) ==> ff`
 impl<
     B,
 >
@@ -165,7 +165,7 @@ where
     type Out = FF;
 }
 
-/// `and(tt, q) => q`
+/// `and(tt, b1) ==> b1`
 impl<
     B,
 >
@@ -194,10 +194,10 @@ pub enum
 #[derive(Show)]
 
 /// ```ignore
-/// p : Bool
-/// q : Bool
-/// ---------------
-/// or(p, q) : Bool
+/// b0 : Bool
+/// b1 : Bool
+/// -----------------
+/// or(b0, b1) : Bool
 /// ```
 impl
     Sig
@@ -208,7 +208,7 @@ for
     type Cod = Bool;
 }
 
-/// `or(ff, q) => q`
+/// `or(ff, b1) ==> b1`
 impl<
     B,
 >
@@ -221,7 +221,7 @@ where
     type Out = B;
 }
 
-/// `or(tt, q) => tt`
+/// `or(tt, b1) ==> tt`
 impl<
     B,
 >
@@ -254,10 +254,10 @@ where
 /// ```ignore
 /// A :: Ty
 /// b : Bool
-/// xt : A
-/// xf : A
-/// ------------------
-/// if(b, xt, xf) : A
+/// m0 : A
+/// m1 : A
+/// -----------------
+/// if(b, m0, m1) : A
 /// ```
 impl<
     A,
@@ -272,7 +272,7 @@ where
     type Cod = A;
 }
 
-/// `if(ff, xt, xf) => xf`
+/// `if(ff, m0, m1) ==> m1`
 impl<
     A,
     B0,
@@ -289,7 +289,7 @@ where
     type Out = B1;
 }
 
-/// `if(tt, xt, xf) => xt`
+/// `if(tt, m0, m1) ==> m0`
 impl<
     A,
     B0,
