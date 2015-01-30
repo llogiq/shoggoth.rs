@@ -1,4 +1,5 @@
 /// Predicate classifying Infer modes
+#[rustc_on_unimplemented = "`{Self}` is not a valid Infer mode"]
 pub trait
     Mode
 {}
