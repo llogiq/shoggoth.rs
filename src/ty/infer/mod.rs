@@ -1,6 +1,6 @@
 use hlist::*;
 use ty::{
-    Arrow,
+    Ar,
     Tm,
     Ty,
 };
@@ -22,11 +22,11 @@ impl<
     D,
     M,
 >
-    Tm<Arrow<D, C>>
+    Tm<Ar<D, C>>
 for
     M
 where
     C: Ty,
     D: HList + Ty,
-    M: Infer<Ty = Arrow<D, C>>,
+    M: Infer<Ty = Ar<D, C>>,
 {}

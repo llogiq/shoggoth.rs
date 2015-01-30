@@ -3,8 +3,8 @@ use self::pos::{
     Pos,
 };
 use ty::{
-    Arrow,
-    Arrow1,
+    Ar,
+    Ar1,
     Eval,
     Infer,
     Tm,
@@ -93,7 +93,7 @@ for
     Succ
 {
     type Mode = infer::mode::Constant;
-    type Ty = Arrow1<Nat, Nat>;
+    type Ty = Ar1<Nat, Nat>;
 }
 
 /// `succ(0) ==> 1`
@@ -148,7 +148,7 @@ for
     Add
 {
     type Mode = infer::mode::Constant;
-    type Ty = Arrow<HC<Nat, HC<Nat, HN>>, Nat>;
+    type Ty = Ar<HC<Nat, HC<Nat, HN>>, Nat>;
 }
 
 /// `add(0, n) ==> n`
@@ -222,7 +222,7 @@ for
     Mul
 {
     type Mode = infer::mode::Constant;
-    type Ty = Arrow<HC<Nat, HC<Nat, HN>>, Nat>;
+    type Ty = Ar<HC<Nat, HC<Nat, HN>>, Nat>;
 }
 
 /// `mul(0, n) ==> 0`

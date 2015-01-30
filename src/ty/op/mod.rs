@@ -74,11 +74,14 @@ where
     type Cod = C;
 }
 
+/// Alias for arrow types with an n-ary domain
+pub type Ar<D, C> = Arrow<D, C>;
+
 /// Alias for arrow types with a nullary domain
-pub type Arrow0 <C> = Arrow<HN, C>;
+pub type Ar0<C> = Ar<HN, C>;
 
 /// Alias for arrow types with a unary domain
-pub type Arrow1<D, C> = Arrow<HC<D, HN>, C>;
+pub type Ar1<D, C> = Ar<HC<D, HN>, C>;
 
 /// Alias for partially applying terms of arrow types to many
 /// arguments

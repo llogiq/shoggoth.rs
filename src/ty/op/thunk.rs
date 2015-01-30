@@ -5,7 +5,7 @@ use ty::{
     infer,
 };
 use ty::op::{
-    Arrow,
+    Ar,
     IsArrow,
 };
 
@@ -48,7 +48,7 @@ where
 {
     type Mode = infer::mode::Thunk;
     type Ty =
-        Arrow<
+        Ar<
             <Xs as TmPrefix<
                 <<Fx as Infer>::Ty as IsArrow>::Dom>
             >::Out,

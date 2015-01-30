@@ -1,6 +1,6 @@
 use hlist::*;
 use ty::{
-    Arrow,
+    Ar,
     Eval,
     Infer,
     Tm,
@@ -108,7 +108,7 @@ where
     A: Ty,
 {
     type Mode = infer::mode::Constant;
-    type Ty = Arrow<HC<List<A>, HC<List<A>, HN>>, List<A>>;
+    type Ty = Ar<HC<List<A>, HC<List<A>, HN>>, List<A>>;
 }
 
 /// `append(nil, r) => r`
@@ -178,7 +178,7 @@ where
     B: Ty,
 {
     type Mode = infer::mode::Constant;
-    type Ty = Arrow<HC<Arrow<HC<A, HN>, B>, HC<List<A>, HN>>, List<B>>;
+    type Ty = Ar<HC<Ar<HC<A, HN>, B>, HC<List<A>, HN>>, List<B>>;
 }
 
 // `map(fx, nil) => nil`
@@ -193,7 +193,7 @@ for
 where
     A: Ty,
     B: Ty,
-    Fx: Infer<Ty = Arrow<HC<A, HN>, B>>,
+    Fx: Infer<Ty = Ar<HC<A, HN>, B>>,
 {
     type Out = Nil;
 }
@@ -214,7 +214,7 @@ for
 where
     A: Ty,
     B: Ty,
-    Fx: Infer<Ty = Arrow<HC<A, HN>, B>>,
+    Fx: Infer<Ty = Ar<HC<A, HN>, B>>,
     H: Tm<A>,
     T: HList,
     T: Tm<List<A>>,

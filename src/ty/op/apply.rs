@@ -6,7 +6,7 @@ use ty::{
     infer,
 };
 use ty::op::{
-    Arrow,
+    Ar,
     Eval,
     IsArrow,
     Thunk,
@@ -54,7 +54,7 @@ where
     >,
     Args: TmPrefix<CxDTy>,
     Args: HList,
-    Cx: Infer<Ty = Arrow<CxDTy, CxCTy>>,
+    Cx: Infer<Ty = Ar<CxDTy, CxCTy>>,
     CxCTy: Ty,
     CxDTy: HList,
     CxDTy: Ty,
@@ -83,10 +83,10 @@ impl<
 for
     HN
 where
-    Fx: Infer<Ty = Arrow<FxDTy, TxCTy>>,
+    Fx: Infer<Ty = Ar<FxDTy, TxCTy>>,
     FxDTy: HList,
     FxDTy: Ty,
-    Thunk<Fx, Xs>: Infer<Ty = Arrow<HN, TxCTy>>,
+    Thunk<Fx, Xs>: Infer<Ty = Ar<HN, TxCTy>>,
     TxCTy: Ty,
     Xs: Eval<Fx>,
     Xs: HList,
@@ -109,7 +109,7 @@ impl<
 for
     HN
 where
-    Tx: Infer<Ty = Arrow<HC<TxDHTy, TxDTTy>, TxCTy>>,
+    Tx: Infer<Ty = Ar<HC<TxDHTy, TxDTTy>, TxCTy>>,
     TxCTy: Ty,
     TxDHTy: Ty,
     TxDTTy: HList,
@@ -143,7 +143,7 @@ where
         Thunk<Fx, HS<Xs, ArgsHTm>>
     >,
     ArgsTTm: HList,
-    Fx: Infer<Ty = Arrow<HC<FxDHTy, FxDTTy>, TxCTy>>,
+    Fx: Infer<Ty = Ar<HC<FxDHTy, FxDTTy>, TxCTy>>,
     FxDHTy: Ty,
     FxDTTy: HList,
     FxDTTy: Ty,

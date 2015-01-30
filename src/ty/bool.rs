@@ -1,7 +1,7 @@
 use hlist::*;
 use ty::{
-    Arrow,
-    Arrow1,
+    Ar,
+    Ar1,
     Eval,
     Infer,
     Tm,
@@ -104,7 +104,7 @@ for
     Not
 {
     type Mode = infer::mode::Constant;
-    type Ty = Arrow1<Bool, Bool>;
+    type Ty = Ar1<Bool, Bool>;
 }
 
 /// `not(ff) ==> tt`
@@ -152,7 +152,7 @@ for
     And
 {
     type Mode = infer::mode::Constant;
-    type Ty = Arrow<HC<Bool, HC<Bool, HN>>, Bool>;
+    type Ty = Ar<HC<Bool, HC<Bool, HN>>, Bool>;
 }
 
 /// `and(ff, b1) ==> ff`
@@ -208,7 +208,7 @@ for
     Or
 {
     type Mode = infer::mode::Constant;
-    type Ty = Arrow<HC<Bool, HC<Bool, HN>>, Bool>;
+    type Ty = Ar<HC<Bool, HC<Bool, HN>>, Bool>;
 }
 
 /// `or(ff, b1) ==> b1`
@@ -272,7 +272,7 @@ where
     A: Ty,
 {
     type Mode = infer::mode::Constant;
-    type Ty = Arrow<HC<Bool, HC<A, HC<A, HN>>>, A>;
+    type Ty = Ar<HC<Bool, HC<A, HC<A, HN>>>, A>;
 }
 
 /// `if(ff, m0, m1) ==> m1`
