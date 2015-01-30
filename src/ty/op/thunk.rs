@@ -1,7 +1,7 @@
 use hlist::*;
 use ty::{
     Infer,
-    Prefix,
+    TmPrefix,
     infer,
 };
 use ty::op::{
@@ -24,7 +24,7 @@ where
     <Fx as Infer>::Ty: IsArrow,
     Fx: Infer,
     Xs: HList,
-    Xs: Prefix<
+    Xs: TmPrefix<
         <<Fx as Infer>::Ty as IsArrow>::Dom
     >,
 {}
@@ -38,18 +38,18 @@ for
     Thunk<Fx, Xs>
 where
     <Fx as Infer>::Ty: IsArrow,
-    <Xs as Prefix<
+    <Xs as TmPrefix<
         <<Fx as Infer>::Ty as IsArrow>::Dom>
     >::Out: HList,
     Fx: Infer,
-    Xs: Prefix<
+    Xs: TmPrefix<
         <<Fx as Infer>::Ty as IsArrow>::Dom
     >,
 {
     type Mode = infer::mode::Thunk;
     type Ty =
         Arrow<
-            <Xs as Prefix<
+            <Xs as TmPrefix<
                 <<Fx as Infer>::Ty as IsArrow>::Dom>
             >::Out,
                 <<Fx as Infer>::Ty as IsArrow>::Cod,

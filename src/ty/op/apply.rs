@@ -1,7 +1,7 @@
 use hlist::*;
 use ty::{
     Infer,
-    Prefix,
+    TmPrefix,
     Ty,
     infer,
 };
@@ -24,7 +24,7 @@ where
     <Fx as Infer>::Ty: IsArrow<Dom = FxDTy>,
     Fx: Infer,
     M: infer::mode::Mode,
-    Self: Prefix<
+    Self: TmPrefix<
         <<Fx as Infer>::Ty as IsArrow>::Dom
     >,
     Self: HList,
@@ -52,7 +52,7 @@ where
         CxDTy,
         Thunk<Cx, HN>
     >,
-    Args: Prefix<CxDTy>,
+    Args: TmPrefix<CxDTy>,
     Args: HList,
     Cx: Infer<Ty = Arrow<CxDTy, CxCTy>>,
     CxCTy: Ty,
@@ -90,7 +90,7 @@ where
     TxCTy: Ty,
     Xs: Eval<Fx>,
     Xs: HList,
-    Xs: Prefix<FxDTy, Out = HN>,
+    Xs: TmPrefix<FxDTy, Out = HN>,
 {
     type Out = <Xs as Eval<Fx>>::Out;
 }
@@ -147,13 +147,13 @@ where
     FxDHTy: Ty,
     FxDTTy: HList,
     FxDTTy: Ty,
-    HC<ArgsHTm, ArgsTTm>: Prefix<HC<TxDHTy, TxDTTy>>,
+    HC<ArgsHTm, ArgsTTm>: TmPrefix<HC<TxDHTy, TxDTTy>>,
     TxCTy: Ty,
     TxDHTy: Ty,
     TxDTTy: HList,
     TxDTTy: Ty,
     Xs: HList,
-    Xs: Prefix<HC<FxDHTy, FxDTTy>, Out = HC<TxDHTy, TxDTTy>>,
+    Xs: TmPrefix<HC<FxDHTy, FxDTTy>, Out = HC<TxDHTy, TxDTTy>>,
     Xs: Snoc<ArgsHTm>,
 {
     type Out =

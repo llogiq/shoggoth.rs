@@ -19,7 +19,7 @@ pub use self::kind::{
     Ty,
 };
 pub use self::hlist::{
-    Prefix,
+    TmPrefix,
 };
 pub use self::infer::{
     Infer,
