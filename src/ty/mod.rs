@@ -49,16 +49,16 @@ pub use self::star::{
 pub use self::witness::{
     Witness,
 };
-// pub use self::zipper::{
-//     Get,
-//     Left,
-//     Put,
-//     Right,
-//     Unzip,
-//     ZCons,
-//     Zip,
-//     Zipper,
-// };
+pub use self::zipper::{
+    Get,
+    Left,
+    Put,
+    Right,
+    Unzip,
+    ZCons,
+    Zip,
+    Zipper,
+};
 
 mod bit;
 mod bool;
@@ -69,7 +69,7 @@ mod list;
 mod op;
 mod star;
 mod witness;
-// mod zipper;
+mod zipper;
 
 /// Type-level type-inferrable terms
 pub mod infer;

@@ -1,14 +1,26 @@
 use hlist::*;
 use ty::{
+    Ar,
+    Ar1,
+    Eval,
+    Infer,
     Tm,
     Ty,
+    infer,
 };
-use ty::fun::*;
 use ty::list::*;
 
 
 
 /// Type-level zippers for lists
+#[derive(Clone)]
+#[derive(Copy)]
+#[derive(Eq)]
+#[derive(Hash)]
+#[derive(Ord)]
+#[derive(PartialEq)]
+#[derive(PartialOrd)]
+#[derive(Show)]
 pub enum
     Zipper<A>
 where
@@ -33,8 +45,20 @@ where
 
 
 /// Zipper constructor
+#[derive(Clone)]
+#[derive(Copy)]
+#[derive(Eq)]
+#[derive(Hash)]
+#[derive(Ord)]
+#[derive(PartialEq)]
+#[derive(PartialOrd)]
+#[derive(Rand)]
+#[derive(Show)]
 pub struct
-    ZCons<L, R>(L, R);
+    ZCons<LS, RS>(LS, RS)
+where
+    LS: HList,
+    RS: HList;
 
 /// ```ignore
 /// A :: Ty
@@ -53,13 +77,23 @@ for
     ZCons<L, R>
 where
     A: Ty,
+    L: HList,
     L: Tm<List<A>>,
+    R: HList,
     R: Tm<List<A>>,
 {}
 
 
 
 /// Type-level list to zipper
+#[derive(Clone)]
+#[derive(Copy)]
+#[derive(Eq)]
+#[derive(Hash)]
+#[derive(Ord)]
+#[derive(PartialEq)]
+#[derive(PartialOrd)]
+#[derive(Show)]
 pub enum
     Zip<A>
 where
@@ -75,14 +109,14 @@ where
 impl<
     A,
 >
-    Sig
+    Infer
 for
     Zip<A>
 where
     A: Ty,
 {
-    type Dom = List<A>;
-    type Cod = Zipper<A>;
+    type Mode = infer::mode::Constant;
+    type Ty   = Ar1<List<A>, Zipper<A>>;
 }
 
 /// `zip(xs) ==> zcons(nil, xs)`
@@ -90,19 +124,28 @@ impl<
     A,
     XS,
 >
-    Rule<Zip<A>>
+    Eval<Zip<A>>
 for
-    XS
+    HC<XS, HN>
 where
     A: Ty,
+    XS: HList,
     XS: Tm<List<A>>,
 {
-    type Out = ZCons<HNil, XS>;
+    type Out = ZCons<HN, XS>;
 }
 
 
 
 /// Type-level zipper to list
+#[derive(Clone)]
+#[derive(Copy)]
+#[derive(Eq)]
+#[derive(Hash)]
+#[derive(Ord)]
+#[derive(PartialEq)]
+#[derive(PartialOrd)]
+#[derive(Show)]
 pub enum
     Unzip<A>
 where
@@ -118,14 +161,14 @@ where
 impl<
     A,
 >
-    Sig
+    Infer
 for
     Unzip<A>
 where
     A: Ty,
 {
-    type Dom = Zipper<A>;
-    type Cod = List<A>;
+    type Mode = infer::mode::Constant;
+    type Ty = Ar1<Zipper<A>, List<A>>;
 }
 
 /// `unzip(zcons(l, r)) ==> append(l, r)`
@@ -135,14 +178,16 @@ impl<
     Rec,
     YS,
 >
-    Rule<Unzip<A>>
+    Eval<Unzip<A>>
 for
-    ZCons<L, YS>
+    HC<ZCons<L, YS>, HN>
 where
     A: Ty,
-    HCons<L, HCons<YS, HNil>>: Rule<Append<A>, Out = Rec>,
+    HC<L, HC<YS, HN>>: Eval<Append<A>, Out = Rec>,
+    L: HList,
     L: Tm<List<A>>,
     Rec: Tm<List<A>>,
+    YS: HList,
     YS: Tm<List<A>>,
 {
     type Out = Rec;
@@ -151,6 +196,14 @@ where
 
 
 /// Type-level move right for zipper
+#[derive(Clone)]
+#[derive(Copy)]
+#[derive(Eq)]
+#[derive(Hash)]
+#[derive(Ord)]
+#[derive(PartialEq)]
+#[derive(PartialOrd)]
+#[derive(Show)]
 pub enum
     Right<A>
 where
@@ -166,14 +219,14 @@ where
 impl<
     A,
 >
-    Sig
+    Infer
 for
     Right<A>
 where
     A: Ty,
 {
-    type Dom = Zipper<A>;
-    type Cod = Zipper<A>;
+    type Mode = infer::mode::Constant;
+    type Ty = Ar1<Zipper<A>, Zipper<A>>;
 }
 
 /// `right(zcons(l, cons(rh, rt))) ==> zcons(cons(rh, l), rt)`
@@ -183,21 +236,31 @@ impl<
     RH,
     RT,
 >
-    Rule<Right<A>>
+    Eval<Right<A>>
 for
-    ZCons<L, HCons<RH, RT>>
+    HC<ZCons<L, HC<RH, RT>>, HN>
 where
     A: Ty,
+    L: HList,
     L: Tm<List<A>>,
     RH: Tm<A>,
-    RT: Tm<List<A>> + HList,
+    RT: HList,
+    RT: Tm<List<A>>,
 {
-    type Out = ZCons<HCons<RH, L>, RT>;
+    type Out = ZCons<HC<RH, L>, RT>;
 }
 
 
 
 /// Type-level move left for zipper
+#[derive(Clone)]
+#[derive(Copy)]
+#[derive(Eq)]
+#[derive(Hash)]
+#[derive(Ord)]
+#[derive(PartialEq)]
+#[derive(PartialOrd)]
+#[derive(Show)]
 pub enum
     Left<A>
 where
@@ -213,14 +276,14 @@ where
 impl<
     A,
 >
-    Sig
+    Infer
 for
     Left<A>
 where
     A: Ty,
 {
-    type Dom = Zipper<A>;
-    type Cod = Zipper<A>;
+    type Mode = infer::mode::Constant;
+    type Ty = Ar1<Zipper<A>, Zipper<A>>;
 }
 
 /// `left(zcons(cons(lh, lt), r)) ==> zcons(lt, cons(lh, r))`
@@ -230,21 +293,31 @@ impl<
     LT,
     R,
 >
-    Rule<Left<A>>
+    Eval<Left<A>>
 for
-    ZCons<HCons<LH, LT>, R>
+    HC<ZCons<HC<LH, LT>, R>, HN>
 where
     A: Ty,
     LH: Tm<A>,
+    LT: HList,
     LT: Tm<List<A>>,
-    R: Tm<List<A>> + HList,
+    R: HList,
+    R: Tm<List<A>>,
 {
-    type Out = ZCons<LT, HCons<LH, R>>;
+    type Out = ZCons<LT, HC<LH, R>>;
 }
 
 
 
 /// Type-level get from focus of zipper
+#[derive(Clone)]
+#[derive(Copy)]
+#[derive(Eq)]
+#[derive(Hash)]
+#[derive(Ord)]
+#[derive(PartialEq)]
+#[derive(PartialOrd)]
+#[derive(Show)]
 pub enum
     Get<A>
 where
@@ -260,14 +333,14 @@ where
 impl<
     A,
 >
-    Sig
+    Infer
 for
     Get<A>
 where
     A: Ty,
 {
-    type Dom = Zipper<A>;
-    type Cod = A;
+    type Mode = infer::mode::Constant;
+    type Ty = Ar1<Zipper<A>, A>;
 }
 
 /// `get(zcons(l, cons(rh, rt))) ==> rh`
@@ -277,14 +350,16 @@ impl<
     RH,
     RT,
 >
-    Rule<Get<A>>
+    Eval<Get<A>>
 for
-    ZCons<L, HCons<RH, RT>>
+    HC<ZCons<L, HC<RH, RT>>, HN>
 where
     A: Ty,
+    L: HList,
     L: Tm<List<A>>,
     RH: Tm<A>,
-    RT: Tm<List<A>> + HList,
+    RT: HList,
+    RT: Tm<List<A>>,
 {
     type Out = RH;
 }
@@ -292,6 +367,14 @@ where
 
 
 /// Type-level put new element, replacing focus of zipper
+#[derive(Clone)]
+#[derive(Copy)]
+#[derive(Eq)]
+#[derive(Hash)]
+#[derive(Ord)]
+#[derive(PartialEq)]
+#[derive(PartialOrd)]
+#[derive(Show)]
 pub enum
     Put<A>
 where
@@ -308,14 +391,14 @@ where
 impl<
     A,
 >
-    Sig
+    Infer
 for
     Put<A>
 where
     A: Ty,
 {
-    type Dom = HCons<Zipper<A>, HCons<A, HNil>>;
-    type Cod = Zipper<A>;
+    type Mode = infer::mode::Constant;
+    type Ty = Ar<HC<Zipper<A>, HC<A, HN>>, Zipper<A>>;
 }
 
 /// `put(zcons(l, cons(rh, rt)), e) ==> zcons(l, cons(e, rt))`
@@ -326,17 +409,19 @@ impl<
     RH,
     RT,
 >
-    Rule<Put<A>>
+    Eval<Put<A>>
 for
-    HCons<ZCons<L, HCons<RH, RT>>, HCons<E, HNil>>
+    HC<ZCons<L, HC<RH, RT>>, HC<E, HN>>
 where
     A: Ty,
     E: Tm<A>,
+    L: HList,
     L: Tm<List<A>>,
     RH: Tm<A>,
-    RT: Tm<List<A>> + HList,
+    RT: HList,
+    RT: Tm<List<A>>,
 {
-    type Out = ZCons<L, HCons<E, RT>>;
+    type Out = ZCons<L, HC<E, RT>>;
 }
 
 
@@ -348,8 +433,37 @@ mod test {
 
     #[test]
     fn put() {
-        let x: Witness<HCons<ZCons<HCons<Lift<bool>, HNil>, HCons<Lift<u8>, HNil>>, HCons<Lift<u16>, HNil>>> = Witness;
-        let x: Witness<ZCons<HCons<Lift<bool>, HNil>, HCons<Lift<u16>, HNil>>> = x.app::<Put<Star>>();
-        let _: Witness<HCons<Lift<bool>, HCons<Lift<u16>, HNil>>> = x.app::<Unzip<Star>>();
+        let x0: Witness<
+            Ap<
+                Put<Star>,
+                HC<
+                    ZCons<
+                        HC<Lift<bool>, HN>,
+                        HC<Lift<u8>  , HN>
+                    >,
+                    HC<Lift<u16>, HN>
+                >
+            >
+        > = Witness;
+        let x1: Witness<
+            ZCons<
+                HC<Lift<bool>, HN>,
+                HC<Lift<u16> , HN>
+            >
+        > = Witness;
+        x0 == x1;
+        let x2: Witness<
+            Ap1<
+                Unzip<Star>,
+                ZCons<
+                    HC<Lift<bool>, HN>,
+                    HC<Lift<u16> , HN>
+                >
+            >
+        > = Witness;
+        let x3: Witness<
+            HC<Lift<bool>, HC<Lift<u16>, HN>>
+        > = Witness;
+        x2 == x3;
     }
 }
