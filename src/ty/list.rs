@@ -237,7 +237,7 @@ for
 where
     A: Ty,
     B: Ty,
-    Fx: Infer<Ty = Ar<HC<A, HN>, B>>,
+    Fx: Infer<Ty = Ar1<A, B>>,
 {
     type Out = Nil;
 }
@@ -258,7 +258,7 @@ for
 where
     A: Ty,
     B: Ty,
-    Fx: Infer<Ty = Ar<HC<A, HN>, B>>,
+    Fx: Infer<Ty = Ar1<A, B>>,
     H: Tm<A>,
     T: HList,
     T: Tm<List<A>>,
