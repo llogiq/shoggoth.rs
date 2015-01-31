@@ -55,7 +55,7 @@ where
 #[derive(Rand)]
 #[derive(Show)]
 pub struct
-    ZCons<LS, RS>(LS, RS)
+    MkZipper<LS, RS>(LS, RS)
 where
     LS: HList,
     RS: HList;
@@ -64,8 +64,8 @@ where
 /// A :: Ty
 /// l : List<A>
 /// r : List<A>
-/// -----------------------
-/// zcons(l, r) : Zipper<A>
+/// ---------------------------
+/// mk_zipper(l, r) : Zipper<A>
 /// ```
 impl<
     A,
@@ -74,7 +74,7 @@ impl<
 >
     Tm<Zipper<A>>
 for
-    ZCons<L, R>
+    MkZipper<L, R>
 where
     A: Ty,
     L: HList,
@@ -119,7 +119,7 @@ where
     type Ty   = Ar1<List<A>, Zipper<A>>;
 }
 
-/// `zip(xs) ==> zcons(nil, xs)`
+/// `zip(xs) ==> mk_zipper(nil, xs)`
 impl<
     A,
     XS,
@@ -132,7 +132,7 @@ where
     XS: HList,
     XS: Tm<List<A>>,
 {
-    type Out = ZCons<HN, XS>;
+    type Out = MkZipper<HN, XS>;
 }
 
 
@@ -171,7 +171,7 @@ where
     type Ty = Ar1<Zipper<A>, List<A>>;
 }
 
-/// `unzip(zcons(l, r)) ==> append(l, r)`
+/// `unzip(mk_zipper(l, r)) ==> append(l, r)`
 impl<
     A,
     L,
@@ -180,7 +180,7 @@ impl<
 >
     Eval<Unzip<A>>
 for
-    HC<ZCons<L, YS>, HN>
+    HC<MkZipper<L, YS>, HN>
 where
     A: Ty,
     HC<L, HC<YS, HN>>: Eval<Append<A>, Out = Rec>,
@@ -229,7 +229,7 @@ where
     type Ty = Ar1<Zipper<A>, Zipper<A>>;
 }
 
-/// `right(zcons(l, cons(rh, rt))) ==> zcons(cons(rh, l), rt)`
+/// `right(mk_zipper(l, cons(rh, rt))) ==> mk_zipper(cons(rh, l), rt)`
 impl<
     A,
     L,
@@ -238,7 +238,7 @@ impl<
 >
     Eval<Right<A>>
 for
-    HC<ZCons<L, HC<RH, RT>>, HN>
+    HC<MkZipper<L, HC<RH, RT>>, HN>
 where
     A: Ty,
     L: HList,
@@ -247,7 +247,7 @@ where
     RT: HList,
     RT: Tm<List<A>>,
 {
-    type Out = ZCons<HC<RH, L>, RT>;
+    type Out = MkZipper<HC<RH, L>, RT>;
 }
 
 
@@ -286,7 +286,7 @@ where
     type Ty = Ar1<Zipper<A>, Zipper<A>>;
 }
 
-/// `left(zcons(cons(lh, lt), r)) ==> zcons(lt, cons(lh, r))`
+/// `left(mk_zipper(cons(lh, lt), r)) ==> mk_zipper(lt, cons(lh, r))`
 impl<
     A,
     LH,
@@ -295,7 +295,7 @@ impl<
 >
     Eval<Left<A>>
 for
-    HC<ZCons<HC<LH, LT>, R>, HN>
+    HC<MkZipper<HC<LH, LT>, R>, HN>
 where
     A: Ty,
     LH: Tm<A>,
@@ -304,7 +304,7 @@ where
     R: HList,
     R: Tm<List<A>>,
 {
-    type Out = ZCons<LT, HC<LH, R>>;
+    type Out = MkZipper<LT, HC<LH, R>>;
 }
 
 
@@ -343,7 +343,7 @@ where
     type Ty = Ar1<Zipper<A>, A>;
 }
 
-/// `get(zcons(l, cons(rh, rt))) ==> rh`
+/// `get(mk_zipper(l, cons(rh, rt))) ==> rh`
 impl<
     A,
     L,
@@ -352,7 +352,7 @@ impl<
 >
     Eval<Get<A>>
 for
-    HC<ZCons<L, HC<RH, RT>>, HN>
+    HC<MkZipper<L, HC<RH, RT>>, HN>
 where
     A: Ty,
     L: HList,
@@ -401,7 +401,7 @@ where
     type Ty = Ar<HC<Zipper<A>, HC<A, HN>>, Zipper<A>>;
 }
 
-/// `put(zcons(l, cons(rh, rt)), e) ==> zcons(l, cons(e, rt))`
+/// `put(mk_zipper(l, cons(rh, rt)), e) ==> mk_zipper(l, cons(e, rt))`
 impl<
     A,
     E,
@@ -411,7 +411,7 @@ impl<
 >
     Eval<Put<A>>
 for
-    HC<ZCons<L, HC<RH, RT>>, HC<E, HN>>
+    HC<MkZipper<L, HC<RH, RT>>, HC<E, HN>>
 where
     A: Ty,
     E: Tm<A>,
@@ -421,7 +421,7 @@ where
     RT: HList,
     RT: Tm<List<A>>,
 {
-    type Out = ZCons<L, HC<E, RT>>;
+    type Out = MkZipper<L, HC<E, RT>>;
 }
 
 
@@ -437,7 +437,7 @@ mod test {
             Ap<
                 Put<Star>,
                 HC<
-                    ZCons<
+                    MkZipper<
                         HC<Lift<bool>, HN>,
                         HC<Lift<u8>  , HN>
                     >,
@@ -446,7 +446,7 @@ mod test {
             >
         > = Witness;
         let x1: Witness<
-            ZCons<
+            MkZipper<
                 HC<Lift<bool>, HN>,
                 HC<Lift<u16> , HN>
             >
@@ -455,7 +455,7 @@ mod test {
         let x2: Witness<
             Ap1<
                 Unzip<Star>,
-                ZCons<
+                MkZipper<
                     HC<Lift<bool>, HN>,
                     HC<Lift<u16> , HN>
                 >

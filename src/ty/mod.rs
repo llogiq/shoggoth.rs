@@ -52,10 +52,10 @@ pub use self::witness::{
 pub use self::zipper::{
     Get,
     Left,
+    MkZipper,
     Put,
     Right,
     Unzip,
-    ZCons,
     Zip,
     Zipper,
 };
@@ -69,7 +69,7 @@ mod list;
 mod op;
 mod star;
 mod witness;
-mod zipper;
+pub mod zipper;
 
 /// Type-level type-inferrable terms
 pub mod infer;
