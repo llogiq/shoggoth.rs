@@ -3,6 +3,8 @@ use self::pos::{
     Pos,
 };
 use ty::{
+    _0,
+    _1,
     Ar,
     Ar1,
     Eval,
@@ -10,10 +12,6 @@ use ty::{
     Tm,
     Ty,
     infer,
-};
-use ty::bit::{
-    _0,
-    _1,
 };
 
 /// Type-level positive natural numbers (binary)
