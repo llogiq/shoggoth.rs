@@ -165,6 +165,68 @@ where
     type Out = Cons<H, <T as Snoc<X>>::Out>;
 }
 
+
+
+trait
+    ReverseHelper<Acc>
+where
+    Acc: HList,
+    Self: HList,
+{
+    type Out: HList;
+}
+
+impl<
+    Acc,
+>
+    ReverseHelper<Acc>
+for
+    Nil
+where
+    Acc: HList,
+{
+    type Out = Acc;
+}
+
+impl<
+    Acc,
+    H,
+    T,
+>
+    ReverseHelper<Acc>
+for
+    Cons<H, T>
+where
+    Acc: HList,
+    T: HList,
+    T: ReverseHelper<Cons<H, Acc>>,
+{
+    type Out = <T as ReverseHelper<Cons<H, Acc>>>::Out;
+}
+
+pub trait
+    Reverse
+where
+    Self: HList,
+{
+    type Out: HList;
+}
+
+impl<
+    Xs
+>
+    Reverse
+for
+    Xs
+where
+    Xs: HList,
+    Xs: ReverseHelper<Nil>,
+{
+    type Out = <Xs as ReverseHelper<Nil>>::Out;
+}
+
+
+
 /// Convenience alias for heterogeneous nil
 pub type HN = Nil;
 
