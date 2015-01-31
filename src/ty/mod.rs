@@ -25,9 +25,7 @@ pub use self::infer::{
     Infer,
 };
 pub use self::list::{
-    Append,
     List,
-    Map,
 };
 pub use self::op::{
     Ap,
@@ -65,7 +63,7 @@ mod bool;
 mod check;
 mod hlist;
 mod kind;
-mod list;
+pub mod list;
 mod op;
 mod star;
 mod witness;

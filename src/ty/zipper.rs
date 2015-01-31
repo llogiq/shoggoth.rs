@@ -1,14 +1,19 @@
-use hlist::*;
+use hlist::{
+    HC,
+    HList,
+    HN,
+    self,
+};
 use ty::{
     Ar,
     Ar1,
     Eval,
     Infer,
+    List,
     Tm,
     Ty,
     infer,
 };
-use ty::list::*;
 
 
 
@@ -171,26 +176,29 @@ where
     type Ty = Ar1<Zipper<A>, List<A>>;
 }
 
-/// `unzip(mk_zipper(l, r)) ==> append(l, r)`
+/// `unzip(mk_zipper(l, r)) ==> append(reverse(l), r)`
 impl<
     A,
     L,
-    Rec,
-    YS,
+    R,
+    Rec0,
+    Rec1,
 >
     Eval<Unzip<A>>
 for
-    HC<MkZipper<L, YS>, HN>
+    HC<MkZipper<L, R>, HN>
 where
     A: Ty,
-    HC<L, HC<YS, HN>>: Eval<Append<A>, Out = Rec>,
+    L: hlist::Reverse<Out = Rec0>,
+    Rec0: hlist::Append<R, Out = Rec1>,
     L: HList,
     L: Tm<List<A>>,
-    Rec: Tm<List<A>>,
-    YS: HList,
-    YS: Tm<List<A>>,
+    R: HList,
+    R: Tm<List<A>>,
+    Rec0: Tm<List<A>>,
+    Rec1: Tm<List<A>>,
 {
-    type Out = Rec;
+    type Out = Rec1;
 }
 
 
@@ -428,7 +436,10 @@ where
 
 #[cfg(test)]
 mod test {
-    use hlist::*;
+    use hlist::{
+        HC,
+        HN,
+    };
     use ty::*;
 
     #[test]

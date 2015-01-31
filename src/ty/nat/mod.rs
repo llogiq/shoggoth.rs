@@ -269,7 +269,10 @@ where
 
 #[cfg(test)]
 mod test {
-    use hlist::*;
+    use hlist::{
+        HC,
+        HN,
+    };
     use super::*;
     use ty::*;
 

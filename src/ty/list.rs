@@ -1,6 +1,14 @@
-use hlist::*;
+use hlist::{
+    Cons,
+    HC,
+    HList,
+    HN,
+    Nil,
+    self,
+};
 use ty::{
     Ar,
+    Ar1,
     Eval,
     Infer,
     Tm,
@@ -111,41 +119,77 @@ where
     type Ty = Ar<HC<List<A>, HC<List<A>, HN>>, List<A>>;
 }
 
-/// `append(nil, r) => r`
 impl<
     A,
-    R,
->
-    Eval<Append<A>>
-for
-    HC<HN, HC<R, HN>>
-where
-    A: Ty,
-    R: Tm<List<A>>,
-{
-    type Out = R;
-}
-
-/// `append(cons(lh, lt), r) => cons(lh, append(lt, r))`
-impl<
-    A,
-    LH,
-    LT,
+    L,
     R,
     Rec,
 >
     Eval<Append<A>>
 for
-    HC<HC<LH, LT>, HC<R, HN>>
+    HC<L, HC<R, HN>>
 where
     A: Ty,
-    LH: Tm<A>,
-    LT: Tm<List<A>> + HList,
+    L: hlist::Append<R, Out = Rec>,
+    L: Tm<List<A>>,
     R: Tm<List<A>>,
     Rec: Tm<List<A>>,
-    HC<LT, HC<R, HN>>: Eval<Append<A>, Out = Rec>,
 {
-    type Out = HC<LH, Rec>;
+    type Out = Rec;
+}
+
+
+
+/// Type-level reverse for lists
+#[derive(Clone)]
+#[derive(Copy)]
+#[derive(Eq)]
+#[derive(Hash)]
+#[derive(Ord)]
+#[derive(PartialEq)]
+#[derive(PartialOrd)]
+#[derive(Show)]
+pub enum
+    Reverse<A>
+where
+    A: Ty,
+{}
+
+/// ```ignore
+/// A :: Ty
+/// xs : List<A>
+/// ---------------------
+/// reverse(xs) : List<A>
+/// ```
+impl<
+    A,
+>
+    Infer
+for
+    Reverse<A>
+where
+    A: Ty,
+{
+    type Mode = infer::mode::Constant;
+    type Ty = Ar1<List<A>, List<A>>;
+}
+
+impl<
+    A,
+    Rec,
+    Xs,
+>
+    Eval<Reverse<A>>
+for
+    HC<Xs, HN>
+where
+    A: Ty,
+    Rec: Tm<List<A>>,
+    Xs: HList,
+    Xs: hlist::Reverse<Out = Rec>,
+    Xs: Tm<List<A>>,
+{
+    type Out = Rec;
 }
 
 
