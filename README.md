@@ -12,6 +12,28 @@ _It was a terrible, indescribable thing vaster than any subway train—a shapele
 
 This library implements generic and type-level programming functionality. It is heavily inspired by Miles Sabin's [Shapeless](https://github.com/milessabin/shapeless) for Scala.
 
+## Features
+
+#### Current
+
+* heterogeneous lists
+* simulated data kinds
+* type-level operations (polyadic, curried)
+* type-level binary natural numbers
+* type-level binary integers
+* type-level lists (mappable with type-level operations)
+* type-level list zippers
+
+#### Future
+
+* more functionality for working with hlists/tuples
+* coproducts
+* hlist/vinyl-style records
+* type-level binary rationals
+* type-level operation composition (polyadic)
+* type-level lenses
+* type macros
+
 ## Documentation
 
 See the API documentation [here](http://epsilonz.github.io/shoggoth.rs/doc/shoggoth/).
