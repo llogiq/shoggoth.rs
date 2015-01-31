@@ -19,12 +19,12 @@ use ty::{
 /// Type-level lists
 #[derive(Clone)]
 #[derive(Copy)]
+#[derive(Debug)]
 #[derive(Eq)]
 #[derive(Hash)]
 #[derive(Ord)]
 #[derive(PartialEq)]
 #[derive(PartialOrd)]
-#[derive(Show)]
 pub enum
     List<A>
 where
@@ -87,12 +87,12 @@ where
 /// Type-level append for lists
 #[derive(Clone)]
 #[derive(Copy)]
+#[derive(Debug)]
 #[derive(Eq)]
 #[derive(Hash)]
 #[derive(Ord)]
 #[derive(PartialEq)]
 #[derive(PartialOrd)]
-#[derive(Show)]
 pub enum
     Append<A>
 where
@@ -143,12 +143,12 @@ where
 /// Type-level reverse for lists
 #[derive(Clone)]
 #[derive(Copy)]
+#[derive(Debug)]
 #[derive(Eq)]
 #[derive(Hash)]
 #[derive(Ord)]
 #[derive(PartialEq)]
 #[derive(PartialOrd)]
-#[derive(Show)]
 pub enum
     Reverse<A>
 where
@@ -197,12 +197,12 @@ where
 /// Type-level operation mapping operations over lists
 #[derive(Clone)]
 #[derive(Copy)]
+#[derive(Debug)]
 #[derive(Eq)]
 #[derive(Hash)]
 #[derive(Ord)]
 #[derive(PartialEq)]
 #[derive(PartialOrd)]
-#[derive(Show)]
 pub enum
     Map<A, B>
 where

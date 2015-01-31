@@ -7,12 +7,12 @@ pub trait
 /// Infer mode for operations
 #[derive(Clone)]
 #[derive(Copy)]
+#[derive(Debug)]
 #[derive(Eq)]
 #[derive(Hash)]
 #[derive(Ord)]
 #[derive(PartialEq)]
 #[derive(PartialOrd)]
-#[derive(Show)]
 pub enum
     Constant
 {}
@@ -20,12 +20,12 @@ pub enum
 /// Infer mode for thunks
 #[derive(Clone)]
 #[derive(Copy)]
+#[derive(Debug)]
 #[derive(Eq)]
 #[derive(Hash)]
 #[derive(Ord)]
 #[derive(PartialEq)]
 #[derive(PartialOrd)]
-#[derive(Show)]
 pub enum
     Thunk
 {}

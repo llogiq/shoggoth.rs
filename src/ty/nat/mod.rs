@@ -20,12 +20,12 @@ pub mod pos;
 /// Type-level natural numbers (binary)
 #[derive(Clone)]
 #[derive(Copy)]
+#[derive(Debug)]
 #[derive(Eq)]
 #[derive(Hash)]
 #[derive(Ord)]
 #[derive(PartialEq)]
 #[derive(PartialOrd)]
-#[derive(Show)]
 pub enum
     Nat
 {}
@@ -70,12 +70,12 @@ where
 /// Type-level successor for natural numbers
 #[derive(Clone)]
 #[derive(Copy)]
+#[derive(Debug)]
 #[derive(Eq)]
 #[derive(Hash)]
 #[derive(Ord)]
 #[derive(PartialEq)]
 #[derive(PartialOrd)]
-#[derive(Show)]
 pub enum
     Succ
 {}
@@ -124,12 +124,12 @@ where
 /// Type-level addition for natural numbers
 #[derive(Clone)]
 #[derive(Copy)]
+#[derive(Debug)]
 #[derive(Eq)]
 #[derive(Hash)]
 #[derive(Ord)]
 #[derive(PartialEq)]
 #[derive(PartialOrd)]
-#[derive(Show)]
 pub enum
     Add
 {}
@@ -198,12 +198,12 @@ where
 /// Type-level multiplication for natural numbers
 #[derive(Clone)]
 #[derive(Copy)]
+#[derive(Debug)]
 #[derive(Eq)]
 #[derive(Hash)]
 #[derive(Ord)]
 #[derive(PartialEq)]
 #[derive(PartialOrd)]
-#[derive(Show)]
 pub enum
     Mul
 {}

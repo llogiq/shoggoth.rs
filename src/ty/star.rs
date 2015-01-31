@@ -7,12 +7,12 @@ use ty::{
 /// Type-level type of normal Rust types
 #[derive(Clone)]
 #[derive(Copy)]
+#[derive(Debug)]
 #[derive(Eq)]
 #[derive(Ord)]
 #[derive(Hash)]
 #[derive(PartialEq)]
 #[derive(PartialOrd)]
-#[derive(Show)]
 pub enum
     Star
 {}
@@ -20,12 +20,12 @@ pub enum
 /// Normal Rust types lifted to terms at the type-level
 #[derive(Clone)]
 #[derive(Copy)]
+#[derive(Debug)]
 #[derive(Eq)]
 #[derive(Hash)]
 #[derive(Ord)]
 #[derive(PartialEq)]
 #[derive(PartialOrd)]
-#[derive(Show)]
 pub enum
     Lift<A>
 {}

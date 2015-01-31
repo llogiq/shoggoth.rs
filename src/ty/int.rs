@@ -16,12 +16,12 @@ use ty::nat::pos;
 /// Type-level integers
 #[derive(Clone)]
 #[derive(Copy)]
+#[derive(Debug)]
 #[derive(Eq)]
 #[derive(Hash)]
 #[derive(Ord)]
 #[derive(PartialEq)]
 #[derive(PartialOrd)]
-#[derive(Show)]
 pub enum
     Int
 {}
@@ -39,12 +39,12 @@ for
 /// Type-level negative integers
 #[derive(Clone)]
 #[derive(Copy)]
+#[derive(Debug)]
 #[derive(Eq)]
 #[derive(Hash)]
 #[derive(Ord)]
 #[derive(PartialEq)]
 #[derive(PartialOrd)]
-#[derive(Show)]
 pub enum
     Zn<P>
 where
@@ -54,12 +54,12 @@ where
 /// Type-level positive integers
 #[derive(Clone)]
 #[derive(Copy)]
+#[derive(Debug)]
 #[derive(Eq)]
 #[derive(Hash)]
 #[derive(Ord)]
 #[derive(PartialEq)]
 #[derive(PartialOrd)]
-#[derive(Show)]
 pub enum
     Zp<P>
 where
@@ -111,12 +111,12 @@ where
 /// ```
 #[derive(Clone)]
 #[derive(Copy)]
+#[derive(Debug)]
 #[derive(Eq)]
 #[derive(Hash)]
 #[derive(Ord)]
 #[derive(PartialEq)]
 #[derive(PartialOrd)]
-#[derive(Show)]
 pub enum
     Double
 {}
@@ -178,12 +178,12 @@ where
 /// ```
 #[derive(Clone)]
 #[derive(Copy)]
+#[derive(Debug)]
 #[derive(Eq)]
 #[derive(Hash)]
 #[derive(Ord)]
 #[derive(PartialEq)]
 #[derive(PartialOrd)]
-#[derive(Show)]
 pub enum
     SuccDouble
 {}
@@ -248,12 +248,12 @@ where
 /// ```
 #[derive(Clone)]
 #[derive(Copy)]
+#[derive(Debug)]
 #[derive(Eq)]
 #[derive(Hash)]
 #[derive(Ord)]
 #[derive(PartialEq)]
 #[derive(PartialOrd)]
-#[derive(Show)]
 pub enum
     PredDouble
 {}

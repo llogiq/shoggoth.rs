@@ -7,13 +7,13 @@ pub trait
 /// Empty heterogeneous list
 #[derive(Clone)]
 #[derive(Copy)]
+#[derive(Debug)]
 #[derive(Eq)]
 #[derive(Hash)]
 #[derive(Ord)]
 #[derive(PartialEq)]
 #[derive(PartialOrd)]
 #[derive(Rand)]
-#[derive(Show)]
 pub struct
     Nil;
 
@@ -26,13 +26,13 @@ for
 /// Cons heterogeneous list
 #[derive(Clone)]
 #[derive(Copy)]
+#[derive(Debug)]
 #[derive(Eq)]
 #[derive(Hash)]
 #[derive(Ord)]
 #[derive(PartialEq)]
 #[derive(PartialOrd)]
 #[derive(Rand)]
-#[derive(Show)]
 pub struct
     Cons<H, T>
 where

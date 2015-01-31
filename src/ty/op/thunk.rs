@@ -12,12 +12,12 @@ use ty::op::{
 /// Partially applied type-level operations
 #[derive(Clone)]
 #[derive(Copy)]
+#[derive(Debug)]
 #[derive(Eq)]
 #[derive(Hash)]
 #[derive(Ord)]
 #[derive(PartialEq)]
 #[derive(PartialOrd)]
-#[derive(Show)]
 pub enum
     Thunk<Fx, Xs>
 where
