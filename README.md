@@ -10,7 +10,7 @@ _It was a terrible, indescribable thing vaster than any subway train—a shapele
 
 ## Synopsis
 
-This library implements generic and type-level programming functionality. It is heavily inspired by Scala's [Shapeless](https://github.com/milessabin/shapeless).
+This library implements generic and type-level programming functionality. It is heavily inspired by Miles Sabin's [Shapeless](https://github.com/milessabin/shapeless) for Scala.
 
 ## Documentation
 
