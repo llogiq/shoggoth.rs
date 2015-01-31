@@ -1,4 +1,3 @@
-#![feature(core)]
 #![feature(hash)]
 #![feature(rand)]
 #![feature(on_unimplemented)]
