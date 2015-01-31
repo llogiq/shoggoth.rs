@@ -99,5 +99,5 @@ for
 where
     HTm: Tm<Star>,
     TTm: HList,
-    TTm: Tm<Star>
+    TTm: Tm<Star>,
 {}
