@@ -181,24 +181,21 @@ impl<
     A,
     L,
     R,
-    Rec0,
-    Rec1,
+    Rec,
 >
     Eval<Unzip<A>>
 for
     HC<MkZipper<L, R>, HN>
 where
     A: Ty,
-    L: hlist::Reverse<Out = Rec0>,
-    Rec0: hlist::Append<R, Out = Rec1>,
+    L: hlist::AppendReverse<R, Out = Rec>,
     L: HList,
     L: Tm<List<A>>,
     R: HList,
     R: Tm<List<A>>,
-    Rec0: Tm<List<A>>,
-    Rec1: Tm<List<A>>,
+    Rec: Tm<List<A>>,
 {
-    type Out = Rec1;
+    type Out = Rec;
 }
 
 
