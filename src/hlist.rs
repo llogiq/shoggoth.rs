@@ -8,6 +8,7 @@ pub trait
 #[derive(Clone)]
 #[derive(Copy)]
 #[derive(Eq)]
+#[derive(Hash)]
 #[derive(Ord)]
 #[derive(PartialEq)]
 #[derive(PartialOrd)]
