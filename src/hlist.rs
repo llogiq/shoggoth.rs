@@ -169,8 +169,8 @@ where
 
 
 
-trait
-    ReverseHelper<Acc>
+pub trait
+    AppendReverse<Acc>
 where
     Acc: HList,
     Self: HList,
@@ -181,7 +181,7 @@ where
 impl<
     Acc,
 >
-    ReverseHelper<Acc>
+    AppendReverse<Acc>
 for
     Nil
 where
@@ -195,15 +195,15 @@ impl<
     H,
     T,
 >
-    ReverseHelper<Acc>
+    AppendReverse<Acc>
 for
     Cons<H, T>
 where
     Acc: HList,
     T: HList,
-    T: ReverseHelper<Cons<H, Acc>>,
+    T: AppendReverse<Cons<H, Acc>>,
 {
-    type Out = <T as ReverseHelper<Cons<H, Acc>>>::Out;
+    type Out = <T as AppendReverse<Cons<H, Acc>>>::Out;
 }
 
 /// Reverse for heterogeneous lists
@@ -223,9 +223,9 @@ for
     Xs
 where
     Xs: HList,
-    Xs: ReverseHelper<Nil>,
+    Xs: AppendReverse<Nil>,
 {
-    type Out = <Xs as ReverseHelper<Nil>>::Out;
+    type Out = <Xs as AppendReverse<Nil>>::Out;
 }
 
 
