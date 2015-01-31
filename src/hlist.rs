@@ -91,6 +91,47 @@ where
     }
 }
 
+
+
+pub trait
+    Append<R>
+where
+    R: HList,
+    Self: HList,
+{
+    type Out: HList;
+}
+
+impl<
+    R,
+>
+    Append<R>
+for
+    Nil
+where
+    R: HList,
+{
+    type Out = R;
+}
+
+impl<
+    H,
+    R,
+    T,
+>
+    Append<R>
+for
+    Cons<H, T>
+where
+    R: HList,
+    T: Append<R>,
+    T: HList,
+{
+    type Out = Cons<H, <T as Append<R>>::Out>;
+}
+
+
+
 pub trait
     Snoc<H>
 where
