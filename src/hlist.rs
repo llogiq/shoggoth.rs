@@ -93,6 +93,7 @@ where
 
 
 
+/// Append for heterogeneous lists
 pub trait
     Append<R>
 where
@@ -132,6 +133,7 @@ where
 
 
 
+/// Snoc (cons to tail) for heterogeneous lists
 pub trait
     Snoc<H>
 where
@@ -204,6 +206,7 @@ where
     type Out = <T as ReverseHelper<Cons<H, Acc>>>::Out;
 }
 
+/// Reverse for heterogeneous lists
 pub trait
     Reverse
 where
@@ -227,11 +230,11 @@ where
 
 
 
-/// Convenience alias for heterogeneous nil
+/// Alias for heterogeneous nil
 pub type HN = Nil;
 
-/// Convenience alias for heterogeneous cons
+/// Alias for heterogeneous cons
 pub type HC<H, T> = Cons<H, T>;
 
-/// Convenience alias for heterogeneous snoc
+/// Alias for heterogeneous snoc
 pub type HS<T, H> = <T as Snoc<H>>::Out;

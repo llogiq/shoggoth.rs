@@ -24,6 +24,7 @@ pub use self::tuple::{
 mod hlist;
 mod product;
 mod tuple;
+/// Heterogeneous lists
 
 /// Type-level programming
 pub mod ty;

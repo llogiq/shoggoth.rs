@@ -63,11 +63,9 @@ mod bool;
 mod check;
 mod hlist;
 mod kind;
-pub mod list;
 mod op;
 mod star;
 mod witness;
-pub mod zipper;
 
 /// Type-level type-inferrable terms
 pub mod infer;
@@ -75,8 +73,14 @@ pub mod infer;
 /// Type-level binary integers
 pub mod int;
 
+/// Type-level lists
+pub mod list;
+
 /// Type-level natural numbers
 pub mod nat;
+
+/// Type-level zippers for lists
+pub mod zipper;
 
 /// 0
 pub type     _0b = bit::_0;
