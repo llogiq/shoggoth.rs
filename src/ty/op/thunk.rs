@@ -10,6 +10,8 @@ use ty::op::{
     IsArrow,
 };
 
+
+
 /// Curried type-level operations
 #[derive(Clone)]
 #[derive(Copy)]
@@ -22,11 +24,11 @@ use ty::op::{
 pub enum
     Thunk<Fx, Xs>
 where
-    <Fx as Infer>::Ty
-        : IsArrow,
       Fx: Infer,
       Xs: HList,
       Xs: TmPrefix<<<Fx as Infer>::Ty as IsArrow>::Dom>,
+    <Fx as Infer>::Ty
+        : IsArrow,
 {}
 
 impl<
