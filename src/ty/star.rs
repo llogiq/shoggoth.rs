@@ -90,14 +90,10 @@ for
 /// Cons<HTm, TTm> : Star
 /// ```
 impl<
-    HTm,
-    TTm,
+     HTm: Tm<Star>,
+     TTm: Tm<Star> + HList,
 >
     Tm<Star>
 for
     Cons<HTm, TTm>
-where
-    HTm: Tm<Star>,
-    TTm: HList,
-    TTm: Tm<Star>,
 {}

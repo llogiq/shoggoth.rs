@@ -56,13 +56,11 @@ for
 /// p : Nat
 /// ```
 impl<
-    P,
+    P: Tm<Pos>,
 >
     Tm<Nat>
 for
     P
-where
-    P: Tm<Pos>,
 {}
 
 
@@ -105,16 +103,14 @@ for
 
 /// `succ<Nat>(p) ==> succ<Pos>(p)`
 impl<
-    Rec,
-    P,
+      P: Tm<Pos>,
+    Rec: Tm<Nat>,
 >
     Eval<Succ>
 for
     HC<P, HN>
 where
-    P: Eval<pos::Succ, Out = Rec>,
-    P: Tm<Pos>,
-    Rec: Tm<Nat>,
+      P: Eval<pos::Succ, Out = Rec>,
 {
     type Out = Rec;
 }
@@ -164,31 +160,27 @@ where
 
 /// `add(m, 0) ==> m`
 impl<
-    P0,
+    P0: Tm<Pos>,
 >
     Eval<Add>
 for
     HC<P0, HC<_0, HN>>
-where
-    P0: Tm<Pos>,
 {
     type Out = P0;
 }
 
 /// `add<Nat>(p, q) ==> add<Pos>(p, q)`
 impl<
-    P0,
-    P1,
-    Rec,
+     P0: Tm<Pos>,
+     P1: Tm<Pos>,
+    Rec: Tm<Nat>,
 >
     Eval<Add>
 for
     HC<P0, HC<P1, HN>>
 where
-    HC<P0, HC<P1, HN>>: Eval<pos::Add, Out = Rec>,
-    P0: Tm<Pos>,
-    P1: Tm<Pos>,
-    Rec: Tm<Nat>,
+    HC<P0, HC<P1, HN>>
+        : Eval<pos::Add, Out = Rec>,
 {
     type Out = Rec;
 }
@@ -225,44 +217,38 @@ for
 
 /// `mul(0, n) ==> 0`
 impl<
-    P1,
+      P1: Tm<Pos>,
 >
     Eval<Mul>
 for
     HC<_0, HC<P1, HN>>
-where
-    P1: Tm<Pos>,
 {
     type Out = _0;
 }
 
 /// `mul(m, 0) ==> 0`
 impl<
-    P0,
+    P0: Tm<Pos>,
 >
     Eval<Mul>
 for
     HC<P0, HC<_0, HN>>
-where
-    P0: Tm<Pos>,
 {
     type Out = _0;
 }
 
 /// `mul<Nat>(p, q) ==> mul<Pos>(p, q)`
 impl<
-    P0,
-    P1,
-    Rec,
+      P0: Tm<Pos>,
+      P1: Tm<Pos>,
+     Rec: Tm<Nat>,
 >
     Eval<Mul>
 for
     HC<P0, HC<P1, HN>>
 where
-    HC<P0, HC<P1, HN>>: Eval<pos::Mul, Out = Rec>,
-    P0: Tm<Pos>,
-    P1: Tm<Pos>,
-    Rec: Tm<Nat>,
+    HC<P0, HC<P1, HN>>
+        : Eval<pos::Mul, Out = Rec>,
 {
     type Out = Rec;
 }

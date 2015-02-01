@@ -22,15 +22,12 @@ for
 /// Cons<HTy, TTy> :: Ty
 /// ```
 impl<
-    HTy,
-    TTy,
+     HTy: Ty,
+     TTy: HList + Ty,
 >
     Ty
 for
     Cons<HTy, TTy>
-where
-    HTy: Ty,
-    TTy: HList + Ty,
 {}
 
 
@@ -54,21 +51,14 @@ for
 /// Cons<HTm, TTm> : Cons<HTy, TTy>
 /// ```
 impl<
-    HTm,
-    HTy,
-    TTm,
-    TTy,
+     HTm: Tm<HTy>,
+     HTy: Ty,
+     TTm: Tm<TTy> + HList,
+     TTy: Ty      + HList,
 >
     Tm<Cons<HTy, TTy>>
 for
     Cons<HTm, TTm>
-where
-    HTm: Tm<HTy>,
-    HTy: Ty,
-    TTm: HList,
-    TTm: Tm<TTy>,
-    TTy: HList,
-    TTy: Ty,
 {}
 
 
@@ -82,9 +72,8 @@ where
 pub trait
     TmPrefix<A>
 where
-    Self: HList,
-    A: HList,
-    A: Ty,
+    Self:      HList,
+       A: Ty + HList,
 {
     type Out: Ty;
 }
@@ -96,14 +85,11 @@ where
 /// Nil : TmPrefix<A>
 /// ```
 impl<
-    A,
+       A: Ty + HList,
 >
     TmPrefix<A>
 for
     HN
-where
-    A: HList,
-    A: Ty,
 {
     type Out = A;
 }
@@ -118,21 +104,16 @@ where
 /// Cons<HTm, TTm> : TmPrefix<HTy, TTy>
 /// ```
 impl<
-    HTm,
-    HTy,
-    TTm,
-    TTy,
+     HTm: Tm<HTy>,
+     HTy: Ty,
+     TTm:      HList,
+     TTy: Ty + HList,
 >
     TmPrefix<HC<HTy, TTy>>
 for
     HC<HTm, TTm>
 where
-    HTm: Tm<HTy>,
-    HTy: Ty,
-    TTm: TmPrefix<TTy>,
-    TTm: HList,
-    TTy: HList,
-    TTy: Ty,
+     TTm: TmPrefix<TTy>,
 {
     type Out = <TTm as TmPrefix<TTy>>::Out;
 }

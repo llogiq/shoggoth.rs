@@ -157,26 +157,22 @@ for
 
 /// `and(ff, b1) ==> ff`
 impl<
-    B1,
+      B1: Tm<Bool>,
 >
     Eval<And>
 for
     HC<FF, HC<B1, HN>>
-where
-    B1: Tm<Bool>,
 {
     type Out = FF;
 }
 
 /// `and(tt, b1) ==> b1`
 impl<
-    B1,
+      B1: Tm<Bool>,
 >
     Eval<And>
 for
     HC<TT, HC<B1, HN>>
-where
-    B1: Tm<Bool>,
 {
     type Out = B1;
 }
@@ -213,26 +209,22 @@ for
 
 /// `or(ff, b1) ==> b1`
 impl<
-    B1,
+      B1: Tm<Bool>,
 >
     Eval<Or>
 for
     HC<FF, HC<B1, HN>>
-where
-    B1: Tm<Bool>,
 {
     type Out = B1;
 }
 
 /// `or(tt, b1) ==> tt`
 impl<
-    B1,
+      B1: Tm<Bool>,
 >
     Eval<Or>
 for
     HC<TT, HC<B1, HN>>
-where
-    B1: Tm<Bool>,
 {
     type Out = TT;
 }
@@ -251,7 +243,7 @@ where
 pub enum
     If<A>
 where
-    A: Ty,
+       A: Ty,
 {}
 
 /// ```ignore
@@ -263,13 +255,11 @@ where
 /// if(b, m0, m1) : A
 /// ```
 impl<
-    A,
+       A: Ty,
 >
     Infer
 for
     If<A>
-where
-    A: Ty,
 {
     type Mode = infer::mode::Constant;
     type Ty = Ar<HC<Bool, HC<A, HC<A, HN>>>, A>;
@@ -277,34 +267,26 @@ where
 
 /// `if(ff, m0, m1) ==> m1`
 impl<
-    A,
-    M0,
-    M1,
+       A: Ty,
+      M0: Tm<A>,
+      M1: Tm<A>,
 >
     Eval<If<A>>
 for
     HC<FF, HC<M0, HC<M1, HN>>>
-where
-    A: Ty,
-    M0: Tm<A>,
-    M1: Tm<A>,
 {
     type Out = M1;
 }
 
 /// `if(tt, m0, m1) ==> m0`
 impl<
-    A,
-    M0,
-    M1,
+       A: Ty,
+      M0: Tm<A>,
+      M1: Tm<A>,
 >
     Eval<If<A>>
 for
     HC<TT, HC<M0, HC<M1, HN>>>
-where
-    A: Ty,
-    M0: Tm<A>,
-    M1: Tm<A>,
 {
     type Out = M0;
 }

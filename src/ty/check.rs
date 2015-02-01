@@ -7,5 +7,5 @@ use ty::{
 pub trait
     Tm<A>
 where
-    A: Ty,
+       A: Ty,
 {}

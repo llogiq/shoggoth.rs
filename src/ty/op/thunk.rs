@@ -2,6 +2,7 @@ use hlist::*;
 use ty::{
     Infer,
     TmPrefix,
+    Ty,
     infer,
 };
 use ty::op::{
@@ -21,37 +22,26 @@ use ty::op::{
 pub enum
     Thunk<Fx, Xs>
 where
-    <Fx as Infer>::Ty: IsArrow,
-    Fx: Infer,
-    Xs: HList,
-    Xs: TmPrefix<
-        <<Fx as Infer>::Ty as IsArrow>::Dom
-    >,
+    <Fx as Infer>::Ty
+        : IsArrow,
+      Fx: Infer,
+      Xs: HList,
+      Xs: TmPrefix<<<Fx as Infer>::Ty as IsArrow>::Dom>,
 {}
 
 impl<
-    Fx,
-    Xs,
+       C: Ty,
+       D: Ty + HList,
+      Ds: Ty + HList,
+      Fx: Infer<Ty = Ar<D, C>>,
+      Xs: HList,
 >
     Infer
 for
     Thunk<Fx, Xs>
 where
-    <Fx as Infer>::Ty: IsArrow,
-    <Xs as TmPrefix<
-        <<Fx as Infer>::Ty as IsArrow>::Dom>
-    >::Out: HList,
-    Fx: Infer,
-    Xs: TmPrefix<
-        <<Fx as Infer>::Ty as IsArrow>::Dom
-    >,
+      Xs: TmPrefix<D, Out = Ds>,
 {
     type Mode = infer::mode::Thunk;
-    type Ty =
-        Ar<
-            <Xs as TmPrefix<
-                <<Fx as Infer>::Ty as IsArrow>::Dom>
-            >::Out,
-                <<Fx as Infer>::Ty as IsArrow>::Cod,
-        >;
+    type Ty = Ar<Ds, C>;
 }

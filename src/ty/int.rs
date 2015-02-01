@@ -48,7 +48,7 @@ for
 pub enum
     Zn<P>
 where
-    P: Tm<pos::Pos>,
+       P: Tm<pos::Pos>,
 {}
 
 /// Type-level positive integers
@@ -63,7 +63,7 @@ where
 pub enum
     Zp<P>
 where
-    P: Tm<pos::Pos>,
+       P: Tm<pos::Pos>,
 {}
 
 /// `0 : Int`
@@ -79,13 +79,11 @@ for
 /// -p : Int
 /// ```
 impl<
-    N,
+       N: Tm<pos::Pos>,
 >
     Tm<Int>
 for
     Zn<N>
-where
-    N: Tm<pos::Pos>,
 {}
 
 /// ```ignore
@@ -94,13 +92,11 @@ where
 /// +p : Int
 /// ```
 impl<
-    N,
+       N: Tm<pos::Pos>,
 >
     Tm<Int>
 for
     Zp<N>
-where
-    N: Tm<pos::Pos>,
 {}
 
 
@@ -146,26 +142,22 @@ for
 
 /// `double(-p) ==> -(p:0)`
 impl<
-    P,
+    P: Tm<pos::Pos>,
 >
     Eval<Double>
 for
     HC<Zn<P>, HN>
-where
-    P: Tm<pos::Pos>,
 {
     type Out = Zn<(P, _0)>;
 }
 
 /// `double(+p) ==> +(p:0)`
 impl<
-    P,
+       P: Tm<pos::Pos>,
 >
     Eval<Double>
 for
     HC<Zp<P>, HN>
-where
-    P: Tm<pos::Pos>,
 {
     type Out = Zp<(P, _0)>;
 }
@@ -213,29 +205,25 @@ for
 
 /// `succ_double[Int](-p) ==> -(pred_double[Pos](p))`
 impl<
-    P,
-    Rec,
+       P: Tm<pos::Pos>,
+     Rec: Tm<pos::Pos>,
 >
     Eval<SuccDouble>
 for
     HC<Zn<P>, HN>
 where
-    P: Eval<pos::PredDouble, Out = Rec>,
-    P: Tm<pos::Pos>,
-    Rec: Tm<pos::Pos>,
+       P: Eval<pos::PredDouble, Out = Rec>,
 {
     type Out = Zn<Rec>;
 }
 
 /// `succ_double(+p) ==> +(p:1)`
 impl<
-    P,
+       P: Tm<pos::Pos>,
 >
     Eval<SuccDouble>
 for
     HC<Zp<P>, HN>
-where
-    P: Tm<pos::Pos>,
 {
     type Out = Zp<(P, _1)>;
 }
@@ -283,29 +271,25 @@ for
 
 /// `pred_double(-p) ==> -(p:1)`
 impl<
-    P,
+       P: Tm<pos::Pos>,
 >
     Eval<PredDouble>
 for
     HC<Zn<P>, HN>
-where
-    P: Tm<pos::Pos>,
 {
     type Out = Zn<(P, _1)>;
 }
 
 /// `pred_double<Int>(+p) ==> +(pred_double<Pos>(p))`
 impl<
-    P,
-    Rec,
+       P: Tm<pos::Pos>,
+     Rec: Tm<pos::Pos>,
 >
     Eval<PredDouble>
 for
     HC<Zp<P>, HN>
 where
-    P: Eval<pos::PredDouble, Out = Rec>,
-    P: Tm<pos::Pos>,
-    Rec: Tm<pos::Pos>,
+       P: Eval<pos::PredDouble, Out = Rec>,
 {
     type Out = Zp<Rec>;
 }

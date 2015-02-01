@@ -29,22 +29,17 @@ mod thunk;
 pub enum
     Arrow<D, C>
 where
-    C: Ty,
-    D: HList,
-    D: Ty,
+       C: Ty,
+       D: Ty + HList,
 {}
 
 impl<
-    C,
-    D,
+       C: Ty,
+       D: Ty + HList,
 >
     Ty
 for
     Arrow<D, C>
-where
-    C: Ty,
-    D: HList,
-    D: Ty,
 {}
 
 /// Predicate providing access to (co)domain of type-level arrows
@@ -59,16 +54,12 @@ where
 }
 
 impl<
-    C,
-    D,
+       C: Ty,
+       D: Ty + HList,
 >
     IsArrow
 for
     Arrow<D, C>
-where
-    C: Ty,
-    D: HList,
-    D: Ty,
 {
     type Dom = D;
     type Cod = C;

@@ -18,15 +18,11 @@ pub trait
 }
 
 impl<
-    C,
-    D,
-    M,
+       C: Ty,
+       D: Ty + HList,
+       M: Infer<Ty = Ar<D, C>>,
 >
     Tm<Ar<D, C>>
 for
     M
-where
-    C: Ty,
-    D: HList + Ty,
-    M: Infer<Ty = Ar<D, C>>,
 {}

@@ -50,15 +50,12 @@ for
 /// (p, b) : Pos
 /// ```
 impl<
-    P,
-    B,
+       B: Tm<Bit>,
+       P: Tm<Pos>,
 >
     Tm<Pos>
 for
     (P, B)
-where
-    B: Tm<Bit>,
-    P: Tm<Pos>,
 {}
 
 
@@ -90,7 +87,7 @@ for
     type Ty = Ar1<Pos, Pos>;
 }
 
-/// `succ(1) => 1:0`
+/// `succ(1) ==> 1:0`
 impl
     Eval<Succ>
 for
@@ -99,31 +96,27 @@ for
     type Out = (_1, _0,);
 }
 
-/// `succ(p:0) => p:1`
+/// `succ(p:0) ==> p:1`
 impl<
-    P,
+       P: Tm<Pos>,
 >
     Eval<Succ>
 for
     HC<(P, _0), HN>
-where
-    P: Tm<Pos>,
 {
     type Out = (P, _1);
 }
 
-/// `p:1 => succ(p):0`
+/// `p:1 ==> succ(p):0`
 impl<
-    P,
-    Rec,
+       P: Tm<Pos>,
+     Rec: Tm<Pos>,
 >
     Eval<Succ>
 for
     HC<(P, _1), HN>
 where
-    P: Eval<Succ, Out = Rec>,
-    P: Tm<Pos>,
-    Rec: Tm<Pos>,
+       P: Eval<Succ, Out = Rec>,
 {
     type Out = (Rec, _0);
 }
@@ -158,7 +151,7 @@ for
     type Ty = Ar<HC<Pos, HC<Pos, HN>>, Pos>;
 }
 
-/// `add(1, 1) => 1:0`
+/// `add(1, 1) ==> 1:0`
 impl
     Eval<Add>
 for
@@ -167,132 +160,116 @@ for
     type Out = (_1, _0);
 }
 
-/// `add(1, q:0) => q:1`
+/// `add(1, q:0) ==> q:1`
 impl<
-    P1,
+      P1: Tm<Pos>,
 >
     Eval<Add>
 for
     HC<_1, HC<(P1, _0), HN>>
-where
-    P1: Tm<Pos>,
 {
     type Out = (P1, _1);
 }
 
-/// `add(1, q:1) => succ(q):0`
+/// `add(1, q:1) ==> succ(q):0`
 impl<
-    P1,
-    Rec,
+      P1: Tm<Pos>,
+     Rec: Tm<Pos>,
 >
     Eval<Add>
 for
     HC<_1, HC<(P1, _1), HN>>
 where
-    P1: Eval<Succ, Out = Rec>,
-    P1: Tm<Pos>,
-    Rec: Tm<Pos>,
+      P1: Eval<Succ, Out = Rec>,
 {
     type Out = (Rec, _0);
 }
 
-/// `add(p:0, 1) => p:1`
+/// `add(p:0, 1) ==> p:1`
 impl<
-    P0,
+      P0: Tm<Pos>,
 >
     Eval<Add>
 for
     HC<(P0, _0), HC<_1, HN>>
-where
-    P0: Tm<Pos>,
 {
     type Out = (P0, _1);
 }
 
-/// `add(p:0, q:0) => add(p, q):0`
+/// `add(p:0, q:0) ==> add(p, q):0`
 impl<
-    P0,
-    P1,
-    Rec,
+      P0: Tm<Pos>,
+      P1: Tm<Pos>,
+     Rec: Tm<Pos>,
 >
     Eval<Add>
 for
     HC<(P0, _0), HC<(P1, _0), HN>>
 where
-    HC<P0, HC<P1, HN>>: Eval<Add, Out = Rec>,
-    P0: Tm<Pos>,
-    P1: Tm<Pos>,
-    Rec: Tm<Pos>,
+    HC<P0, HC<P1, HN>>
+        : Eval<Add, Out = Rec>,
 {
     type Out = (Rec, _0);
 }
 
-/// `add(p:0, q:1) => add(p, q):1`
+/// `add(p:0, q:1) ==> add(p, q):1`
 impl<
-    P0,
-    P1,
-    Rec,
+      P0: Tm<Pos>,
+      P1: Tm<Pos>,
+     Rec: Tm<Pos>,
 >
     Eval<Add>
 for
     HC<(P0, _0), HC<(P1, _1), HN>>
 where
-    HC<P0, HC<P1, HN>>: Eval<Add, Out = Rec>,
-    P0: Tm<Pos>,
-    P1: Tm<Pos>,
-    Rec: Tm<Pos>,
+    HC<P0, HC<P1, HN>>
+        : Eval<Add, Out = Rec>,
 {
     type Out = (Rec, _1);
 }
 
-/// `add(p:1, 1) => succ(p):0`
+/// `add(p:1, 1) ==> succ(p):0`
 impl<
-    P0,
-    Rec,
+      P0: Tm<Pos>,
+     Rec: Tm<Pos>,
 >
     Eval<Add>
 for
     HC<(P0, _1), HC<_1, HN>>
 where
-    P0: Eval<Succ, Out = Rec>,
-    P0: Tm<Pos>,
-    Rec: Tm<Pos>,
+      P0: Eval<Succ, Out = Rec>,
 {
     type Out = (Rec, _0);
 }
 
-/// `add(p:1, q:0) => add(p, q):1`
+/// `add(p:1, q:0) ==> add(p, q):1`
 impl<
-    P0,
-    P1,
-    Rec,
+      P0: Tm<Pos>,
+      P1: Tm<Pos>,
+     Rec: Tm<Pos>,
 >
     Eval<Add>
 for
     HC<(P0, _1), HC<(P1, _0), HN>>
 where
-    HC<P0, HC<P1, HN>>: Eval<Add, Out = Rec>,
-    P0: Tm<Pos>,
-    P1: Tm<Pos>,
-    Rec: Tm<Pos>,
+    HC<P0, HC<P1, HN>>
+        : Eval<Add, Out = Rec>,
 {
     type Out = (Rec, _1);
 }
 
-/// `add(p:1, q:1) => add_carry(p, q):1`
+/// `add(p:1, q:1) ==> add_carry(p, q):1`
 impl<
-    P0,
-    P1,
-    Rec,
+      P0: Tm<Pos>,
+      P1: Tm<Pos>,
+     Rec: Tm<Pos>,
 >
     Eval<Add>
 for
     HC<(P0, _1), HC<(P1, _1), HN>>
 where
-    HC<P0, HC<P1, HN>>: Eval<AddCarry, Out = Rec>,
-    P0: Tm<Pos>,
-    P1: Tm<Pos>,
-    Rec: Tm<Pos>,
+    HC<P0, HC<P1, HN>>
+        : Eval<AddCarry, Out = Rec>,
 {
     type Out = (Rec, _0);
 }
@@ -327,7 +304,7 @@ for
     type Ty = Ar<HC<Pos, HC<Pos, HN>>, Pos>;
 }
 
-/// `add_carry(1, 1) => 1:1`
+/// `add_carry(1, 1) ==> 1:1`
 impl
     Eval<AddCarry>
 for
@@ -336,138 +313,122 @@ for
     type Out = (_1, _1);
 }
 
-/// `add_carry(1, q:0) => succ(q):0`
+/// `add_carry(1, q:0) ==> succ(q):0`
 impl<
-    P1,
-    Rec,
+      P1: Tm<Pos>,
+     Rec: Tm<Pos>,
 >
     Eval<AddCarry>
 for
     HC<_1, HC<(P1, _0), HN>>
 where
-    P1: Eval<Succ, Out = Rec>,
-    P1: Tm<Pos>,
-    Rec: Tm<Pos>,
+      P1: Eval<Succ, Out = Rec>,
 {
     type Out = (Rec, _0);
 }
 
-/// `add_carry(1, q:1) => succ(q):1`
+/// `add_carry(1, q:1) ==> succ(q):1`
 impl<
-    P1,
-    Rec
+      P1: Tm<Pos>,
+     Rec: Tm<Pos>,
 >
     Eval<AddCarry>
 for
     HC<_1, HC<(P1, _1), HN>>
 where
-    P1: Eval<Succ, Out = Rec>,
-    P1: Tm<Pos>,
-    Rec: Tm<Pos>,
+      P1: Eval<Succ, Out = Rec>,
 {
     type Out = (Rec, _1);
 }
 
-/// `add_carry(p:0, 1) => p:1`
+/// `add_carry(p:0, 1) ==> p:1`
 impl<
-    P0,
-    Rec,
+      P0: Tm<Pos>,
+     Rec: Tm<Pos>,
 >
     Eval<AddCarry>
 for
     HC<(P0, _0), HC<_1, HN>>
 where
-    P0: Eval<Succ, Out = Rec>,
-    P0: Tm<Pos>,
-    Rec: Tm<Pos>,
+      P0: Eval<Succ, Out = Rec>,
 {
     type Out = (P0, _0);
 }
 
-/// `add_carry(p:0, q:0) => add(p, q):1`
+/// `add_carry(p:0, q:0) ==> add(p, q):1`
 impl<
-    P0,
-    P1,
-    Rec,
+      P0: Tm<Pos>,
+      P1: Tm<Pos>,
+     Rec: Tm<Pos>,
 >
     Eval<AddCarry>
 for
     HC<(P0, _0), HC<(P1, _0), HN>>
 where
-    HC<P0, HC<P1, HN>>: Eval<Add, Out = Rec>,
-    P0: Tm<Pos>,
-    P1: Tm<Pos>,
-    Rec: Tm<Pos>,
+    HC<P0, HC<P1, HN>>
+        : Eval<Add, Out = Rec>,
 {
     type Out = (Rec, _1);
 }
 
-/// `add_carry(p:0, q:1) => add_carry(p, q):0`
+/// `add_carry(p:0, q:1) ==> add_carry(p, q):0`
 impl<
-    P0,
-    P1,
-    Rec,
+      P0: Tm<Pos>,
+      P1: Tm<Pos>,
+     Rec: Tm<Pos>,
 >
     Eval<AddCarry>
 for
     HC<(P0, _0), HC<(P1, _1), HN>>
 where
-    HC<P0, HC<P1, HN>>: Eval<AddCarry, Out = Rec>,
-    P0: Tm<Pos>,
-    P1: Tm<Pos>,
-    Rec: Tm<Pos>,
+    HC<P0, HC<P1, HN>>
+        : Eval<AddCarry, Out = Rec>,
 {
     type Out = (Rec, _0);
 }
 
-/// `add_carry(p:1, 1) => succ(p):1`
+/// `add_carry(p:1, 1) ==> succ(p):1`
 impl<
-    P0,
-    Rec,
+      P0: Tm<Pos>,
+     Rec: Tm<Pos>,
 >
     Eval<AddCarry>
 for
     HC<(P0, _1), HC<_1, HN>>
 where
-    P0: Tm<Pos>,
-    P0: Eval<Succ, Out = Rec>,
-    Rec: Tm<Pos>,
+      P0: Eval<Succ, Out = Rec>,
 {
     type Out = (Rec, _1);
 }
 
-/// `add_carry(p:1, q:0) => add_carry(p, q):0`
+/// `add_carry(p:1, q:0) ==> add_carry(p, q):0`
 impl<
-    P0,
-    P1,
-    Rec,
+      P0: Tm<Pos>,
+      P1: Tm<Pos>,
+     Rec: Tm<Pos>,
 >
     Eval<AddCarry>
 for
     HC<(P0, _1), HC<(P1, _0), HN>>
 where
-    HC<P0, HC<P1, HN>>: Eval<AddCarry, Out = Rec>,
-    P0: Tm<Pos>,
-    P1: Tm<Pos>,
-    Rec: Tm<Pos>,
+    HC<P0, HC<P1, HN>>
+        : Eval<AddCarry, Out = Rec>,
 {
     type Out = (Rec, _0);
 }
 
-/// `add_carry(p:1, q:1) => add_carry(p, q):1`
+/// `add_carry(p:1, q:1) ==> add_carry(p, q):1`
 impl<
-    P0,
-    P1,
-    Rec,
+      P0: Tm<Pos>,
+      P1: Tm<Pos>,
+     Rec: Tm<Pos>,
 >
     Eval<AddCarry>
 for
     HC<(P0, _1), HC<(P1, _1), HN>>
 where
-    HC<P0, HC<P1, HN>>: Eval<AddCarry, Out = Rec>,
-    P0: Tm<Pos>,
-    P1: Tm<Pos>,
-    Rec: Tm<Pos>,
+    HC<P0, HC<P1, HN>>
+        : Eval<AddCarry, Out = Rec>,
 {
     type Out = (Rec, _1);
 }
@@ -500,7 +461,7 @@ for
     type Ty = Ar1<Pos, Pos>;
 }
 
-/// `pred_carry(1) => 1`
+/// `pred_carry(1) ==> 1`
 impl
     Eval<PredDouble>
 for
@@ -509,31 +470,27 @@ for
     type Out = _1;
 }
 
-/// `pred_carry(p:0) => pred_double(p):1`
+/// `pred_carry(p:0) ==> pred_double(p):1`
 impl<
-    P,
-    Rec,
+       P: Tm<Pos>,
+     Rec: Tm<Pos>,
 >
     Eval<PredDouble>
 for
     HC<(P, _0), HN>
 where
-    P: Eval<PredDouble, Out = Rec>,
-    P: Tm<Pos>,
-    Rec: Tm<Pos>,
+       P: Eval<PredDouble, Out = Rec>,
 {
     type Out = (Rec, _1);
 }
 
-/// `pred_carry(p:1) => p:0:1`
+/// `pred_carry(p:1) ==> p:0:1`
 impl<
-    P,
+       P: Tm<Pos>,
 >
     Eval<PredDouble>
 for
     HC<(P, _1), HN>
-where
-    P: Tm<Pos>,
 {
     type Out = ((P, _0), _1);
 }
@@ -567,7 +524,7 @@ for
     type Ty = Ar1<Pos, Pos>;
 }
 
-/// `pred(p:1) => p:0`
+/// `pred(p:1) ==> p:0`
 impl
     Eval<Pred>
 for
@@ -576,31 +533,27 @@ for
     type Out = _1;
 }
 
-/// `p:0 => pred_double(p)`
+/// `p:0 ==> pred_double(p)`
 impl<
-    P,
-    Rec,
+       P: Tm<Pos>,
+     Rec: Tm<Pos>,
 >
     Eval<Pred>
 for
     HC<(P, _0), HN>
 where
-    P: Eval<PredDouble, Out = Rec>,
-    P: Tm<Pos>,
-    Rec: Tm<Pos>,
+       P: Eval<PredDouble, Out = Rec>,
 {
     type Out = Rec;
 }
 
-/// `p:1 => p:0`
+/// `p:1 ==> p:0`
 impl<
-    P,
+       P: Tm<Pos>,
 >
     Eval<Pred>
 for
     HC<(P, _1), HN>
-where
-    P: Tm<Pos>,
 {
     type Out = (P, _0);
 }
@@ -635,54 +588,50 @@ for
     type Ty = Ar<HC<Pos, HC<Pos, HN>>, Pos>;
 }
 
-/// `mul(1, q) => q`
+/// `mul(1, q) ==> q`
 impl<
-    P1,
+      P1: Tm<Pos>,
 >
     Eval<Mul>
 for
     HC<_1, HC<P1, HN>>
-where
-    P1: Tm<Pos>
 {
     type Out = P1;
 }
 
-/// `mul(p:0, q) => mul(p, q):0`
+/// `mul(p:0, q) ==> mul(p, q):0`
 impl<
-    P0,
-    P1,
-    Rec,
+      P0: Tm<Pos>,
+      P1: Tm<Pos>,
+     Rec: Tm<Pos>,
 >
     Eval<Mul>
 for
     HC<(P0, _0), HC<P1, HN>>
 where
-    HC<P0, HC<P1, HN>>: Eval<Mul, Out = Rec>,
-    P0: Tm<Pos>,
-    P1: Tm<Pos>,
-    Rec: Tm<Pos>,
+    HC<P0, HC<P1, HN>>
+        : Eval<Mul, Out = Rec>,
 {
     type Out = (Rec, _0);
 }
 
-/// `mul(p:1, q) => add(q, mul(p, q)):0`
+/// `mul(p:1, q) ==> add(q, mul(p, q)):0`
 impl<
-    P0,
-    P1,
-    Rec0,
-    Rec1,
+      P0: Tm<Pos>,
+      P1: Tm<Pos>,
+    Rec0: Tm<Pos>,
+    Rec1: Tm<Pos>,
 >
     Eval<Mul>
 for
     HC<(P0, _1), HC<P1, HN>>
 where
-    HC<P0, HC<P1, HN>>: Eval<Mul, Out = Rec0>,
-    HC<P1, HC<Rec0, HN>>: Eval<Add, Out = Rec1>,
-    P0: Tm<Pos>,
-    P1: Tm<Pos>,
-    Rec0: Tm<Pos>,
-    Rec1: Tm<Pos>,
+    // mul(p0, p1) ==> r0
+    HC<P0, HC<P1, HN>>
+        : Eval<Mul, Out = Rec0>,
+    // mul(p1, r0) ==> r1
+    HC<P1, HC<Rec0, HN>>
+        : Eval<Add, Out = Rec1>,
 {
     type Out = Rec1;
 }

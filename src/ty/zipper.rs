@@ -29,7 +29,7 @@ use ty::{
 pub enum
     Zipper<A>
 where
-    A: Ty,
+       A: Ty,
 {}
 
 /// ```ignore
@@ -38,13 +38,11 @@ where
 /// Zipper<A> :: Ty
 /// ```
 impl<
-    A,
+       A: Ty,
 >
     Ty
 for
     Zipper<A>
-where
-    A: Ty,
 {}
 
 
@@ -60,32 +58,26 @@ where
 #[derive(PartialOrd)]
 #[derive(Rand)]
 pub struct
-    MkZipper<LS, RS>(LS, RS)
+    MkZipper<Xs, Ys>(Xs, Ys)
 where
-    LS: HList,
-    RS: HList;
+      Xs: HList,
+      Ys: HList;
 
 /// ```ignore
 /// A :: Ty
-/// l : List<A>
-/// r : List<A>
-/// ---------------------------
-/// mk_zipper(l, r) : Zipper<A>
+/// xs : List<A>
+/// ys : List<A>
+/// -----------------------------
+/// mk_zipper(xs, ys) : Zipper<A>
 /// ```
 impl<
-    A,
-    L,
-    R,
+       A: Ty,
+      Xs: Tm<List<A>> + HList,
+      Ys: Tm<List<A>> + HList,
 >
     Tm<Zipper<A>>
 for
-    MkZipper<L, R>
-where
-    A: Ty,
-    L: HList,
-    L: Tm<List<A>>,
-    R: HList,
-    R: Tm<List<A>>,
+    MkZipper<Xs, Ys>
 {}
 
 
@@ -102,7 +94,7 @@ where
 pub enum
     Zip<A>
 where
-    A: Ty,
+       A: Ty,
 {}
 
 /// ```ignore
@@ -112,30 +104,24 @@ where
 /// zip(xs) : Zipper<A>
 /// ```
 impl<
-    A,
+       A: Ty,
 >
     Infer
 for
     Zip<A>
-where
-    A: Ty,
 {
     type Mode = infer::mode::Constant;
-    type Ty   = Ar1<List<A>, Zipper<A>>;
+    type Ty = Ar1<List<A>, Zipper<A>>;
 }
 
 /// `zip(xs) ==> mk_zipper(nil, xs)`
 impl<
-    A,
-    XS,
+       A: Ty,
+      XS: Tm<List<A>> + HList,
 >
     Eval<Zip<A>>
 for
     HC<XS, HN>
-where
-    A: Ty,
-    XS: HList,
-    XS: Tm<List<A>>,
 {
     type Out = MkZipper<HN, XS>;
 }
@@ -154,7 +140,7 @@ where
 pub enum
     Unzip<A>
 where
-    A: Ty,
+       A: Ty,
 {}
 
 /// ```ignore
@@ -164,36 +150,28 @@ where
 /// unzip(zs) : List<A>
 /// ```
 impl<
-    A,
+       A: Ty,
 >
     Infer
 for
     Unzip<A>
-where
-    A: Ty,
 {
     type Mode = infer::mode::Constant;
     type Ty = Ar1<Zipper<A>, List<A>>;
 }
 
-/// `unzip(mk_zipper(l, r)) ==> append(reverse(l), r)`
+/// `unzip(mk_zipper(xs, ys)) ==> append(reverse(xs), ys)`
 impl<
-    A,
-    L,
-    R,
-    Rec,
+       A: Ty,
+      Xs: Tm<List<A>> + HList,
+      Ys: Tm<List<A>> + HList,
+     Rec: Tm<List<A>>,
 >
     Eval<Unzip<A>>
 for
-    HC<MkZipper<L, R>, HN>
+    HC<MkZipper<Xs, Ys>, HN>
 where
-    A: Ty,
-    L: hlist::AppendReverse<R, Out = Rec>,
-    L: HList,
-    L: Tm<List<A>>,
-    R: HList,
-    R: Tm<List<A>>,
-    Rec: Tm<List<A>>,
+      Xs: hlist::AppendReverse<Ys, Out = Rec>,
 {
     type Out = Rec;
 }
@@ -212,7 +190,7 @@ where
 pub enum
     Right<A>
 where
-    A: Ty,
+       A: Ty,
 {}
 
 /// ```ignore
@@ -222,37 +200,28 @@ where
 /// right(zs) : Zipper<A>
 /// ```
 impl<
-    A,
+       A: Ty,
 >
     Infer
 for
     Right<A>
-where
-    A: Ty,
 {
     type Mode = infer::mode::Constant;
     type Ty = Ar1<Zipper<A>, Zipper<A>>;
 }
 
-/// `right(mk_zipper(l, cons(rh, rt))) ==> mk_zipper(cons(rh, l), rt)`
+/// `right(mk_zipper(xs, cons(y, ys))) ==> mk_zipper(cons(y, xs), ys)`
 impl<
-    A,
-    L,
-    RH,
-    RT,
+       A: Ty,
+      Xs: Tm<List<A>> + HList,
+       Y: Tm<A>,
+      Ys: Tm<List<A>> + HList,
 >
     Eval<Right<A>>
 for
-    HC<MkZipper<L, HC<RH, RT>>, HN>
-where
-    A: Ty,
-    L: HList,
-    L: Tm<List<A>>,
-    RH: Tm<A>,
-    RT: HList,
-    RT: Tm<List<A>>,
+    HC<MkZipper<Xs, HC<Y, Ys>>, HN>
 {
-    type Out = MkZipper<HC<RH, L>, RT>;
+    type Out = MkZipper<HC<Y, Xs>, Ys>;
 }
 
 
@@ -269,7 +238,7 @@ where
 pub enum
     Left<A>
 where
-    A: Ty,
+       A: Ty,
 {}
 
 /// ```ignore
@@ -279,37 +248,28 @@ where
 /// left(zs) : Zipper<A>
 /// ```
 impl<
-    A,
+       A: Ty,
 >
     Infer
 for
     Left<A>
-where
-    A: Ty,
 {
     type Mode = infer::mode::Constant;
     type Ty = Ar1<Zipper<A>, Zipper<A>>;
 }
 
-/// `left(mk_zipper(cons(lh, lt), r)) ==> mk_zipper(lt, cons(lh, r))`
+/// `left(mk_zipper(cons(x, xs), ys)) ==> mk_zipper(xs, cons(x, ys))`
 impl<
-    A,
-    LH,
-    LT,
-    R,
+       A: Ty,
+       X: Tm<A>,
+      Xs: Tm<List<A>> + HList,
+      Ys: Tm<List<A>> + HList,
 >
     Eval<Left<A>>
 for
-    HC<MkZipper<HC<LH, LT>, R>, HN>
-where
-    A: Ty,
-    LH: Tm<A>,
-    LT: HList,
-    LT: Tm<List<A>>,
-    R: HList,
-    R: Tm<List<A>>,
+    HC<MkZipper<HC<X, Xs>, Ys>, HN>
 {
-    type Out = MkZipper<LT, HC<LH, R>>;
+    type Out = MkZipper<Xs, HC<X, Ys>>;
 }
 
 
@@ -326,7 +286,7 @@ where
 pub enum
     Get<A>
 where
-    A: Ty,
+       A: Ty,
 {}
 
 /// ```ignore
@@ -336,37 +296,28 @@ where
 /// get(zs) : A
 /// ```
 impl<
-    A,
+       A: Ty,
 >
     Infer
 for
     Get<A>
-where
-    A: Ty,
 {
     type Mode = infer::mode::Constant;
     type Ty = Ar1<Zipper<A>, A>;
 }
 
-/// `get(mk_zipper(l, cons(rh, rt))) ==> rh`
+/// `get(mk_zipper(xs, cons(y, ys))) ==> y`
 impl<
-    A,
-    L,
-    RH,
-    RT,
+       A: Ty,
+      Xs: Tm<List<A>> + HList,
+       Y: Tm<A>,
+      Ys: Tm<List<A>> + HList,
 >
     Eval<Get<A>>
 for
-    HC<MkZipper<L, HC<RH, RT>>, HN>
-where
-    A: Ty,
-    L: HList,
-    L: Tm<List<A>>,
-    RH: Tm<A>,
-    RT: HList,
-    RT: Tm<List<A>>,
+    HC<MkZipper<Xs, HC<Y, Ys>>, HN>
 {
-    type Out = RH;
+    type Out = Y;
 }
 
 
@@ -383,7 +334,7 @@ where
 pub enum
     Put<A>
 where
-    A: Ty,
+       A: Ty,
 {}
 
 /// ```ignore
@@ -394,39 +345,29 @@ where
 /// put(zs, e) : Zipper<A>
 /// ```
 impl<
-    A,
+       A: Ty,
 >
     Infer
 for
     Put<A>
-where
-    A: Ty,
 {
     type Mode = infer::mode::Constant;
     type Ty = Ar<HC<Zipper<A>, HC<A, HN>>, Zipper<A>>;
 }
 
-/// `put(mk_zipper(l, cons(rh, rt)), e) ==> mk_zipper(l, cons(e, rt))`
+/// `put(mk_zipper(xs, cons(y, ys)), e) ==> mk_zipper(xs, cons(e, ys))`
 impl<
-    A,
-    E,
-    L,
-    RH,
-    RT,
+       A: Ty,
+       E: Tm<A>,
+      Xs: Tm<List<A>> + HList,
+       Y: Tm<A>,
+      Ys: Tm<List<A>> + HList,
 >
     Eval<Put<A>>
 for
-    HC<MkZipper<L, HC<RH, RT>>, HC<E, HN>>
-where
-    A: Ty,
-    E: Tm<A>,
-    L: HList,
-    L: Tm<List<A>>,
-    RH: Tm<A>,
-    RT: HList,
-    RT: Tm<List<A>>,
+    HC<MkZipper<Xs, HC<Y, Ys>>, HC<E, HN>>
 {
-    type Out = MkZipper<L, HC<E, RT>>;
+    type Out = MkZipper<Xs, HC<E, Ys>>;
 }
 
 

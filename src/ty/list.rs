@@ -28,7 +28,7 @@ use ty::{
 pub enum
     List<A>
 where
-    A: Ty,
+       A: Ty,
 {}
 
 /// ```ignore
@@ -37,13 +37,11 @@ where
 /// List<A> :: Ty
 /// ```
 impl<
-    A,
+       A: Ty,
 >
     Ty
 for
     List<A>
-where
-    A: Ty,
 {}
 
 /// ```ignore
@@ -52,13 +50,11 @@ where
 /// nil : List<A>
 /// ```
 impl<
-    A,
+       A: Ty,
 >
     Tm<List<A>>
 for
     HN
-where
-    A: Ty,
 {}
 
 /// ```ignore
@@ -69,17 +65,13 @@ where
 /// cons(h, t) : List<A>
 /// ```
 impl<
-    A,
-    H,
-    T,
+       A: Ty,
+       H: Tm<A>,
+       T: Tm<List<A>>,
 >
     Tm<List<A>>
 for
     HC<H, T>
-where
-    A: Ty,
-    H: Tm<A>,
-    T: Tm<List<A>>,
 {}
 
 
@@ -96,7 +88,7 @@ where
 pub enum
     Append<A>
 where
-    A: Ty,
+       A: Ty,
 {}
 
 /// ```ignore
@@ -107,33 +99,27 @@ where
 /// append(l, r) : List<A>
 /// ```
 impl<
-    A,
+       A: Ty,
 >
     Infer
 for
     Append<A>
-where
-    A: Ty,
 {
     type Mode = infer::mode::Constant;
     type Ty = Ar<HC<List<A>, HC<List<A>, HN>>, List<A>>;
 }
 
 impl<
-    A,
-    L,
-    R,
-    Rec,
+       A: Ty,
+       L: Tm<List<A>>,
+       R: Tm<List<A>>,
+     Rec: Tm<List<A>>,
 >
     Eval<Append<A>>
 for
     HC<L, HC<R, HN>>
 where
-    A: Ty,
-    L: hlist::Append<R, Out = Rec>,
-    L: Tm<List<A>>,
-    R: Tm<List<A>>,
-    Rec: Tm<List<A>>,
+       L: hlist::Append<R, Out = Rec>,
 {
     type Out = Rec;
 }
@@ -152,7 +138,7 @@ where
 pub enum
     Reverse<A>
 where
-    A: Ty,
+       A: Ty,
 {}
 
 /// ```ignore
@@ -162,32 +148,26 @@ where
 /// reverse(xs) : List<A>
 /// ```
 impl<
-    A,
+       A: Ty,
 >
     Infer
 for
     Reverse<A>
-where
-    A: Ty,
 {
     type Mode = infer::mode::Constant;
     type Ty = Ar1<List<A>, List<A>>;
 }
 
 impl<
-    A,
-    Rec,
-    Xs,
+       A: Ty,
+     Rec: Tm<List<A>>,
+      Xs: Tm<List<A>> + HList,
 >
     Eval<Reverse<A>>
 for
     HC<Xs, HN>
 where
-    A: Ty,
-    Rec: Tm<List<A>>,
-    Xs: HList,
-    Xs: hlist::Reverse<Out = Rec>,
-    Xs: Tm<List<A>>,
+      Xs: hlist::Reverse<Out = Rec>,
 {
     type Out = Rec;
 }
@@ -206,69 +186,55 @@ where
 pub enum
     Map<A, B>
 where
-    A: Ty,
-    B: Ty,
+       A: Ty,
+       B: Ty,
 {}
 
 impl<
-    A,
-    B,
+       A: Ty,
+       B: Ty,
 >
     Infer
 for
     Map<A, B>
-where
-    A: Ty,
-    B: Ty,
 {
     type Mode = infer::mode::Constant;
     type Ty = Ar<HC<Ar<HC<A, HN>, B>, HC<List<A>, HN>>, List<B>>;
 }
 
-// `map(fx, nil) => nil`
+// `map(fx, nil) ==> nil`
 impl<
-    A,
-    B,
-    Fx,
+       A: Ty,
+       B: Ty,
+      Fx: Infer<Ty = Ar1<A, B>>,
 >
     Eval<Map<A, B>>
 for
     HC<Fx, HC<Nil, HN>>
-where
-    A: Ty,
-    B: Ty,
-    Fx: Infer<Ty = Ar1<A, B>>,
 {
     type Out = Nil;
 }
 
-// `map(fx, cons(h, t)) => cons(fx(h), map(f, t))`
+// `map(fx, cons(h, t)) ==> cons(fx(h), map(f, t))`
 impl<
-    A,
-    B,
-    Fx,
-    H,
-    T,
-    Rec0,
-    Rec1,
+       A: Ty,
+       B: Ty,
+      Fx: Infer<Ty = Ar1<A, B>>,
+       H: Tm<A>,
+       T: Tm<List<A>> + HList,
+    Rec0: Tm<B>,
+    Rec1: Tm<List<B>>,
 >
     Eval<Map<A, B>>
 for
     HC<Fx, HC<Cons<H, T>, HN>>
 where
-    A: Ty,
-    B: Ty,
-    Fx: Infer<Ty = Ar1<A, B>>,
-    H: Tm<A>,
-    T: HList,
-    T: Tm<List<A>>,
-
-    // fx(h) => r0
-    HC<H, HN>: Eval<Fx, Out = Rec0>,
-    // map(fx, t) => r1
-    HC<Fx, HC<T, HN>>: Eval<Map<A, B>, Out = Rec1>,
-    // cons(r0, r1) => out
-    Cons<Rec0, Rec1>: Tm<List<B>>,
+    // fx(h) ==> r0
+    HC<H, HN>
+        : Eval<Fx, Out = Rec0>,
+    // map(fx, t) ==> r1
+    HC<Fx, HC<T, HN>>
+        : Eval<Map<A, B>, Out = Rec1>,
 {
     type Out = Cons<Rec0, Rec1>;
 }

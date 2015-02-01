@@ -16,28 +16,31 @@ use ty::op::{
 /// (i.e., operation symbol)
 pub trait
     AppEval<
-        M,
+            M,
         FxDTy,
-        Fx,
+           Fx,
     >
 where
-    <Fx as Infer>::Ty: IsArrow<Dom = FxDTy>,
-    Fx: Infer,
-    M: infer::mode::Mode,
-    Self: TmPrefix<
-        <<Fx as Infer>::Ty as IsArrow>::Dom
-    >,
+    <Fx as
+        Infer
+   >::Ty: IsArrow<Dom = FxDTy>,
+      Fx: Infer,
+       M: infer::mode::Mode,
     Self: HList,
+    Self:
+        TmPrefix<
+            <<Fx as Infer>::Ty as IsArrow>::Dom
+        >,
 {
     // FIXME: should probably put a bound on Out
     type Out;
 }
 
 impl<
-    CxDTy,
-    CxCTy,
-    Cx,
-    Args,
+    Args: HList,
+      Cx: Infer<Ty = Ar<CxDTy, CxCTy>>,
+   CxCTy: Ty,
+   CxDTy: Ty + HList,
 >
     AppEval<
         infer::mode::Constant,
@@ -47,17 +50,13 @@ impl<
 for
     Args
 where
-    Args: AppEval<
-        infer::mode::Thunk,
-        CxDTy,
-        Thunk<Cx, HN>
-    >,
+    Args:
+        AppEval<
+            infer::mode::Thunk,
+            CxDTy,
+            Thunk<Cx, HN>
+        >,
     Args: TmPrefix<CxDTy>,
-    Args: HList,
-    Cx: Infer<Ty = Ar<CxDTy, CxCTy>>,
-    CxCTy: Ty,
-    CxDTy: HList,
-    CxDTy: Ty,
 {
     type Out =
         <Args as
@@ -70,10 +69,10 @@ where
 }
 
 impl<
-    Fx,
-    FxDTy,
-    TxCTy,
-    Xs,
+      Fx: Infer<Ty = Ar<FxDTy, TxCTy>>,
+   FxDTy: Ty + HList,
+   TxCTy: Ty,
+      Xs: HList,
 >
     AppEval<
         infer::mode::Thunk,
@@ -83,23 +82,19 @@ impl<
 for
     HN
 where
-    Fx: Infer<Ty = Ar<FxDTy, TxCTy>>,
-    FxDTy: HList,
-    FxDTy: Ty,
-    Thunk<Fx, Xs>: Infer<Ty = Ar<HN, TxCTy>>,
-    TxCTy: Ty,
-    Xs: Eval<Fx>,
-    Xs: HList,
-    Xs: TmPrefix<FxDTy, Out = HN>,
+    Thunk<Fx, Xs
+       >: Infer<Ty = Ar<HN, TxCTy>>,
+      Xs: Eval<Fx>,        
+      Xs: TmPrefix<FxDTy, Out = HN>,
 {
     type Out = <Xs as Eval<Fx>>::Out;
 }
 
 impl<
-    Tx,
-    TxCTy,
-    TxDHTy,
-    TxDTTy,
+      Tx: Infer<Ty = Ar<HC<TxDHTy, TxDTTy>, TxCTy>>,
+   TxCTy: Ty,
+  TxDHTy: Ty,
+  TxDTTy: Ty + HList,
 >
     AppEval<
         infer::mode::Thunk,
@@ -108,26 +103,20 @@ impl<
     >
 for
     HN
-where
-    Tx: Infer<Ty = Ar<HC<TxDHTy, TxDTTy>, TxCTy>>,
-    TxCTy: Ty,
-    TxDHTy: Ty,
-    TxDTTy: HList,
-    TxDTTy: Ty,
 {
     type Out = Tx;
 }
 
 impl<
-    ArgsHTm,
-    ArgsTTm,
-    Fx,
-    FxDHTy,
-    FxDTTy,
-    TxCTy,
-    TxDHTy,
-    TxDTTy,
-    Xs,
+     ArgsHTm,
+     ArgsTTm: HList,
+          Fx: Infer<Ty = Ar<HC<FxDHTy, FxDTTy>, TxCTy>>,
+      FxDHTy: Ty,
+      FxDTTy: Ty + HList,
+       TxCTy: Ty,
+      TxDHTy: Ty,
+      TxDTTy: Ty + HList,
+          Xs: HList,
 >
     AppEval<
         infer::mode::Thunk,
@@ -137,24 +126,16 @@ impl<
 for
     HC<ArgsHTm, ArgsTTm>
 where
-    ArgsTTm: AppEval<
-        infer::mode::Thunk,
-        TxDTTy,
-        Thunk<Fx, HS<Xs, ArgsHTm>>
-    >,
-    ArgsTTm: HList,
-    Fx: Infer<Ty = Ar<HC<FxDHTy, FxDTTy>, TxCTy>>,
-    FxDHTy: Ty,
-    FxDTTy: HList,
-    FxDTTy: Ty,
-    HC<ArgsHTm, ArgsTTm>: TmPrefix<HC<TxDHTy, TxDTTy>>,
-    TxCTy: Ty,
-    TxDHTy: Ty,
-    TxDTTy: HList,
-    TxDTTy: Ty,
-    Xs: HList,
-    Xs: TmPrefix<HC<FxDHTy, FxDTTy>, Out = HC<TxDHTy, TxDTTy>>,
-    Xs: Snoc<ArgsHTm>,
+      Xs: TmPrefix<HC<FxDHTy, FxDTTy>, Out = HC<TxDHTy, TxDTTy>>,
+      Xs: Snoc<ArgsHTm>,
+    ArgsTTm
+        : AppEval<
+            infer::mode::Thunk,
+            TxDTTy,
+            Thunk<Fx, HS<Xs, ArgsHTm>>
+        >,
+    HC<ArgsHTm, ArgsTTm>
+        : TmPrefix<HC<TxDHTy, TxDTTy>>,
 {
     type Out =
         <ArgsTTm as AppEval<

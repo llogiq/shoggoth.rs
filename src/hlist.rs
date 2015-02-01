@@ -36,7 +36,7 @@ for
 pub struct
     Cons<H, T>
 where
-    T: HList
+       T: HList
 {
     pub head: H,
     pub tail: T,
@@ -47,7 +47,7 @@ impl<H, T>
 for
     Cons<H, T>
 where
-    T: HList
+       T: HList
 {}
 
 /// `HList` predicate implemented when `Self` is heterogeneous cons
@@ -68,14 +68,12 @@ where
 }
 
 impl<
-    H,
-    T,
+       H,
+       T: HList,
 >
     IsCons
 for
     Cons<H, T>
-where
-    T: HList,
 {
     type H = H;
     type T = T;
@@ -97,36 +95,32 @@ where
 pub trait
     Append<R>
 where
-    R: HList,
+       R: HList,
     Self: HList,
 {
     type Out: HList;
 }
 
 impl<
-    R,
+    R: HList,
 >
     Append<R>
 for
     Nil
-where
-    R: HList,
 {
     type Out = R;
 }
 
 impl<
-    H,
-    R,
-    T,
+       H,
+       R: HList,
+       T: HList,
 >
     Append<R>
 for
     Cons<H, T>
 where
-    R: HList,
-    T: Append<R>,
-    T: HList,
+       T: Append<R>,
 {
     type Out = Cons<H, <T as Append<R>>::Out>;
 }
@@ -153,15 +147,14 @@ for
 }
 
 impl<
-    H,
-    T,
-    X,
+       H,
+       T: HList,
+       X,
 >
     Snoc<X>
 for
     Cons<H, T>
 where
-    T: HList,
     T: Snoc<X>,
 {
     type Out = Cons<H, <T as Snoc<X>>::Out>;
@@ -172,36 +165,32 @@ where
 pub trait
     AppendReverse<Acc>
 where
-    Acc: HList,
+     Acc: HList,
     Self: HList,
 {
     type Out: HList;
 }
 
 impl<
-    Acc,
+     Acc: HList,
 >
     AppendReverse<Acc>
 for
     Nil
-where
-    Acc: HList,
 {
     type Out = Acc;
 }
 
 impl<
-    Acc,
-    H,
-    T,
+     Acc: HList,
+       H,
+       T: HList,
 >
     AppendReverse<Acc>
 for
     Cons<H, T>
 where
-    Acc: HList,
-    T: HList,
-    T: AppendReverse<Cons<H, Acc>>,
+       T: AppendReverse<Cons<H, Acc>>,
 {
     type Out = <T as AppendReverse<Cons<H, Acc>>>::Out;
 }
@@ -216,14 +205,13 @@ where
 }
 
 impl<
-    Xs
+      Xs: HList,
 >
     Reverse
 for
     Xs
 where
-    Xs: HList,
-    Xs: AppendReverse<Nil>,
+      Xs: AppendReverse<Nil>,
 {
     type Out = <Xs as AppendReverse<Nil>>::Out;
 }
