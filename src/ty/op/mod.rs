@@ -91,6 +91,10 @@ pub type Ap<Fx, Xs> =
         >
     >::Out;
 
+/// Alias for partially applying terms of arrow types to zero
+/// arguments
+pub type Ap0<Fx> = Ap<Fx, HN>;
+
 /// Alias for partially applying terms of arrow types to a single
 /// argument
 pub type Ap1<Fx, X> = Ap<Fx, HC<X, HN>>;
