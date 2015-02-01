@@ -1,13 +1,15 @@
 pub use self::apply::{
     AppEval,
 };
+pub use self::compose::{
+    Cmp,
+    ProjCods,
+    ProjDoms,
+};
 pub use self::eval::{
     Eval,
 };
 pub use self::thunk::{
-    Cmp,
-    ProjCods,
-    ProjDoms,
     Thunk,
 };
 use hlist::*;
@@ -17,6 +19,7 @@ use ty::{
 };
 
 mod apply;
+mod compose;
 mod eval;
 mod thunk;
 
