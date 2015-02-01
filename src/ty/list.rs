@@ -86,7 +86,7 @@ for
 #[derive(PartialEq)]
 #[derive(PartialOrd)]
 pub enum
-    Append<A>
+    Prepend<A>
 where
        A: Ty,
 {}
@@ -103,7 +103,7 @@ impl<
 >
     Infer
 for
-    Append<A>
+    Prepend<A>
 {
     type Mode = infer::mode::Constant;
     type Ty = Ar<HC<List<A>, HC<List<A>, HN>>, List<A>>;
@@ -115,11 +115,11 @@ impl<
       Ys: Tm<List<A>>,
      Rec: Tm<List<A>>,
 >
-    Eval<Append<A>>
+    Eval<Prepend<A>>
 for
     HC<Xs, HC<Ys, HN>>
 where
-      Xs: hlist::Append<Ys, Out = Rec>,
+      Xs: hlist::Prepend<Ys, Out = Rec>,
 {
     type Out = Rec;
 }

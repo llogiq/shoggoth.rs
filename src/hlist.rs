@@ -91,9 +91,9 @@ for
 
 
 
-/// Append for heterogeneous lists
+/// Prepend for heterogeneous lists
 pub trait
-    Append<R>
+    Prepend<R>
 where
        R: HList,
     Self: HList,
@@ -104,7 +104,7 @@ where
 impl<
     R: HList,
 >
-    Append<R>
+    Prepend<R>
 for
     Nil
 {
@@ -116,13 +116,13 @@ impl<
        R: HList,
        T: HList,
 >
-    Append<R>
+    Prepend<R>
 for
     Cons<H, T>
 where
-       T: Append<R>,
+       T: Prepend<R>,
 {
-    type Out = Cons<H, <T as Append<R>>::Out>;
+    type Out = Cons<H, <T as Prepend<R>>::Out>;
 }
 
 
@@ -163,7 +163,7 @@ where
 
 
 pub trait
-    AppendReverse<Acc>
+    ReversePrepend<Acc>
 where
      Acc: HList,
     Self: HList,
@@ -174,7 +174,7 @@ where
 impl<
      Acc: HList,
 >
-    AppendReverse<Acc>
+    ReversePrepend<Acc>
 for
     Nil
 {
@@ -186,16 +186,16 @@ impl<
        H,
        T: HList,
 >
-    AppendReverse<Acc>
+    ReversePrepend<Acc>
 for
     Cons<H, T>
 where
-       T: AppendReverse<Cons<H, Acc>>,
+       T: ReversePrepend<Cons<H, Acc>>,
 {
-    type Out = <T as AppendReverse<Cons<H, Acc>>>::Out;
+    type Out = <T as ReversePrepend<Cons<H, Acc>>>::Out;
 }
 
-/// Reverse for heterogeneous lists
+/// Reverse prepend for heterogeneous lists
 pub trait
     Reverse
 where
@@ -211,9 +211,9 @@ impl<
 for
     Xs
 where
-      Xs: AppendReverse<Nil>,
+      Xs: ReversePrepend<Nil>,
 {
-    type Out = <Xs as AppendReverse<Nil>>::Out;
+    type Out = <Xs as ReversePrepend<Nil>>::Out;
 }
 
 

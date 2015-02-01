@@ -35,7 +35,7 @@ impl<
 for
     HC<Fx, Fxs>
 where
-       D: Append<Rec0, Out = Rec1>,
+       D: Prepend<Rec0, Out = Rec1>,
      Fxs: ProjDoms<Out = Rec0>,
     <Fx as Infer>::Ty
         : IsArrow<Dom = D>,

@@ -171,7 +171,7 @@ impl<
 for
     HC<MkZipper<Xs, Ys>, HN>
 where
-      Xs: hlist::AppendReverse<Ys, Out = Rec>,
+      Xs: hlist::ReversePrepend<Ys, Out = Rec>,
 {
     type Out = Rec;
 }
