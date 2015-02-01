@@ -54,24 +54,24 @@ impl<
 >
     Tm<List<A>>
 for
-    HN
+    Nil
 {}
 
 /// ```ignore
 /// A :: Ty
-/// h : A
-/// t : List<A>
-/// --------------------
-/// cons(h, t) : List<A>
+/// x : A
+/// xs : List<A>
+/// ---------------------
+/// cons(x, xs) : List<A>
 /// ```
 impl<
        A: Ty,
-       H: Tm<A>,
-       T: Tm<List<A>>,
+       X: Tm<A>,
+      Xs: Tm<List<A>> + HList,
 >
     Tm<List<A>>
 for
-    HC<H, T>
+    Cons<X, Xs>
 {}
 
 
@@ -111,15 +111,15 @@ for
 
 impl<
        A: Ty,
-       L: Tm<List<A>>,
-       R: Tm<List<A>>,
+      Xs: Tm<List<A>>,
+      Ys: Tm<List<A>>,
      Rec: Tm<List<A>>,
 >
     Eval<Append<A>>
 for
-    HC<L, HC<R, HN>>
+    HC<Xs, HC<Ys, HN>>
 where
-       L: hlist::Append<R, Out = Rec>,
+      Xs: hlist::Append<Ys, Out = Rec>,
 {
     type Out = Rec;
 }
@@ -215,25 +215,25 @@ for
     type Out = Nil;
 }
 
-// `map(fx, cons(h, t)) ==> cons(fx(h), map(f, t))`
+// `map(fx, cons(x, xs)) ==> cons(fx(x), map(fx, xs))`
 impl<
        A: Ty,
        B: Ty,
       Fx: Infer<Ty = Ar1<A, B>>,
-       H: Tm<A>,
-       T: Tm<List<A>> + HList,
+       X: Tm<A>,
+      Xs: Tm<List<A>> + HList,
     Rec0: Tm<B>,
-    Rec1: Tm<List<B>>,
+    Rec1: Tm<List<B>> + HList,
 >
     Eval<Map<A, B>>
 for
-    HC<Fx, HC<Cons<H, T>, HN>>
+    HC<Fx, HC<Cons<X, Xs>, HN>>
 where
     // fx(h) ==> r0
-    HC<H, HN>
+    HC<X, HN>
         : Eval<Fx, Out = Rec0>,
     // map(fx, t) ==> r1
-    HC<Fx, HC<T, HN>>
+    HC<Fx, HC<Xs, HN>>
         : Eval<Map<A, B>, Out = Rec1>,
 {
     type Out = Cons<Rec0, Rec1>;
