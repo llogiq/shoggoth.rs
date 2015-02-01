@@ -19,6 +19,7 @@ This library implements generic and type-level programming functionality. It is 
 * heterogeneous lists
 * simulated data kinds
 * type-level operations (polyadic, curried)
+* type-level operation composition (polyadic)
 * type-level bits
 * type-level booleans
 * type-level binary natural numbers
@@ -32,7 +33,6 @@ This library implements generic and type-level programming functionality. It is 
 * coproducts
 * hlist/vinyl-style records
 * type-level binary rationals
-* type-level operation composition (polyadic)
 * type-level lenses
 * type macros
 
