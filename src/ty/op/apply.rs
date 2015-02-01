@@ -16,14 +16,11 @@ use ty::op::{
 /// (i.e., operation symbol)
 pub trait
     AppEval<
-            M,
+        M,
         FxDTy,
-           Fx,
+        Fx,
     >
 where
-    <Fx as
-        Infer
-   >::Ty: IsArrow<Dom = FxDTy>,
       Fx: Infer,
        M: infer::mode::Mode,
     Self: HList,
@@ -31,6 +28,8 @@ where
         TmPrefix<
             <<Fx as Infer>::Ty as IsArrow>::Dom
         >,
+    <Fx as Infer>::Ty
+        : IsArrow<Dom = FxDTy>,
 {
     // FIXME: should probably put a bound on Out
     type Out;
@@ -82,8 +81,8 @@ impl<
 for
     HN
 where
-    Thunk<Fx, Xs
-       >: Infer<Ty = Ar<HN, TxCTy>>,
+    Thunk<Fx, Xs>
+        : Infer<Ty = Ar<HN, TxCTy>>,
       Xs: Eval<Fx>,        
       Xs: TmPrefix<FxDTy, Out = HN>,
 {
