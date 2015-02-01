@@ -35,7 +35,10 @@ pub use self::op::{
     Ar,
     Ar0,
     Ar1,
+    Cmp,
     Eval,
+    ProjDoms,
+    ProjCods,
     IsArrow,
     Thunk,
 };

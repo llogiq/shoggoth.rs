@@ -5,6 +5,9 @@ pub use self::eval::{
     Eval,
 };
 pub use self::thunk::{
+    Cmp,
+    ProjCods,
+    ProjDoms,
     Thunk,
 };
 use hlist::*;
