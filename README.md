@@ -18,12 +18,9 @@ This library implements generic and type-level programming functionality. It is 
 
 * heterogeneous lists
 * simulated data kinds
-* type-level operations (polyadic, curried)
-* type-level operation composition (polyadic)
-* type-level bits
-* type-level booleans
-* type-level binary natural numbers
-* type-level binary integers
+* type-level operations (polyadic, curried, composable, higher-order)
+* type-level bits and booleans
+* type-level binary natural numbers and integers
 * type-level lists (mappable with type-level operations)
 * type-level list zippers
 
