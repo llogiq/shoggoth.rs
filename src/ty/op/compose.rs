@@ -104,8 +104,8 @@ where
 {}
 
 impl<
-    Fxs,
-    Gx: Infer,
+     Fxs,
+      Gx: Infer,
 >
     Infer
 for
