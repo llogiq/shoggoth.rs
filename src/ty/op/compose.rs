@@ -195,6 +195,11 @@ where
 
 
 
+// Alias for binary composition
+type Cmp1<Gx, Fx> = Cmp<HC<Gx, HN>, Fx>;
+
+
+
 #[cfg(test)]
 mod test {
     use hlist::*;
