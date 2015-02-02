@@ -11,6 +11,7 @@ use ty::{
 };
 
 /// Project and flatten the domains of operations in an HList
+#[doc(hidden)]
 pub trait
     ProjDoms
 where
@@ -49,6 +50,7 @@ where
 
 
 /// Project the codomains of operations in an HList
+#[doc(hidden)]
 pub trait
     ProjCods
 where
@@ -125,6 +127,7 @@ where
 
 
 
+#[doc(hidden)]
 pub trait
     AppMany<Fxs>
 where

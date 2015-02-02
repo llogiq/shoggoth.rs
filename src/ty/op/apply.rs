@@ -14,6 +14,7 @@ use ty::op::{
 
 /// Partially apply a thunk to an argument or evaluate a constant
 /// (i.e., operation symbol)
+#[doc(hidden)]
 pub trait
     AppEval<
         M,

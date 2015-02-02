@@ -69,6 +69,7 @@ for
 /// --------------------------------------------
 /// [ M_0, ..., M_n ] : TmPre<[ A_0, ..., A_m ]>
 /// ```
+#[doc(hidden)]
 pub trait
     TmPre<A>
 where
@@ -120,6 +121,7 @@ where
 
 
 
+#[doc(hidden)]
 pub trait
     TmExt<A>
 where
