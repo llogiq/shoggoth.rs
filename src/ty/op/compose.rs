@@ -1,8 +1,11 @@
 use hlist::*;
 use ty::{
     Ar,
+    Eval,
     Infer,
     IsArrow,
+    Tm,
+    TmExt,
     Ty,
     infer,
 };
@@ -122,6 +125,73 @@ where
 
 
 
+pub trait
+    AppMany<Fxs>
+where
+     Fxs: HList,
+    Self: HList,
+{
+    type Out: HList;
+}
+
+impl
+    AppMany<HN>
+for
+    HN
+{
+    type Out = HN;
+}
+
+impl<
+    Args: Tm<D> + HList,
+    Rest: HList,
+       C: Ty,
+       D: Ty    + HList,
+      Fx: Infer<Ty = Ar<D, C>>,
+     Fxs: HList,
+   Input: HList,
+     Rec,
+>
+    AppMany<HC<Fx, Fxs>>
+for
+    Input
+where
+    Args: Eval<Fx, Out = Rec>,
+   Input: TmExt<D, Out = Args, Ext = Rest>,
+    Rest: AppMany<Fxs>,
+{
+    type Out =
+        HC<
+            Rec,
+            <Rest as AppMany<Fxs>>::Out,
+        >;
+}
+
+
+
+impl<
+    FxsD: Ty       + HList,
+    FxsC: Ty       + HList,
+     GxC: Ty,
+     Fxs,
+      Gx: Infer<Ty = Ar<FxsC, GxC>>,
+   Input: Tm<FxsD> + HList,
+    Rec0: Tm<FxsC>,
+    Rec1: Tm<GxC>,
+>
+    Eval<Cmp<Fxs, Gx>>
+for
+    Input
+where
+     Fxs: ProjDoms<Out = FxsD> + ProjCods<Out = FxsC>,
+   Input: AppMany<Fxs, Out = Rec0>,
+    Rec0: Eval<Gx, Out = Rec1>,
+{
+    type Out = Rec1;
+}
+
+
+
 #[cfg(test)]
 mod test {
     use hlist::*;
@@ -171,5 +241,23 @@ mod test {
                 And,
             >
         >();
+        let nand:
+            Witness<
+                Ap<
+                    Cmp<
+                        HC<And,
+                        HN>,
+                        Not,
+                    >,
+                    HC<FF,
+                    HC<FF,
+                    HN>>
+                >
+            > = Witness;
+        let res:
+            Witness<
+                TT
+            > = Witness;
+        nand == res;
     }
 }

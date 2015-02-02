@@ -117,4 +117,62 @@ where
 {
     type Out = <TTm as TmPre<TTy>>::Out;
 }
+
+
+
+pub trait
+    TmExt<A>
+where
+    Self:      HList,
+       A: Ty + HList,
+{
+    type Out: Tm<A>; // FIXME: + Prepend<Self::Ext, Out = Self>;
+    type Ext: HList;
+}
+
+impl<
+       M: HList,
+>
+    TmExt<HN>
+for
+    M
+{
+    type Out = HN;
+    type Ext = M;
+}
+
+impl<
+     HTm: Tm<HTy>,
+     HTy: Ty,
+  RecExt: HList,
+  RecOut: Tm<TTy> + HList,
+     TTm: HList,
+     TTy: Ty      + HList,
+>
+    TmExt<HC<HTy, TTy>>
+for
+    HC<HTm, TTm>
+where
+     TTm: TmExt<TTy, Out = RecOut, Ext = RecExt>,
+{
+    type Out = HC<HTm, RecOut>;
+    type Ext = RecExt;
+}
+
+
+
+#[cfg(test)]
+mod test {
+    use hlist::*;
+    use ty::*;
+
+    #[test]
+    fn tm_ext() {
+        let x0: Witness< <HC<TT, HC<FF, HN>> as TmExt<HC<Bool, HN>>>::Out > = Witness;
+        let x1: Witness< HC<TT, HN> > = Witness;
+        x0 == x1;
+        let x2: Witness< <HC<TT, HC<FF, HN>> as TmExt<HC<Bool, HN>>>::Ext > = Witness;
+        let x3: Witness< HC<FF, HN> > = Witness;
+        x2 == x3;
+    }
 }

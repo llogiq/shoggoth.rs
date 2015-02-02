@@ -19,6 +19,7 @@ pub use self::kind::{
     Ty,
 };
 pub use self::hlist::{
+    TmExt,
     TmPre,
 };
 pub use self::infer::{
