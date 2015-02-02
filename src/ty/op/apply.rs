@@ -1,7 +1,7 @@
 use hlist::*;
 use ty::{
     Infer,
-    TmPrefix,
+    TmPre,
     Ty,
     infer,
 };
@@ -25,7 +25,7 @@ where
        M: infer::mode::Mode,
     Self: HList,
     Self:
-        TmPrefix<
+        TmPre<
             <<Fx as Infer>::Ty as IsArrow>::Dom
         >,
     <Fx as Infer>::Ty
@@ -55,7 +55,7 @@ where
             CxDTy,
             Thunk<Cx, HN>
         >,
-    Args: TmPrefix<CxDTy>,
+    Args: TmPre<CxDTy>,
 {
     type Out =
         <Args as
@@ -84,7 +84,7 @@ where
     Thunk<Fx, Xs>
         : Infer<Ty = Ar<HN, TxCTy>>,
       Xs: Eval<Fx>,        
-      Xs: TmPrefix<FxDTy, Out = HN>,
+      Xs: TmPre<FxDTy, Out = HN>,
 {
     type Out = <Xs as Eval<Fx>>::Out;
 }
@@ -125,7 +125,7 @@ impl<
 for
     HC<ArgsHTm, ArgsTTm>
 where
-      Xs: TmPrefix<HC<FxDHTy, FxDTTy>, Out = HC<TxDHTy, TxDTTy>>,
+      Xs: TmPre<HC<FxDHTy, FxDTTy>, Out = HC<TxDHTy, TxDTTy>>,
       Xs: Snoc<ArgsHTm>,
     ArgsTTm
         : AppEval<
@@ -134,7 +134,7 @@ where
             Thunk<Fx, HS<Xs, ArgsHTm>>
         >,
     HC<ArgsHTm, ArgsTTm>
-        : TmPrefix<HC<TxDHTy, TxDTTy>>,
+        : TmPre<HC<TxDHTy, TxDTTy>>,
 {
     type Out =
         <ArgsTTm as AppEval<

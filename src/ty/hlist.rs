@@ -66,11 +66,11 @@ for
 /// ```ignore
 /// n <= m
 /// forall k. k <= n -> M_k : Tm<A_k>
-/// -----------------------------------------------
-/// [ M_0, ..., M_n ] : TmPrefix<[ A_0, ..., A_m ]>
+/// --------------------------------------------
+/// [ M_0, ..., M_n ] : TmPre<[ A_0, ..., A_m ]>
 /// ```
 pub trait
-    TmPrefix<A>
+    TmPre<A>
 where
     Self:      HList,
        A: Ty + HList,
@@ -81,13 +81,13 @@ where
 /// ```ignore
 /// A :: Ty
 /// A :: HList (i.e., is a product type)
-/// -----------------
-/// Nil : TmPrefix<A>
+/// --------------
+/// Nil : TmPre<A>
 /// ```
 impl<
        A: Ty + HList,
 >
-    TmPrefix<A>
+    TmPre<A>
 for
     HN
 {
@@ -99,9 +99,9 @@ for
 /// TTy :: Ty      + HList (i.e., is a product type)
 /// HTm :: Tm<HTy>
 /// TTm :: Tm<TTy> + HList (i.e., is a product term)
-/// TmPrefix<TTy> holds for TTm
-/// -----------------------------------
-/// Cons<HTm, TTm> : TmPrefix<HTy, TTy>
+/// TmPre<TTy> holds for TTm
+/// --------------------------------
+/// Cons<HTm, TTm> : TmPre<HTy, TTy>
 /// ```
 impl<
      HTm: Tm<HTy>,
@@ -109,11 +109,12 @@ impl<
      TTm:      HList,
      TTy: Ty + HList,
 >
-    TmPrefix<HC<HTy, TTy>>
+    TmPre<HC<HTy, TTy>>
 for
     HC<HTm, TTm>
 where
-     TTm: TmPrefix<TTy>,
+     TTm: TmPre<TTy>,
 {
-    type Out = <TTm as TmPrefix<TTy>>::Out;
+    type Out = <TTm as TmPre<TTy>>::Out;
+}
 }

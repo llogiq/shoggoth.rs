@@ -1,7 +1,7 @@
 use hlist::*;
 use ty::{
     Infer,
-    TmPrefix,
+    TmPre,
     Ty,
     infer,
 };
@@ -26,7 +26,7 @@ pub enum
 where
       Fx: Infer,
       Xs: HList,
-      Xs: TmPrefix<<<Fx as Infer>::Ty as IsArrow>::Dom>,
+      Xs: TmPre<<<Fx as Infer>::Ty as IsArrow>::Dom>,
     <Fx as Infer>::Ty
         : IsArrow,
 {}
@@ -42,7 +42,7 @@ impl<
 for
     Thunk<Fx, Xs>
 where
-      Xs: TmPrefix<D, Out = Ds>,
+      Xs: TmPre<D, Out = Ds>,
 {
     type Mode = infer::mode::Thunk;
     type Ty = Ar<Ds, C>;
