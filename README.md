@@ -23,6 +23,7 @@ This library implements generic and type-level programming functionality. It is 
 * type-level binary natural numbers and integers
 * type-level lists (mappable with type-level operations)
 * type-level list zippers
+* type-level lenses
 
 #### Future
 
@@ -30,7 +31,6 @@ This library implements generic and type-level programming functionality. It is 
 * coproducts
 * hlist/vinyl-style records
 * type-level binary rationals
-* type-level lenses
 * type macros
 
 ## Documentation
