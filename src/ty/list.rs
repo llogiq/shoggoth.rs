@@ -10,6 +10,7 @@ use ty::{
     Ar,
     Ar1,
     Eval,
+    Eval1,
     Infer,
     Tm,
     Ty,
@@ -230,8 +231,7 @@ for
     HC<Fx, HC<Cons<X, Xs>, HN>>
 where
     // fx(h) ==> r0
-    HC<X, HN>
-        : Eval<Fx, Out = Rec0>,
+       X: Eval1<Fx, Out = Rec0>,
     // map(fx, t) ==> r1
     HC<Fx, HC<Xs, HN>>
         : Eval<Map<A, B>, Out = Rec1>,

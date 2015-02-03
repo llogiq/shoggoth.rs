@@ -3,6 +3,7 @@ use ty::{
     Ar,
     Ar1,
     Eval,
+    Eval1,
     Infer,
     Tm,
     Ty,
@@ -116,7 +117,7 @@ impl<
 for
     HC<(P, _1), HN>
 where
-       HC<P, HN>: Eval<Succ, Out = Rec>,
+       P: Eval1<Succ, Out = Rec>,
 {
     type Out = (Rec, _0);
 }
@@ -180,7 +181,7 @@ impl<
 for
     HC<_1, HC<(P1, _1), HN>>
 where
-      HC<P1, HN>: Eval<Succ, Out = Rec>,
+      P1: Eval1<Succ, Out = Rec>,
 {
     type Out = (Rec, _0);
 }
@@ -237,7 +238,7 @@ impl<
 for
     HC<(P0, _1), HC<_1, HN>>
 where
-      HC<P0, HN>: Eval<Succ, Out = Rec>,
+      P0: Eval1<Succ, Out = Rec>,
 {
     type Out = (Rec, _0);
 }
@@ -322,7 +323,7 @@ impl<
 for
     HC<_1, HC<(P1, _0), HN>>
 where
-      HC<P1, HN>: Eval<Succ, Out = Rec>,
+      P1: Eval1<Succ, Out = Rec>,
 {
     type Out = (Rec, _0);
 }
@@ -336,7 +337,7 @@ impl<
 for
     HC<_1, HC<(P1, _1), HN>>
 where
-      HC<P1, HN>: Eval<Succ, Out = Rec>,
+      P1: Eval1<Succ, Out = Rec>,
 {
     type Out = (Rec, _1);
 }
@@ -350,7 +351,7 @@ impl<
 for
     HC<(P0, _0), HC<_1, HN>>
 where
-      HC<P0, HN>: Eval<Succ, Out = Rec>,
+      P0: Eval1<Succ, Out = Rec>,
 {
     type Out = (P0, _0);
 }
@@ -396,7 +397,7 @@ impl<
 for
     HC<(P0, _1), HC<_1, HN>>
 where
-      HC<P0, HN>: Eval<Succ, Out = Rec>,
+      P0: Eval1<Succ, Out = Rec>,
 {
     type Out = (Rec, _1);
 }
@@ -472,7 +473,7 @@ impl<
 for
     HC<(P, _0), HN>
 where
-       HC<P, HN>: Eval<PredDouble, Out = Rec>,
+       P: Eval1<PredDouble, Out = Rec>,
 {
     type Out = (Rec, _1);
 }
@@ -534,7 +535,7 @@ impl<
 for
     HC<(P, _0), HN>
 where
-       HC<P, HN>: Eval<PredDouble, Out = Rec>,
+       P: Eval1<PredDouble, Out = Rec>,
 {
     type Out = Rec;
 }

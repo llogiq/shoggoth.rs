@@ -9,6 +9,7 @@ use ty::{
     Ar1,
     Cmp1,
     Eval,
+    Eval1,
     Infer,
     Lens,
     List,
@@ -241,9 +242,7 @@ for
     HC<MkZipper<Xs, Cons<Y, Ys>>,
     HN>>
 where
-    HC<P,
-    HN>
-        : Eval<nat::Pred, Out = Rec0>,
+       P: Eval1<nat::Pred, Out = Rec0>,
     HC<Rec0,
     HC<MkZipper<Cons<Y, Xs>, Ys>,
     HN>>

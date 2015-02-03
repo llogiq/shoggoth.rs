@@ -9,6 +9,7 @@ use ty::{
     Ar1,
     Bit,
     Eval,
+    Eval1,
     Infer,
     Tm,
     Ty,
@@ -111,7 +112,7 @@ impl<
 for
     HC<P, HN>
 where
-      HC<P, HN>: Eval<pos::Succ, Out = Rec>,
+       P: Eval1<pos::Succ, Out = Rec>,
 {
     type Out = Rec;
 }
@@ -164,7 +165,7 @@ impl<
 for
     HC<(P, B), HN>
 where
-       HC<(P, B), HN>: Eval<pos::Pred, Out = Rec>,
+  (P, B): Eval1<pos::Pred, Out = Rec>,
 {
     type Out = Rec;
 }

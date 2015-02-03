@@ -2,6 +2,7 @@ use hlist::*;
 use ty::{
     Ar1,
     Eval,
+    Eval1,
     Infer,
     Tm,
     Ty,
@@ -212,7 +213,7 @@ impl<
 for
     HC<Zn<P>, HN>
 where
-       P: Eval<pos::PredDouble, Out = Rec>,
+       P: Eval1<pos::PredDouble, Out = Rec>,
 {
     type Out = Zn<Rec>;
 }
@@ -289,7 +290,7 @@ impl<
 for
     HC<Zp<P>, HN>
 where
-       P: Eval<pos::PredDouble, Out = Rec>,
+       P: Eval1<pos::PredDouble, Out = Rec>,
 {
     type Out = Zp<Rec>;
 }

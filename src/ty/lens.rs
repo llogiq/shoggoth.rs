@@ -3,6 +3,7 @@ use ty::{
     Ar,
     Ar1,
     Eval,
+    Eval1,
     Infer,
     Tm,
     Ty,
@@ -145,7 +146,7 @@ impl<
 for
     HC<Sm, HN>
 where
-      HC<Sm, HN>: Eval<Lx, Out = MkStore<Rec>>,
+      Sm: Eval1<Lx, Out = MkStore<Rec>>,
 {
     type Out = <Rec as StoreLike<A, T, B>>::Get;
 }
@@ -201,12 +202,10 @@ impl<
 for
     HC<Fx, HC<Sm, HN>>
 where
-   HC<Rec1, HN>
-        : Eval<<Rec0 as StoreLike<A, T, B>>::Set, Out = Rec2>,
-   HC<<Rec0 as StoreLike<A, T, B>>::Get, HN>
-        : Eval<Fx, Out = Rec1>,
-   HC<Sm, HN>
-        : Eval<Lx, Out = MkStore<Rec0>>,
+    Rec1: Eval1<<Rec0 as StoreLike<A, T, B>>::Set, Out = Rec2>,
+      Sm: Eval1<Lx, Out = MkStore<Rec0>>,
+ <Rec0 as StoreLike<A, T, B>>::Get
+        : Eval1<Fx, Out = Rec1>,
 {
     type Out = Rec2;
 }
