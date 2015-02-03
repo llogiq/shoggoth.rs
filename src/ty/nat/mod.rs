@@ -153,14 +153,14 @@ impl<
 for
     HC<_0, HC<P1, HN>>
 where
-    P1: Tm<Pos>,
+      P1: Tm<Pos>,
 {
     type Out = P1;
 }
 
 /// `add(m, 0) ==> m`
 impl<
-    P0: Tm<Pos>,
+      P0: Tm<Pos>,
 >
     Eval<Add>
 for
@@ -171,9 +171,9 @@ for
 
 /// `add<Nat>(p, q) ==> add<Pos>(p, q)`
 impl<
-     P0: Tm<Pos>,
-     P1: Tm<Pos>,
-    Rec: Tm<Nat>,
+      P0: Tm<Pos>,
+      P1: Tm<Pos>,
+     Rec: Tm<Nat>,
 >
     Eval<Add>
 for
@@ -228,7 +228,7 @@ for
 
 /// `mul(m, 0) ==> 0`
 impl<
-    P0: Tm<Pos>,
+      P0: Tm<Pos>,
 >
     Eval<Mul>
 for
