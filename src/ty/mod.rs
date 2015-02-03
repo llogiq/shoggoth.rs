@@ -25,6 +25,14 @@ pub use self::hlist::{
 pub use self::infer::{
     Infer,
 };
+pub use self::lens::{
+    Lens,
+    MkStore,
+    Over,
+    Store,
+    StoreLike,
+    View,
+};
 pub use self::list::{
     List,
 };
@@ -68,6 +76,7 @@ mod bool;
 mod check;
 mod hlist;
 mod kind;
+mod lens;
 mod op;
 mod star;
 mod witness;

@@ -1,21 +1,26 @@
+use hlist::*;
 use hlist::{
-    HC,
-    HList,
-    HN,
     self,
 };
 use ty::{
+    _0,
+    Ap1,
     Ar,
     Ar1,
+    Cmp1,
     Eval,
     Infer,
+    Lens,
     List,
+    MkStore,
+    Store,
+    StoreLike,
     Tm,
     Ty,
     infer,
+    nat,
+    zipper,
 };
-
-
 
 /// Type-level zippers for lists
 #[derive(Clone)]
@@ -193,12 +198,6 @@ where
        A: Ty,
 {}
 
-/// ```ignore
-/// A :: Ty
-/// zs : Zipper<A>
-/// ---------------------
-/// right(zs) : Zipper<A>
-/// ```
 impl<
        A: Ty,
 >
@@ -207,69 +206,50 @@ for
     Right<A>
 {
     type Mode = infer::mode::Constant;
-    type Ty = Ar1<Zipper<A>, Zipper<A>>;
+    type Ty = Ar<HC<nat::Nat,
+                 HC<Zipper<A>,
+                 HN>>,
+                 Zipper<A>>;
 }
 
-/// `right(mk_zipper(xs, cons(y, ys))) ==> mk_zipper(cons(y, xs), ys)`
 impl<
        A: Ty,
+      Xs: Tm<List<A>> + HList,
+      Ys: Tm<List<A>> + HList,
+>
+    Eval<Right<A>>
+for
+    HC<_0,
+    HC<MkZipper<Xs, Ys>,
+    HN>>
+{
+    type Out = MkZipper<Xs, Ys>;
+}
+
+impl<
+       A: Ty,
+       P: Tm<nat::pos::Pos>,
+    Rec0: Tm<nat::Nat>,
+    Rec1: Tm<Zipper<A>>,
       Xs: Tm<List<A>> + HList,
        Y: Tm<A>,
       Ys: Tm<List<A>> + HList,
 >
     Eval<Right<A>>
 for
-    HC<MkZipper<Xs, HC<Y, Ys>>, HN>
-{
-    type Out = MkZipper<HC<Y, Xs>, Ys>;
-}
-
-
-
-/// Type-level move left for zipper
-#[derive(Clone)]
-#[derive(Copy)]
-#[derive(Debug)]
-#[derive(Eq)]
-#[derive(Hash)]
-#[derive(Ord)]
-#[derive(PartialEq)]
-#[derive(PartialOrd)]
-pub enum
-    Left<A>
+    HC<P,
+    HC<MkZipper<Xs, Cons<Y, Ys>>,
+    HN>>
 where
-       A: Ty,
-{}
-
-/// ```ignore
-/// A :: Ty
-/// zs : Zipper<A>
-/// --------------------
-/// left(zs) : Zipper<A>
-/// ```
-impl<
-       A: Ty,
->
-    Infer
-for
-    Left<A>
+    HC<P,
+    HN>
+        : Eval<nat::Pred, Out = Rec0>,
+    HC<Rec0,
+    HC<MkZipper<Cons<Y, Xs>, Ys>,
+    HN>>
+        : Eval<Right<A>, Out = Rec1>,
 {
-    type Mode = infer::mode::Constant;
-    type Ty = Ar1<Zipper<A>, Zipper<A>>;
-}
-
-/// `left(mk_zipper(cons(x, xs), ys)) ==> mk_zipper(xs, cons(x, ys))`
-impl<
-       A: Ty,
-       X: Tm<A>,
-      Xs: Tm<List<A>> + HList,
-      Ys: Tm<List<A>> + HList,
->
-    Eval<Left<A>>
-for
-    HC<MkZipper<HC<X, Xs>, Ys>, HN>
-{
-    type Out = MkZipper<Xs, HC<X, Ys>>;
+    type Out = Rec1;
 }
 
 
@@ -372,6 +352,103 @@ for
 
 
 
+impl<
+       A: Ty,
+      Xs: Tm<List<A>> + HList,
+       Y: Tm<A>,
+      Ys: Tm<List<A>> + HList,
+>
+    StoreLike<A, List<A>>
+for
+    MkZipper<Xs, HC<Y, Ys>>
+{
+    type Get = Ap1<zipper::Get<A>, Self>;
+    type Set = Ap1<Cmp1<zipper::Put<A>, zipper::Unzip<A>>, Self>;
+}
+
+
+
+#[derive(Clone)]
+#[derive(Copy)]
+#[derive(Debug)]
+#[derive(Eq)]
+#[derive(Hash)]
+#[derive(Ord)]
+#[derive(PartialEq)]
+#[derive(PartialOrd)]
+pub enum
+    ToStore<A>
+where
+       A: Ty,
+{}
+
+impl<
+       A: Ty,
+>
+    Infer
+for
+    ToStore<A>
+{
+    type Mode = infer::mode::Constant;
+    type Ty = Ar1<Zipper<A>, Store<A, List<A>>>;
+}
+
+impl<
+       A: Ty,
+      Xs: Tm<List<A>> + HList,
+       Y: Tm<A>,
+      Ys: Tm<List<A>> + HList,
+>
+    Eval<ToStore<A>>
+for
+    HC<MkZipper<Xs, Cons<Y, Ys>>,
+    HN>
+{
+    type Out = MkStore<MkZipper<Xs, Cons<Y, Ys>>>;
+}
+
+
+
+#[derive(Clone)]
+#[derive(Copy)]
+#[derive(Debug)]
+#[derive(Eq)]
+#[derive(Hash)]
+#[derive(Ord)]
+#[derive(PartialEq)]
+#[derive(PartialOrd)]
+pub enum
+    Nth<A>
+{}
+
+impl<
+       A: Ty,
+>
+    Infer
+for
+    Nth<A>
+{
+    type Mode = infer::mode::Constant;
+    type Ty = Ar1<nat::Nat, Lens<List<A>, A>>;
+}
+
+impl<
+       A: Ty,
+       N: Tm<nat::Nat>,
+>
+    Eval<Nth<A>>
+for
+    HC<N,
+    HN>
+{
+    type Out =
+        Cmp1<Zip<A>
+            ,Cmp1<Ap1<Right<A>, N>
+                 ,ToStore<A>>>;
+}
+
+
+
 #[cfg(test)]
 mod test {
     use hlist::{
@@ -384,7 +461,7 @@ mod test {
     fn put() {
         let x0: Witness<
             Ap<
-                Put<Star>,
+                zipper::Put<Star>,
                 HC<
                     MkZipper<
                         HC<Lift<bool>, HN>,
@@ -416,3 +493,4 @@ mod test {
         x2 == x3;
     }
 }
+
