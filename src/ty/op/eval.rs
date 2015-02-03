@@ -2,6 +2,7 @@ use hlist::*;
 use ty::{
     Infer,
     Tm,
+    infer,
 };
 use ty::op::{
     IsArrow,
@@ -12,7 +13,7 @@ use ty::op::{
 pub trait
     Eval<Fx>
 where
-          Fx: Infer,
+          Fx: Infer<Mode = infer::mode::Constant>,
     <Fx as Infer
        >::Ty: IsArrow,
         Self: HList,

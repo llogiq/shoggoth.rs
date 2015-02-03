@@ -1,5 +1,6 @@
 use hlist::*;
 use ty::{
+    AppEval,
     Ar,
     Eval,
     Infer,
@@ -150,8 +151,9 @@ impl<
     Rest: HList,
        C: Ty,
        D: Ty    + HList,
-      Fx: Infer<Ty = Ar<D, C>>,
+      Fx: Infer<Mode = Im, Ty = Ar<D, C>>,
      Fxs: HList,
+      Im,
    Input: HList,
      Rec,
 >
@@ -159,7 +161,7 @@ impl<
 for
     Input
 where
-    Args: Eval<Fx, Out = Rec>,
+    Args: AppEval<Im, D, Fx, Out = Rec>,
    Input: TmExt<D, Out = Args, Ext = Rest>,
     Rest: AppMany<Fxs>,
 {
@@ -177,9 +179,10 @@ impl<
     FxsC: Ty       + HList,
      GxC: Ty,
      Fxs,
-      Gx: Infer<Ty = Ar<FxsC, GxC>>,
+      Gx: Infer<Mode = Im, Ty = Ar<FxsC, GxC>>,
+      Im,
    Input: Tm<FxsD> + HList,
-    Rec0: Tm<FxsC>,
+    Rec0: Tm<FxsC> + HList,
     Rec1: Tm<GxC>,
 >
     Eval<Cmp<Fxs, Gx>>
@@ -188,7 +191,7 @@ for
 where
      Fxs: ProjDoms<Out = FxsD> + ProjCods<Out = FxsC>,
    Input: AppMany<Fxs, Out = Rec0>,
-    Rec0: Eval<Gx, Out = Rec1>,
+    Rec0: AppEval<Im, FxsC, Gx, Out = Rec1>,
 {
     type Out = Rec1;
 }
