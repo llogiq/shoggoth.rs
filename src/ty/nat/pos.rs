@@ -635,6 +635,7 @@ mod test {
     use super::*;
     use ty::*;
 
+    #[test]
     fn pred() {
         let x0: Witness<Ap1<nat::pos::Pred, (_1, _0)>> = Witness;
         let x1: Witness<_1> = Witness;
