@@ -492,3 +492,12 @@ mod test {
         x2 == x3;
     }
 
+    #[test]
+    fn nth() {
+        let x0: Witness<
+                Ap1<View<Ap1<zipper::Nth<_>, _1b>>, HC<FF, HC<TT, HN>>>
+            > = Witness;
+        let x1: Witness<TT> = Witness;
+        x0 == x1;
+    }
+}
