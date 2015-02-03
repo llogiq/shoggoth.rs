@@ -57,11 +57,7 @@ pub use self::witness::{
     Witness,
 };
 pub use self::zipper::{
-    Get,
-    Left,
     MkZipper,
-    Put,
-    Right,
     Unzip,
     Zip,
     Zipper,
