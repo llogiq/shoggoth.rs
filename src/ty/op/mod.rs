@@ -9,6 +9,7 @@ pub use self::compose::{
 };
 pub use self::eval::{
     Eval,
+    Eval1,
 };
 pub use self::thunk::{
     Thunk,

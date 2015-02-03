@@ -47,6 +47,7 @@ pub use self::op::{
     Cmp,
     Cmp1,
     Eval,
+    Eval1,
     ProjDoms,
     ProjCods,
     IsArrow,
