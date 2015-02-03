@@ -17,7 +17,7 @@ This library implements generic and type-level programming functionality. It is 
 #### Current
 
 * heterogeneous lists
-* simulated data kinds
+* simulated data kinds (bidirectional)
 * type-level operations (polyadic, curried, composable, higher-order)
 * type-level bits and booleans
 * type-level binary natural numbers and integers
