@@ -459,37 +459,36 @@ mod test {
     #[test]
     fn put() {
         let x0: Witness<
-            Ap<
-                zipper::Put<Star>,
-                HC<
-                    MkZipper<
-                        HC<Lift<bool>, HN>,
-                        HC<Lift<u8>  , HN>
-                    >,
-                    HC<Lift<u16>, HN>
+                Ap<
+                    zipper::Put<Star>,
+                    HC<
+                        MkZipper<
+                            HC<Lift<bool>, HN>,
+                            HC<Lift<u8>  , HN>
+                        >,
+                        HC<Lift<u16>, HN>
+                    >
                 >
-            >
-        > = Witness;
+            > = Witness;
         let x1: Witness<
-            MkZipper<
-                HC<Lift<bool>, HN>,
-                HC<Lift<u16> , HN>
-            >
-        > = Witness;
-        x0 == x1;
-        let x2: Witness<
-            Ap1<
-                Unzip<Star>,
                 MkZipper<
                     HC<Lift<bool>, HN>,
                     HC<Lift<u16> , HN>
                 >
-            >
-        > = Witness;
+            > = Witness;
+        x0 == x1;
+        let x2: Witness<
+                Ap1<
+                    Unzip<Star>,
+                    MkZipper<
+                        HC<Lift<bool>, HN>,
+                        HC<Lift<u16> , HN>
+                    >
+                >
+            > = Witness;
         let x3: Witness<
-            HC<Lift<bool>, HC<Lift<u16>, HN>>
-        > = Witness;
+                HC<Lift<bool>, HC<Lift<u16>, HN>>
+            > = Witness;
         x2 == x3;
     }
-}
 
