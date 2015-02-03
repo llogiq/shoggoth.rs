@@ -196,7 +196,7 @@ where
 
 
 // Alias for binary composition
-type Cmp1<Gx, Fx> = Cmp<HC<Gx, HN>, Fx>;
+pub type Cmp1<Gx, Fx> = Cmp<HC<Gx, HN>, Fx>;
 
 
 

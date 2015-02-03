@@ -3,6 +3,7 @@ pub use self::apply::{
 };
 pub use self::compose::{
     Cmp,
+    Cmp1,
     ProjCods,
     ProjDoms,
 };
