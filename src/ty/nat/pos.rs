@@ -627,3 +627,17 @@ where
 {
     type Out = Rec1;
 }
+
+
+
+#[cfg(test)]
+mod test {
+    use super::*;
+    use ty::*;
+
+    fn pred() {
+        let x0: Witness<Ap1<nat::pos::Pred, (_1, _0)>> = Witness;
+        let x1: Witness<_1> = Witness;
+        x0 == x1;
+    }
+}
