@@ -1,5 +1,4 @@
 use hlist::*;
-use ty::bit::*;
 use ty::{
     Ar,
     Ar1,
@@ -9,6 +8,7 @@ use ty::{
     Ty,
     infer,
 };
+use ty::bit::*;
 
 /// Type-level positive natural numbers (binary)
 #[derive(Clone)]
