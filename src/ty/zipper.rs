@@ -123,13 +123,13 @@ for
 /// `zip(xs) ==> mk_zipper(nil, xs)`
 impl<
        A: Ty,
-      XS: Tm<List<A>> + HList,
+      Xs: Tm<List<A>> + HList,
 >
     Eval<Zip<A>>
 for
-    HC<XS, HN>
+    HC<Xs, HN>
 {
-    type Out = MkZipper<HN, XS>;
+    type Out = MkZipper<HN, Xs>;
 }
 
 
