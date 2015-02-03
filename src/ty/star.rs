@@ -1,5 +1,7 @@
 use hlist::*;
 use ty::{
+    Ap,
+    Ap1,
     Tm,
     Ty,
 };
@@ -29,6 +31,8 @@ pub enum
 pub enum
     Lift<A>
 {}
+
+pub type L<A> = Lift<A>;
 
 /// Lower Rust types lifted to type-level terms; inverse of `Lift`
 #[rustc_on_unimplemented = "`{Self}` is not a lifted Rust type"]
@@ -97,3 +101,71 @@ impl<
 for
     Cons<HTm, TTm>
 {}
+
+
+
+pub trait
+    LiftMany
+where
+    Self: HList,
+{
+    type Out: Tm<Star> + HList;
+}
+
+impl
+    LiftMany
+for
+    Nil
+{
+    type Out = Nil;
+}
+
+impl<
+       X,
+      Xs: HList,
+>
+    LiftMany
+for
+    Cons<X, Xs>
+where
+      Xs: LiftMany,
+{
+    type Out = Cons<Lift<X>, <Xs as LiftMany>::Out>;
+}
+
+
+
+pub trait
+    LowerMany
+where
+    Self: Tm<Star> + HList,
+{
+    type Out: HList;
+}
+
+impl
+    LowerMany
+for
+    Nil
+{
+    type Out = Nil;
+}
+
+impl<
+       X: Tm<Star>,
+      Xs: Tm<Star> + HList,
+>
+    LowerMany
+for
+    Cons<X, Xs>
+where
+       X: Lower,
+      Xs: LowerMany,
+{
+    type Out = Cons<<X as Lower>::Out, <Xs as LowerMany>::Out>;
+}
+
+
+
+pub type ApT <Fx, Xs> = <Ap <Fx,  <Xs  as LiftMany>::Out> as Lower>::Out;
+pub type ApT1<Fx, X > = <Ap1<Fx, L<X>>                    as Lower>::Out;

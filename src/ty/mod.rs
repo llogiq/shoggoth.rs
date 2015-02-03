@@ -44,8 +44,12 @@ pub use self::op::{
     Thunk,
 };
 pub use self::star::{
+    ApT,
+    ApT1,
     Lift,
+    LiftMany,
     Lower,
+    LowerMany,
     Star,
 };
 pub use self::witness::{
