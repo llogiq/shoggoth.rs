@@ -447,11 +447,6 @@ pub enum
     PredDouble
 {}
 
-/// ```ignore
-/// p : Pos
-/// -------------------
-/// pred_carry(p) : Pos
-/// ```
 impl
     Infer
 for
@@ -461,7 +456,6 @@ for
     type Ty = Ar1<Pos, Pos>;
 }
 
-/// `pred_carry(1) ==> 1`
 impl
     Eval<PredDouble>
 for
@@ -470,7 +464,6 @@ for
     type Out = _1;
 }
 
-/// `pred_carry(p:0) ==> pred_double(p):1`
 impl<
        P: Tm<Pos>,
      Rec: Tm<Pos>,
@@ -484,7 +477,6 @@ where
     type Out = (Rec, _1);
 }
 
-/// `pred_carry(p:1) ==> p:0:1`
 impl<
        P: Tm<Pos>,
 >
