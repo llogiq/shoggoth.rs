@@ -7,6 +7,7 @@ use ty::{
     _1,
     Ar,
     Ar1,
+    Bit,
     Eval,
     Infer,
     Tm,
@@ -114,6 +115,56 @@ where
 {
     type Out = Rec;
 }
+
+
+
+#[derive(Clone)]
+#[derive(Copy)]
+#[derive(Debug)]
+#[derive(Eq)]
+#[derive(Hash)]
+#[derive(Ord)]
+#[derive(PartialEq)]
+#[derive(PartialOrd)]
+pub enum
+    Pred
+{}
+
+impl
+    Infer
+for
+    Pred
+{
+    type Mode = infer::mode::Constant;
+    type Ty = Ar1<Nat, Nat>;
+}
+
+impl
+    Eval<Pred>
+for
+    HC<_0, HN>
+{
+    type Out = _0;
+}
+
+impl
+    Eval<Pred>
+for
+    HC<_1, HN>
+{
+    type Out = _0;
+}
+
+impl<
+       B: Tm<Bit>,
+       P: Tm<Pos>,
+     Rec: Tm<Pos>,
+>
+    Eval<Pred>
+for
+    HC<(P, B), HN>
+where
+       HC<(P, B), HN>: Eval<pos::Pred, Out = Rec>,
 {
     type Out = Rec;
 }
