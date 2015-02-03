@@ -110,7 +110,10 @@ impl<
 for
     HC<P, HN>
 where
-      P: Eval<pos::Succ, Out = Rec>,
+      HC<P, HN>: Eval<pos::Succ, Out = Rec>,
+{
+    type Out = Rec;
+}
 {
     type Out = Rec;
 }

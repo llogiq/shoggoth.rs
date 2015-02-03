@@ -116,7 +116,7 @@ impl<
 for
     HC<(P, _1), HN>
 where
-       P: Eval<Succ, Out = Rec>,
+       HC<P, HN>: Eval<Succ, Out = Rec>,
 {
     type Out = (Rec, _0);
 }
@@ -180,7 +180,7 @@ impl<
 for
     HC<_1, HC<(P1, _1), HN>>
 where
-      P1: Eval<Succ, Out = Rec>,
+      HC<P1, HN>: Eval<Succ, Out = Rec>,
 {
     type Out = (Rec, _0);
 }
@@ -237,7 +237,7 @@ impl<
 for
     HC<(P0, _1), HC<_1, HN>>
 where
-      P0: Eval<Succ, Out = Rec>,
+      HC<P0, HN>: Eval<Succ, Out = Rec>,
 {
     type Out = (Rec, _0);
 }
@@ -322,7 +322,7 @@ impl<
 for
     HC<_1, HC<(P1, _0), HN>>
 where
-      P1: Eval<Succ, Out = Rec>,
+      HC<P1, HN>: Eval<Succ, Out = Rec>,
 {
     type Out = (Rec, _0);
 }
@@ -336,7 +336,7 @@ impl<
 for
     HC<_1, HC<(P1, _1), HN>>
 where
-      P1: Eval<Succ, Out = Rec>,
+      HC<P1, HN>: Eval<Succ, Out = Rec>,
 {
     type Out = (Rec, _1);
 }
@@ -350,7 +350,7 @@ impl<
 for
     HC<(P0, _0), HC<_1, HN>>
 where
-      P0: Eval<Succ, Out = Rec>,
+      HC<P0, HN>: Eval<Succ, Out = Rec>,
 {
     type Out = (P0, _0);
 }
@@ -396,7 +396,7 @@ impl<
 for
     HC<(P0, _1), HC<_1, HN>>
 where
-      P0: Eval<Succ, Out = Rec>,
+      HC<P0, HN>: Eval<Succ, Out = Rec>,
 {
     type Out = (Rec, _1);
 }
@@ -479,7 +479,7 @@ impl<
 for
     HC<(P, _0), HN>
 where
-       P: Eval<PredDouble, Out = Rec>,
+       HC<P, HN>: Eval<PredDouble, Out = Rec>,
 {
     type Out = (Rec, _1);
 }
@@ -542,7 +542,7 @@ impl<
 for
     HC<(P, _0), HN>
 where
-       P: Eval<PredDouble, Out = Rec>,
+       HC<P, HN>: Eval<PredDouble, Out = Rec>,
 {
     type Out = Rec;
 }
