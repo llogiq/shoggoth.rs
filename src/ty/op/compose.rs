@@ -165,11 +165,7 @@ where
    Input: TmExt<D, Out = Args, Ext = Rest>,
     Rest: AppMany<Fxs>,
 {
-    type Out =
-        HC<
-            Rec,
-            <Rest as AppMany<Fxs>>::Out,
-        >;
+    type Out = HC<Rec, <Rest as AppMany<Fxs>>::Out>;
 }
 
 
