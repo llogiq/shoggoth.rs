@@ -240,3 +240,7 @@ where
 {
     type Out = Cons<Rec0, Rec1>;
 }
+
+
+
+pub type NonEmpty<A> = HC<A, List<A>>;
