@@ -1,5 +1,4 @@
 #![feature(hash)]
-#![feature(rand)]
 #![feature(on_unimplemented)]
 
 // pub use self::hlist::{

@@ -7,6 +7,5 @@
 #[derive(Ord)]
 #[derive(PartialEq)]
 #[derive(PartialOrd)]
-#[derive(Rand)]
 pub struct
     Witness<A>;

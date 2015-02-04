@@ -13,7 +13,6 @@ pub trait
 #[derive(Ord)]
 #[derive(PartialEq)]
 #[derive(PartialOrd)]
-#[derive(Rand)]
 pub struct
     Nil;
 
@@ -32,7 +31,6 @@ for
 #[derive(Ord)]
 #[derive(PartialEq)]
 #[derive(PartialOrd)]
-#[derive(Rand)]
 pub struct
     Cons<H, T>
 where

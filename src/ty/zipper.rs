@@ -61,7 +61,6 @@ for
 #[derive(Ord)]
 #[derive(PartialEq)]
 #[derive(PartialOrd)]
-#[derive(Rand)]
 pub struct
     MkZipper<Xs, Ys>(Xs, Ys)
 where
