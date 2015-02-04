@@ -3,6 +3,7 @@ use ty::{
     AppEval,
     Ar,
     Ar1,
+    Const,
     Eval,
     Infer,
     IsArrow,
@@ -285,4 +286,67 @@ where
         : AppEval<GxM, HC<A, HN>, Gx, Out = MkStore<Get1, Set1>>,
 {
     type Out = MkStore<Get1, ty::Cmp1<Set1, Set0>>;
+}
+
+
+
+#[derive(Clone)]
+#[derive(Copy)]
+#[derive(Debug)]
+#[derive(Eq)]
+#[derive(Hash)]
+#[derive(Ord)]
+#[derive(PartialEq)]
+#[derive(PartialOrd)]
+pub enum
+    Set<Lx>
+where
+      Lx: Infer,
+   <Lx as Infer>::Ty: IsLens,
+{}
+
+impl<
+       A: Ty,
+       B: Ty,
+      Lx: Infer,
+       S: Ty,
+       T: Ty,
+>
+    Infer
+for
+    Set<Lx>
+where
+   <Lx as Infer>::Ty
+        : IsLens<S = S, A = A, T = T, B = B>,
+{
+    type Mode = infer::mode::Constant;
+    type Ty = Ar<HC<B, HC<S, HN>>, T>;
+}
+
+impl<
+       A: Ty,
+       B: Ty,
+      Bm: Tm<B>,
+      Lx: Infer<Mode = LxM, Ty = Lens<S, A, T, B>>,
+     LxM,
+    Rec0,
+    Rec1: Tm<T>,
+       S: Ty,
+      Sm: Tm<S>,
+       T: Ty,
+>
+    Eval<Set<Lx>>
+for
+    HC<Bm, HC<Sm, HN>>
+where
+    HC<Bm, HN>
+        : AppEval<infer::mode::Constant, HC<B, HN>, Const<B, A>, Out = Rec0>,
+    HC<Rec0, HC<Sm, HN>>
+        : AppEval<
+            infer::mode::Constant,
+            <<Lx as Infer>::Ty as IsArrow>::Dom,
+            Over<Lx>,
+            Out = Rec1>
+{
+    type Out = Rec1;
 }
