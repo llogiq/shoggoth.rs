@@ -4,6 +4,7 @@ use hlist::{
 };
 use ty::{
     _0,
+    Ap,
     Ap1,
     Ar,
     Ar1,
@@ -15,12 +16,10 @@ use ty::{
     List,
     MkStore,
     Store,
-    StoreLike,
     Tm,
     Ty,
     infer,
     nat,
-    zipper,
 };
 
 /// Type-level zippers for lists
@@ -351,22 +350,6 @@ for
 
 
 
-impl<
-       A: Ty,
-      Xs: Tm<List<A>> + HList,
-       Y: Tm<A>,
-      Ys: Tm<List<A>> + HList,
->
-    StoreLike<A, List<A>>
-for
-    MkZipper<Xs, HC<Y, Ys>>
-{
-    type Get = Ap1<zipper::Get<A>, Self>;
-    type Set = Ap1<Cmp1<zipper::Put<A>, zipper::Unzip<A>>, Self>;
-}
-
-
-
 #[derive(Clone)]
 #[derive(Copy)]
 #[derive(Debug)]
@@ -403,7 +386,10 @@ for
     HC<MkZipper<Xs, Cons<Y, Ys>>,
     HN>
 {
-    type Out = MkStore<MkZipper<Xs, Cons<Y, Ys>>>;
+    type Out = MkStore<
+        Ap<Get<A>, Self>,
+        Cmp1<Ap<Put<A>, Self>, Unzip<A>>,
+    >;
 }
 
 
@@ -440,10 +426,7 @@ for
     HC<N,
     HN>
 {
-    type Out =
-        Cmp1<Zip<A>
-            ,Cmp1<Ap1<Right<A>, N>
-                 ,ToStore<A>>>;
+    type Out = Cmp1<Zip<A>, Cmp1<Ap1<Right<A>, N>, ToStore<A>>>;
 }
 
 

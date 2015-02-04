@@ -5,19 +5,11 @@ use ty::{
     Ar1,
     Eval,
     Infer,
+    IsArrow,
     Tm,
     Ty,
     infer,
 };
-
-
-
-pub trait
-    StoreLike<A, T, B=A>
-{
-    type Get: Tm<A>;
-    type Set: Tm<Ar1<B, T>>;
-}
 
 
 
@@ -56,18 +48,23 @@ for
 #[derive(PartialEq)]
 #[derive(PartialOrd)]
 pub enum
-    MkStore<Sx>
+    MkStore<Get, Set>
+where
+     Set: Infer,
+    <Set as Infer>::Ty
+        : IsArrow,
 {}
 
 impl<
        A: Ty,
        B: Ty,
+     Get: Tm<A>,
+     Set: Infer<Ty = Ar1<B, T>>,
        T: Ty,
-      Sx: StoreLike<A, T, B>
 >
     Tm<Store<A, T, B>>
 for
-    MkStore<Sx>
+    MkStore<Get, Set>
 {}
 
 
@@ -139,7 +136,7 @@ impl<
       Lx: Infer<Mode = LxM, Ty = Lens<S, A, T, B>>,
      LxM,
     Get0: Tm<A>,
-    Rec0: StoreLike<A, T, B, Get = Get0>,
+    Set0,
        S: Ty,
       Sm: Tm<S>,
        T: Ty,
@@ -149,7 +146,7 @@ for
     HC<Sm, HN>
 where
       HC<Sm, HN>
-        : AppEval<LxM, HC<S, HN>, Lx, Out = MkStore<Rec0>>,
+        : AppEval<LxM, HC<S, HN>, Lx, Out = MkStore<Get0, Set0>>,
 {
     type Out = Get0;
 }
@@ -196,7 +193,6 @@ impl<
      FxM,
       Lx: Infer<Mode = LxM, Ty = Lens<S, A, T, B>>,
      LxM,
-    Rec0,
     Get0,
    Set0M,
     Set0: Infer<Mode = Set0M, Ty = Ar1<B, T>>,
@@ -210,11 +206,10 @@ impl<
 for
     HC<Fx, HC<Sm, HN>>
 where
-    Rec0: StoreLike<A, T, B, Get = Get0, Set = Set0>,
     HC<Rec1, HN>
         : AppEval<Set0M, HC<B, HN>, Set0, Out = Rec2>,
     HC<Sm, HN>
-        : AppEval<LxM, HC<S, HN>, Lx, Out = MkStore<Rec0>>,
+        : AppEval<LxM, HC<S, HN>, Lx, Out = MkStore<Get0, Set0>>,
     HC<Get0, HN>
         : AppEval<FxM, HC<A, HN>, Fx, Out = Rec1>,
 {

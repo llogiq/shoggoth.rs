@@ -30,7 +30,6 @@ pub use self::lens::{
     MkStore,
     Over,
     Store,
-    StoreLike,
     View,
 };
 pub use self::list::{
