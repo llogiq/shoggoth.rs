@@ -178,7 +178,7 @@ impl<
     FxsD: Ty       + HList,
     FxsC: Ty       + HList,
      GxC: Ty,
-     Fxs,
+     Fxs:            HList,
       Gx: Infer<Mode = GxM, Ty = Ar<FxsC, GxC>>,
      GxM: infer::mode::Mode,
    Input: Tm<FxsD> + HList,
