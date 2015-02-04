@@ -7,10 +7,10 @@ use hlist::{
     self,
 };
 use ty::{
+    AppEval,
     Ar,
     Ar1,
     Eval,
-    Eval1,
     Infer,
     Tm,
     Ty,
@@ -220,18 +220,20 @@ for
 impl<
        A: Ty,
        B: Ty,
-      Fx: Infer<Ty = Ar1<A, B>>,
+      Fx: Infer<Mode = FxM, Ty = Ar1<A, B>>,
+     FxM,
        X: Tm<A>,
       Xs: Tm<List<A>> + HList,
     Rec0: Tm<B>,
     Rec1: Tm<List<B>> + HList,
 >
     Eval<Map<A, B>>
-for
+for 
     HC<Fx, HC<Cons<X, Xs>, HN>>
 where
     // fx(h) ==> r0
-       X: Eval1<Fx, Out = Rec0>,
+   HC<X, HN>
+        : AppEval<FxM, HC<A, HN>, Fx, Out = Rec0>,
     // map(fx, t) ==> r1
     HC<Fx, HC<Xs, HN>>
         : Eval<Map<A, B>, Out = Rec1>,

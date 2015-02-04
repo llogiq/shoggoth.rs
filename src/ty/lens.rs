@@ -1,9 +1,9 @@
 use hlist::*;
 use ty::{
+    AppEval,
     Ar,
     Ar1,
     Eval,
-    Eval1,
     Infer,
     Tm,
     Ty,
@@ -120,14 +120,14 @@ where
 
 impl<
        A: Ty,
-      Lx: Infer,
+       B: Ty,
+      Lx: Infer<Ty = Lens<S, A, T, B>>,
        S: Ty,
+       T: Ty,
 >
     Infer
 for
     View<Lx>
-where
-  <Lx as Infer>::Ty: IsLens<S = S, A = A>,
 {
     type Mode = infer::mode::Constant;
     type Ty = Ar1<S, A>;
@@ -136,8 +136,10 @@ where
 impl<
        A: Ty,
        B: Ty,
-      Lx: Infer<Ty = Lens<S, A, T, B>>,
-     Rec: StoreLike<A, T, B>,
+      Lx: Infer<Mode = LxM, Ty = Lens<S, A, T, B>>,
+     LxM,
+    Get0: Tm<A>,
+    Rec0: StoreLike<A, T, B, Get = Get0>,
        S: Ty,
       Sm: Tm<S>,
        T: Ty,
@@ -146,9 +148,10 @@ impl<
 for
     HC<Sm, HN>
 where
-      Sm: Eval1<Lx, Out = MkStore<Rec>>,
+      HC<Sm, HN>
+        : AppEval<LxM, HC<S, HN>, Lx, Out = MkStore<Rec0>>,
 {
-    type Out = <Rec as StoreLike<A, T, B>>::Get;
+    type Out = Get0;
 }
 
 
@@ -189,9 +192,14 @@ where
 impl<
        A: Ty,
        B: Ty,
-      Fx: Infer<Ty = Ar1<A, B>>,
-      Lx: Infer<Ty = Lens<S, A, T, B>>,
-    Rec0: StoreLike<A, T, B>,
+      Fx: Infer<Mode = FxM, Ty = Ar1<A, B>>,
+     FxM,
+      Lx: Infer<Mode = LxM, Ty = Lens<S, A, T, B>>,
+     LxM,
+    Rec0,
+    Get0,
+   Set0M,
+    Set0: Infer<Mode = Set0M, Ty = Ar1<B, T>>,
     Rec1,
     Rec2: Tm<T>,
        S: Ty,
@@ -202,10 +210,13 @@ impl<
 for
     HC<Fx, HC<Sm, HN>>
 where
-    Rec1: Eval1<<Rec0 as StoreLike<A, T, B>>::Set, Out = Rec2>,
-      Sm: Eval1<Lx, Out = MkStore<Rec0>>,
- <Rec0 as StoreLike<A, T, B>>::Get
-        : Eval1<Fx, Out = Rec1>,
+    Rec0: StoreLike<A, T, B, Get = Get0, Set = Set0>,
+    HC<Rec1, HN>
+        : AppEval<Set0M, HC<B, HN>, Set0, Out = Rec2>,
+    HC<Sm, HN>
+        : AppEval<LxM, HC<S, HN>, Lx, Out = MkStore<Rec0>>,
+    HC<Get0, HN>
+        : AppEval<FxM, HC<A, HN>, Fx, Out = Rec1>,
 {
     type Out = Rec2;
 }
