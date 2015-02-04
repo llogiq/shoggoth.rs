@@ -30,9 +30,9 @@ for
 }
 
 impl<
-       D,
+       D: Ty + HList,
       Fx: Infer,
-     Fxs: HList,
+     Fxs:      HList,
     Rec0,
     Rec1: Ty + HList,
 >
