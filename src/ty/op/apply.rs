@@ -25,10 +25,7 @@ where
       Fx: Infer,
        M: infer::mode::Mode,
     Self: HList,
-    Self:
-        TmPre<
-            <<Fx as Infer>::Ty as IsArrow>::Dom
-        >,
+    Self: TmPre<<<Fx as Infer>::Ty as IsArrow>::Dom>,
     <Fx as Infer>::Ty
         : IsArrow<Dom = FxDTy>,
 {
