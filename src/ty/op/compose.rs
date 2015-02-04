@@ -76,8 +76,9 @@ impl<
 for
     HC<Fx, Fxs>
 where
-    <Fx as Infer>::Ty: IsArrow,
      Fxs: ProjCods,
+   <Fx as Infer>::Ty
+        : IsArrow,
 {
     type Out =
         HC<
