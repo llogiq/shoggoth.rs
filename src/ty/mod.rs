@@ -49,6 +49,7 @@ pub use self::op::{
     Eval1,
     ProjDoms,
     ProjCods,
+    Id,
     IsArrow,
     Thunk,
 };

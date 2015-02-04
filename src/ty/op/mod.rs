@@ -17,7 +17,9 @@ pub use self::thunk::{
 use hlist::*;
 use ty::{
     Infer,
+    Tm,
     Ty,
+    infer,
 };
 
 mod apply;
@@ -100,3 +102,41 @@ pub type Ap0<Fx> = Ap<Fx, HN>;
 /// Alias for partially applying terms of arrow types to a single
 /// argument
 pub type Ap1<Fx, X> = Ap<Fx, HC<X, HN>>;
+
+
+
+#[derive(Clone)]
+#[derive(Copy)]
+#[derive(Debug)]
+#[derive(Eq)]
+#[derive(Hash)]
+#[derive(Ord)]
+#[derive(PartialEq)]
+#[derive(PartialOrd)]
+pub enum
+    Id<A>
+where
+       A: Ty,
+{}
+
+impl<
+       A: Ty,
+>
+    Infer
+for
+    Id<A>
+{
+    type Mode = infer::mode::Constant;
+    type Ty = Ar1<A, A>;
+}
+
+impl<
+       A: Ty,
+       M: Tm<A>,
+>
+    Eval<Id<A>>
+for
+    HC<M, HN>
+{
+    type Out = M;
+}
