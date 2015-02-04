@@ -478,9 +478,19 @@ mod test {
     #[test]
     fn nth() {
         let x0: Witness<
-                Ap1<View<Ap1<zipper::Nth<_>, _1b>>, HC<FF, HC<TT, HN>>>
+                Ap1<
+                    View<
+                        lens::Cmp<
+                            Ap1<zipper::Nth<List<Bool>>, _1b>,
+                            Ap1<zipper::Nth     <Bool> , _2b>
+                        >
+                    >,
+                    HC<HN,
+                    HC<HC<FF, HC<TT, HC<FF, HC<FF, HN>>>>,
+                    HN>>
+                >
             > = Witness;
-        let x1: Witness<TT> = Witness;
+        let x1: Witness<FF> = Witness;
         x0 == x1;
     }
 }

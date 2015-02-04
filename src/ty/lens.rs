@@ -9,6 +9,7 @@ use ty::{
     Tm,
     Ty,
     infer,
+    self,
 };
 
 
@@ -214,4 +215,74 @@ where
         : AppEval<FxM, HC<A, HN>, Fx, Out = Rec1>,
 {
     type Out = Rec2;
+}
+
+
+
+#[derive(Clone)]
+#[derive(Copy)]
+#[derive(Debug)]
+#[derive(Eq)]
+#[derive(Hash)]
+#[derive(Ord)]
+#[derive(PartialEq)]
+#[derive(PartialOrd)]
+pub enum
+    Cmp<Fx, Gx>
+where
+      Fx: Infer,
+   <Fx as Infer>::Ty
+        : IsLens,
+      Gx: Infer,
+   <Gx as Infer>::Ty
+        : IsLens< S = <<Fx as Infer>::Ty as IsLens>::A
+                , T = <<Fx as Infer>::Ty as IsLens>::B
+                >,
+{}
+
+impl<
+       A: Ty,
+       B: Ty,
+      Fx: Infer<Ty = Lens<S, A, T, B>>,
+      Gx: Infer<Ty = Lens<A, U, B, V>>,
+       S: Ty,
+       T: Ty,
+       U: Ty,
+       V: Ty,
+>
+    Infer
+for
+    Cmp<Fx, Gx>
+{
+    type Mode = infer::mode::Constant;
+    type Ty = Lens<S, U, T, V>;
+}
+
+impl<
+       A: Ty,
+       B: Ty,
+     FxM,
+      Fx: Infer<Mode = FxM, Ty = Lens<S, A, T, B>>,
+    Get0,
+    Get1: Tm<U>,
+    Set0: Infer<Ty = Ar1<B, T>>,
+    Set1: Infer<Ty = Ar1<V, B>>,
+     GxM,
+      Gx: Infer<Mode = GxM, Ty = Lens<A, U, B, V>>,
+       S: Ty,
+      Sm: Tm<S>,
+       T: Ty,
+       U: Ty,
+       V: Ty,
+>
+    Eval<Cmp<Fx, Gx>>
+for
+    HC<Sm, HN>
+where
+    HC<Sm, HN>
+        : AppEval<FxM, HC<S, HN>, Fx, Out = MkStore<Get0, Set0>>,
+    HC<Get0, HN>
+        : AppEval<GxM, HC<A, HN>, Gx, Out = MkStore<Get1, Set1>>,
+{
+    type Out = MkStore<Get1, ty::Cmp1<Set1, Set0>>;
 }

@@ -76,7 +76,6 @@ mod bool;
 mod check;
 mod hlist;
 mod kind;
-mod lens;
 mod op;
 mod star;
 mod witness;
@@ -86,6 +85,9 @@ pub mod infer;
 
 /// Type-level binary integers
 pub mod int;
+
+/// Type-level lenses
+pub mod lens;
 
 /// Type-level lists
 pub mod list;
