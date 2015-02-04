@@ -45,6 +45,7 @@ pub use self::op::{
     Ar1,
     Cmp,
     Cmp1,
+    Const,
     Eval,
     Eval1,
     ProjDoms,

@@ -140,3 +140,45 @@ for
 {
     type Out = M;
 }
+
+
+
+#[derive(Clone)]
+#[derive(Copy)]
+#[derive(Debug)]
+#[derive(Eq)]
+#[derive(Hash)]
+#[derive(Ord)]
+#[derive(PartialEq)]
+#[derive(PartialOrd)]
+pub enum
+    Const<A, B>
+where
+       A: Ty,
+       B: Ty,
+{}
+
+impl<
+       A: Ty,
+       B: Ty,
+>
+    Infer
+for
+    Const<A, B>
+{
+    type Mode = infer::mode::Constant;
+    type Ty = Ar<HC<A, HC<B, HN>>, A>;
+}
+
+impl<
+       A: Ty,
+       B: Ty,
+       M: Tm<A>,
+       N: Tm<B>,
+>
+    Eval<Const<A, B>>
+for
+    HC<M, HC<N, HN>>
+{
+    type Out = M;
+}
