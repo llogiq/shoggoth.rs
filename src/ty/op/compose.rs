@@ -151,9 +151,9 @@ impl<
     Rest: HList,
        C: Ty,
        D: Ty    + HList,
-      Fx: Infer<Mode = Im, Ty = Ar<D, C>>,
+      Fx: Infer<Mode = FxM, Ty = Ar<D, C>>,
+     FxM: infer::mode::Mode,
      Fxs: HList,
-      Im,
    Input: HList,
      Rec,
 >
@@ -161,7 +161,7 @@ impl<
 for
     Input
 where
-    Args: AppEval<Im, D, Fx, Out = Rec>,
+    Args: AppEval<FxM, D, Fx, Out = Rec>,
    Input: TmExt<D, Out = Args, Ext = Rest>,
     Rest: AppMany<Fxs>,
 {
@@ -179,8 +179,8 @@ impl<
     FxsC: Ty       + HList,
      GxC: Ty,
      Fxs,
-      Gx: Infer<Mode = Im, Ty = Ar<FxsC, GxC>>,
-      Im,
+      Gx: Infer<Mode = GxM, Ty = Ar<FxsC, GxC>>,
+     GxM: infer::mode::Mode,
    Input: Tm<FxsD> + HList,
     Rec0: Tm<FxsC> + HList,
     Rec1: Tm<GxC>,
@@ -191,7 +191,7 @@ for
 where
      Fxs: ProjDoms<Out = FxsD> + ProjCods<Out = FxsC>,
    Input: AppMany<Fxs, Out = Rec0>,
-    Rec0: AppEval<Im, FxsC, Gx, Out = Rec1>,
+    Rec0: AppEval<GxM, FxsC, Gx, Out = Rec1>,
 {
     type Out = Rec1;
 }
