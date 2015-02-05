@@ -243,4 +243,34 @@ where
 
 
 
-pub type NonEmpty<A> = HC<A, List<A>>;
+#[derive(Clone)]
+#[derive(Copy)]
+#[derive(Debug)]
+#[derive(Eq)]
+#[derive(Hash)]
+#[derive(Ord)]
+#[derive(PartialEq)]
+#[derive(PartialOrd)]
+pub enum
+    NonEmpty<A>
+where
+       A: Ty,
+{}
+
+impl<
+       A: Ty,
+>
+    Ty
+for
+    NonEmpty<A>
+{}
+
+impl<
+       A: Ty,
+       X: Tm<A>,
+      Xs: Tm<List<A>>,
+>
+    Tm<NonEmpty<A>>
+for
+    HC<X, Xs>
+{}
