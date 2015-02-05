@@ -3,7 +3,6 @@ use ty::{
     AppEval,
     Ar,
     Ar1,
-    Const,
     Eval,
     Infer,
     IsArrow,
@@ -329,7 +328,9 @@ impl<
       Bm: Tm<B>,
       Lx: Infer<Mode = LxM, Ty = Lens<S, A, T, B>>,
      LxM,
-    Rec0,
+    Get0,
+   Set0M,
+    Set0: Infer<Mode = Set0M, Ty = Ar1<B, T>>,
     Rec1: Tm<T>,
        S: Ty,
       Sm: Tm<S>,
@@ -340,13 +341,9 @@ for
     HC<Bm, HC<Sm, HN>>
 where
     HC<Bm, HN>
-        : AppEval<infer::mode::Constant, HC<B, HN>, Const<B, A>, Out = Rec0>,
-    HC<Rec0, HC<Sm, HN>>
-        : AppEval<
-            infer::mode::Constant,
-            <<Lx as Infer>::Ty as IsArrow>::Dom,
-            Over<Lx>,
-            Out = Rec1>
+        : AppEval<Set0M, HC<B, HN>, Set0, Out = Rec1>,
+    HC<Sm, HN>
+        : AppEval<LxM, HC<S, HN>, Lx, Out = MkStore<Get0, Set0>>,
 {
     type Out = Rec1;
 }
