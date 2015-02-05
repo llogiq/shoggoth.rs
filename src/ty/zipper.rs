@@ -475,21 +475,38 @@ mod test {
     }
 
     #[test]
-    fn nth() {
-        let x0: Witness<
-                Ap1<
-                    View<
-                        lens::Cmp<
-                            Ap1<zipper::Nth<List<Bool>>, _1b>,
-                            Ap1<zipper::Nth     <Bool> , _2b>
-                        >
-                    >,
-                    HC<HN,
-                    HC<HC<FF, HC<TT, HC<FF, HC<FF, HN>>>>,
-                    HN>>
-                >
-            > = Witness;
-        let x1: Witness<FF> = Witness;
+    fn nth_over() {
+        let x0 = Witness::<
+            Ap1<Ap1<Over<lens::Cmp<Ap1<zipper::Nth<List<Bool>>, _1b>,
+                                   Ap1<zipper::Nth     <Bool> , _1b>>>,
+                    Ap1<Const<_, _>, FF>>,
+                HC<HC<FF, HN>,
+                HC<HC<FF, HC<TT, HC<FF, HN>>>,
+                HN>>>
+            >;
+        let x1 = Witness::<
+                HC<HC<FF, HN>,
+                HC<HC<FF, HC<FF, HC<FF, HN>>>,
+                HN>>
+            >;
+        x0 == x1;
+    }
+
+    #[test]
+    fn nth_set() {
+        let x0 = Witness::<
+            Ap1<Ap1<lens::Set<lens::Cmp<Ap1<zipper::Nth<List<Bool>>, _1b>,
+                                        Ap1<zipper::Nth     <Bool> , _1b>>>,
+                    TT>,
+                HC<HC<FF, HN>,
+                HC<HC<FF, HC<TT, HC<FF, HN>>>,
+                HN>>>
+            >;
+        let x1 = Witness::<
+                HC<HC<FF, HN>,
+                HC<HC<FF, HC<TT, HC<FF, HN>>>,
+                HN>>
+            >;
         x0 == x1;
     }
 }
