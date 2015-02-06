@@ -1,43 +1,13 @@
 /// Predicate classifying Infer modes
 #[rustc_on_unimplemented = "`{Self}` is not a valid Infer mode"]
-pub trait
-    Mode
-{}
+pub trait Mode {}
 
 /// Infer mode for operations
-#[derive(Clone)]
-#[derive(Copy)]
-#[derive(Debug)]
-#[derive(Eq)]
-#[derive(Hash)]
-#[derive(Ord)]
-#[derive(PartialEq)]
-#[derive(PartialOrd)]
-pub enum
-    Constant
-{}
+#[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+pub enum Constant {}
+impl Mode for Thunk {}
 
 /// Infer mode for thunks
-#[derive(Clone)]
-#[derive(Copy)]
-#[derive(Debug)]
-#[derive(Eq)]
-#[derive(Hash)]
-#[derive(Ord)]
-#[derive(PartialEq)]
-#[derive(PartialOrd)]
-pub enum
-    Thunk
-{}
-
-impl
-    Mode
-for
-    Thunk
-{}
-
-impl
-    Mode
-for
-    Constant
-{}
+#[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+pub enum Thunk {}
+impl Mode for Constant {}

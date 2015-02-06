@@ -12,37 +12,20 @@ use ty::{
 use ty::bit::*;
 
 /// Type-level positive natural numbers (binary)
-#[derive(Clone)]
-#[derive(Copy)]
-#[derive(Debug)]
-#[derive(Eq)]
-#[derive(Hash)]
-#[derive(Ord)]
-#[derive(PartialEq)]
-#[derive(PartialOrd)]
-pub enum
-    Pos
-{}
+#[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+pub enum Pos {}
 
 /// ```ignore
 /// ---------
 /// Pos :: Ty
 /// ```
-impl
-    Ty
-for
-    Pos
-{}
+impl Ty for Pos {}
 
 /// ```ignore
 /// -------
 /// 1 : Pos
 /// ```
-impl
-    Tm<Pos>
-for
-    _1
-{}
+impl Tm<Pos> for _1 {}
 
 /// ```ignore
 /// p : Pos
@@ -50,61 +33,29 @@ for
 /// ------------
 /// (p, b) : Pos
 /// ```
-impl<
-       B: Tm<Bit>,
-       P: Tm<Pos>,
->
-    Tm<Pos>
-for
-    (P, B)
-{}
-
-
+impl<B: Tm<Bit>, P: Tm<Pos>> Tm<Pos> for (P, B) {}
 
 /// Type-level successor for positive natural numbers
-#[derive(Clone)]
-#[derive(Copy)]
-#[derive(Debug)]
-#[derive(Eq)]
-#[derive(Hash)]
-#[derive(Ord)]
-#[derive(PartialEq)]
-#[derive(PartialOrd)]
-pub enum
-    Succ
-{}
+#[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+pub enum Succ {}
 
 /// ```ignore
 /// p : Pos
 /// -------------
 /// succ(p) : Pos
 /// ```
-impl
-    Infer
-for
-    Succ
-{
+impl Infer for Succ {
     type Mode = infer::mode::Constant;
     type Ty = Ar1<Pos, Pos>;
 }
 
 /// `succ(1) ==> 1:0`
-impl
-    Eval<Succ>
-for
-    HC<_1, HN>
-{
+impl Eval<Succ> for HC<_1, HN> {
     type Out = (_1, _0,);
 }
 
 /// `succ(p:0) ==> p:1`
-impl<
-       P: Tm<Pos>,
->
-    Eval<Succ>
-for
-    HC<(P, _0), HN>
-{
+impl<P: Tm<Pos>> Eval<Succ> for HC<(P, _0), HN> {
     type Out = (P, _1);
 }
 
@@ -112,30 +63,15 @@ for
 impl<
        P: Tm<Pos>,
      Rec: Tm<Pos>,
->
-    Eval<Succ>
-for
-    HC<(P, _1), HN>
-where
+> Eval<Succ> for HC<(P, _1), HN> where
        P: Eval1<Succ, Out = Rec>,
 {
     type Out = (Rec, _0);
 }
 
-
-
 /// Type-level addition for positive natural numbers
-#[derive(Clone)]
-#[derive(Copy)]
-#[derive(Debug)]
-#[derive(Eq)]
-#[derive(Hash)]
-#[derive(Ord)]
-#[derive(PartialEq)]
-#[derive(PartialOrd)]
-pub enum
-    Add
-{}
+#[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+pub enum Add {}
 
 /// ```ignore
 /// p : Pos
@@ -143,32 +79,18 @@ pub enum
 /// ---------------
 /// add(p, q) : Pos
 /// ```
-impl
-    Infer
-for
-    Add
-{
+impl Infer for Add {
     type Mode = infer::mode::Constant;
     type Ty = Ar<HC<Pos, HC<Pos, HN>>, Pos>;
 }
 
 /// `add(1, 1) ==> 1:0`
-impl
-    Eval<Add>
-for
-    HC<_1, HC<_1, HN>>
-{
+impl Eval<Add> for HC<_1, HC<_1, HN>> {
     type Out = (_1, _0);
 }
 
 /// `add(1, q:0) ==> q:1`
-impl<
-      P1: Tm<Pos>,
->
-    Eval<Add>
-for
-    HC<_1, HC<(P1, _0), HN>>
-{
+impl<P1: Tm<Pos>> Eval<Add> for HC<_1, HC<(P1, _0), HN>> {
     type Out = (P1, _1);
 }
 
@@ -176,24 +98,14 @@ for
 impl<
       P1: Tm<Pos>,
      Rec: Tm<Pos>,
->
-    Eval<Add>
-for
-    HC<_1, HC<(P1, _1), HN>>
-where
+> Eval<Add> for HC<_1, HC<(P1, _1), HN>> where
       P1: Eval1<Succ, Out = Rec>,
 {
     type Out = (Rec, _0);
 }
 
 /// `add(p:0, 1) ==> p:1`
-impl<
-      P0: Tm<Pos>,
->
-    Eval<Add>
-for
-    HC<(P0, _0), HC<_1, HN>>
-{
+impl<P0: Tm<Pos>> Eval<Add> for HC<(P0, _0), HC<_1, HN>> {
     type Out = (P0, _1);
 }
 
@@ -202,11 +114,7 @@ impl<
       P0: Tm<Pos>,
       P1: Tm<Pos>,
      Rec: Tm<Pos>,
->
-    Eval<Add>
-for
-    HC<(P0, _0), HC<(P1, _0), HN>>
-where
+> Eval<Add> for HC<(P0, _0), HC<(P1, _0), HN>> where
     HC<P0, HC<P1, HN>>
         : Eval<Add, Out = Rec>,
 {
@@ -218,11 +126,7 @@ impl<
       P0: Tm<Pos>,
       P1: Tm<Pos>,
      Rec: Tm<Pos>,
->
-    Eval<Add>
-for
-    HC<(P0, _0), HC<(P1, _1), HN>>
-where
+> Eval<Add> for HC<(P0, _0), HC<(P1, _1), HN>> where
     HC<P0, HC<P1, HN>>
         : Eval<Add, Out = Rec>,
 {
@@ -233,11 +137,7 @@ where
 impl<
       P0: Tm<Pos>,
      Rec: Tm<Pos>,
->
-    Eval<Add>
-for
-    HC<(P0, _1), HC<_1, HN>>
-where
+> Eval<Add> for HC<(P0, _1), HC<_1, HN>> where
       P0: Eval1<Succ, Out = Rec>,
 {
     type Out = (Rec, _0);
@@ -248,11 +148,7 @@ impl<
       P0: Tm<Pos>,
       P1: Tm<Pos>,
      Rec: Tm<Pos>,
->
-    Eval<Add>
-for
-    HC<(P0, _1), HC<(P1, _0), HN>>
-where
+> Eval<Add> for HC<(P0, _1), HC<(P1, _0), HN>> where
     HC<P0, HC<P1, HN>>
         : Eval<Add, Out = Rec>,
 {
@@ -264,31 +160,16 @@ impl<
       P0: Tm<Pos>,
       P1: Tm<Pos>,
      Rec: Tm<Pos>,
->
-    Eval<Add>
-for
-    HC<(P0, _1), HC<(P1, _1), HN>>
-where
+> Eval<Add> for HC<(P0, _1), HC<(P1, _1), HN>> where
     HC<P0, HC<P1, HN>>
         : Eval<AddCarry, Out = Rec>,
 {
     type Out = (Rec, _0);
 }
 
-
-
 /// Type-level addition with carry for positive natural numbers
-#[derive(Clone)]
-#[derive(Copy)]
-#[derive(Debug)]
-#[derive(Eq)]
-#[derive(Hash)]
-#[derive(Ord)]
-#[derive(PartialEq)]
-#[derive(PartialOrd)]
-pub enum
-    AddCarry
-{}
+#[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+pub enum AddCarry {}
 
 /// ```ignore
 /// p : Pos
@@ -296,21 +177,13 @@ pub enum
 /// ---------------------
 /// add_carry(p, q) : Pos
 /// ```
-impl
-    Infer
-for
-    AddCarry
-{
+impl Infer for AddCarry {
     type Mode = infer::mode::Constant;
     type Ty = Ar<HC<Pos, HC<Pos, HN>>, Pos>;
 }
 
 /// `add_carry(1, 1) ==> 1:1`
-impl
-    Eval<AddCarry>
-for
-    HC<_1, HC<_1, HN>>
-{
+impl Eval<AddCarry> for HC<_1, HC<_1, HN>> {
     type Out = (_1, _1);
 }
 
@@ -318,11 +191,7 @@ for
 impl<
       P1: Tm<Pos>,
      Rec: Tm<Pos>,
->
-    Eval<AddCarry>
-for
-    HC<_1, HC<(P1, _0), HN>>
-where
+> Eval<AddCarry> for HC<_1, HC<(P1, _0), HN>> where
       P1: Eval1<Succ, Out = Rec>,
 {
     type Out = (Rec, _0);
@@ -332,11 +201,7 @@ where
 impl<
       P1: Tm<Pos>,
      Rec: Tm<Pos>,
->
-    Eval<AddCarry>
-for
-    HC<_1, HC<(P1, _1), HN>>
-where
+> Eval<AddCarry> for HC<_1, HC<(P1, _1), HN>> where
       P1: Eval1<Succ, Out = Rec>,
 {
     type Out = (Rec, _1);
@@ -346,11 +211,7 @@ where
 impl<
       P0: Tm<Pos>,
      Rec: Tm<Pos>,
->
-    Eval<AddCarry>
-for
-    HC<(P0, _0), HC<_1, HN>>
-where
+> Eval<AddCarry> for HC<(P0, _0), HC<_1, HN>> where
       P0: Eval1<Succ, Out = Rec>,
 {
     type Out = (P0, _0);
@@ -361,11 +222,7 @@ impl<
       P0: Tm<Pos>,
       P1: Tm<Pos>,
      Rec: Tm<Pos>,
->
-    Eval<AddCarry>
-for
-    HC<(P0, _0), HC<(P1, _0), HN>>
-where
+> Eval<AddCarry> for HC<(P0, _0), HC<(P1, _0), HN>> where
     HC<P0, HC<P1, HN>>
         : Eval<Add, Out = Rec>,
 {
@@ -377,11 +234,7 @@ impl<
       P0: Tm<Pos>,
       P1: Tm<Pos>,
      Rec: Tm<Pos>,
->
-    Eval<AddCarry>
-for
-    HC<(P0, _0), HC<(P1, _1), HN>>
-where
+> Eval<AddCarry> for HC<(P0, _0), HC<(P1, _1), HN>> where
     HC<P0, HC<P1, HN>>
         : Eval<AddCarry, Out = Rec>,
 {
@@ -392,11 +245,7 @@ where
 impl<
       P0: Tm<Pos>,
      Rec: Tm<Pos>,
->
-    Eval<AddCarry>
-for
-    HC<(P0, _1), HC<_1, HN>>
-where
+> Eval<AddCarry> for HC<(P0, _1), HC<_1, HN>> where
       P0: Eval1<Succ, Out = Rec>,
 {
     type Out = (Rec, _1);
@@ -407,11 +256,7 @@ impl<
       P0: Tm<Pos>,
       P1: Tm<Pos>,
      Rec: Tm<Pos>,
->
-    Eval<AddCarry>
-for
-    HC<(P0, _1), HC<(P1, _0), HN>>
-where
+> Eval<AddCarry> for HC<(P0, _1), HC<(P1, _0), HN>> where
     HC<P0, HC<P1, HN>>
         : Eval<AddCarry, Out = Rec>,
 {
@@ -423,52 +268,29 @@ impl<
       P0: Tm<Pos>,
       P1: Tm<Pos>,
      Rec: Tm<Pos>,
->
-    Eval<AddCarry>
-for
-    HC<(P0, _1), HC<(P1, _1), HN>>
-where
+> Eval<AddCarry> for HC<(P0, _1), HC<(P1, _1), HN>> where
     HC<P0, HC<P1, HN>>
         : Eval<AddCarry, Out = Rec>,
 {
     type Out = (Rec, _1);
 }
 
-
-
 /// `λx. 2 * x - 1`
-#[derive(Clone)]
-#[derive(Copy)]
-#[derive(Debug)]
-#[derive(Eq)]
-#[derive(Hash)]
-#[derive(Ord)]
-#[derive(PartialEq)]
-#[derive(PartialOrd)]
-pub enum
-    PredDouble
-{}
+#[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+pub enum PredDouble {}
 
 /// ```ignore
 /// p : Pos
 /// --------------------
 /// pred_double(p) : Pos
 /// ```
-impl
-    Infer
-for
-    PredDouble
-{
+impl Infer for PredDouble {
     type Mode = infer::mode::Constant;
     type Ty = Ar1<Pos, Pos>;
 }
 
 /// `pred_double(1) ==> 1`
-impl
-    Eval<PredDouble>
-for
-    HC<_1, HN>
-{
+impl Eval<PredDouble> for HC<_1, HN> {
     type Out = _1;
 }
 
@@ -476,11 +298,7 @@ for
 impl<
        P: Tm<Pos>,
      Rec: Tm<Pos>,
->
-    Eval<PredDouble>
-for
-    HC<(P, _0), HN>
-where
+> Eval<PredDouble> for HC<(P, _0), HN> where
        P: Eval1<PredDouble, Out = Rec>,
 {
     type Out = (Rec, _1);
@@ -489,49 +307,26 @@ where
 /// `pred_double(p:1) ==> p:0:1`
 impl<
        P: Tm<Pos>,
->
-    Eval<PredDouble>
-for
-    HC<(P, _1), HN>
-{
+> Eval<PredDouble> for HC<(P, _1), HN> {
     type Out = ((P, _0), _1);
 }
 
-
-
 /// Type-level predecessor for positive natural numbers
-#[derive(Clone)]
-#[derive(Copy)]
-#[derive(Debug)]
-#[derive(Eq)]
-#[derive(Hash)]
-#[derive(Ord)]
-#[derive(PartialEq)]
-#[derive(PartialOrd)]
-pub enum
-    Pred
-{}
+#[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+pub enum Pred {}
 
 /// ```ignore
 /// p : Pos
 /// -------------
 /// pred(p) : Pos
 /// ```
-impl
-    Infer
-for
-    Pred
-{
+impl Infer for Pred {
     type Mode = infer::mode::Constant;
     type Ty = Ar1<Pos, Pos>;
 }
 
 /// `pred(p:1) ==> p:0`
-impl
-    Eval<Pred>
-for
-    HC<_1, HN>
-{
+impl Eval<Pred> for HC<_1, HN> {
     type Out = _1;
 }
 
@@ -539,41 +334,20 @@ for
 impl<
        P: Tm<Pos>,
      Rec: Tm<Pos>,
->
-    Eval<Pred>
-for
-    HC<(P, _0), HN>
-where
+> Eval<Pred> for HC<(P, _0), HN> where
        P: Eval1<PredDouble, Out = Rec>,
 {
     type Out = Rec;
 }
 
 /// `p:1 ==> p:0`
-impl<
-       P: Tm<Pos>,
->
-    Eval<Pred>
-for
-    HC<(P, _1), HN>
-{
+impl<P: Tm<Pos>> Eval<Pred> for HC<(P, _1), HN> {
     type Out = (P, _0);
 }
 
-
-
 /// Type-level multiplication for positive natural numbers
-#[derive(Clone)]
-#[derive(Copy)]
-#[derive(Debug)]
-#[derive(Eq)]
-#[derive(Hash)]
-#[derive(Ord)]
-#[derive(PartialEq)]
-#[derive(PartialOrd)]
-pub enum
-    Mul
-{}
+#[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+pub enum Mul {}
 
 /// ```ignore
 /// p : Pos
@@ -581,23 +355,13 @@ pub enum
 /// ---------------
 /// mul(p, q) : Pos
 /// ```
-impl
-    Infer
-for
-    Mul
-{
+impl Infer for Mul {
     type Mode = infer::mode::Constant;
     type Ty = Ar<HC<Pos, HC<Pos, HN>>, Pos>;
 }
 
 /// `mul(1, q) ==> q`
-impl<
-      P1: Tm<Pos>,
->
-    Eval<Mul>
-for
-    HC<_1, HC<P1, HN>>
-{
+impl<P1: Tm<Pos>> Eval<Mul> for HC<_1, HC<P1, HN>> {
     type Out = P1;
 }
 
@@ -606,11 +370,7 @@ impl<
       P0: Tm<Pos>,
       P1: Tm<Pos>,
      Rec: Tm<Pos>,
->
-    Eval<Mul>
-for
-    HC<(P0, _0), HC<P1, HN>>
-where
+> Eval<Mul> for HC<(P0, _0), HC<P1, HN>> where
     HC<P0, HC<P1, HN>>
         : Eval<Mul, Out = Rec>,
 {
@@ -623,11 +383,7 @@ impl<
       P1: Tm<Pos>,
     Rec0: Tm<Pos>,
     Rec1: Tm<Pos>,
->
-    Eval<Mul>
-for
-    HC<(P0, _1), HC<P1, HN>>
-where
+> Eval<Mul> for HC<(P0, _1), HC<P1, HN>> where
     // mul(p0, p1) ==> r0
     HC<P0, HC<P1, HN>>
         : Eval<Mul, Out = Rec0>,
@@ -638,8 +394,6 @@ where
     type Out = Rec1;
 }
 
-
-
 #[cfg(test)]
 mod test {
     use super::*;
@@ -647,8 +401,8 @@ mod test {
 
     #[test]
     fn pred() {
-        let x0: Witness<Ap1<nat::pos::Pred, (_1, _0)>> = Witness;
-        let x1: Witness<_1> = Witness;
+        let x0 = Witness::<Ap1<nat::pos::Pred, (_1, _0)>>;
+        let x1 = Witness::<_1>;
         x0 == x1;
     }
 }

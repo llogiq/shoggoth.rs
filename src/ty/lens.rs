@@ -12,45 +12,13 @@ use ty::{
     self,
 };
 
+#[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+pub enum Store<A: Ty, T: Ty, B: Ty = A> {}
 
+impl<A: Ty, B: Ty, T: Ty> Ty for Store<A, T, B> {}
 
-#[derive(Clone)]
-#[derive(Copy)]
-#[derive(Debug)]
-#[derive(Eq)]
-#[derive(Hash)]
-#[derive(Ord)]
-#[derive(PartialEq)]
-#[derive(PartialOrd)]
-pub enum
-    Store<A, T, B=A>
-where
-       A: Ty,
-       B: Ty,
-       T: Ty,
-{}
-
-impl<
-       A: Ty,
-       B: Ty,
-       T: Ty,
->
-    Ty
-for
-    Store<A, T, B>
-{}
-
-#[derive(Clone)]
-#[derive(Copy)]
-#[derive(Debug)]
-#[derive(Eq)]
-#[derive(Hash)]
-#[derive(Ord)]
-#[derive(PartialEq)]
-#[derive(PartialOrd)]
-pub enum
-    MkStore<Get, Set>
-where
+#[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+pub enum MkStore<Get, Set> where
      Set: Infer,
     <Set as Infer>::Ty
         : IsArrow,
@@ -62,56 +30,26 @@ impl<
      Get: Tm<A>,
      Set: Infer<Ty = Ar1<B, T>>,
        T: Ty,
->
-    Tm<Store<A, T, B>>
-for
-    MkStore<Get, Set>
-{}
-
-
+> Tm<Store<A, T, B>> for MkStore<Get, Set> {}
 
 pub type Lens<S, A, T=S, B=A> = Ar1<S, Store<A, T, B>>;
 
-
-
-pub trait
-    IsLens
-{
+pub trait IsLens {
     type S: Ty;
     type A: Ty;
     type T: Ty;
     type B: Ty;
 }
 
-impl<
-       S: Ty,
-       A: Ty,
-       T: Ty,
-       B: Ty,
->
-    IsLens
-for
-    Lens<S, A, T, B>
-{
+impl<S: Ty, A: Ty, T: Ty, B: Ty> IsLens for Lens<S, A, T, B> {
     type S = S;
     type A = A;
     type T = T;
     type B = B;
 }
 
-
-
-#[derive(Clone)]
-#[derive(Copy)]
-#[derive(Debug)]
-#[derive(Eq)]
-#[derive(Hash)]
-#[derive(Ord)]
-#[derive(PartialEq)]
-#[derive(PartialOrd)]
-pub enum
-    View<Lx>
-where
+#[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+pub enum View<Lx> where
       Lx: Infer,
    <Lx as Infer>::Ty: IsLens,
 {}
@@ -122,11 +60,7 @@ impl<
       Lx: Infer<Ty = Lens<S, A, T, B>>,
        S: Ty,
        T: Ty,
->
-    Infer
-for
-    View<Lx>
-{
+> Infer for View<Lx> {
     type Mode = infer::mode::Constant;
     type Ty = Ar1<S, A>;
 }
@@ -141,30 +75,15 @@ impl<
        S: Ty,
       Sm: Tm<S>,
        T: Ty,
->
-    Eval<View<Lx>>
-for
-    HC<Sm, HN>
-where
+> Eval<View<Lx>> for HC<Sm, HN> where
       HC<Sm, HN>
         : AppEval<LxM, HC<S, HN>, Lx, Out = MkStore<Get0, Set0>>,
 {
     type Out = Get0;
 }
 
-
-
-#[derive(Clone)]
-#[derive(Copy)]
-#[derive(Debug)]
-#[derive(Eq)]
-#[derive(Hash)]
-#[derive(Ord)]
-#[derive(PartialEq)]
-#[derive(PartialOrd)]
-pub enum
-    Over<Lx>
-where
+#[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+pub enum Over<Lx> where
       Lx: Infer,
    <Lx as Infer>::Ty: IsLens,
 {}
@@ -175,11 +94,7 @@ impl<
       Lx: Infer,
        S: Ty,
        T: Ty,
->
-    Infer
-for
-    Over<Lx>
-where
+> Infer for Over<Lx> where
    <Lx as Infer>::Ty
         : IsLens<S = S, A = A, T = T, B = B>,
 {
@@ -202,11 +117,7 @@ impl<
        S: Ty,
       Sm: Tm<S>,
        T: Ty,
->
-    Eval<Over<Lx>>
-for
-    HC<Fx, HC<Sm, HN>>
-where
+> Eval<Over<Lx>> for HC<Fx, HC<Sm, HN>> where
     HC<Rec1, HN>
         : AppEval<Set0M, HC<B, HN>, Set0, Out = Rec2>,
     HC<Sm, HN>
@@ -217,19 +128,8 @@ where
     type Out = Rec2;
 }
 
-
-
-#[derive(Clone)]
-#[derive(Copy)]
-#[derive(Debug)]
-#[derive(Eq)]
-#[derive(Hash)]
-#[derive(Ord)]
-#[derive(PartialEq)]
-#[derive(PartialOrd)]
-pub enum
-    Cmp<Fx, Gx>
-where
+#[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+pub enum Cmp<Fx, Gx> where
       Fx: Infer,
    <Fx as Infer>::Ty
         : IsLens,
@@ -249,11 +149,7 @@ impl<
        T: Ty,
        U: Ty,
        V: Ty,
->
-    Infer
-for
-    Cmp<Fx, Gx>
-{
+> Infer for Cmp<Fx, Gx> {
     type Mode = infer::mode::Constant;
     type Ty = Lens<S, U, T, V>;
 }
@@ -274,11 +170,7 @@ impl<
        T: Ty,
        U: Ty,
        V: Ty,
->
-    Eval<Cmp<Fx, Gx>>
-for
-    HC<Sm, HN>
-where
+> Eval<Cmp<Fx, Gx>> for HC<Sm, HN> where
     HC<Sm, HN>
         : AppEval<FxM, HC<S, HN>, Fx, Out = MkStore<Get0, Set0>>,
     HC<Get0, HN>
@@ -287,19 +179,8 @@ where
     type Out = MkStore<Get1, ty::Cmp1<Set1, Set0>>;
 }
 
-
-
-#[derive(Clone)]
-#[derive(Copy)]
-#[derive(Debug)]
-#[derive(Eq)]
-#[derive(Hash)]
-#[derive(Ord)]
-#[derive(PartialEq)]
-#[derive(PartialOrd)]
-pub enum
-    Set<Lx>
-where
+#[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+pub enum Set<Lx> where
       Lx: Infer,
    <Lx as Infer>::Ty: IsLens,
 {}
@@ -310,11 +191,7 @@ impl<
       Lx: Infer,
        S: Ty,
        T: Ty,
->
-    Infer
-for
-    Set<Lx>
-where
+> Infer for Set<Lx> where
    <Lx as Infer>::Ty
         : IsLens<S = S, A = A, T = T, B = B>,
 {
@@ -335,11 +212,7 @@ impl<
        S: Ty,
       Sm: Tm<S>,
        T: Ty,
->
-    Eval<Set<Lx>>
-for
-    HC<Bm, HC<Sm, HN>>
-where
+> Eval<Set<Lx>> for HC<Bm, HC<Sm, HN>> where
     HC<Bm, HN>
         : AppEval<Set0M, HC<B, HN>, Set0, Out = Rec1>,
     HC<Sm, HN>

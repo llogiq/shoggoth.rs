@@ -1,8 +1,6 @@
 /// Predicate implemented when `Self` has a concept of `head` and `tail`
 #[rustc_on_unimplemented = "`{Self}` is not a composite type"]
-pub trait
-    IsComposite
-{
+pub trait IsComposite {
     type H;
     type T;
 
@@ -10,27 +8,13 @@ pub trait
     fn split(self) -> (Self::H, Self::T);
 
     #[inline]
-    fn head(self) -> Self::H where
-        Self: Sized
-    {
-        self.split().0
-    }
+    fn head(self) -> Self::H where Self: Sized { self.split().0 }
 
     #[inline]
-    fn tail(self) -> Self::T where
-        Self: Sized
-    {
-        self.split().1
-    }
+    fn tail(self) -> Self::T where Self: Sized { self.split().1 }
 }
 
-impl<
-    A0,
->
-    IsComposite
-for
-    (A0,)
-{
+impl<A0> IsComposite for (A0,) {
     type H = A0;
     type T = ();
 
@@ -41,14 +25,7 @@ for
     }
 }
 
-impl<
-    A0,
-    A1,
->
-    IsComposite
-for
-    (A0, A1)
-{
+impl<A0, A1> IsComposite for (A0, A1) {
     type H = A0;
     type T = (A1,);
 
@@ -59,15 +36,7 @@ for
     }
 }
 
-impl<
-    A0,
-    A1,
-    A2,
->
-    IsComposite
-for
-    (A0, A1, A2)
-{
+impl<A0, A1, A2> IsComposite for (A0, A1, A2) {
     type H = A0;
     type T = (A1, A2);
 
@@ -78,16 +47,7 @@ for
     }
 }
 
-impl<
-    A0,
-    A1,
-    A2,
-    A3,
->
-    IsComposite
-for
-    (A0, A1, A2, A3)
-{
+impl<A0, A1, A2, A3> IsComposite for (A0, A1, A2, A3) {
     type H = A0;
     type T = (A1, A2, A3);
 
@@ -100,22 +60,14 @@ for
 
 /// Operations on `Tuples`
 #[rustc_on_unimplemented = "Tuple operations are not specified for `{Self}`"]
-pub trait
-    TupleOps
-{
+pub trait TupleOps {
     #[inline]
-    fn head(self) -> <Self as IsComposite>::H where
-        Self: Sized,
-        Self: IsComposite,
-    {
+    fn head(self) -> <Self as IsComposite>::H where Self: Sized + IsComposite {
         IsComposite::head(self)
     }
 
     #[inline]
-    fn tail(self) -> <Self as IsComposite>::T where
-        Self: Sized,
-        Self: IsComposite,
-    {
+    fn tail(self) -> <Self as IsComposite>::T where Self: Sized + IsComposite {
         IsComposite::tail(self)
     }
 }

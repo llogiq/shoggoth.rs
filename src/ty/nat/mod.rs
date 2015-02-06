@@ -20,147 +20,78 @@ use ty::{
 pub mod pos;
 
 /// Type-level natural numbers (binary)
-#[derive(Clone)]
-#[derive(Copy)]
-#[derive(Debug)]
-#[derive(Eq)]
-#[derive(Hash)]
-#[derive(Ord)]
-#[derive(PartialEq)]
-#[derive(PartialOrd)]
-pub enum
-    Nat
-{}
+#[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+pub enum Nat {}
 
 /// ```ignore
 /// ---------
 /// Nat :: Ty
 /// ```
-impl
-    Ty
-for
-    Nat
-{}
+impl Ty for Nat {}
 
 /// ```ignore
 /// -------
 /// 0 : Nat
 /// ```
-impl
-    Tm<Nat>
-for
-    _0
-{}
+impl Tm<Nat> for _0 {}
 
 /// ```ignore
 /// p : Pos
 /// -------
 /// p : Nat
 /// ```
-impl<
-    P: Tm<Pos>,
->
-    Tm<Nat>
-for
-    P
-{}
-
-
+impl<P: Tm<Pos>> Tm<Nat> for P {}
 
 /// Type-level successor for natural numbers
-#[derive(Clone)]
-#[derive(Copy)]
-#[derive(Debug)]
-#[derive(Eq)]
-#[derive(Hash)]
-#[derive(Ord)]
-#[derive(PartialEq)]
-#[derive(PartialOrd)]
-pub enum
-    Succ
-{}
+#[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+pub enum Succ {}
 
 /// ```ignore
 /// n : Nat
 /// -------------
 /// succ(n) : Nat
 /// ```
-impl
-    Infer
-for
-    Succ
-{
+impl Infer for Succ {
     type Mode = infer::mode::Constant;
     type Ty = Ar1<Nat, Nat>;
 }
 
 /// `succ(0) ==> 1`
-impl
-    Eval<Succ>
-for
-    HC<_0, HN>
-{
+impl Eval<Succ> for HC<_0, HN> {
     type Out = _1;
 }
 
 /// `succ<Nat>(p) ==> succ<Pos>(p)`
 impl<
-      P: Tm<Pos>,
-    Rec: Tm<Nat>,
->
-    Eval<Succ>
-for
-    HC<P, HN>
-where
+       P: Tm<Pos>,
+     Rec: Tm<Nat>,
+> Eval<Succ> for HC<P, HN> where
        P: Eval1<pos::Succ, Out = Rec>,
 {
     type Out = Rec;
 }
 
-
-
 /// Type-level predecessor for natural numbers
-#[derive(Clone)]
-#[derive(Copy)]
-#[derive(Debug)]
-#[derive(Eq)]
-#[derive(Hash)]
-#[derive(Ord)]
-#[derive(PartialEq)]
-#[derive(PartialOrd)]
-pub enum
-    Pred
-{}
+#[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+pub enum Pred {}
 
 /// ```ignore
 /// n : Nat
 /// -------------
 /// pred(n) : Nat
 /// ```
-impl
-    Infer
-for
-    Pred
-{
+impl Infer for Pred {
     type Mode = infer::mode::Constant;
     type Ty = Ar1<Nat, Nat>;
 }
 
 /// `pred(0) ==> 0`
-impl
-    Eval<Pred>
-for
-    HC<_0, HN>
-{
+impl Eval<Pred> for HC<_0, HN> {
     type Out = _0;
 }
 
 /// `pred(1) ==> 0`
-impl
-    Eval<Pred>
-for
-    HC<_1, HN>
-{
+impl Eval<Pred> for HC<_1, HN> {
     type Out = _0;
 }
 
@@ -169,30 +100,15 @@ impl<
        B: Tm<Bit>,
        P: Tm<Pos>,
      Rec: Tm<Pos>,
->
-    Eval<Pred>
-for
-    HC<(P, B), HN>
-where
+> Eval<Pred> for HC<(P, B), HN> where
   (P, B): Eval1<pos::Pred, Out = Rec>,
 {
     type Out = Rec;
 }
 
-
-
 /// Type-level addition for natural numbers
-#[derive(Clone)]
-#[derive(Copy)]
-#[derive(Debug)]
-#[derive(Eq)]
-#[derive(Hash)]
-#[derive(Ord)]
-#[derive(PartialEq)]
-#[derive(PartialOrd)]
-pub enum
-    Add
-{}
+#[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+pub enum Add {}
 
 /// ```ignore
 /// m : Nat
@@ -200,36 +116,18 @@ pub enum
 /// ---------------
 /// add(m, n) : Nat
 /// ```
-impl
-    Infer
-for
-    Add
-{
+impl Infer for Add {
     type Mode = infer::mode::Constant;
     type Ty = Ar<HC<Nat, HC<Nat, HN>>, Nat>;
 }
 
 /// `add(0, n) ==> n`
-impl<
-    P1,
->
-    Eval<Add>
-for
-    HC<_0, HC<P1, HN>>
-where
-      P1: Tm<Pos>,
-{
+impl<P1: Tm<Pos>> Eval<Add> for HC<_0, HC<P1, HN>> {
     type Out = P1;
 }
 
 /// `add(m, 0) ==> m`
-impl<
-      P0: Tm<Pos>,
->
-    Eval<Add>
-for
-    HC<P0, HC<_0, HN>>
-{
+impl<P0: Tm<Pos>> Eval<Add> for HC<P0, HC<_0, HN>> {
     type Out = P0;
 }
 
@@ -238,31 +136,16 @@ impl<
       P0: Tm<Pos>,
       P1: Tm<Pos>,
      Rec: Tm<Nat>,
->
-    Eval<Add>
-for
-    HC<P0, HC<P1, HN>>
-where
+> Eval<Add> for HC<P0, HC<P1, HN>> where
     HC<P0, HC<P1, HN>>
         : Eval<pos::Add, Out = Rec>,
 {
     type Out = Rec;
 }
 
-
-
 /// Type-level multiplication for natural numbers
-#[derive(Clone)]
-#[derive(Copy)]
-#[derive(Debug)]
-#[derive(Eq)]
-#[derive(Hash)]
-#[derive(Ord)]
-#[derive(PartialEq)]
-#[derive(PartialOrd)]
-pub enum
-    Mul
-{}
+#[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+pub enum Mul {}
 
 /// ```ignore
 /// m : Nat
@@ -270,34 +153,18 @@ pub enum
 /// ---------------
 /// mul(m, n) : Nat
 /// ```
-impl
-    Infer
-for
-    Mul
-{
+impl Infer for Mul {
     type Mode = infer::mode::Constant;
     type Ty = Ar<HC<Nat, HC<Nat, HN>>, Nat>;
 }
 
 /// `mul(0, n) ==> 0`
-impl<
-      P1: Tm<Pos>,
->
-    Eval<Mul>
-for
-    HC<_0, HC<P1, HN>>
-{
+impl<P1: Tm<Pos>> Eval<Mul> for HC<_0, HC<P1, HN>> {
     type Out = _0;
 }
 
 /// `mul(m, 0) ==> 0`
-impl<
-      P0: Tm<Pos>,
->
-    Eval<Mul>
-for
-    HC<P0, HC<_0, HN>>
-{
+impl<P0: Tm<Pos>> Eval<Mul> for HC<P0, HC<_0, HN>> {
     type Out = _0;
 }
 
@@ -306,11 +173,7 @@ impl<
       P0: Tm<Pos>,
       P1: Tm<Pos>,
      Rec: Tm<Nat>,
->
-    Eval<Mul>
-for
-    HC<P0, HC<P1, HN>>
-where
+> Eval<Mul> for HC<P0, HC<P1, HN>> where
     HC<P0, HC<P1, HN>>
         : Eval<pos::Mul, Out = Rec>,
 {
@@ -330,36 +193,36 @@ mod test {
 
     #[test]
     fn add_0() {
-        let x0: Witness<Ap<Add, HC<_0b, HC<_16384b, HN>>>> = Witness;
-        let x1: Witness<_16384b> = Witness;
+        let x0 = Witness::<Ap<Add, HC<_0b, HC<_16384b, HN>>>>;
+        let x1 = Witness::<_16384b>;
         x0 == x1;
     }
 
     #[test]
     fn add() {
-        let x0: Witness<Ap<Add, HC<_8192b, HC<_8192b, HN>>>> = Witness;
-        let x1: Witness<_16384b> = Witness;
+        let x0 = Witness::<Ap<Add, HC<_8192b, HC<_8192b, HN>>>>;
+        let x1 = Witness::<_16384b>;
         x0 == x1;
     }
 
     #[test]
     fn mul_0() {
-        let x0: Witness<Ap<Mul, HC<_0b, HC<_16384b, HN>>>> = Witness;
-        let x1: Witness<_0b> = Witness;
+        let x0 = Witness::<Ap<Mul, HC<_0b, HC<_16384b, HN>>>>;
+        let x1 = Witness::<_0b>;
         x0 == x1;
     }
 
     #[test]
     fn mul_1() {
-        let x0: Witness<Ap<Mul, HC<_1b, HC<_16384b, HN>>>> = Witness;
-        let x1: Witness<_16384b> = Witness;
+        let x0 = Witness::<Ap<Mul, HC<_1b, HC<_16384b, HN>>>>;
+        let x1 = Witness::<_16384b>;
         x0 == x1;
     }
 
     #[test]
     fn mul() {
-        let x0: Witness<Ap<Mul, HC<_32b, HC<_2048b, HN>>>> = Witness;
-        let x1: Witness<_65536b> = Witness;
+        let x0 = Witness::<Ap<Mul, HC<_32b, HC<_2048b, HN>>>>;
+        let x1 = Witness::<_65536b>;
         x0 == x1;
     }
 }

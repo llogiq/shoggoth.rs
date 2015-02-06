@@ -4,74 +4,31 @@ use ty::{
 };
 
 /// Type-level bits
-#[derive(Clone)]
-#[derive(Copy)]
-#[derive(Debug)]
-#[derive(Eq)]
-#[derive(Hash)]
-#[derive(Ord)]
-#[derive(PartialEq)]
-#[derive(PartialOrd)]
-pub enum
-    Bit
-{}
+#[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+pub enum Bit {}
 
 /// ```ignore
 /// ---------
 /// Bit :: Ty
 /// ```
-impl
-    Ty
-for
-    Bit
-{}
-
-
+impl Ty for Bit {}
 
 /// Type-level bit `0`
-#[derive(Clone)]
-#[derive(Copy)]
-#[derive(Debug)]
-#[derive(Eq)]
-#[derive(Hash)]
-#[derive(Ord)]
-#[derive(PartialEq)]
-#[derive(PartialOrd)]
-pub enum
-    _0
-{}
+#[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+pub enum _0 {}
 
 /// ```ignore
 /// --------
 /// 0 : Bit
 /// ```
-impl
-    Tm<Bit>
-for
-    _0
-{}
-
-
+impl Tm<Bit> for _0 {}
 
 /// Type-level bit `1`
-#[derive(Clone)]
-#[derive(Copy)]
-#[derive(Debug)]
-#[derive(Eq)]
-#[derive(Hash)]
-#[derive(Ord)]
-#[derive(PartialEq)]
-#[derive(PartialOrd)]
-pub enum
-    _1
-{}
+#[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+pub enum _1 {}
 
 /// ```ignore
 /// -------
 /// 1 : Bit
 /// ```
-impl
-    Tm<Bit>
-for
-    _1
-{}
+impl Tm<Bit> for _1 {}

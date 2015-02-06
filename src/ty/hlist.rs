@@ -8,11 +8,7 @@ use ty::{
 /// ---------
 /// Nil :: Ty
 /// ```
-impl
-    Ty
-for
-    Nil
-{}
+impl Ty for Nil {}
 
 /// ```ignore
 /// HTy :: Ty
@@ -22,25 +18,15 @@ for
 /// Cons<HTy, TTy> :: Ty
 /// ```
 impl<
-     HTy: Ty,
-     TTy: HList + Ty,
->
-    Ty
-for
-    Cons<HTy, TTy>
-{}
-
-
+    HTy: Ty,
+    TTy: HList + Ty
+> Ty for Cons<HTy, TTy> {}
 
 /// ```ignore
 /// ---------
 /// Nil : Nil
 /// ```
-impl
-    Tm<Nil>
-for
-    Nil
-{}
+impl Tm<Nil> for Nil {}
 
 /// ```ignore
 /// HTm : HTy
@@ -55,13 +41,7 @@ impl<
      HTy: Ty,
      TTm: Tm<TTy> + HList,
      TTy: Ty      + HList,
->
-    Tm<Cons<HTy, TTy>>
-for
-    Cons<HTm, TTm>
-{}
-
-
+> Tm<Cons<HTy, TTy>> for Cons<HTm, TTm> {}
 
 /// ```ignore
 /// n <= m
@@ -69,13 +49,7 @@ for
 /// --------------------------------------------
 /// [ M_0, ..., M_n ] : TmPre<[ A_0, ..., A_m ]>
 /// ```
-#[doc(hidden)]
-pub trait
-    TmPre<A>
-where
-    Self:      HList,
-       A: Ty + HList,
-{
+pub trait TmPre<A: Ty + HList>: HList {
     type Out: Ty;
 }
 
@@ -85,13 +59,7 @@ where
 /// --------------
 /// Nil : TmPre<A>
 /// ```
-impl<
-       A: Ty + HList,
->
-    TmPre<A>
-for
-    HN
-{
+impl<A: Ty + HList> TmPre<A> for HN {
     type Out = A;
 }
 
@@ -109,36 +77,18 @@ impl<
      HTy: Ty,
      TTm:      HList,
      TTy: Ty + HList,
->
-    TmPre<HC<HTy, TTy>>
-for
-    HC<HTm, TTm>
-where
-     TTm: TmPre<TTy>,
+> TmPre<HC<HTy, TTy>> for HC<HTm, TTm> where
+     TTm: TmPre<TTy>
 {
     type Out = <TTm as TmPre<TTy>>::Out;
 }
 
-
-
-#[doc(hidden)]
-pub trait
-    TmExt<A>
-where
-    Self:      HList,
-       A: Ty + HList,
-{
+pub trait TmExt<A: Ty + HList>: HList {
     type Out: Tm<A>; // FIXME: + Prepend<Self::Ext, Out = Self>;
     type Ext: HList;
 }
 
-impl<
-       M: HList,
->
-    TmExt<HN>
-for
-    M
-{
+impl<M: HList> TmExt<HN> for M {
     type Out = HN;
     type Ext = M;
 }
@@ -150,18 +100,12 @@ impl<
   RecOut: Tm<TTy> + HList,
      TTm: HList,
      TTy: Ty      + HList,
->
-    TmExt<HC<HTy, TTy>>
-for
-    HC<HTm, TTm>
-where
+> TmExt<HC<HTy, TTy>> for HC<HTm, TTm> where
      TTm: TmExt<TTy, Out = RecOut, Ext = RecExt>,
 {
     type Out = HC<HTm, RecOut>;
     type Ext = RecExt;
 }
-
-
 
 #[cfg(test)]
 mod test {
@@ -170,11 +114,11 @@ mod test {
 
     #[test]
     fn tm_ext() {
-        let x0: Witness< <HC<TT, HC<FF, HN>> as TmExt<HC<Bool, HN>>>::Out > = Witness;
-        let x1: Witness< HC<TT, HN> > = Witness;
+        let x0 = Witness::<<HC<TT, HC<FF, HN>> as TmExt<HC<Bool, HN>>>::Out>;
+        let x1 = Witness::<HC<TT, HN>>;
         x0 == x1;
-        let x2: Witness< <HC<TT, HC<FF, HN>> as TmExt<HC<Bool, HN>>>::Ext > = Witness;
-        let x3: Witness< HC<FF, HN> > = Witness;
+        let x2 = Witness::<<HC<TT, HC<FF, HN>> as TmExt<HC<Bool, HN>>>::Ext>;
+        let x3 = Witness::<HC<FF, HN>>;
         x2 == x3;
     }
 }

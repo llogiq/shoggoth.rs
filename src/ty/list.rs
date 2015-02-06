@@ -18,45 +18,22 @@ use ty::{
 };
 
 /// Type-level lists
-#[derive(Clone)]
-#[derive(Copy)]
-#[derive(Debug)]
-#[derive(Eq)]
-#[derive(Hash)]
-#[derive(Ord)]
-#[derive(PartialEq)]
-#[derive(PartialOrd)]
-pub enum
-    List<A>
-where
-       A: Ty,
-{}
+#[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+pub enum List<A: Ty> {}
 
 /// ```ignore
 /// A :: Ty
 /// -------------
 /// List<A> :: Ty
 /// ```
-impl<
-       A: Ty,
->
-    Ty
-for
-    List<A>
-{}
+impl<A: Ty> Ty for List<A> {}
 
 /// ```ignore
 /// A :: Ty
 /// -------------
 /// nil : List<A>
 /// ```
-impl<
-       A: Ty,
->
-    Tm<List<A>>
-for
-    Nil
-{}
+impl<A: Ty> Tm<List<A>> for Nil {}
 
 /// ```ignore
 /// A :: Ty
@@ -69,28 +46,11 @@ impl<
        A: Ty,
        X: Tm<A>,
       Xs: Tm<List<A>> + HList,
->
-    Tm<List<A>>
-for
-    Cons<X, Xs>
-{}
-
-
+> Tm<List<A>> for Cons<X, Xs> {}
 
 /// Type-level append for lists
-#[derive(Clone)]
-#[derive(Copy)]
-#[derive(Debug)]
-#[derive(Eq)]
-#[derive(Hash)]
-#[derive(Ord)]
-#[derive(PartialEq)]
-#[derive(PartialOrd)]
-pub enum
-    Prepend<A>
-where
-       A: Ty,
-{}
+#[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+pub enum Prepend<A: Ty> {}
 
 /// ```ignore
 /// A :: Ty
@@ -99,13 +59,7 @@ where
 /// ----------------------
 /// append(l, r) : List<A>
 /// ```
-impl<
-       A: Ty,
->
-    Infer
-for
-    Prepend<A>
-{
+impl<A: Ty> Infer for Prepend<A> {
     type Mode = infer::mode::Constant;
     type Ty = Ar<HC<List<A>, HC<List<A>, HN>>, List<A>>;
 }
@@ -115,11 +69,7 @@ impl<
       Xs: Tm<List<A>>,
       Ys: Tm<List<A>>,
      Rec: Tm<List<A>>,
->
-    Eval<Prepend<A>>
-for
-    HC<Xs, HC<Ys, HN>>
-where
+> Eval<Prepend<A>> for HC<Xs, HC<Ys, HN>> where
       Xs: hlist::Prepend<Ys, Out = Rec>,
 {
     type Out = Rec;
@@ -128,19 +78,8 @@ where
 
 
 /// Type-level reverse for lists
-#[derive(Clone)]
-#[derive(Copy)]
-#[derive(Debug)]
-#[derive(Eq)]
-#[derive(Hash)]
-#[derive(Ord)]
-#[derive(PartialEq)]
-#[derive(PartialOrd)]
-pub enum
-    Reverse<A>
-where
-       A: Ty,
-{}
+#[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+pub enum Reverse<A: Ty> {}
 
 /// ```ignore
 /// A :: Ty
@@ -148,57 +87,26 @@ where
 /// ---------------------
 /// reverse(xs) : List<A>
 /// ```
-impl<
-       A: Ty,
->
-    Infer
-for
-    Reverse<A>
-{
+impl< A: Ty> Infer for Reverse<A> {
     type Mode = infer::mode::Constant;
     type Ty = Ar1<List<A>, List<A>>;
 }
 
 impl<
        A: Ty,
-     Rec: Tm<List<A>>,
+     Rec: Tm<List<A>> + HList,
       Xs: Tm<List<A>> + HList,
->
-    Eval<Reverse<A>>
-for
-    HC<Xs, HN>
-where
+> Eval<Reverse<A>> for HC<Xs, HN> where
       Xs: hlist::Reverse<Out = Rec>,
 {
     type Out = Rec;
 }
 
-
-
 /// Type-level operation mapping operations over lists
-#[derive(Clone)]
-#[derive(Copy)]
-#[derive(Debug)]
-#[derive(Eq)]
-#[derive(Hash)]
-#[derive(Ord)]
-#[derive(PartialEq)]
-#[derive(PartialOrd)]
-pub enum
-    Map<A, B>
-where
-       A: Ty,
-       B: Ty,
-{}
+#[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+pub enum Map<A: Ty, B: Ty> {}
 
-impl<
-       A: Ty,
-       B: Ty,
->
-    Infer
-for
-    Map<A, B>
-{
+impl<A: Ty, B: Ty> Infer for Map<A, B> {
     type Mode = infer::mode::Constant;
     type Ty = Ar<HC<Ar<HC<A, HN>, B>, HC<List<A>, HN>>, List<B>>;
 }
@@ -208,11 +116,7 @@ impl<
        A: Ty,
        B: Ty,
       Fx: Infer<Ty = Ar1<A, B>>,
->
-    Eval<Map<A, B>>
-for
-    HC<Fx, HC<Nil, HN>>
-{
+> Eval<Map<A, B>> for HC<Fx, HC<Nil, HN>> {
     type Out = Nil;
 }
 
@@ -226,11 +130,7 @@ impl<
       Xs: Tm<List<A>> + HList,
     Rec0: Tm<B>,
     Rec1: Tm<List<B>> + HList,
->
-    Eval<Map<A, B>>
-for 
-    HC<Fx, HC<Cons<X, Xs>, HN>>
-where
+> Eval<Map<A, B>> for HC<Fx, HC<Cons<X, Xs>, HN>> where
     // fx(h) ==> r0
    HC<X, HN>
         : AppEval<FxM, HC<A, HN>, Fx, Out = Rec0>,
@@ -241,36 +141,7 @@ where
     type Out = Cons<Rec0, Rec1>;
 }
 
-
-
-#[derive(Clone)]
-#[derive(Copy)]
-#[derive(Debug)]
-#[derive(Eq)]
-#[derive(Hash)]
-#[derive(Ord)]
-#[derive(PartialEq)]
-#[derive(PartialOrd)]
-pub enum
-    NonEmpty<A>
-where
-       A: Ty,
-{}
-
-impl<
-       A: Ty,
->
-    Ty
-for
-    NonEmpty<A>
-{}
-
-impl<
-       A: Ty,
-       X: Tm<A>,
-      Xs: Tm<List<A>>,
->
-    Tm<NonEmpty<A>>
-for
-    HC<X, Xs>
-{}
+#[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+pub enum NonEmpty<A: Ty> {}
+impl<A: Ty> Ty for NonEmpty<A> {}
+impl<A: Ty, X: Tm<A>, Xs: Tm<List<A>>> Tm<NonEmpty<A>> for HC<X, Xs> {}

@@ -14,18 +14,12 @@ use ty::op::{
 
 /// Partially apply a thunk to an argument or evaluate a constant
 /// (i.e., operation symbol)
-#[doc(hidden)]
-pub trait
-    AppEval<
-        M,
-        FxDTy,
-        Fx,
-    >
+pub trait AppEval<M, FxDTy, Fx>
+    : HList
+    + TmPre<<<Fx as Infer>::Ty as IsArrow>::Dom>
 where
       Fx: Infer,
        M: infer::mode::Mode,
-    Self: HList,
-    Self: TmPre<<<Fx as Infer>::Ty as IsArrow>::Dom>,
     <Fx as Infer>::Ty
         : IsArrow<Dom = FxDTy>,
 {
@@ -38,31 +32,19 @@ impl<
       Cx: Infer<Ty = Ar<CxDTy, CxCTy>>,
    CxCTy: Ty,
    CxDTy: Ty + HList,
->
-    AppEval<
-        infer::mode::Constant,
-        CxDTy,
-        Cx,
-    >
-for
-    Args
-where
-    Args:
-        AppEval<
-            infer::mode::Thunk,
-            CxDTy,
-            Thunk<Cx, HN>
-        >,
+> AppEval<
+    infer::mode::Constant,
+    CxDTy,
+    Cx
+> for Args where
+    Args: AppEval<infer::mode::Thunk, CxDTy, Thunk<Cx, HN>>,
     Args: TmPre<CxDTy>,
 {
-    type Out =
-        <Args as
-            AppEval<
-                infer::mode::Thunk,
-                CxDTy,
-                Thunk<Cx, HN>,
-            >
-        >::Out;
+    type Out = <Args as AppEval<
+        infer::mode::Thunk,
+        CxDTy,
+        Thunk<Cx, HN>>
+    >::Out;
 }
 
 impl<
@@ -70,15 +52,11 @@ impl<
    FxDTy: Ty + HList,
    TxCTy: Ty,
       Xs: HList,
->
-    AppEval<
-        infer::mode::Thunk,
-        HN,
-        Thunk<Fx, Xs>,
-    >
-for
-    HN
-where
+> AppEval<
+    infer::mode::Thunk,
+    HN,
+    Thunk<Fx, Xs>,
+> for HN where
     Thunk<Fx, Xs>
         : Infer<Ty = Ar<HN, TxCTy>>,
       Xs: Eval<Fx>,        
@@ -92,15 +70,11 @@ impl<
    TxCTy: Ty,
   TxDHTy: Ty,
   TxDTTy: Ty + HList,
->
-    AppEval<
-        infer::mode::Thunk,
-        HC<TxDHTy, TxDTTy>,
-        Tx,
-    >
-for
-    HN
-{
+> AppEval<
+    infer::mode::Thunk,
+    HC<TxDHTy, TxDTTy>,
+    Tx
+> for HN {
     type Out = Tx;
 }
 
@@ -114,15 +88,11 @@ impl<
       TxDHTy: Ty,
       TxDTTy: Ty + HList,
           Xs: HList,
->
-    AppEval<
-        infer::mode::Thunk,
-        HC<TxDHTy, TxDTTy>,
-        Thunk<Fx, Xs>
-    >
-for
-    HC<ArgsHTm, ArgsTTm>
-where
+> AppEval<
+    infer::mode::Thunk,
+    HC<TxDHTy, TxDTTy>,
+    Thunk<Fx, Xs>
+> for HC<ArgsHTm, ArgsTTm> where
       Xs: TmPre<HC<FxDHTy, FxDTTy>, Out = HC<TxDHTy, TxDTTy>>,
       Xs: Snoc<ArgsHTm>,
     ArgsTTm
@@ -134,10 +104,9 @@ where
     HC<ArgsHTm, ArgsTTm>
         : TmPre<HC<TxDHTy, TxDTTy>>,
 {
-    type Out =
-        <ArgsTTm as AppEval<
-            infer::mode::Thunk,
-            TxDTTy,
-            Thunk<Fx, HS<Xs, ArgsHTm>>
-        >>::Out;
+    type Out = <ArgsTTm as AppEval<
+        infer::mode::Thunk,
+        TxDTTy,
+        Thunk<Fx, HS<Xs, ArgsHTm>>>
+    >::Out;
 }
