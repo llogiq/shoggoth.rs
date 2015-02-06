@@ -39,8 +39,6 @@ pub enum TT {}
 /// ```
 impl Tm<Bool> for  TT {}
 
-
-
 /// Type-level operation for bool negation
 #[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
 pub enum Not {}
@@ -65,8 +63,6 @@ impl Eval<Not> for HC<TT, HN> {
     type Out = FF;
 }
 
-
-
 /// Type-level operation for bool conjunction
 #[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
 pub enum And {}
@@ -83,20 +79,14 @@ impl Infer for And {
 }
 
 /// `and(ff, b1) ==> ff`
-impl<B1: Tm<Bool>>
-    Eval<And>
-for HC<FF, HC<B1, HN>> {
+impl<B1: Tm<Bool>> Eval<And> for HC<FF, HC<B1, HN>> {
     type Out = FF;
 }
 
 /// `and(tt, b1) ==> b1`
-impl<B1: Tm<Bool>>
-    Eval<And>
-for HC<TT, HC<B1, HN>> {
+impl<B1: Tm<Bool>> Eval<And> for HC<TT, HC<B1, HN>> {
     type Out = B1;
 }
-
-
 
 /// Type-level operation for bool disjunction
 #[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
@@ -114,30 +104,17 @@ impl Infer for Or {
 }
 
 /// `or(ff, b1) ==> b1`
-impl<B1: Tm<Bool>>
-    Eval<Or>
-for HC<FF, HC<B1, HN>> {
+impl<B1: Tm<Bool>> Eval<Or> for HC<FF, HC<B1, HN>> {
     type Out = B1;
 }
 
 /// `or(tt, b1) ==> tt`
-impl<B1: Tm<Bool>>
-    Eval<Or>
-for HC<TT, HC<B1, HN>> {
+impl<B1: Tm<Bool>> Eval<Or> for HC<TT, HC<B1, HN>> {
     type Out = TT;
 }
 
-
-
 /// Type-level operation for bool conditional
-#[derive(Clone)]
-#[derive(Copy)]
-#[derive(Debug)]
-#[derive(Eq)]
-#[derive(Hash)]
-#[derive(Ord)]
-#[derive(PartialEq)]
-#[derive(PartialOrd)]
+#[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
 pub enum If<A: Ty> {}
 
 /// ```ignore
@@ -154,18 +131,22 @@ impl<A: Ty> Infer for If<A> {
 }
 
 /// `if(ff, m0, m1) ==> m1`
-impl<A: Ty, M0: Tm<A>, M1: Tm<A>> Eval<If<A>> for HC<FF, HC<M0, HC<M1, HN>>> {
+impl<
+       A: Ty,
+      M0: Tm<A>,
+      M1: Tm<A>
+> Eval<If<A>> for HC<FF, HC<M0, HC<M1, HN>>> {
     type Out = M1;
 }
 
 /// `if(tt, m0, m1) ==> m0`
-impl<A: Ty, M0: Tm<A>, M1: Tm<A>>
-    Eval<If<A>>
-for HC<TT, HC<M0, HC<M1, HN>>> {
+impl<
+       A: Ty,
+      M0: Tm<A>,
+      M1: Tm<A>
+> Eval<If<A>> for HC<TT, HC<M0, HC<M1, HN>>> {
     type Out = M0;
 }
-
-
 
 #[cfg(test)]
 mod test {

@@ -49,8 +49,6 @@ impl<N: Tm<pos::Pos>> Tm<Int> for Zn<N> {}
 /// ```
 impl<N: Tm<pos::Pos>> Tm<Int> for Zp<N> {}
 
-
-
 /// Type-level doubling for binary integers:
 /// ```ignore
 /// λx : Int. 2 * x

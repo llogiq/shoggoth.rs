@@ -257,37 +257,19 @@ mod test {
 
     #[test]
     fn put() {
-        let x0 = Witness::<
-                Ap<
-                    zipper::Put<Star>,
-                    HC<
-                        MkZipper<
-                            HC<Lift<bool>, HN>,
-                            HC<Lift<u8>  , HN>
-                        >,
-                        HC<Lift<u16>, HN>
-                    >
-                >
-            >;
-        let x1= Witness::<
-                MkZipper<
-                    HC<Lift<bool>, HN>,
-                    HC<Lift<u16> , HN>
-                >
-            >;
+        let x0 = Witness::<Ap<zipper::Put<Star>,
+                              HC<MkZipper<HC<Lift<bool>, HN>,
+                                          HC<Lift<u8>,   HN>>,
+                              HC<Lift<u16>, HN>>>>;
+        let x1= Witness::<MkZipper<HC<Lift<bool>, HN>,
+                                   HC<Lift<u16>,  HN>>>;
         x0 == x1;
-        let x2 = Witness::<
-                Ap1<
-                    Unzip<Star>,
-                    MkZipper<
-                        HC<Lift<bool>, HN>,
-                        HC<Lift<u16> , HN>
-                    >
-                >
-            >;
-        let x3 = Witness::<
-                HC<Lift<bool>, HC<Lift<u16>, HN>>
-            >;
+        let x2 = Witness::<Ap1<Unzip<Star>,
+                               MkZipper<HC<Lift<bool>, HN>,
+                                        HC<Lift<u16>,  HN>>>;
+        let x3 = Witness::<HC<Lift<bool>,
+                           HC<Lift<u16>,
+                           HN>>>;
         x2 == x3;
     }
 
@@ -295,17 +277,15 @@ mod test {
     fn nth_over() {
         let x0 = Witness::<
             Ap1<Ap1<Over<lens::Cmp<Ap1<zipper::Nth<List<Bool>>, _1b>,
-                                   Ap1<zipper::Nth     <Bool> , _1b>>>,
+                                   Ap1<zipper::Nth     <Bool>,  _1b>>>,
                     Ap1<Const<_, _>, FF>>,
                 HC<HC<FF, HN>,
                 HC<HC<FF, HC<TT, HC<FF, HN>>>,
-                HN>>>
-            >;
+                HN>>>>;
         let x1 = Witness::<
                 HC<HC<FF, HN>,
                 HC<HC<FF, HC<FF, HC<FF, HN>>>,
-                HN>>
-            >;
+                HN>>>;
         x0 == x1;
     }
 
@@ -317,13 +297,11 @@ mod test {
                     TT>,
                 HC<HC<FF, HN>,
                 HC<HC<FF, HC<TT, HC<FF, HN>>>,
-                HN>>>
-            >;
+                HN>>>>;
         let x1 = Witness::<
                 HC<HC<FF, HN>,
                 HC<HC<FF, HC<TT, HC<FF, HN>>>,
-                HN>>
-            >;
+                HN>>>;
         x0 == x1;
     }
 }

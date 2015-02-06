@@ -57,7 +57,6 @@ impl<H, T: HList, X> Snoc<X> for Cons<H, T> where T: Snoc<X> {
     type Out = Cons<H, <T as Snoc<X>>::Out>;
 }
 
-
 /// Reverse prepend for heterogeneous lists
 pub trait ReversePrepend<Acc: HList>: HList {
     type Out: HList;
