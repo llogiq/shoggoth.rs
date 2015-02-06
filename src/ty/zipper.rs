@@ -266,7 +266,7 @@ mod test {
         x0 == x1;
         let x2 = Witness::<Ap1<Unzip<Star>,
                                MkZipper<HC<Lift<bool>, HN>,
-                                        HC<Lift<u16>,  HN>>>;
+                                        HC<Lift<u16>,  HN>>>>;
         let x3 = Witness::<HC<Lift<bool>,
                            HC<Lift<u16>,
                            HN>>>;
