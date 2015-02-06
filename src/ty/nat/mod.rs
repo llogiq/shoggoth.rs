@@ -119,6 +119,7 @@ where
 
 
 
+/// Type-level predecessor for natural numbers
 #[derive(Clone)]
 #[derive(Copy)]
 #[derive(Debug)]
@@ -131,6 +132,11 @@ pub enum
     Pred
 {}
 
+/// ```ignore
+/// n : Nat
+/// -------------
+/// pred(n) : Nat
+/// ```
 impl
     Infer
 for
@@ -140,6 +146,7 @@ for
     type Ty = Ar1<Nat, Nat>;
 }
 
+/// `pred(0) ==> 0`
 impl
     Eval<Pred>
 for
@@ -148,6 +155,7 @@ for
     type Out = _0;
 }
 
+/// `pred(1) ==> 0`
 impl
     Eval<Pred>
 for
@@ -156,6 +164,7 @@ for
     type Out = _0;
 }
 
+/// `pred<Nat>(p:b) ==> pred<Pos>(p:b)`
 impl<
        B: Tm<Bit>,
        P: Tm<Pos>,
