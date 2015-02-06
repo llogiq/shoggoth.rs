@@ -79,6 +79,7 @@ impl<Fxs, Gx: Infer> Infer for Cmp<Fxs, Gx> where
     >;
 }
 
+#[rustc_on_unimplemented = "`{Fxs}` cannot be applied to `{Self}`"]
 pub trait AppMany<Fxs: HList>: HList {
     type Out: HList;
 }

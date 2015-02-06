@@ -34,6 +34,7 @@ impl<
 
 pub type Lens<S, A, T=S, B=A> = Ar1<S, Store<A, T, B>>;
 
+#[rustc_on_unimplemented = "`{Self}` is not a valid type-level lens"]
 pub trait IsLens {
     type S: Ty;
     type A: Ty;

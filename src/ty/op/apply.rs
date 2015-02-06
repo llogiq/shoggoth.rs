@@ -14,6 +14,7 @@ use ty::op::{
 
 /// Partially apply a thunk to an argument or evaluate a constant
 /// (i.e., operation symbol)
+#[rustc_on_unimplemented = "`{Fx}` cannot be applied to `{Self}`"]
 pub trait AppEval<M, FxDTy, Fx>
     : HList
     + TmPre<<<Fx as Infer>::Ty as IsArrow>::Dom>

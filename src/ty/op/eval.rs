@@ -10,6 +10,7 @@ use ty::op::{
 
 /// Interpret constants (i.e., operation symbols) at a given input
 /// (i.e., `Self`)
+#[rustc_on_unimplemented = "`{Fx}` cannot be evaluated at `{Self}`"]
 pub trait Eval<Fx>
     : HList
     + Tm<<<Fx as Infer>::Ty as IsArrow>::Dom>
