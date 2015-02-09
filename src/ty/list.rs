@@ -75,8 +75,6 @@ impl<
     type Out = Rec;
 }
 
-
-
 /// Type-level reverse for lists
 #[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
 pub enum Reverse<A: Ty> {}

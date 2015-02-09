@@ -67,8 +67,6 @@ impl<X, Xs: HList> LiftMany for Cons<X, Xs> where Xs: LiftMany {
     type Out = Cons<Lift<X>, <Xs as LiftMany>::Out>;
 }
 
-
-
 pub trait LowerMany: Tm<Star> + HList {
     type Out: HList;
 }
