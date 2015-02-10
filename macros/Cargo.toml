@@ -1,0 +1,10 @@
+[package]
+
+name = "shoggoth_macros"
+version = "0.0.5"
+authors = [ "Darin Morrison <darinmorrison+epsilonz@gmail.com>" ]
+
+[lib]
+name = "shoggoth_macros"
+path = "src/lib.rs"
+plugin = true
