@@ -1,7 +1,7 @@
 [package]
 
 name = "shoggoth_macros"
-version = "0.0.5"
+version = "0.0.16"
 authors = [ "Darin Morrison <darinmorrison+epsilonz@gmail.com>" ]
 
 [lib]
