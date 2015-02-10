@@ -22,20 +22,20 @@ macro_rules! seq_tail {
 //     IsCons,
 //     Nil,
 // };
-// pub use self::product::{
-//     ProductOps,
-//     ToHList,
-//     ToTuple,
-// };
-// pub use self::tuple::{
-//     IsComposite,
-//     TupleOps,
-// };
+pub use self::product::{
+    ProductOps,
+    ToHList,
+    ToTuple,
+};
+pub use self::tuple::{
+    IsComposite,
+    TupleOps,
+};
 
 /// Heterogeneous lists
 pub mod hlist;
-// mod product;
-// mod tuple;
+mod product;
+mod tuple;
 
 /// Type-level programming
 pub mod ty;
