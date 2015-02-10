@@ -1,6 +1,6 @@
 /// Predicate implemented when `Self` has a concept of `head` and `tail`
 #[rustc_on_unimplemented = "`{Self}` is not a composite type"]
-pub trait IsComposite {
+pub trait IsComposite: Sized {
     type H;
     type T;
 
@@ -8,10 +8,14 @@ pub trait IsComposite {
     fn split(self) -> (Self::H, Self::T);
 
     #[inline]
-    fn head(self) -> Self::H where Self: Sized { self.split().0 }
+    fn head(self) -> Self::H {
+        self.split().0
+    }
 
     #[inline]
-    fn tail(self) -> Self::T where Self: Sized { self.split().1 }
+    fn tail(self) -> Self::T {
+        self.split().1
+    }
 }
 
 impl<A0> IsComposite for (A0,) {
