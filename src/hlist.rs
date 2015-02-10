@@ -9,10 +9,7 @@ impl HList for Nil {}
 
 /// Cons heterogeneous list
 #[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
-pub struct Cons<H, T: HList> {
-    pub head: H,
-    pub tail: T,
-}
+pub struct Cons<H, T: HList>(pub H, pub T);
 impl<H, T: HList> HList for Cons<H, T> {}
 
 /// `HList` predicate implemented when `Self` is heterogeneous cons
@@ -27,8 +24,8 @@ pub trait IsCons: HList {
 impl<H, T: HList> IsCons for Cons<H, T> {
     type H = H;
     type T = T;
-    #[inline] fn head(self) -> H { self.head }
-    #[inline] fn tail(self) -> T { self.tail }
+    #[inline] fn head(self) -> H { self.0 }
+    #[inline] fn tail(self) -> T { self.1 }
 }
 
 /// Prepend for heterogeneous lists
