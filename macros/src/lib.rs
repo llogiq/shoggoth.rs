@@ -38,7 +38,7 @@ pub fn impl_for_seq_upto_registrar(reg: &mut plugin::Registry) -> ()
 fn impl_for_seq_upto_expand<'cx>(
     ecx: &'cx mut base::ExtCtxt,
     span: codemap::Span,
-    args: &[ast::TokenTree]
+    args: &[ast::TokenTree],
 ) -> Box<base::MacResult + 'cx> {
     let mut parser = ecx.new_parser_from_tts(args);
 
