@@ -22,7 +22,7 @@ macro_rules! impl_is_composite_for_seq {
         }
     }
 }
-impl_for_seq_upto!{ impl_is_composite_for_seq, 64 }
+impl_for_seq_upto!{ impl_is_composite_for_seq, 32 }
 
 impl<H, Seq0> At<ty::_0b> for Seq0 where Seq0: IsComposite<H = H> {
     type Out = H;
@@ -63,7 +63,7 @@ macro_rules! impl_to_hlist_for_seq {
         }
     }
 }
-impl_for_seq_upto!{ impl_to_hlist_for_seq, 64 }
+impl_for_seq_upto!{ impl_to_hlist_for_seq, 32 }
 
 macro_rules! impl_to_tuple_for_seq {
     ($($seq:ident),*) => {
@@ -75,4 +75,4 @@ macro_rules! impl_to_tuple_for_seq {
         }
     }
 }
-impl_for_seq_upto!{ impl_to_tuple_for_seq, 64 }
+impl_for_seq_upto!{ impl_to_tuple_for_seq, 32 }
