@@ -14,14 +14,6 @@ macro_rules! seq_tail {
     ($x:ident, $($xs:ident),*) => { ($($xs,)*) };
 }
 
-// pub use self::hlist::{
-//     Cons,
-//     HC,
-//     HList,
-//     HN,
-//     IsCons,
-//     Nil,
-// };
 pub use self::product::{
     ProductOps,
     ToHList,
