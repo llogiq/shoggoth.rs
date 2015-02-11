@@ -3,6 +3,12 @@
 name = "shoggoth_macros"
 version = "0.0.17"
 authors = [ "Darin Morrison <darinmorrison+epsilonz@gmail.com>" ]
+description = "Generic and type-level programming for Rust"
+documentation = "http://epsilonz.github.io/shoggoth.rs/doc/shoggoth/"
+keywords = ["binary", "generic", "heterogeneous", "natural-numbers", "type-level"]
+license = "MIT"
+readme = "../README.md"
+repository = "https://github.com/epsilonz/shoggoth.rs"
 
 [lib]
 name = "shoggoth_macros"
