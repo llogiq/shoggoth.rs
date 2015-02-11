@@ -2,17 +2,7 @@
 #![feature(on_unimplemented)]
 #![feature(plugin)]
 
-#[plugin] extern crate shoggoth_macros;
-
-macro_rules! seq_head {
-    ($x:ident) => { $x };
-    ($x:ident, $($xs:ident),*) => { $x };
-}
-
-macro_rules! seq_tail {
-    ($x:ident) => { () };
-    ($x:ident, $($xs:ident),*) => { ($($xs,)*) };
-}
+#[macro_use] #[plugin] extern crate shoggoth_macros;
 
 pub use self::product::{
     ProductOps,
