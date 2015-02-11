@@ -1,6 +1,7 @@
 #![feature(hash)]
 #![feature(on_unimplemented)]
 #![feature(plugin)]
+#![recursion_limit="66"]
 
 #[macro_use] #[plugin] extern crate shoggoth_macros;
 
