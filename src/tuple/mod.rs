@@ -44,9 +44,7 @@ mod test {
     use product::{
         ProductOps
     };
-    use tuple::{
-        TupleOps,
-    };
+    use super::*;
     use ty;
 
     type _3b = (ty::_1b, ty::_1b);
