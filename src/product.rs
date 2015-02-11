@@ -32,4 +32,4 @@ pub trait ProductOps: Sized {
     }
 }
 
-impl<Ctx> ProductOps for Ctx {}
+impl<Seq> ProductOps for Seq {}
