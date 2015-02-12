@@ -1,7 +1,7 @@
 [package]
 
 name = "shoggoth_macros"
-version = "0.0.18"
+version = "0.0.19"
 authors = [ "Darin Morrison <darinmorrison+epsilonz@gmail.com>" ]
 description = "Generic and type-level programming for Rust"
 documentation = "http://epsilonz.github.io/shoggoth.rs/doc/shoggoth/"
