@@ -50,7 +50,8 @@ impl Infer for Unzip {
 
 /// `unzip(mk_zipper(xs, ys)) ==> append(reverse(xs), ys)`
 impl<Xs, Ys, Rec> Eval<Unzip> for
-    HC<MkZipper<Xs, Ys>, HN>
+    HC<MkZipper<Xs, Ys>,
+    HN>
 where
       Xs: hlist::ReversePrepend<Ys, Out = Rec>,
 {

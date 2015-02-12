@@ -4,18 +4,14 @@ use hlist::*;
 #[rustc_on_unimplemented = "`{Self}` cannot be converted to a heterogeneous list"]
 pub trait ToHList {
     type Out: HList;
-
-    #[inline]
-    fn apply(self) -> Self::Out;
+    #[inline] fn apply(self) -> Self::Out;
 }
 
 /// Trait for converting things to a `Tuple`
 #[rustc_on_unimplemented = "`{Self}` cannot be converted to a tuple"]
 pub trait ToTuple {
     type Out;
-
-    #[inline]
-    fn apply(self) -> Self::Out;
+    #[inline] fn apply(self) -> Self::Out;
 }
 
 /// Operations on `Products`
@@ -31,5 +27,4 @@ pub trait ProductOps: Sized {
         ToTuple::apply(self)
     }
 }
-
 impl<Seq> ProductOps for Seq {}
