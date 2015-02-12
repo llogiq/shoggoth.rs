@@ -36,12 +36,12 @@ impl<Seq0, Seq1, TH> At<ty::_1b> for Seq0 where
     #[inline] fn at(self) -> TH { self.tail().head() }
 }
 impl<
-    B: ty::Tm<ty::Bit>,
-    P: ty::Tm<ty::nat::pos::Pos>,
-    Rec0: ty::Tm<ty::nat::pos::Pos>,
+       B,
+       P: ty::nat::pos::Pos,
+    Rec0: ty::nat::pos::Pos,
     Rec1,
     Seq0,
-    Seq1
+    Seq1,
 > At<(P, B)> for Seq0 where
     Seq0: IsComposite<T = Seq1>,
     Seq1: At<Rec0, Out = Rec1>,

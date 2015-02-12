@@ -1,47 +1,31 @@
 use hlist::*;
 use ty::{
     Infer,
-    Tm,
+    TmPre,
     infer,
-};
-use ty::op::{
-    IsArrow,
 };
 
 /// Interpret constants (i.e., operation symbols) at a given input
 /// (i.e., `Self`)
 #[rustc_on_unimplemented = "`{Fx}` cannot be evaluated at `{Self}`"]
 pub trait Eval<Fx>
-    : HList
-    + Tm<<<Fx as Infer>::Ty as IsArrow>::Dom>
+    : TmPre<<Fx as Infer>::Arity, Out = HN>
 where
-      Fx: Infer<Mode = infer::mode::Constant>,
-    <Fx as Infer>::Ty
-        : IsArrow,
-
+    Fx: Infer<Mode = infer::mode::Constant>
 {
-    type Out: Tm<<<Fx as Infer>::Ty as IsArrow>::Cod>;
+    type Out;
 }
 
-pub trait Eval1<Fx> where
-      Fx: Infer,
+pub trait Eval1<Fx: Infer> where
     HC<Self, HN>
         : Eval<Fx>,
-    HC<Self, HN>
-        : Tm<<<Fx as Infer>::Ty as IsArrow>::Dom>,
-    <Fx as Infer>::Ty
-        : IsArrow,
 {
-    type Out: Tm<<<Fx as Infer>::Ty as IsArrow>::Cod>;
+    type Out;
 }
 
 impl<Fx: Infer, Xs> Eval1<Fx> for Xs where
     HC<Xs, HN>
         : Eval<Fx>,
-    HC<Xs, HN>
-        : Tm<<<Fx as Infer>::Ty as IsArrow>::Dom>,
-    <Fx as Infer>::Ty
-        : IsArrow,
 {
     type Out = <HC<Xs, HN> as Eval<Fx>>::Out;
 }

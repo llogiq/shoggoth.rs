@@ -1,5 +1,3 @@
-use ty;
-
 mod boilerplate;
 
 #[rustc_on_unimplemented = "`{Self}` is not a composite type"]
@@ -13,16 +11,15 @@ pub trait IsComposite: Sized {
 }
 
 #[rustc_on_unimplemented = "Cannot get element of `{Self}` at index `{N}`"]
-trait At<N>: IsComposite where N: ty::Tm<ty::nat::Nat> {
+trait At<N>: IsComposite {
     type Out;
-
     #[inline] fn at(self) -> Self::Out;
 }
 
 #[rustc_on_unimplemented = "Tuple operations are not specified for `{Self}`"]
 pub trait TupleOps: Sized {
     #[inline]
-    fn at<N: ty::Tm<ty::nat::Nat>>(self) -> <Self as At<N>>::Out where Self: At<N> {
+    fn at<N>(self) -> <Self as At<N>>::Out where Self: At<N> {
         <Self as At<N>>::at(self)
     }
 

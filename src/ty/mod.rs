@@ -1,22 +1,14 @@
 pub use self::bit::{
-    Bit,
     _0,
     _1,
 };
 pub use self::bool::{
     And,
-    Bool,
     FF,
     If,
     Not,
     Or,
     TT,
-};
-pub use self::check::{
-    Tm,
-};
-pub use self::kind::{
-    Ty,
 };
 pub use self::hlist::{
     TmExt,
@@ -26,23 +18,14 @@ pub use self::infer::{
     Infer,
 };
 pub use self::lens::{
-    Lens,
     MkStore,
     Over,
-    Store,
     View,
-};
-pub use self::list::{
-    List,
 };
 pub use self::op::{
     Ap,
     Ap1,
     AppEval,
-    Arrow,
-    Ar,
-    Ar0,
-    Ar1,
     Cmp,
     Cmp1,
     Const,
@@ -51,17 +34,7 @@ pub use self::op::{
     ProjDoms,
     ProjCods,
     Id,
-    IsArrow,
     Thunk,
-};
-pub use self::star::{
-    ApT,
-    ApT1,
-    Lift,
-    LiftMany,
-    Lower,
-    LowerMany,
-    Star,
 };
 pub use self::witness::{
     Witness,
@@ -75,18 +48,15 @@ pub use self::zipper::{
 
 mod bit;
 mod bool;
-mod check;
 mod hlist;
-mod kind;
 mod op;
-mod star;
 mod witness;
 
 /// Type-level type-inferrable terms
 pub mod infer;
 
-/// Type-level binary integers
-pub mod int;
+// /// Type-level binary integers
+// pub mod int;
 
 /// Type-level lenses
 pub mod lens;
@@ -94,7 +64,7 @@ pub mod lens;
 /// Type-level lists
 pub mod list;
 
-/// Type-level natural numbers
+// /// Type-level natural numbers
 pub mod nat;
 
 /// Type-level zippers for lists

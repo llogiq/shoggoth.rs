@@ -9,7 +9,7 @@ impl HList for Nil {}
 
 /// Cons heterogeneous list
 #[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
-pub struct Cons<H, T: HList>(pub H, pub T);
+pub struct Cons<H, T>(pub H, pub T);
 impl<H, T: HList> HList for Cons<H, T> {}
 
 /// `HList` predicate implemented when `Self` is heterogeneous cons
@@ -29,21 +29,21 @@ impl<H, T: HList> IsCons for Cons<H, T> {
 }
 
 /// Prepend for heterogeneous lists
-pub trait Prepend<R: HList>: HList {
-    type Out: HList;
+pub trait Prepend<R> {
+    type Out;
 }
 
-impl<R: HList> Prepend<R> for Nil {
+impl<R> Prepend<R> for Nil {
     type Out = R;
 }
 
-impl<H, R: HList, T: HList> Prepend<R> for Cons<H, T> where T: Prepend<R> {
+impl<H, R, T: HList> Prepend<R> for Cons<H, T> where T: Prepend<R> {
     type Out = Cons<H, <T as Prepend<R>>::Out>;
 }
 
 /// Snoc (cons to tail) for heterogeneous lists
-pub trait Snoc<H>: HList {
-    type Out: HList;
+pub trait Snoc<H> {
+    type Out;
 }
 
 impl<X> Snoc<X> for Nil {
@@ -55,26 +55,26 @@ impl<H, T: HList, X> Snoc<X> for Cons<H, T> where T: Snoc<X> {
 }
 
 /// Reverse prepend for heterogeneous lists
-pub trait ReversePrepend<Acc: HList>: HList {
-    type Out: HList;
+pub trait ReversePrepend<Acc> {
+    type Out;
 }
 
-impl<Acc: HList> ReversePrepend<Acc> for Nil {
+impl<Acc> ReversePrepend<Acc> for Nil {
     type Out = Acc;
 }
 
-impl<Acc: HList, H, T: HList> ReversePrepend<Acc> for Cons<H, T> where
+impl<Acc, H, T: HList> ReversePrepend<Acc> for Cons<H, T> where
     T: ReversePrepend<Cons<H, Acc>>,
 {
     type Out = <T as ReversePrepend<Cons<H, Acc>>>::Out;
 }
 
 /// Reverse prepend for heterogeneous lists
-pub trait Reverse: HList {
-    type Out: HList;
+pub trait Reverse {
+    type Out;
 }
 
-impl<Xs: HList> Reverse for Xs where Xs: ReversePrepend<Nil> {
+impl<Xs> Reverse for Xs where Xs: ReversePrepend<Nil> {
     type Out = <Xs as ReversePrepend<Nil>>::Out;
 }
 

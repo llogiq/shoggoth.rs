@@ -1,34 +1,24 @@
-use hlist::*;
 use ty::{
     Infer,
     TmPre,
-    Ty,
     infer,
-};
-use ty::op::{
-    Ar,
-    IsArrow,
 };
 
 /// Curried type-level operations
 #[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
 pub enum Thunk<Fx, Xs> where
       Fx: Infer,
-      Xs: HList,
-      Xs: TmPre<<<Fx as Infer>::Ty as IsArrow>::Dom>,
-    <Fx as Infer>::Ty
-        : IsArrow,
+      Xs: TmPre<<Fx as Infer>::Arity>,
 {}
 
 impl<
-       C: Ty,
-       D: Ty + HList,
-      Ds: Ty + HList,
-      Fx: Infer<Ty = Ar<D, C>>,
-      Xs: HList,
+       D,
+      Ds,
+      Fx: Infer<Arity = D>,
+      Xs,
 > Infer for Thunk<Fx, Xs> where
       Xs: TmPre<D, Out = Ds>,
 {
+    type Arity = Ds;
     type Mode = infer::mode::Thunk;
-    type Ty = Ar<Ds, C>;
 }

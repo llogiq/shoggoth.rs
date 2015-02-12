@@ -1,56 +1,25 @@
 use hlist::*;
 use ty::{
-    Ar,
-    Ar1,
     Eval,
     Infer,
-    Tm,
-    Ty,
     infer,
 };
-
-/// Type-level booleans
-#[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
-pub enum Bool {}
-
-/// ```ignore
-/// ----------
-/// Bool :: Ty
-/// ```
-impl Ty for Bool {}
 
 /// Type-level false
 #[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
 pub enum FF {}
 
-/// ```ignore
-/// ---------
-/// ff : Bool
-/// ```
-impl Tm<Bool> for FF {}
-
 /// Type-level true
 #[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
 pub enum TT {}
-
-/// ```ignore
-/// ---------
-/// tt : Bool
-/// ```
-impl Tm<Bool> for  TT {}
 
 /// Type-level operation for bool negation
 #[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
 pub enum Not {}
 
-/// ```ignore
-/// b : Bool
-/// -------------
-/// not(b) : Bool
-/// ```
 impl Infer for Not {
+    type Arity = HC<(), HN>;
     type Mode = infer::mode::Constant;
-    type Ty = Ar1<Bool, Bool>;
 }
 
 /// `not(ff) ==> tt`
@@ -67,24 +36,18 @@ impl Eval<Not> for HC<TT, HN> {
 #[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
 pub enum And {}
 
-/// ```ignore
-/// b0 : Bool
-/// b1 : Bool
-/// ------------------
-/// and(b0, b1) : Bool
-/// ```
 impl Infer for And {
+    type Arity = HC<(), HC<(), HN>>;
     type Mode = infer::mode::Constant;
-    type Ty = Ar<HC<Bool, HC<Bool, HN>>, Bool>;
 }
 
 /// `and(ff, b1) ==> ff`
-impl<B1: Tm<Bool>> Eval<And> for HC<FF, HC<B1, HN>> {
+impl<B1> Eval<And> for HC<FF, HC<B1, HN>> {
     type Out = FF;
 }
 
 /// `and(tt, b1) ==> b1`
-impl<B1: Tm<Bool>> Eval<And> for HC<TT, HC<B1, HN>> {
+impl<B1> Eval<And> for HC<TT, HC<B1, HN>> {
     type Out = B1;
 }
 
@@ -92,59 +55,37 @@ impl<B1: Tm<Bool>> Eval<And> for HC<TT, HC<B1, HN>> {
 #[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
 pub enum Or {}
 
-/// ```ignore
-/// b0 : Bool
-/// b1 : Bool
-/// -----------------
-/// or(b0, b1) : Bool
-/// ```
 impl Infer for Or {
+    type Arity = HC<(), HC<(), HN>>;
     type Mode = infer::mode::Constant;
-    type Ty = Ar<HC<Bool, HC<Bool, HN>>, Bool>;
 }
 
 /// `or(ff, b1) ==> b1`
-impl<B1: Tm<Bool>> Eval<Or> for HC<FF, HC<B1, HN>> {
+impl<B1> Eval<Or> for HC<FF, HC<B1, HN>> {
     type Out = B1;
 }
 
 /// `or(tt, b1) ==> tt`
-impl<B1: Tm<Bool>> Eval<Or> for HC<TT, HC<B1, HN>> {
+impl<B1> Eval<Or> for HC<TT, HC<B1, HN>> {
     type Out = TT;
 }
 
 /// Type-level operation for bool conditional
 #[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
-pub enum If<A: Ty> {}
+pub enum If {}
 
-/// ```ignore
-/// A :: Ty
-/// b : Bool
-/// m0 : A
-/// m1 : A
-/// -----------------
-/// if(b, m0, m1) : A
-/// ```
-impl<A: Ty> Infer for If<A> {
+impl Infer for If {
+    type Arity = HC<(), HC<(), HC<(), HN>>>;
     type Mode = infer::mode::Constant;
-    type Ty = Ar<HC<Bool, HC<A, HC<A, HN>>>, A>;
 }
 
 /// `if(ff, m0, m1) ==> m1`
-impl<
-       A: Ty,
-      M0: Tm<A>,
-      M1: Tm<A>
-> Eval<If<A>> for HC<FF, HC<M0, HC<M1, HN>>> {
+impl<M0, M1> Eval<If> for HC<FF, HC<M0, HC<M1, HN>>> {
     type Out = M1;
 }
 
 /// `if(tt, m0, m1) ==> m0`
-impl<
-       A: Ty,
-      M0: Tm<A>,
-      M1: Tm<A>
-> Eval<If<A>> for HC<TT, HC<M0, HC<M1, HN>>> {
+impl<M0, M1> Eval<If> for HC<TT, HC<M0, HC<M1, HN>>> {
     type Out = M0;
 }
 
@@ -171,7 +112,7 @@ mod test {
 
     #[test]
     fn and_false() {
-        fn aux<B: Tm<Bool> + Eq>() {
+        fn aux<B: Eq>() {
             let x0 = Witness::<Ap<And, HC<FF, HC<B, HN>>>>;
             let x1 = Witness::<FF>;
             x0 == x1;
@@ -182,7 +123,7 @@ mod test {
 
     #[test]
     fn and_true() {
-        fn aux<B: Tm<Bool> + Eq>() {
+        fn aux<B: Eq>() {
             let x0 = Witness::<Ap<And, HC<TT, HC<B, HN>>>>;
             let x1 = Witness::<B>;
             x0 == x1;
@@ -193,7 +134,7 @@ mod test {
 
     #[test]
     fn or_false() {
-        fn aux<B: Tm<Bool> + Eq>() {
+        fn aux<B: Eq>() {
             let x0 = Witness::<Ap<Or, HC<FF, HC<B, HN>>>>;
             let x1 = Witness::<B>;
             x0 == x1;
@@ -204,7 +145,7 @@ mod test {
 
     #[test]
     fn or_true() {
-        fn aux<B: Tm<Bool> + Eq>() {
+        fn aux<B: Eq>() {
             let x0 = Witness::<Ap<Or, HC<TT, HC<B, HN>>>>;
             let x1 = Witness::<TT>;
             x0 == x1;
@@ -215,14 +156,14 @@ mod test {
 
     #[test]
     fn if_false() {
-        let x0 = Witness::<Ap<If<Bool>, HC<FF, HC<FF, HC<TT, HN>>>>>;
+        let x0 = Witness::<Ap<If, HC<FF, HC<FF, HC<TT, HN>>>>>;
         let x1 = Witness::<TT>;
         x0 == x1;
     }
 
     #[test]
     fn if_true() {
-        let x0 = Witness::<Ap<If<Bool>, HC<TT, HC<FF, HC<TT, HN>>>>>;
+        let x0 = Witness::<Ap<If, HC<TT, HC<FF, HC<TT, HN>>>>>;
         let x1 = Witness::<FF>;
         x0 == x1;
     }

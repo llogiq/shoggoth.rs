@@ -17,8 +17,6 @@ pub use self::thunk::{
 use hlist::*;
 use ty::{
     Infer,
-    Tm,
-    Ty,
     infer,
 };
 
@@ -27,39 +25,12 @@ mod compose;
 mod eval;
 mod thunk;
 
-/// Type-level operations
-#[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
-pub enum Arrow<D: Ty + HList, C: Ty> {}
-
-impl<C: Ty, D: Ty + HList> Ty for Arrow<D, C> {}
-
-/// Predicate providing access to (co)domain of type-level arrows
-#[rustc_on_unimplemented = "`{Self}` is not a valid type-level arrow type"]
-pub trait IsArrow: Ty {
-    type Dom: Ty + HList;
-    type Cod: Ty;
-}
-
-impl<C: Ty, D: Ty + HList> IsArrow for Arrow<D, C> {
-    type Dom = D;
-    type Cod = C;
-}
-
-/// Alias for arrow types with an n-ary domain
-pub type Ar<D, C> = Arrow<D, C>;
-
-/// Alias for arrow types with a nullary domain
-pub type Ar0<C> = Ar<HN, C>;
-
-/// Alias for arrow types with a unary domain
-pub type Ar1<D, C> = Ar<HC<D, HN>, C>;
-
 /// Alias for partially applying terms of arrow types to many
 /// arguments
 pub type Ap<Fx, Xs> = <Xs as AppEval<
-     <Fx as Infer>::Mode,
-    <<Fx as Infer>::Ty as IsArrow>::Dom,
-      Fx>
+    <Fx as Infer>::Mode,
+    <Fx as Infer>::Arity,
+     Fx>
 >::Out;
 
 /// Alias for partially applying terms of arrow types to zero
@@ -71,30 +42,25 @@ pub type Ap0<Fx> = Ap<Fx, HN>;
 pub type Ap1<Fx, X> = Ap<Fx, HC<X, HN>>;
 
 #[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
-pub enum Id<A: Ty> {}
+pub enum Id {}
 
-impl<A: Ty> Infer for Id<A> {
+impl Infer for Id {
+    type Arity = HC<(), HN>;
     type Mode = infer::mode::Constant;
-    type Ty = Ar1<A, A>;
 }
 
-impl<A: Ty, M: Tm<A>> Eval<Id<A>> for HC<M, HN> {
+impl<M> Eval<Id> for HC<M, HN> {
     type Out = M;
 }
 
 #[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
-pub enum Const<A: Ty, B: Ty> {}
+pub enum Const {}
 
-impl<A: Ty, B: Ty> Infer for Const<A, B> {
+impl Infer for Const {
+    type Arity = HC<(), HC<(), HN>>;
     type Mode = infer::mode::Constant;
-    type Ty = Ar<HC<A, HC<B, HN>>, A>;
 }
 
-impl<
-       A: Ty,
-       B: Ty,
-       M: Tm<A>,
-       N: Tm<B>,
-> Eval<Const<A, B>> for HC<M, HC<N, HN>> {
+impl<M, N> Eval<Const> for HC<M, HC<N, HN>> {
     type Out = M;
 }

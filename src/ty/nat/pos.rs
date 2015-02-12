@@ -1,52 +1,24 @@
 use hlist::*;
 use ty::{
-    Ar,
-    Ar1,
     Eval,
     Eval1,
     Infer,
-    Tm,
-    Ty,
     infer,
 };
 use ty::bit::*;
 
 /// Type-level positive natural numbers (binary)
-#[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
-pub enum Pos {}
-
-/// ```ignore
-/// ---------
-/// Pos :: Ty
-/// ```
-impl Ty for Pos {}
-
-/// ```ignore
-/// -------
-/// 1 : Pos
-/// ```
-impl Tm<Pos> for _1 {}
-
-/// ```ignore
-/// p : Pos
-/// b : Bit
-/// ------------
-/// (p, b) : Pos
-/// ```
-impl<B: Tm<Bit>, P: Tm<Pos>> Tm<Pos> for (P, B) {}
+pub trait Pos {}
+impl Pos for _1 {}
+impl<P: Pos, B> Pos for (P, B) {}
 
 /// Type-level successor for positive natural numbers
 #[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
 pub enum Succ {}
 
-/// ```ignore
-/// p : Pos
-/// -------------
-/// succ(p) : Pos
-/// ```
 impl Infer for Succ {
+    type Arity = HC<(), HN>;
     type Mode = infer::mode::Constant;
-    type Ty = Ar1<Pos, Pos>;
 }
 
 /// `succ(1) ==> 1:0`
@@ -55,15 +27,12 @@ impl Eval<Succ> for HC<_1, HN> {
 }
 
 /// `succ(p:0) ==> p:1`
-impl<P: Tm<Pos>> Eval<Succ> for HC<(P, _0), HN> {
+impl<P> Eval<Succ> for HC<(P, _0), HN> {
     type Out = (P, _1);
 }
 
 /// `p:1 ==> succ(p):0`
-impl<
-       P: Tm<Pos>,
-     Rec: Tm<Pos>,
-> Eval<Succ> for HC<(P, _1), HN> where
+impl<P, Rec> Eval<Succ> for HC<(P, _1), HN> where
        P: Eval1<Succ, Out = Rec>,
 {
     type Out = (Rec, _0);
@@ -73,15 +42,9 @@ impl<
 #[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
 pub enum Add {}
 
-/// ```ignore
-/// p : Pos
-/// q : Pos
-/// ---------------
-/// add(p, q) : Pos
-/// ```
 impl Infer for Add {
+    type Arity = HC<(), HC<(), HN>>;
     type Mode = infer::mode::Constant;
-    type Ty = Ar<HC<Pos, HC<Pos, HN>>, Pos>;
 }
 
 /// `add(1, 1) ==> 1:0`
@@ -90,31 +53,24 @@ impl Eval<Add> for HC<_1, HC<_1, HN>> {
 }
 
 /// `add(1, q:0) ==> q:1`
-impl<P1: Tm<Pos>> Eval<Add> for HC<_1, HC<(P1, _0), HN>> {
+impl<P1> Eval<Add> for HC<_1, HC<(P1, _0), HN>> {
     type Out = (P1, _1);
 }
 
 /// `add(1, q:1) ==> succ(q):0`
-impl<
-      P1: Tm<Pos>,
-     Rec: Tm<Pos>,
-> Eval<Add> for HC<_1, HC<(P1, _1), HN>> where
+impl<P1, Rec> Eval<Add> for HC<_1, HC<(P1, _1), HN>> where
       P1: Eval1<Succ, Out = Rec>,
 {
     type Out = (Rec, _0);
 }
 
 /// `add(p:0, 1) ==> p:1`
-impl<P0: Tm<Pos>> Eval<Add> for HC<(P0, _0), HC<_1, HN>> {
+impl<P0> Eval<Add> for HC<(P0, _0), HC<_1, HN>> {
     type Out = (P0, _1);
 }
 
 /// `add(p:0, q:0) ==> add(p, q):0`
-impl<
-      P0: Tm<Pos>,
-      P1: Tm<Pos>,
-     Rec: Tm<Pos>,
-> Eval<Add> for HC<(P0, _0), HC<(P1, _0), HN>> where
+impl<P0, P1, Rec> Eval<Add> for HC<(P0, _0), HC<(P1, _0), HN>> where
     HC<P0, HC<P1, HN>>
         : Eval<Add, Out = Rec>,
 {
@@ -122,11 +78,7 @@ impl<
 }
 
 /// `add(p:0, q:1) ==> add(p, q):1`
-impl<
-      P0: Tm<Pos>,
-      P1: Tm<Pos>,
-     Rec: Tm<Pos>,
-> Eval<Add> for HC<(P0, _0), HC<(P1, _1), HN>> where
+impl<P0, P1, Rec> Eval<Add> for HC<(P0, _0), HC<(P1, _1), HN>> where
     HC<P0, HC<P1, HN>>
         : Eval<Add, Out = Rec>,
 {
@@ -134,21 +86,14 @@ impl<
 }
 
 /// `add(p:1, 1) ==> succ(p):0`
-impl<
-      P0: Tm<Pos>,
-     Rec: Tm<Pos>,
-> Eval<Add> for HC<(P0, _1), HC<_1, HN>> where
+impl<P0, Rec> Eval<Add> for HC<(P0, _1), HC<_1, HN>> where
       P0: Eval1<Succ, Out = Rec>,
 {
     type Out = (Rec, _0);
 }
 
 /// `add(p:1, q:0) ==> add(p, q):1`
-impl<
-      P0: Tm<Pos>,
-      P1: Tm<Pos>,
-     Rec: Tm<Pos>,
-> Eval<Add> for HC<(P0, _1), HC<(P1, _0), HN>> where
+impl<P0, P1, Rec> Eval<Add> for HC<(P0, _1), HC<(P1, _0), HN>> where
     HC<P0, HC<P1, HN>>
         : Eval<Add, Out = Rec>,
 {
@@ -156,11 +101,7 @@ impl<
 }
 
 /// `add(p:1, q:1) ==> add_carry(p, q):1`
-impl<
-      P0: Tm<Pos>,
-      P1: Tm<Pos>,
-     Rec: Tm<Pos>,
-> Eval<Add> for HC<(P0, _1), HC<(P1, _1), HN>> where
+impl<P0, P1, Rec> Eval<Add> for HC<(P0, _1), HC<(P1, _1), HN>> where
     HC<P0, HC<P1, HN>>
         : Eval<AddCarry, Out = Rec>,
 {
@@ -178,8 +119,8 @@ pub enum AddCarry {}
 /// add_carry(p, q) : Pos
 /// ```
 impl Infer for AddCarry {
+    type Arity = HC<(), HC<(), HN>>;
     type Mode = infer::mode::Constant;
-    type Ty = Ar<HC<Pos, HC<Pos, HN>>, Pos>;
 }
 
 /// `add_carry(1, 1) ==> 1:1`
@@ -188,41 +129,28 @@ impl Eval<AddCarry> for HC<_1, HC<_1, HN>> {
 }
 
 /// `add_carry(1, q:0) ==> succ(q):0`
-impl<
-      P1: Tm<Pos>,
-     Rec: Tm<Pos>,
-> Eval<AddCarry> for HC<_1, HC<(P1, _0), HN>> where
+impl<P1, Rec> Eval<AddCarry> for HC<_1, HC<(P1, _0), HN>> where
       P1: Eval1<Succ, Out = Rec>,
 {
     type Out = (Rec, _0);
 }
 
 /// `add_carry(1, q:1) ==> succ(q):1`
-impl<
-      P1: Tm<Pos>,
-     Rec: Tm<Pos>,
-> Eval<AddCarry> for HC<_1, HC<(P1, _1), HN>> where
+impl<P1, Rec> Eval<AddCarry> for HC<_1, HC<(P1, _1), HN>> where
       P1: Eval1<Succ, Out = Rec>,
 {
     type Out = (Rec, _1);
 }
 
 /// `add_carry(p:0, 1) ==> p:1`
-impl<
-      P0: Tm<Pos>,
-     Rec: Tm<Pos>,
-> Eval<AddCarry> for HC<(P0, _0), HC<_1, HN>> where
+impl<P0, Rec> Eval<AddCarry> for HC<(P0, _0), HC<_1, HN>> where
       P0: Eval1<Succ, Out = Rec>,
 {
     type Out = (P0, _0);
 }
 
 /// `add_carry(p:0, q:0) ==> add(p, q):1`
-impl<
-      P0: Tm<Pos>,
-      P1: Tm<Pos>,
-     Rec: Tm<Pos>,
-> Eval<AddCarry> for HC<(P0, _0), HC<(P1, _0), HN>> where
+impl<P0, P1, Rec> Eval<AddCarry> for HC<(P0, _0), HC<(P1, _0), HN>> where
     HC<P0, HC<P1, HN>>
         : Eval<Add, Out = Rec>,
 {
@@ -230,11 +158,7 @@ impl<
 }
 
 /// `add_carry(p:0, q:1) ==> add_carry(p, q):0`
-impl<
-      P0: Tm<Pos>,
-      P1: Tm<Pos>,
-     Rec: Tm<Pos>,
-> Eval<AddCarry> for HC<(P0, _0), HC<(P1, _1), HN>> where
+impl<P0, P1, Rec> Eval<AddCarry> for HC<(P0, _0), HC<(P1, _1), HN>> where
     HC<P0, HC<P1, HN>>
         : Eval<AddCarry, Out = Rec>,
 {
@@ -242,21 +166,14 @@ impl<
 }
 
 /// `add_carry(p:1, 1) ==> succ(p):1`
-impl<
-      P0: Tm<Pos>,
-     Rec: Tm<Pos>,
-> Eval<AddCarry> for HC<(P0, _1), HC<_1, HN>> where
+impl<P0, Rec> Eval<AddCarry> for HC<(P0, _1), HC<_1, HN>> where
       P0: Eval1<Succ, Out = Rec>,
 {
     type Out = (Rec, _1);
 }
 
 /// `add_carry(p:1, q:0) ==> add_carry(p, q):0`
-impl<
-      P0: Tm<Pos>,
-      P1: Tm<Pos>,
-     Rec: Tm<Pos>,
-> Eval<AddCarry> for HC<(P0, _1), HC<(P1, _0), HN>> where
+impl<P0, P1, Rec> Eval<AddCarry> for HC<(P0, _1), HC<(P1, _0), HN>> where
     HC<P0, HC<P1, HN>>
         : Eval<AddCarry, Out = Rec>,
 {
@@ -264,11 +181,7 @@ impl<
 }
 
 /// `add_carry(p:1, q:1) ==> add_carry(p, q):1`
-impl<
-      P0: Tm<Pos>,
-      P1: Tm<Pos>,
-     Rec: Tm<Pos>,
-> Eval<AddCarry> for HC<(P0, _1), HC<(P1, _1), HN>> where
+impl<P0, P1, Rec> Eval<AddCarry> for HC<(P0, _1), HC<(P1, _1), HN>> where
     HC<P0, HC<P1, HN>>
         : Eval<AddCarry, Out = Rec>,
 {
@@ -279,14 +192,9 @@ impl<
 #[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
 pub enum PredDouble {}
 
-/// ```ignore
-/// p : Pos
-/// --------------------
-/// pred_double(p) : Pos
-/// ```
 impl Infer for PredDouble {
+    type Arity = HC<(), HN>;
     type Mode = infer::mode::Constant;
-    type Ty = Ar1<Pos, Pos>;
 }
 
 /// `pred_double(1) ==> 1`
@@ -295,19 +203,14 @@ impl Eval<PredDouble> for HC<_1, HN> {
 }
 
 /// `pred_double(p:0) ==> pred_double(p):1`
-impl<
-       P: Tm<Pos>,
-     Rec: Tm<Pos>,
-> Eval<PredDouble> for HC<(P, _0), HN> where
+impl<P, Rec> Eval<PredDouble> for HC<(P, _0), HN> where
        P: Eval1<PredDouble, Out = Rec>,
 {
     type Out = (Rec, _1);
 }
 
 /// `pred_double(p:1) ==> p:0:1`
-impl<
-       P: Tm<Pos>,
-> Eval<PredDouble> for HC<(P, _1), HN> {
+impl<P> Eval<PredDouble> for HC<(P, _1), HN> {
     type Out = ((P, _0), _1);
 }
 
@@ -321,8 +224,8 @@ pub enum Pred {}
 /// pred(p) : Pos
 /// ```
 impl Infer for Pred {
+    type Arity = HC<(), HN>;
     type Mode = infer::mode::Constant;
-    type Ty = Ar1<Pos, Pos>;
 }
 
 /// `pred(p:1) ==> p:0`
@@ -331,17 +234,14 @@ impl Eval<Pred> for HC<_1, HN> {
 }
 
 /// `p:0 ==> pred_double(p)`
-impl<
-       P: Tm<Pos>,
-     Rec: Tm<Pos>,
-> Eval<Pred> for HC<(P, _0), HN> where
+impl<P, Rec> Eval<Pred> for HC<(P, _0), HN> where
        P: Eval1<PredDouble, Out = Rec>,
 {
     type Out = Rec;
 }
 
 /// `p:1 ==> p:0`
-impl<P: Tm<Pos>> Eval<Pred> for HC<(P, _1), HN> {
+impl<P> Eval<Pred> for HC<(P, _1), HN> {
     type Out = (P, _0);
 }
 
@@ -349,28 +249,18 @@ impl<P: Tm<Pos>> Eval<Pred> for HC<(P, _1), HN> {
 #[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
 pub enum Mul {}
 
-/// ```ignore
-/// p : Pos
-/// q : Pos
-/// ---------------
-/// mul(p, q) : Pos
-/// ```
 impl Infer for Mul {
+    type Arity = HC<(), HC<(), HN>>;
     type Mode = infer::mode::Constant;
-    type Ty = Ar<HC<Pos, HC<Pos, HN>>, Pos>;
 }
 
 /// `mul(1, q) ==> q`
-impl<P1: Tm<Pos>> Eval<Mul> for HC<_1, HC<P1, HN>> {
+impl<P1> Eval<Mul> for HC<_1, HC<P1, HN>> {
     type Out = P1;
 }
 
 /// `mul(p:0, q) ==> mul(p, q):0`
-impl<
-      P0: Tm<Pos>,
-      P1: Tm<Pos>,
-     Rec: Tm<Pos>,
-> Eval<Mul> for HC<(P0, _0), HC<P1, HN>> where
+impl<P0, P1, Rec> Eval<Mul> for HC<(P0, _0), HC<P1, HN>> where
     HC<P0, HC<P1, HN>>
         : Eval<Mul, Out = Rec>,
 {
@@ -378,12 +268,7 @@ impl<
 }
 
 /// `mul(p:1, q) ==> add(q, mul(p, q)):0`
-impl<
-      P0: Tm<Pos>,
-      P1: Tm<Pos>,
-    Rec0: Tm<Pos>,
-    Rec1: Tm<Pos>,
-> Eval<Mul> for HC<(P0, _1), HC<P1, HN>> where
+impl<P0, P1, Rec0, Rec1> Eval<Mul> for HC<(P0, _1), HC<P1, HN>> where
     // mul(p0, p1) ==> r0
     HC<P0, HC<P1, HN>>
         : Eval<Mul, Out = Rec0>,

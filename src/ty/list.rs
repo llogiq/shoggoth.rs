@@ -1,75 +1,31 @@
 use hlist::{
     Cons,
     HC,
-    HList,
     HN,
     Nil,
     self,
 };
 use ty::{
     AppEval,
-    Ar,
-    Ar1,
     Eval,
     Infer,
-    Tm,
-    Ty,
     infer,
 };
 
 /// Type-level lists
 #[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
-pub enum List<A: Ty> {}
-
-/// ```ignore
-/// A :: Ty
-/// -------------
-/// List<A> :: Ty
-/// ```
-impl<A: Ty> Ty for List<A> {}
-
-/// ```ignore
-/// A :: Ty
-/// -------------
-/// nil : List<A>
-/// ```
-impl<A: Ty> Tm<List<A>> for Nil {}
-
-/// ```ignore
-/// A :: Ty
-/// x : A
-/// xs : List<A>
-/// ---------------------
-/// cons(x, xs) : List<A>
-/// ```
-impl<
-       A: Ty,
-       X: Tm<A>,
-      Xs: Tm<List<A>> + HList,
-> Tm<List<A>> for Cons<X, Xs> {}
+pub enum List {}
 
 /// Type-level append for lists
 #[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
-pub enum Prepend<A: Ty> {}
+pub enum Prepend {}
 
-/// ```ignore
-/// A :: Ty
-/// l : List<A>
-/// r : List<A>
-/// ----------------------
-/// append(l, r) : List<A>
-/// ```
-impl<A: Ty> Infer for Prepend<A> {
+impl Infer for Prepend {
+    type Arity = HC<(), HC<(), HN>>;
     type Mode = infer::mode::Constant;
-    type Ty = Ar<HC<List<A>, HC<List<A>, HN>>, List<A>>;
 }
 
-impl<
-       A: Ty,
-      Xs: Tm<List<A>>,
-      Ys: Tm<List<A>>,
-     Rec: Tm<List<A>>,
-> Eval<Prepend<A>> for HC<Xs, HC<Ys, HN>> where
+impl<Xs, Ys, Rec> Eval<Prepend> for HC<Xs, HC<Ys, HN>> where
       Xs: hlist::Prepend<Ys, Out = Rec>,
 {
     type Out = Rec;
@@ -77,24 +33,14 @@ impl<
 
 /// Type-level reverse for lists
 #[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
-pub enum Reverse<A: Ty> {}
+pub enum Reverse {}
 
-/// ```ignore
-/// A :: Ty
-/// xs : List<A>
-/// ---------------------
-/// reverse(xs) : List<A>
-/// ```
-impl< A: Ty> Infer for Reverse<A> {
+impl Infer for Reverse {
+    type Arity = HC<(), HN> ;
     type Mode = infer::mode::Constant;
-    type Ty = Ar1<List<A>, List<A>>;
 }
 
-impl<
-       A: Ty,
-     Rec: Tm<List<A>> + HList,
-      Xs: Tm<List<A>> + HList,
-> Eval<Reverse<A>> for HC<Xs, HN> where
+impl<Rec, Xs> Eval<Reverse> for HC<Xs, HN> where
       Xs: hlist::Reverse<Out = Rec>,
 {
     type Out = Rec;
@@ -102,44 +48,41 @@ impl<
 
 /// Type-level operation mapping operations over lists
 #[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
-pub enum Map<A: Ty, B: Ty> {}
+pub enum Map {}
 
-impl<A: Ty, B: Ty> Infer for Map<A, B> {
+impl Infer for Map {
+    type Arity = HC<HC<(), HN>, HC<(), HN>>;
     type Mode = infer::mode::Constant;
-    type Ty = Ar<HC<Ar<HC<A, HN>, B>, HC<List<A>, HN>>, List<B>>;
 }
 
 // `map(fx, nil) ==> nil`
-impl<
-       A: Ty,
-       B: Ty,
-      Fx: Infer<Ty = Ar1<A, B>>,
-> Eval<Map<A, B>> for HC<Fx, HC<Nil, HN>> {
+impl<Fx> Eval<Map> for HC<Fx, HC<Nil, HN>>
+{
     type Out = Nil;
 }
 
 // `map(fx, cons(x, xs)) ==> cons(fx(x), map(fx, xs))`
-impl<
-       A: Ty,
-       B: Ty,
-      Fx: Infer<Mode = FxM, Ty = Ar1<A, B>>,
-     FxM,
-       X: Tm<A>,
-      Xs: Tm<List<A>> + HList,
-    Rec0: Tm<B>,
-    Rec1: Tm<List<B>> + HList,
-> Eval<Map<A, B>> for HC<Fx, HC<Cons<X, Xs>, HN>> where
+impl<Fx, FxM, X, Xs, Rec0, Rec1> Eval<Map> for HC<Fx, HC<Cons<X, Xs>, HN>> where
+      Fx: Infer<Mode = FxM>,
     // fx(h) ==> r0
-   HC<X, HN>
-        : AppEval<FxM, HC<A, HN>, Fx, Out = Rec0>,
+    HC<X, HN>
+        : AppEval<FxM, HC<(), HN>, Fx, Out = Rec0>,
     // map(fx, t) ==> r1
     HC<Fx, HC<Xs, HN>>
-        : Eval<Map<A, B>, Out = Rec1>,
+        : Eval<Map, Out = Rec1>,
 {
     type Out = Cons<Rec0, Rec1>;
 }
 
-#[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
-pub enum NonEmpty<A: Ty> {}
-impl<A: Ty> Ty for NonEmpty<A> {}
-impl<A: Ty, X: Tm<A>, Xs: Tm<List<A>>> Tm<NonEmpty<A>> for HC<X, Xs> {}
+#[cfg(test)]
+mod test {
+    use hlist::*;
+    use ty::*;
+
+    #[test]
+    fn map() {
+        let x0 = Witness::<Ap<list::Map, HC<Not, HC<HC<FF, HC<TT, HN>>, HN>>>>;
+        let x1 = Witness::<HC<TT, HC<FF, HN>>>;
+        x0 == x1;
+    }
+}

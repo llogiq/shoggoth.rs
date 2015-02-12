@@ -2,37 +2,27 @@ use hlist::*;
 use ty::{
     Infer,
     TmPre,
-    Ty,
     infer,
 };
 use ty::op::{
-    Ar,
     Eval,
-    IsArrow,
     Thunk,
 };
 
 /// Partially apply a thunk to an argument or evaluate a constant
 /// (i.e., operation symbol)
 #[rustc_on_unimplemented = "`{Fx}` cannot be applied to `{Self}`"]
-pub trait AppEval<M, FxDTy, Fx>
-    : HList
-    + TmPre<<<Fx as Infer>::Ty as IsArrow>::Dom>
-where
-      Fx: Infer,
+pub trait AppEval<M, FxDTy, Fx>: TmPre<FxDTy> where
+      Fx: Infer<Arity = FxDTy>,
        M: infer::mode::Mode,
-    <Fx as Infer>::Ty
-        : IsArrow<Dom = FxDTy>,
 {
-    // FIXME: should probably put a bound on Out
     type Out;
 }
 
 impl<
-    Args: HList,
-      Cx: Infer<Ty = Ar<CxDTy, CxCTy>>,
-   CxCTy: Ty,
-   CxDTy: Ty + HList,
+    Args,
+      Cx: Infer<Arity = CxDTy>,
+   CxDTy,
 > AppEval<
     infer::mode::Constant,
     CxDTy,
@@ -49,17 +39,16 @@ impl<
 }
 
 impl<
-      Fx: Infer<Ty = Ar<FxDTy, TxCTy>>,
-   FxDTy: Ty + HList,
-   TxCTy: Ty,
-      Xs: HList,
+      Fx: Infer<Arity = FxDTy>,
+   FxDTy,
+      Xs,
 > AppEval<
     infer::mode::Thunk,
     HN,
     Thunk<Fx, Xs>,
 > for HN where
     Thunk<Fx, Xs>
-        : Infer<Ty = Ar<HN, TxCTy>>,
+        : Infer<Arity = HN>,
       Xs: Eval<Fx>,        
       Xs: TmPre<FxDTy, Out = HN>,
 {
@@ -67,10 +56,9 @@ impl<
 }
 
 impl<
-      Tx: Infer<Ty = Ar<HC<TxDHTy, TxDTTy>, TxCTy>>,
-   TxCTy: Ty,
-  TxDHTy: Ty,
-  TxDTTy: Ty + HList,
+      Tx: Infer<Arity = HC<TxDHTy, TxDTTy>>,
+  TxDHTy,
+  TxDTTy,
 > AppEval<
     infer::mode::Thunk,
     HC<TxDHTy, TxDTTy>,
@@ -81,14 +69,13 @@ impl<
 
 impl<
      ArgsHTm,
-     ArgsTTm: HList,
-          Fx: Infer<Ty = Ar<HC<FxDHTy, FxDTTy>, TxCTy>>,
-      FxDHTy: Ty,
-      FxDTTy: Ty + HList,
-       TxCTy: Ty,
-      TxDHTy: Ty,
-      TxDTTy: Ty + HList,
-          Xs: HList,
+     ArgsTTm,
+          Fx: Infer<Arity = HC<FxDHTy, FxDTTy>>,
+      FxDHTy,
+      FxDTTy,
+      TxDHTy,
+      TxDTTy,
+          Xs,
 > AppEval<
     infer::mode::Thunk,
     HC<TxDHTy, TxDTTy>,
