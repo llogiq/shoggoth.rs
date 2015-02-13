@@ -69,18 +69,16 @@ fn impl_for_seq_upto_expand<'cx>(
         }
     };
 
-    let xs = range(0, iterations)
-        .map(|x| token::str_to_ident(format!("A{}", x).as_slice()))
-        .collect::<Vec<_>>()
-        .to_tokens(ecx);
-
-    let mut ctx = range(0, xs.len() * 2 - 1).map(|k| {
+    let mut ctx = range(0, iterations * 2 - 1).flat_map(|k| {
         if k % 2 == 0 {
-            xs[k / 2].clone()
+            token::str_to_ident(format!("A{}", (k / 2)).as_slice())
+                .to_tokens(ecx)
+                .into_iter()
         } else {
             let span  = codemap::DUMMY_SP;
             let token = parse::token::Token::Comma;
-            ast::TokenTree::TtToken(span, token)
+            vec![ast::TokenTree::TtToken(span, token)]
+                .into_iter()
         }
     }).collect::<Vec<_>>();
 
