@@ -69,6 +69,7 @@ fn impl_for_seq_upto_expand<'cx>(
         }
     };
 
+    // generate a token tree: A0, ..., An
     let mut ctx = range(0, iterations * 2 - 1).flat_map(|k| {
         if k % 2 == 0 {
             token::str_to_ident(format!("A{}", (k / 2)).as_slice())
@@ -82,6 +83,7 @@ fn impl_for_seq_upto_expand<'cx>(
         }
     }).collect::<Vec<_>>();
 
+    // iterate over the ctx and generate impl syntax fragments
     let mut items = vec![];
     let mut i = ctx.len();
     for _ in range(0, iterations) {
@@ -90,5 +92,6 @@ fn impl_for_seq_upto_expand<'cx>(
         ctx.truncate(i);
     }
 
+    // splice the impl fragments into the ast
     base::MacItems::new(items.into_iter())
 }
