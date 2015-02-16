@@ -1,2 +1,2 @@
-pub mod hlist;
+pub mod list;
 pub mod tuple;

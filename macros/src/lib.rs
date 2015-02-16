@@ -19,16 +19,16 @@ use syntax::ext::quote::rt::{
 };
 use syntax::parse::token;
 
-#[macro_export] macro_rules! HList {
-    {} => { ::hlist::Nil };
-    { $head:ty } => { ::hlist::Cons<$head, ::hlist::Nil> };
-    { $head:ty, $($tail:ty),* } => { ::hlist::Cons<$head, HList!($($tail),*)> };
+#[macro_export] macro_rules! List {
+    {} => { ::list::Nil };
+    { $head:ty } => { ::list::Cons<$head, ::list::Nil> };
+    { $head:ty, $($tail:ty),* } => { ::list::Cons<$head, List!($($tail),*)> };
 }
 
-#[macro_export] macro_rules! hlist {
-    {} => { ::hlist::Nil };
-    { $head:expr } => { ::hlist::Cons($head, ::hlist::Nil) };
-    { $head:expr, $($tail:expr),* } => { ::hlist::Cons($head, hlist!($($tail),*)) };
+#[macro_export] macro_rules! list {
+    {} => { ::list::Nil };
+    { $head:expr } => { ::list::Cons($head, ::list::Nil) };
+    { $head:expr, $($tail:expr),* } => { ::list::Cons($head, list!($($tail),*)) };
 }
 
 #[macro_export] macro_rules! seq_head {

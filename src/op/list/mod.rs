@@ -1,15 +1,15 @@
-use hlist::*;
+use list::*;
 
 mod boilerplate;
 
-pub trait IsHCons: HList {
+pub trait IsCons: List {
     type H;
     type T;
     fn head(self) -> Self::H;
     fn tail(self) -> Self::T;
 }
 
-impl<H, T: HList> IsHCons for Cons<H, T> {
+impl<H, T: List> IsCons for Cons<H, T> {
     type H = H;
     type T = T;
 

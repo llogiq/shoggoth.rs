@@ -1,5 +1,5 @@
 use syntax::product::{
-    ToHList,
+    ToList,
     ToTuple,
 };
 use op::tuple::{
@@ -22,14 +22,14 @@ macro_rules! impl_is_composite_for_seq {
 }
 impl_for_seq_upto!{ impl_is_composite_for_seq, 16 }
 
-macro_rules! impl_to_hlist_for_seq {
+macro_rules! impl_to_list_for_seq {
     ($($seq:ident),*) => {
         #[allow(non_snake_case)]
-        impl<$($seq,)*> Fn<(($($seq,)*),)> for ToHList {
-            type Output = HList![$($seq),*];
+        impl<$($seq,)*> Fn<(($($seq,)*),)> for ToList {
+            type Output = List![$($seq),*];
             #[inline]
-            extern "rust-call" fn call(&self, (arg,): (($($seq,)*),)) -> HList![$($seq),*] {
-                match arg { ($($seq,)*) => hlist![$($seq),*] }
+            extern "rust-call" fn call(&self, (arg,): (($($seq,)*),)) -> List![$($seq),*] {
+                match arg { ($($seq,)*) => list![$($seq),*] }
             }
         }
     }
