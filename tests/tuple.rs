@@ -3,19 +3,9 @@ mod test {
     extern crate shoggoth;
 
     use self::shoggoth::hlist::*;
-    use self::shoggoth::nat;
     use self::shoggoth::syntax::product::{
         ProductOps,
     };
-    use self::shoggoth::syntax::std::tuple::{
-        TupleOps,
-    };
-
-    #[test]
-    fn at() {
-        assert_eq!((0u8, true, "foo", Some(42u64), Ok::<_, ()>(false)).at::<nat::_0>(),
-                    0u8);
-    }
 
     #[test]
     fn to_hlist() {
