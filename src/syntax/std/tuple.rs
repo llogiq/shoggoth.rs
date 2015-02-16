@@ -13,5 +13,4 @@ pub trait TupleOps: Sized {
         IsPair::tail(self)
     }
 }
-
 impl<Seq> TupleOps for Seq {}
