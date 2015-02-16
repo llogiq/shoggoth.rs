@@ -18,4 +18,6 @@ pub trait ProductOps {
         ToTuple.call((self,))
     }
 }
-impl<Seq> ProductOps for Seq {}
+
+impl<Seq> ProductOps for Seq {
+}

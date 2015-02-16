@@ -17,4 +17,6 @@ pub trait ListOps {
         IsCons::tail(self)
     }
 }
-impl<Seq> ListOps for Seq {}
+
+impl<Seq> ListOps for Seq {
+}

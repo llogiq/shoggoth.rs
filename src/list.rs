@@ -14,6 +14,7 @@ pub trait ToSingleton {
         Cons(self, Nil)
     }
 }
+
 impl<A> ToSingleton for A {
     type Out = Cons<Self, Nil>;
 }
@@ -30,8 +31,12 @@ pub trait List {
         Cons(x, self)
     }
 }
-impl List for Nil {}
-impl<H, T: List> List for Cons<H, T> {}
+
+impl List for Nil {
+}
+
+impl<H, T: List> List for Cons<H, T> {
+}
 
 impl<Ys: List> std::ops::Add<Ys> for Nil {
     type Output = Ys;

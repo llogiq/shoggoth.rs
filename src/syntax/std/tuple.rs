@@ -17,4 +17,6 @@ pub trait TupleOps {
         IsPair::tail(self)
     }
 }
-impl<Seq> TupleOps for Seq {}
+
+impl<Seq> TupleOps for Seq {
+}
