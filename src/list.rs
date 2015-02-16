@@ -1,3 +1,5 @@
+use std;
+
 #[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
 pub struct Nil;
 
@@ -30,3 +32,30 @@ pub trait List {
 }
 impl List for Nil {}
 impl<H, T: List> List for Cons<H, T> {}
+
+impl<Ys: List> std::ops::Add<Ys> for Nil {
+    type Output = Ys;
+
+    #[inline]
+    fn add(self, rhs: Ys) -> Ys {
+        rhs
+    }
+}
+
+impl<
+    Rec: List + Sized,
+    X,
+    Xs: List,
+    Ys: List,
+> std::ops::Add<Ys> for Cons<X, Xs> where
+    Xs: std::ops::Add<Ys, Output = Rec>,
+{
+    type Output = Cons<X, Rec>;
+
+    #[inline]
+    fn add(self, rhs: Ys) -> Cons<X, Rec> {
+        Cons(self.0, self.1 + rhs)
+    }
+}
+
+pub type Append<Xs, Ys> = <Xs as std::ops::Add<Ys>>::Output;
