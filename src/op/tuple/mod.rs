@@ -3,9 +3,18 @@ mod boilerplate;
 pub trait IsComposite: Sized {
     type H;
     type T;
-    #[inline] fn pair(self) -> (Self::H, Self::T);
-    #[inline] fn head(self) -> Self::H { self.pair().0 }
-    #[inline] fn tail(self) -> Self::T { self.pair().1 }
+
+    fn pair(self) -> (Self::H, Self::T);
+
+    #[inline]
+    fn head(self) -> Self::H {
+        self.pair().0
+    }
+
+    #[inline]
+    fn tail(self) -> Self::T {
+        self.pair().1
+    }
 }
 
 pub struct At<N>;
