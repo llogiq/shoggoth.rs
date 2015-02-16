@@ -2,14 +2,12 @@ use syntax::product::{
     ToList,
     ToTuple,
 };
-use op::tuple::{
-    IsPair,
-};
+use op::tuple;
 
-macro_rules! impl_is_composite_for_seq {
+macro_rules! impl_is_pair_for_seq {
     ($($seq:ident),*) => {
         #[allow(non_snake_case)]
-        impl<$($seq,)*> IsPair for ($($seq,)*) {
+        impl<$($seq,)*> tuple::IsPair for ($($seq,)*) {
             type H = seq_head!($($seq),*);
             type T = seq_tail!($($seq),*);
             #[inline]
@@ -20,7 +18,6 @@ macro_rules! impl_is_composite_for_seq {
         }
     }
 }
-impl_for_seq_upto!{ impl_is_composite_for_seq, 16 }
 
 macro_rules! impl_to_list_for_seq {
     ($($seq:ident),*) => {
@@ -34,7 +31,6 @@ macro_rules! impl_to_list_for_seq {
         }
     }
 }
-impl_for_seq_upto!{ impl_to_hlist_for_seq, 16 }
 
 macro_rules! impl_to_tuple_for_seq {
     ($($seq:ident),*) => {
@@ -48,4 +44,7 @@ macro_rules! impl_to_tuple_for_seq {
         }
     }
 }
+
+impl_for_seq_upto!{  impl_is_pair_for_seq, 16 }
+impl_for_seq_upto!{  impl_to_list_for_seq, 16 }
 impl_for_seq_upto!{ impl_to_tuple_for_seq, 16 }
