@@ -1,5 +1,5 @@
 #[cfg(test)]
-mod test {
+mod product {
     extern crate shoggoth;
 
     use self::shoggoth::list::*;
@@ -9,7 +9,8 @@ mod test {
 
     #[test]
     fn to_list() {
-        assert_eq!((0u8, true, "foo", Some(42u64), Ok::<_, ()>(false)).to_list(),
+        let xs = (0u8, true, "foo", Some(42u64), Ok::<_, ()>(false));
+        assert_eq!(xs.to_list(),
                    Cons(0u8,
                    Cons(true,
                    Cons("foo",
@@ -20,7 +21,7 @@ mod test {
 
     #[test]
     fn to_tuple() {
-        assert_eq!((0u8, true, "foo", Some(42u64), Ok::<_, ()>(false)).to_tuple(),
-                   (0u8, true, "foo", Some(42u64), Ok::<_, ()>(false)));
+        let xs = (0u8, true, "foo", Some(42u64), Ok::<_, ()>(false));
+        assert_eq!(xs.to_tuple(), xs);
     }
 }
