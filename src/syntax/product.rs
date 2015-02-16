@@ -1,13 +1,8 @@
 pub struct ToHList;
-pub struct ToPair;
 pub struct ToTuple;
 
 pub trait ProductOps: Sized {
     #[inline]
-    fn to_pair (self) -> <ToPair  as Fn<(Self,)>>::Output where
-        ToPair: Fn<(Self,)>
-    {
-        ToPair .call((self,))
     }
 
     #[inline]

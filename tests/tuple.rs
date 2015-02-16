@@ -19,12 +19,6 @@ mod test {
     }
 
     #[test]
-    fn to_pair() {
-        assert_eq!((0u8,  true, "foo", Some(42u64), Ok::<_, ()>(false)).to_pair(),
-                   (0u8, (true, "foo", Some(42u64), Ok::<_, ()>(false))));
-    }
-
-    #[test]
     fn to_tuple() {
         assert_eq!((0u8, true, "foo", Some(42u64), Ok::<_, ()>(false)).to_tuple(),
                    (0u8, true, "foo", Some(42u64), Ok::<_, ()>(false)));

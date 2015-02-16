@@ -1,6 +1,5 @@
 use syntax::product::{
     ToHList,
-    ToPair,
     ToTuple,
 };
 use op::tuple::{
@@ -36,14 +35,6 @@ macro_rules! impl_to_hlist_for_seq {
     }
 }
 impl_for_seq_upto!{ impl_to_hlist_for_seq, 16 }
-
-impl<Seq: IsComposite> Fn<(Seq,)> for ToPair {
-    type Output = (<Seq as IsComposite>::H, <Seq as IsComposite>::T);
-    #[inline]
-    extern "rust-call" fn call(&self, (arg,): (Seq,)) -> (<Seq as IsComposite>::H, <Seq as IsComposite>::T) {
-        arg.pair()
-    }
-}
 
 macro_rules! impl_to_tuple_for_seq {
     ($($seq:ident),*) => {
