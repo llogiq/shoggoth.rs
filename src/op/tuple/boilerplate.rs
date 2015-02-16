@@ -3,13 +3,13 @@ use syntax::product::{
     ToTuple,
 };
 use op::tuple::{
-    IsComposite,
+    IsPair,
 };
 
 macro_rules! impl_is_composite_for_seq {
     ($($seq:ident),*) => {
         #[allow(non_snake_case)]
-        impl<$($seq,)*> IsComposite for ($($seq,)*) {
+        impl<$($seq,)*> IsPair for ($($seq,)*) {
             type H = seq_head!($($seq),*);
             type T = seq_tail!($($seq),*);
             #[inline]

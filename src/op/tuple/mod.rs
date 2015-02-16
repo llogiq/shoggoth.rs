@@ -1,6 +1,6 @@
 mod boilerplate;
 
-pub trait IsComposite: Sized {
+pub trait IsPair: Sized {
     type H;
     type T;
 
