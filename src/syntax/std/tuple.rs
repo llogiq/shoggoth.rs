@@ -2,14 +2,18 @@ use op::tuple::{
     IsPair,
 };
 
-pub trait TupleOps: Sized {
+pub trait TupleOps {
     #[inline]
-    fn head(self) -> <Self as IsPair>::H where Self: IsPair {
+    fn head(self) -> <Self as IsPair>::H where
+        Self: Sized + IsPair,
+    {
         IsPair::head(self)
     }
 
     #[inline]
-    fn tail(self) -> <Self as IsPair>::T where Self: IsPair {
+    fn tail(self) -> <Self as IsPair>::T where
+        Self: Sized + IsPair,
+    {
         IsPair::tail(self)
     }
 }
