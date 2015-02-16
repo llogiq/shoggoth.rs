@@ -31,6 +31,12 @@ use syntax::parse::token;
     { $head:expr, $($tail:expr),* } => { ::list::Cons($head, list!($($tail),*)) };
 }
 
+#[macro_export] macro_rules! list_match {
+    {} => { ::list::Nil };
+    { $head:ident } => { ::list::Cons($head, ::list::Nil) };
+    { $head:ident, $($tail:ident),* } => { ::list::Cons($head, list_match!($($tail),*)) };
+}
+
 #[macro_export] macro_rules! seq_head {
     { $x:ident } => { $x };
     { $x:ident, $($xs:ident),* } => { $x };
