@@ -1,4 +1,4 @@
-use op::tuple::{
+use ops::tuple::{
     IsPair,
 };
 

@@ -1,8 +1,8 @@
-use syntax::product::{
+use impls::product::{
     ToList,
     ToTuple,
 };
-use op::tuple::{
+use ops::tuple::{
     IsPair,
 };
 

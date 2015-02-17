@@ -1,8 +1,8 @@
-use list::*;
-use syntax::product::{
+use impls::product::{
     ToList,
     ToTuple,
 };
+use list::*;
 
 impl Fn<(Nil,)> for ToList {
     type Output = Nil;

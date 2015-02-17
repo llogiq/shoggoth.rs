@@ -2,7 +2,7 @@
 
 #[cfg(test)]
 mod product {
-    use super::shoggoth::syntax::product::{
+    use super::shoggoth::impls::product::{
         ProductOps,
     };
 

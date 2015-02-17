@@ -9,7 +9,7 @@
 #[macro_use] mod macros;
 
 pub mod bit;
+pub mod impls;
 pub mod list;
 pub mod nat;
-pub mod op;
-pub mod syntax;
+pub mod ops;
