@@ -6,10 +6,10 @@
 #![plugin(shoggoth_macros)]
 
 #[macro_use] extern crate shoggoth_macros;
+#[macro_use] mod macros;
 
 pub mod bit;
-#[macro_use] pub mod list;
+pub mod list;
 pub mod nat;
-
 pub mod op;
 pub mod syntax;
