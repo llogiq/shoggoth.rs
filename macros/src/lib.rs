@@ -19,24 +19,6 @@ use syntax::ext::quote::rt::{
 };
 use syntax::parse::token;
 
-#[macro_export] macro_rules! List {
-    {} => { ::list::Nil };
-    { $head:ty } => { ::list::Cons<$head, ::list::Nil> };
-    { $head:ty, $($tail:ty),* } => { ::list::Cons<$head, List!($($tail),*)> };
-}
-
-#[macro_export] macro_rules! list {
-    {} => { ::list::Nil };
-    { $head:expr } => { ::list::Cons($head, ::list::Nil) };
-    { $head:expr, $($tail:expr),* } => { ::list::Cons($head, list!($($tail),*)) };
-}
-
-#[macro_export] macro_rules! list_match {
-    {} => { ::list::Nil };
-    { $head:ident } => { ::list::Cons($head, ::list::Nil) };
-    { $head:ident, $($tail:ident),* } => { ::list::Cons($head, list_match!($($tail),*)) };
-}
-
 #[macro_export] macro_rules! seq_head {
     { $x:ident } => { $x };
     { $x:ident, $($xs:ident),* } => { $x };
