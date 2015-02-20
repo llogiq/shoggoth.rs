@@ -1,4 +1,4 @@
-use std;
+pub mod diff;
 
 #[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
 pub struct Nil;
@@ -6,39 +6,24 @@ pub struct Nil;
 #[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
 pub struct Cons<H, T: List>(pub H, pub T);
 
-pub trait ToSingleton {
-    type Out: List = Cons<Self, Nil>;
-
-    #[inline]
-    fn single(self) -> Cons<Self, Nil> where Self: Sized {
-        Cons(self, Nil)
-    }
-}
-
-impl<A> ToSingleton for A {
-    type Out = Cons<Self, Nil>;
+#[inline]
+pub fn nil() -> Nil {
+    Nil
 }
 
 #[rustc_on_unimplemented = "`{Self}` is not a heterogeneous list"]
 pub trait List {
     #[inline]
-    fn nil() -> Nil {
-        Nil
-    }
-
-    #[inline]
     fn cons<X>(self, x: X) -> Cons<X, Self> where Self: Sized {
         Cons(x, self)
     }
 }
-
 impl List for Nil {
 }
-
 impl<H, T: List> List for Cons<H, T> {
 }
 
-impl<Ys: List> std::ops::Add<Ys> for Nil {
+impl<Ys: List> ::std::ops::Add<Ys> for Nil {
     type Output = Ys;
 
     #[inline]
@@ -46,14 +31,13 @@ impl<Ys: List> std::ops::Add<Ys> for Nil {
         rhs
     }
 }
-
 impl<
     Rec: List + Sized,
     X,
     Xs: List,
     Ys: List,
-> std::ops::Add<Ys> for Cons<X, Xs> where
-    Xs: std::ops::Add<Ys, Output = Rec>,
+> ::std::ops::Add<Ys> for Cons<X, Xs> where
+    Xs: ::std::ops::Add<Ys, Output = Rec>,
 {
     type Output = Cons<X, Rec>;
 
@@ -63,4 +47,33 @@ impl<
     }
 }
 
-pub type Append<Xs, Ys> = <Xs as std::ops::Add<Ys>>::Output;
+pub type Append<Xs, Ys> = <Xs as ::std::ops::Add<Ys>>::Output;
+
+pub type Single<X> = Cons<X, Nil>;
+
+pub trait ToSingleton {
+    type Out: List = Cons<Self, Nil>;
+
+    #[inline]
+    fn single(self) -> Cons<Self, Nil> where
+        Self: Sized,
+    {
+        Cons(self, Nil)
+    }
+}
+impl<A> ToSingleton for A {
+    type Out = Single<A>;
+}
+
+#[cfg(test)]
+mod test {
+    use list::{
+        List,
+        self,
+    };
+
+    #[test]
+    fn welp() {
+        list::nil().cons(false).cons(());
+    }
+}
