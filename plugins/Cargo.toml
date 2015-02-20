@@ -1,6 +1,6 @@
 [package]
 
-name = "shoggoth_macros"
+name = "shoggoth_plugins"
 version = "0.0.19"
 authors = [ "Darin Morrison <darinmorrison+epsilonz@gmail.com>" ]
 description = "Generic and type-level programming for Rust"
@@ -11,6 +11,6 @@ readme = "../README.md"
 repository = "https://github.com/epsilonz/shoggoth.rs"
 
 [lib]
-name = "shoggoth_macros"
+name = "shoggoth_plugins"
 path = "src/lib.rs"
 plugin = true

@@ -3,11 +3,8 @@
 #![feature(on_unimplemented)]
 #![feature(plugin)]
 #![feature(unboxed_closures)]
-#![plugin(shoggoth_macros)]
+#![plugin(shoggoth_plugins)]
 
-#![allow(plugin_as_library)]
-
-#[macro_use] extern crate shoggoth_macros;
 #[macro_use] mod macros;
 
 pub mod bit;

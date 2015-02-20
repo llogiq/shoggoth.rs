@@ -24,19 +24,9 @@ use syntax::parse::{
     token,
 };
 
-#[macro_export] macro_rules! seq_head {
-    { $x:ident } => { $x };
-    { $x:ident, $($xs:ident),* } => { $x };
-}
-
-#[macro_export] macro_rules! seq_tail {
-    { $x:ident } => { () };
-    { $x:ident, $($xs:ident),* } => { ($($xs,)*) };
-}
-
 #[plugin_registrar]
 #[doc(hidden)]
-pub fn shoggoth_macros_registrar(reg: &mut plugin::Registry) {
+pub fn shoggoth_plugins_registrar(reg: &mut plugin::Registry) {
     reg.register_macro("invoke_for_seq_upto", invoke_for_seq_upto_expand);
     reg.register_macro("Val", val_expand);
 }
