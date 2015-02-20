@@ -17,5 +17,6 @@ mod numerics;
 #[doc(hidden)]
 pub fn shoggoth_plugins_registrar(reg: &mut plugin::Registry) {
     reg.register_macro("invoke_for_seq_upto", boilerplate::invoke_for_seq_upto_expand);
-    reg.register_macro("Val", numerics::val_expand);
+    reg.register_macro("Nat", numerics::nat_ty_expand);
+    reg.register_macro("nat", numerics::nat_tm_expand);
 }
