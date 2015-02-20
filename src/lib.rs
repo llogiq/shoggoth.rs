@@ -5,6 +5,8 @@
 #![feature(unboxed_closures)]
 #![plugin(shoggoth_macros)]
 
+#![allow(plugin_as_library)]
+
 #[macro_use] extern crate shoggoth_macros;
 #[macro_use] mod macros;
 
