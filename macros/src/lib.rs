@@ -30,8 +30,7 @@ use syntax::parse::token;
 }
 
 #[plugin_registrar]
-pub fn invoke_for_seq_upto_registrar(reg: &mut plugin::Registry) -> ()
-{
+pub fn invoke_for_seq_upto_registrar(reg: &mut plugin::Registry) {
     reg.register_macro("invoke_for_seq_upto", invoke_for_seq_upto_expand);
 }
 
