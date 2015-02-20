@@ -30,12 +30,12 @@ use syntax::parse::token;
 }
 
 #[plugin_registrar]
-pub fn impl_for_seq_upto_registrar(reg: &mut plugin::Registry) -> ()
+pub fn invoke_for_seq_upto_registrar(reg: &mut plugin::Registry) -> ()
 {
-    reg.register_macro("impl_for_seq_upto", impl_for_seq_upto_expand);
+    reg.register_macro("invoke_for_seq_upto", invoke_for_seq_upto_expand);
 }
 
-fn impl_for_seq_upto_expand<'cx>(
+fn invoke_for_seq_upto_expand<'cx>(
     ecx: &'cx mut base::ExtCtxt,
     span: codemap::Span,
     args: &[ast::TokenTree],
@@ -82,7 +82,7 @@ fn impl_for_seq_upto_expand<'cx>(
         Some(base::MacItems::new(items.into_iter()))
 
     }).unwrap_or_else(|| {
-        ecx.span_err(span, "impl_for_seq_upto!: expected an integer literal argument");
+        ecx.span_err(span, "invoke_for_seq_upto!: expected an integer literal argument");
         base::DummyResult::any(span)
     })
 }

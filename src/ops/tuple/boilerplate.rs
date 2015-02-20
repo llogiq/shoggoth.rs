@@ -50,6 +50,6 @@ macro_rules! impl_to_tuple_for_seq {
     }
 }
 
-impl_for_seq_upto!{  impl_is_pair_for_seq, 16 }
-impl_for_seq_upto!{  impl_to_list_for_seq, 16 }
-impl_for_seq_upto!{ impl_to_tuple_for_seq, 16 }
+invoke_for_seq_upto!{  impl_is_pair_for_seq, 16 }
+invoke_for_seq_upto!{  impl_to_list_for_seq, 16 }
+invoke_for_seq_upto!{ impl_to_tuple_for_seq, 16 }
