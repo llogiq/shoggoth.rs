@@ -17,8 +17,9 @@ const NAT_STR_SEP: &'static str = ", bit::_";
 //         ==> (((((((((_1, _0), _0), _0), _0), _0), _0), _0), _0), _0)
 #[inline(always)]
 fn nat_str(mut num: u64) -> String {
-    let mut res = String::from_str(NAT_STR_PRE);
+    let mut res: String;
     if num < 2 {
+        res = String::from_str(NAT_STR_PRE);
         res.push_str(num.to_string().as_slice());
     } else {
         let mut bin = vec![];
