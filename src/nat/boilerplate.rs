@@ -1,18 +1,26 @@
-use bit::*;
-use std::marker::{
-    PhantomFn,
+use bit::{
+    _0,
+    _1,
+};
+use nat::{
+    Add,
+    AddCarry,
+    IsNat,
+    IsPos,
+    Nat,
+    Succ,
 };
 
-pub struct Add;
-pub struct AddCarry;
-pub struct Succ;
+// Fn: Succ ///////////////////////////////////////////////////////////////////
 
-pub trait IsPos: PhantomFn<Self> + IsNat {}
-impl IsPos for _1 {}
-impl<P: IsPos, B: IsBit> IsPos for (P, B) {}
-
-// Succ
-
+/// `succ(0) ==> 1`
+impl Fn<(Nat<_0>,)> for Succ {
+    type Output = Nat<_1>;
+    #[inline]
+    extern "rust-call" fn call(&self, (Nat(_0 {}),): (Nat<_0>,)) -> Nat<_1> {
+        Nat(_1)
+    }
+}
 /// `succ(1) ==> 1:0`
 impl Fn<(_1,)> for Succ {
     type Output = (_1, _0);
@@ -40,8 +48,24 @@ impl<P: IsPos, Rec> Fn<((P, _1),)> for Succ where
     }
 }
 
-// Add
+// Fn: Add ////////////////////////////////////////////////////////////////////
 
+/// `add(0, q) ==> q`
+impl<Q: IsPos> Fn<((Nat<_0>,), (Nat<Q>,))> for Add {
+    type Output = Nat<Q>;
+    #[inline]
+    extern "rust-call" fn call(&self, ((Nat(_0 {}),), (Nat(q),)): ((Nat<_0>,), (Nat<Q>,))) -> Nat<Q> {
+        Nat(q)
+    }
+}
+/// `add(p, 0) ==> p`
+impl<P: IsPos> Fn<((Nat<P>,), (Nat<_0>,))> for Add {
+    type Output = Nat<P>;
+    #[inline]
+    extern "rust-call" fn call(&self, ((Nat(p),), (Nat(_0 {}),)): ((Nat<P>,), (Nat<_0>,))) -> Nat<P> {
+        Nat(p)
+    }
+}
 /// `add(1, 1) ==> 1:0`
 impl Fn<(_1, _1)> for Add {
     type Output = (_1, _0);
@@ -127,7 +151,7 @@ impl<P: IsPos, Q: IsPos, K> Fn<((P, _1), (Q, _1,))> for Add where
     }
 }
 
-// AddCarry
+// Fn: AddCarry ///////////////////////////////////////////////////////////////
 
 /// `add_carry(1, 1) ==> 1:1`
 impl Fn<(_1, _1)> for AddCarry {
@@ -218,38 +242,7 @@ impl<P: IsPos, Q: IsPos, K> Fn<((P, _1), (Q, _1,))> for AddCarry where
     }
 }
 
-pub struct Nat<N: IsNat>(N);
-
-pub trait IsNat: PhantomFn<Self> {}
-impl IsNat for _0 {}
-impl IsNat for _1 {}
-impl<P: IsPos, B: IsBit> IsNat for (P, B) {}
-
-/// `succ(0) ==> 1`
-impl Fn<(Nat<_0>,)> for Succ {
-    type Output = Nat<_1>;
-    #[inline]
-    extern "rust-call" fn call(&self, (Nat(_0 {}),): (Nat<_0>,)) -> Nat<_1> {
-        Nat(_1)
-    }
-}
-
-/// `add(0, q) ==> q`
-impl<Q: IsPos> Fn<((Nat<_0>,), (Nat<Q>,))> for Add {
-    type Output = Nat<Q>;
-    #[inline]
-    extern "rust-call" fn call(&self, ((Nat(_0 {}),), (Nat(q),)): ((Nat<_0>,), (Nat<Q>,))) -> Nat<Q> {
-        Nat(q)
-    }
-}
-/// `add(p, 0) ==> p`
-impl<P: IsPos> Fn<((Nat<P>,), (Nat<_0>,))> for Add {
-    type Output = Nat<P>;
-    #[inline]
-    extern "rust-call" fn call(&self, ((Nat(p),), (Nat(_0 {}),)): ((Nat<P>,), (Nat<_0>,))) -> Nat<P> {
-        Nat(p)
-    }
-}
+// Infix: Add /////////////////////////////////////////////////////////////////
 
 impl<M: IsNat, N: IsNat, K: IsNat> ::std::ops::Add<Nat<N>> for Nat<M> where
     Add: Fn<(M, N), Output = K>
@@ -258,16 +251,5 @@ impl<M: IsNat, N: IsNat, K: IsNat> ::std::ops::Add<Nat<N>> for Nat<M> where
     #[inline]
     fn add(self, rhs: Nat<N>) -> Nat<K> {
         Nat(Add(self.0, rhs.0))
-    }
-}
-
-#[cfg(test)]
-mod test {
-    use bit;
-    use nat;
-
-    #[test]
-    fn add() {
-        let _: Nat!(32768) = nat!(16384) + nat!(16384);
     }
 }
