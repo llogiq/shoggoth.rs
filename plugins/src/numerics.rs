@@ -9,17 +9,23 @@ use syntax::parse::{
     parser,
 };
 
-const NAT_STR_PRE: &'static str =   "bit::_";
-const NAT_STR_SEP: &'static str = ", bit::_";
+enum Mode {
+    Tm,
+    Ty,
+}
 
 // Convert a u64 to a string representation of a type-level binary natural, e.g.,
 //     nat_str(1024)
 //         ==> (((((((((_1, _0), _0), _0), _0), _0), _0), _0), _0), _0)
-#[inline(always)]
-fn nat_str(mut num: u64) -> String {
-    let mut res: String;
+fn nat_str(mut num: u64, mode: Mode) -> String {
+    let delims = match mode {
+        Mode::Tm => { ("(", ")") }
+        Mode::Ty => { ("<", ">") }
+    };
+    let mut res = String::from_str("nat::Nat");
+    res.push_str(delims.0);
     if num < 2 {
-        res = String::from_str(NAT_STR_PRE);
+        res.push_str("bit::_");
         res.push_str(num.to_string().as_slice());
     } else {
         let mut bin = vec![];
@@ -27,16 +33,17 @@ fn nat_str(mut num: u64) -> String {
             bin.push(num % 2);
             num >>= 1;
         }
-        res = ::std::iter::repeat('(').take(bin.len() - 1).collect();
-        res.push_str(NAT_STR_PRE);
+        res.push_str(::std::iter::repeat("(").take(bin.len() - 1).collect::<String>().as_slice());
+        res.push_str("bit::_");
         res.push_str(bin.pop().unwrap().to_string().as_slice());
         for b in bin.iter().rev() {
-            res.push_str(NAT_STR_SEP);
+            res.push_str(", bit::_");
             res.push_str(b.to_string().as_slice());
             res.push_str(")");
         }
     }
-    return res;
+    res.push_str(delims.1);
+    res
 }
 
 // Generate a parser with the nat string for `num` as input
@@ -44,10 +51,11 @@ fn nat_str(mut num: u64) -> String {
 fn nat_str_parser<'cx>(
     ecx: &'cx mut base::ExtCtxt,
     num: u64,
+   mode: Mode,
 ) -> parse::parser::Parser<'cx> {
     let filemap = ecx
         .codemap()
-        .new_filemap(String::from_str("<nat!>"), nat_str(num));
+        .new_filemap(String::from_str("<nat!>"), nat_str(num, mode));
     let reader  = lexer::StringReader::new(
         &ecx.parse_sess().span_diagnostic,
         filemap);
@@ -62,10 +70,11 @@ fn nat_str_parser<'cx>(
 pub fn nat_lit_parser<'cx>(
      ecx: &'cx mut base::ExtCtxt,
     args: &[ast::TokenTree],
+    mode: Mode,
 ) -> Option<parse::parser::Parser<'cx>> {
     let mut litp = ecx.new_parser_from_tts(args);
     if let ast::Lit_::LitInt(lit, _) = litp.parse_lit().node {
-        Some(nat_str_parser(ecx, lit))
+        Some(nat_str_parser(ecx, lit, mode))
     } else {
         None
     }
@@ -81,7 +90,7 @@ pub fn nat_ty_expand<'cx>(
     args: &[ast::TokenTree],
 ) -> Box<base::MacResult + 'cx> {
     {
-        nat_lit_parser(ecx, args)
+        nat_lit_parser(ecx, args, Mode::Ty)
     }.and_then(|mut natp| {
         Some(base::MacTy::new(natp.parse_ty()))
     }).unwrap_or_else(|| {
@@ -100,7 +109,7 @@ pub fn nat_tm_expand<'cx>(
     args: &[ast::TokenTree],
 ) -> Box<base::MacResult + 'cx> {
     {
-        nat_lit_parser(ecx, args)
+        nat_lit_parser(ecx, args, Mode::Tm)
     }.and_then(|mut natp| {
         Some(base::MacExpr::new(natp.parse_expr()))
     }).unwrap_or_else(|| {
