@@ -1,6 +1,5 @@
 use bit::*;
 use std::marker::{
-    PhantomData,
     PhantomFn,
 };
 
