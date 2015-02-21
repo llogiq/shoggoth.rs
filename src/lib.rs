@@ -1,5 +1,4 @@
 #![feature(core)]
-#![feature(hash)]
 #![feature(on_unimplemented)]
 #![feature(plugin)]
 #![feature(unboxed_closures)]
