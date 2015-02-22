@@ -22,7 +22,7 @@ fn nat_str(mut num: u64, mode: Mode) -> String {
         Mode::Tm => { ("(", ")") }
         Mode::Ty => { ("<", ">") }
     };
-    let mut res = String::from_str("nat::Nat");
+    let mut res = String::from_str("nat::W");
     res.push_str(delims.0);
     if num < 2 {
         res.push_str("bit::_");
