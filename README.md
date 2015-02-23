@@ -16,27 +16,24 @@ This library implements generic and type-level programming functionality. It is 
 
 #### Current
 
-* heterogeneous lists
-* type-level operations (polyadic, curried, composable, higher-order)
-* type-level bits and booleans
-* type-level binary natural numbers and integers
-* type-level lists (mappable with type-level operations)
-* type-level list zippers
-* type-level lenses
-
-#### Future
-
-* more functionality for working with hlists/tuples
-* coproducts
-* hlist/vinyl-style records
-* type-level binary rationals
+* generic programming with tuples
+* type-level booleans and bits
+* type-level lists and difference lists
+* type-level binary natural numbers
 * type macros
+* reflection of static type-level data to value-level runtime data
 
 ## Documentation
 
 See the API documentation [here](http://epsilonz.github.io/shoggoth.rs/doc/shoggoth/).
 
 ## Requirements
+
+NOTE: Shoggoth depends on an experimental type macros feature
+described in
+[this RFC](https://github.com/rust-lang/rfcs/pull/873). The feature is
+implemented in
+[this rust branch](https://github.com/freebroccolo/rust/tree/feature/type_macros).
 
 1.   [Rust](http://www.rust-lang.org/)
 2.   [Cargo](http://crates.io/)
