@@ -5,11 +5,6 @@
 extern crate shoggoth;
 extern crate test;
 
-use shoggoth::{
-    bit,
-    nat,
-};
-
 #[bench]
 fn bench(b: &mut test::Bencher) {
     let task = || {
