@@ -64,16 +64,3 @@ pub trait ToSingleton {
 impl<A> ToSingleton for A {
     type Out = Single<A>;
 }
-
-#[cfg(test)]
-mod test {
-    use list::{
-        List,
-        self,
-    };
-
-    #[test]
-    fn welp() {
-        list::nil().cons(false).cons(());
-    }
-}
