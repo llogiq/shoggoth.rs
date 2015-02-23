@@ -73,7 +73,7 @@ fn nat_str<'cx>(
 // Generate a parser with the nat string for `num` as input
 #[inline(always)]
 fn nat_str_parser<'cx>(
-    ecx: &'cx mut base::ExtCtxt,
+    ecx: &'cx base::ExtCtxt,
     num: u64,
    mode: Mode,
 ) -> parse::parser::Parser<'cx> {
@@ -92,7 +92,7 @@ fn nat_str_parser<'cx>(
 // Try to parse an integer literal and return a new parser for its nat string
 #[inline]
 pub fn nat_lit_parser<'cx>(
-     ecx: &'cx mut base::ExtCtxt,
+     ecx: &'cx base::ExtCtxt,
     args: &[ast::TokenTree],
     mode: Mode,
 ) -> Option<parse::parser::Parser<'cx>> {
