@@ -26,8 +26,8 @@ impl IsNat for _0 {}
 impl<P: Pos> IsNat for P {}
 
 // Classify valid binary nats (with zero)
-pub trait Nat: PhantomFn<Self> {}
-impl<N: IsNat> Nat for W<N> {}
+pub trait Nat: PhantomFn<Self> + Reifies<Output = usize> {}
+impl<N: IsNat + Reifies<Output = usize>> Nat for W<N> {}
 
 pub mod ops {
     pub struct Add;
