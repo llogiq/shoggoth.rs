@@ -84,5 +84,6 @@ mod test {
     #[test]
     fn add() {
         let _: Nat!(32768) = nat!(16384) + nat!(16384);
+        println!("{:?}", nat::ops::Compare.call((nat!(10), nat!(20))));
     }
 }

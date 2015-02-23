@@ -277,3 +277,121 @@ impl<M: IsNat, N: IsNat, Rec: IsNat> std::ops::Add<W<N>> for W<M> where
         W(nat::ops::Add(self.0, rhs.0))
     }
 }
+
+// Fn: CompareCont /////////////////////////////////////////////////////////////
+
+// `compare_cont(1, 1, k) ==> k`
+impl<K> Fn<(_1, _1, K)> for nat::ops::CompareCont {
+    type Output = K;
+    #[inline]
+    extern "rust-call" fn call(&self, (_1 {}, _1 {}, k): (_1, _1, K)) -> K {
+        k
+    }
+}
+// `compare_cont(1, q:b, k) ==> lt`
+impl<P: Pos, B: Bit, K> Fn<(_1, (P, B), K)> for nat::ops::CompareCont {
+    type Output = order::LT;
+    #[inline]
+    extern "rust-call" fn call(&self, (_1 {}, (_p, _b), _k): (_1, (P, B), K)) -> order::LT {
+        order::LT
+    }
+}
+// `compare_cont(p:0, 1, k) ==> gt`
+impl<LHS: Pos, K> Fn<((LHS, _0), _1, K)> for nat::ops::CompareCont {
+    type Output = order::GT;
+    #[inline]
+    extern "rust-call" fn call(&self, ((_lhs, _0 {}), _1 {}, _k): ((LHS, _0), _1, K)) -> order::GT {
+        order::GT
+    }
+}
+// `compare_cont(p:0, q:0, k) ==> compare_cont(p, q, k)`
+impl<LHS: Pos, RHS: Pos, K, Rec> Fn<((LHS, _0), (RHS, _0), K)> for nat::ops::CompareCont where
+    nat::ops::CompareCont: Fn<(LHS, RHS, K), Output = Rec>
+{
+    type Output = Rec;
+    #[inline]
+    extern "rust-call" fn call(&self, ((lhs, _0 {}), (rhs, _0 {}), k): ((LHS, _0), (RHS, _0), K)) -> Rec {
+        nat::ops::CompareCont(lhs, rhs, k)
+    }
+}
+// `compare_cont(p:0, q:1, k) ==> compare_cont(p, q, lt)`
+impl<LHS: Pos, RHS: Pos, K, Rec> Fn<((LHS, _0), (RHS, _1), K)> for nat::ops::CompareCont where
+    nat::ops::CompareCont: Fn<(LHS, RHS, order::LT), Output = Rec>
+{
+    type Output = Rec;
+    #[inline]
+    extern "rust-call" fn call(&self, ((lhs, _0 {}), (rhs, _1 {}), _k): ((LHS, _0), (RHS, _1), K)) -> Rec {
+        nat::ops::CompareCont(lhs, rhs, order::LT)
+    }
+}
+// `compare_cont(p:1, 1, k) ==> gt`
+impl<LHS: Pos, K> Fn<((LHS, _1), _1, K)> for nat::ops::CompareCont {
+    type Output = order::GT;
+    #[inline]
+    extern "rust-call" fn call(&self, ((_lhs, _1 {}), _1 {}, _k): ((LHS, _1), _1, K)) -> order::GT {
+        order::GT
+    }
+}
+// `compare_cont(p:1, q:0, k) ==> compare_cont(p, q, gt)`
+impl<LHS: Pos, RHS: Pos, K, Rec> Fn<((LHS, _1), (RHS, _0), K)> for nat::ops::CompareCont where
+    nat::ops::CompareCont: Fn<(LHS, RHS, order::GT), Output = Rec>
+{
+    type Output = Rec;
+    #[inline]
+    extern "rust-call" fn call(&self, ((lhs, _1 {}), (rhs, _0 {}), _): ((LHS, _1), (RHS, _0), K)) -> Rec {
+        nat::ops::CompareCont(lhs, rhs, order::GT)
+    }
+}
+// `compare_cont(p:1, q:1, k) ==> compare_cont(p, q, k)`
+impl<LHS: Pos, RHS: Pos, K, Rec> Fn<((LHS, _1), (RHS, _1), K)> for nat::ops::CompareCont where
+    nat::ops::CompareCont: Fn<(LHS, RHS, K), Output = Rec>
+{
+    type Output = Rec;
+    #[inline]
+    extern "rust-call" fn call(&self, ((lhs, _1 {}), (rhs, _1 {}), k): ((LHS, _1), (RHS, _1), K)) -> Rec {
+        nat::ops::CompareCont(lhs, rhs, k)
+    }
+}
+
+// Fn: Compare /////////////////////////////////////////////////////////////////
+
+impl<LHS: IsNat, RHS: IsNat, Rec> Fn<(W<LHS>, W<RHS>)> for nat::ops::Compare where
+    nat::ops::Compare: Fn<(LHS, RHS), Output = Rec>
+{
+    type Output = Rec;
+    #[inline]
+    extern "rust-call" fn call(&self, (W(lhs), W(rhs)): (W<LHS>, W<RHS>)) -> Rec {
+        nat::ops::Compare(lhs, rhs)
+    }
+}
+
+impl Fn<(_0, _0)> for nat::ops::Compare {
+    type Output = order::Eq;
+    #[inline]
+    extern "rust-call" fn call(&self, (_0 {}, _0 {}): (_0, _0)) -> order::Eq {
+        order::Eq
+    }
+}
+impl<RHS: Pos> Fn<(_0, RHS)> for nat::ops::Compare {
+    type Output = order::LT;
+    #[inline]
+    extern "rust-call" fn call(&self, (_0 {}, _rhs): (_0, RHS)) -> order::LT {
+        order::LT
+    }
+}
+impl<LHS: Pos> Fn<(LHS, _0)> for nat::ops::Compare {
+    type Output = order::GT;
+    #[inline]
+    extern "rust-call" fn call(&self, (_lhs, _0 {}): (LHS, _0)) -> order::GT {
+        order::GT
+    }
+}
+impl<LHS: Pos, RHS: Pos, Rec> Fn<(LHS, RHS)> for nat::ops::Compare where
+    nat::ops::CompareCont: Fn<(LHS, RHS, order::Eq), Output = Rec>
+{
+    type Output = Rec;
+    #[inline]
+    extern "rust-call" fn call(&self, (lhs, rhs): (LHS, RHS)) -> Rec {
+        nat::ops::CompareCont(lhs, rhs, order::Eq)
+    }
+}
