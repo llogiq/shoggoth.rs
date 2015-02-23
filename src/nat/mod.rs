@@ -81,9 +81,20 @@ mod test {
         Reifies,
     };
 
+    // FIXME: add algebraic tests
+
     #[test]
     fn add() {
         let _: Nat!(32768) = nat!(16384) + nat!(16384);
+    }
+
+    #[test]
+    fn compare() {
         println!("{:?}", nat::ops::Compare.call((nat!(10), nat!(20))));
+    }
+
+    #[test]
+    fn reflect() {
+        println!("{:?}", nat!(16384).reflect());
     }
 }
