@@ -29,9 +29,15 @@ impl<P: Pos> IsNat for P {}
 pub trait Nat: PhantomFn<Self> {}
 impl<N: IsNat> Nat for W<N> {}
 
-pub struct Add;
-pub struct AddCarry;
-pub struct Succ;
+pub mod ops {
+    pub struct Add;
+    #[doc(hidden)] pub struct AddCarry;
+    pub struct Compare;
+    #[doc(hidden)] pub struct CompareCont;
+    pub struct Eq;
+    pub struct Succ;
+}
+
 impl<N: IsNat> Reifies for W<N> where
     N: Reifies<Output = usize>
 {
