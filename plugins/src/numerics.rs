@@ -34,6 +34,7 @@ fn crate_prefix_path<'a, 'cx>(
 // Convert a u64 to a string representation of a type-level binary natural, e.g.,
 //     nat_str(1024)
 //         ==> (((((((((_1, _0), _0), _0), _0), _0), _0), _0), _0), _0)
+#[inline(always)]
 fn nat_str<'cx>(
         ecx: &'cx base::ExtCtxt,
     mut num: u64,
@@ -90,7 +91,7 @@ fn nat_str_parser<'cx>(
 }
 
 // Try to parse an integer literal and return a new parser for its nat string
-#[inline]
+#[inline(always)]
 pub fn nat_lit_parser<'cx>(
      ecx: &'cx base::ExtCtxt,
     args: &[ast::TokenTree],
