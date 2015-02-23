@@ -141,10 +141,10 @@ mod test {
     };
 
     #[test]
-    fn welp() {
+    fn diff() {
         println!("{:?}", (list::nil().cons(false).cons(42u64).cons("foo").diff()
                         + list::nil().cons(false).cons(42u64).cons(vec![()]).diff()
-                        + list::nil().cons(false).cons(42u64).cons(()).diff().snoc("welp")
-                        + list::nil().cons("lel").cons(vec![0u8, 1u8]).cons(true).diff()).list());
+                        + list::nil().cons(false).cons(42u64).cons(()).diff().snoc("bar")
+                        + list::nil().cons("baz").cons(vec![0u8, 1u8]).cons(true).diff()).list());
     }
 }
