@@ -1,21 +1,24 @@
+use reflect::{
+    Reifies,
+};
+
 #[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
 pub struct FF;
 
 #[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
 pub struct TT;
 
-pub trait Bool {
-    fn as_bool(&self) -> bool;
-}
-impl Bool for FF {
+impl Reifies for FF {
+    type Output = bool;
     #[inline(always)]
-    fn as_bool(&self) -> bool {
+    fn reflect(&self) -> bool {
         false
     }
 }
-impl Bool for TT {
+impl Reifies for TT {
+    type Output = bool;
     #[inline(always)]
-    fn as_bool(&self) -> bool {
+    fn reflect(&self) -> bool {
         true
     }
 }

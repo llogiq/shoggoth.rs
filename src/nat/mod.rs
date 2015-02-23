@@ -3,6 +3,9 @@ use bit::{
     _1,
     Bit,
 };
+use reflect::{
+    Reifies,
+};
 use std::marker::{
     PhantomFn,
 };
@@ -29,11 +32,48 @@ impl<N: IsNat> Nat for W<N> {}
 pub struct Add;
 pub struct AddCarry;
 pub struct Succ;
+impl<N: IsNat> Reifies for W<N> where
+    N: Reifies<Output = usize>
+{
+    type Output = usize;
+    #[inline]
+    fn reflect(&self) -> usize {
+        self.0.reflect()
+    }
+}
+impl Reifies for _0 {
+    type Output = usize;
+    #[inline]
+    fn reflect(&self) -> usize {
+        0
+    }
+}
+impl Reifies for _1 {
+    type Output = usize;
+    #[inline]
+    fn reflect(&self) -> usize {
+        1
+    }
+}
+impl<P: Pos, B: Bit> Reifies for (P, B) where
+    P: Reifies<Output = usize>,
+    B: Reifies<Output = usize>,
+{
+    type Output = usize;
+    #[inline]
+    fn reflect(&self) -> usize {
+        let &(ref p, ref b) = self;
+        2 * p.reflect() + b.reflect()
+    }
+}
 
 #[cfg(test)]
 mod test {
     use bit;
     use nat;
+    use reflect::{
+        Reifies,
+    };
 
     #[test]
     fn add() {
