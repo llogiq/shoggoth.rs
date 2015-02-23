@@ -19,7 +19,7 @@ impl<N: IsNat, Rec: Pos> Fn<(W<N>,)> for nat::ops::Succ where
     nat::ops::Succ: Fn<(N,), Output = Rec>
 {
     type Output = W<Rec>;
-    #[inline(always)]
+    #[inline]
     extern "rust-call" fn call(&self, (W(n),): (W<N>,)) -> W<Rec> {
         W(nat::ops::Succ.call((n,)))
     }
@@ -28,7 +28,7 @@ impl<N: IsNat, Rec: Pos> Fn<(W<N>,)> for nat::ops::Succ where
 /// `succ(0) ==> 1`
 impl Fn<(_0,)> for nat::ops::Succ {
     type Output = _1;
-    #[inline(always)]
+    #[inline]
     extern "rust-call" fn call(&self, (_0 {},): (_0,)) -> _1 {
         _1
     }
@@ -36,7 +36,7 @@ impl Fn<(_0,)> for nat::ops::Succ {
 /// `succ(1) ==> 1:0`
 impl Fn<(_1,)> for nat::ops::Succ {
     type Output = (_1, _0);
-    #[inline(always)]
+    #[inline]
     extern "rust-call" fn call(&self, (_1 {},): (_1,)) -> (_1, _0) {
         (_1, _0)
     }
@@ -44,7 +44,7 @@ impl Fn<(_1,)> for nat::ops::Succ {
 /// `succ(p:0) ==> p:1`
 impl<LHS: Pos> Fn<((LHS, _0),)> for nat::ops::Succ {
     type Output = (LHS, _1);
-    #[inline(always)]
+    #[inline]
     extern "rust-call" fn call(&self, ((lhs, _),): ((LHS, _0),)) -> (LHS, _1) {
         (lhs, _1)
     }
@@ -54,7 +54,7 @@ impl<LHS: Pos, Rec> Fn<((LHS, _1),)> for nat::ops::Succ where
     nat::ops::Succ: Fn<(LHS,), Output = Rec>,
 {
     type Output = (Rec, _0);
-    #[inline(always)]
+    #[inline]
     extern "rust-call" fn call(&self, ((lhs, _),): ((LHS, _1),)) -> (Rec, _0) {
         (nat::ops::Succ(lhs), _0)
     }
@@ -67,7 +67,7 @@ impl<LHS: IsNat, RHS: IsNat, Rec: Pos> Fn<(W<LHS>, W<RHS>)> for nat::ops::Add wh
     nat::ops::Add: Fn<(LHS, RHS), Output = Rec>
 {
     type Output = W<Rec>;
-    #[inline(always)]
+    #[inline]
     extern "rust-call" fn call(&self, (W(lhs), W(rhs)): (W<LHS>, W<RHS>)) -> W<Rec> {
         W(nat::ops::Add(lhs, rhs))
     }

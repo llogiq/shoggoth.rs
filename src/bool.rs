@@ -10,14 +10,14 @@ pub struct TT;
 
 impl Reifies for FF {
     type Output = bool;
-    #[inline(always)]
+    #[inline]
     fn reflect(&self) -> bool {
         false
     }
 }
 impl Reifies for TT {
     type Output = bool;
-    #[inline(always)]
+    #[inline]
     fn reflect(&self) -> bool {
         true
     }
