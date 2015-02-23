@@ -14,7 +14,7 @@ mod boilerplate;
 
 // Nat wrapper struct (grumble, grumble, coherence...)
 #[derive(Copy, Clone, Debug, Eq, Ord, PartialEq, PartialOrd)]
-pub struct W<N: IsNat>(N);
+pub struct W<N: IsNat>(pub N);
 
 // Classify valid binary nats (positive)
 pub trait Pos: PhantomFn<Self> + IsNat {}
