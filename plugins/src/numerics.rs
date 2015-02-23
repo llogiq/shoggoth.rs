@@ -14,18 +14,41 @@ enum Mode {
     Ty,
 }
 
+const SHOGGOTH_CRATE_NAME: &'static str = "shoggoth";
+
+// Conditionally prefix crate name to the path; like the $crate macro variable
+#[inline(always)]
+fn crate_prefix_path<'a, 'cx>(
+     ecx: &'cx base::ExtCtxt,
+    path: &'a str
+) -> String {
+    let mut res = String::new();
+    if ecx.ecfg.crate_name.as_slice() != SHOGGOTH_CRATE_NAME {
+        res.push_str(SHOGGOTH_CRATE_NAME);
+        res.push_str("::");
+    }
+    res.push_str(path);
+    res
+}
+
 // Convert a u64 to a string representation of a type-level binary natural, e.g.,
 //     nat_str(1024)
 //         ==> (((((((((_1, _0), _0), _0), _0), _0), _0), _0), _0), _0)
-fn nat_str(mut num: u64, mode: Mode) -> String {
+fn nat_str<'cx>(
+        ecx: &'cx base::ExtCtxt,
+    mut num: u64,
+       mode: Mode,
+) -> String {
+    let nat_path = crate_prefix_path(ecx, "nat::W");
+    let bit_path = crate_prefix_path(ecx, "bit::_");
     let delims = match mode {
         Mode::Tm => { ("(", ")") }
         Mode::Ty => { ("<", ">") }
     };
-    let mut res = String::from_str("nat::W");
+    let mut res = String::from_str(nat_path.as_slice());
     res.push_str(delims.0);
     if num < 2 {
-        res.push_str("bit::_");
+        res.push_str(bit_path.as_slice());
         res.push_str(num.to_string().as_slice());
     } else {
         let mut bin = vec![];
@@ -34,10 +57,11 @@ fn nat_str(mut num: u64, mode: Mode) -> String {
             num >>= 1;
         }
         res.push_str(::std::iter::repeat("(").take(bin.len() - 1).collect::<String>().as_slice());
-        res.push_str("bit::_");
+        res.push_str(bit_path.as_slice());
         res.push_str(bin.pop().unwrap().to_string().as_slice());
         for b in bin.iter().rev() {
-            res.push_str(", bit::_");
+            res.push_str(", ");
+            res.push_str(bit_path.as_slice());
             res.push_str(b.to_string().as_slice());
             res.push_str(")");
         }
@@ -55,7 +79,7 @@ fn nat_str_parser<'cx>(
 ) -> parse::parser::Parser<'cx> {
     let filemap = ecx
         .codemap()
-        .new_filemap(String::from_str("<nat!>"), nat_str(num, mode));
+        .new_filemap(String::from_str("<nat!>"), nat_str(ecx, num, mode));
     let reader  = lexer::StringReader::new(
         &ecx.parse_sess().span_diagnostic,
         filemap);
