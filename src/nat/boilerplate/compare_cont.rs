@@ -12,74 +12,58 @@ use order;
 // Fn: CompareCont /////////////////////////////////////////////////////////////
 
 // `compare_cont(1, 1, k) ==> k`
-impl<K> Fn<(_1, _1, K)> for CompareCont {
-    type Output = K;
-    #[inline]
-    extern "rust-call" fn call(&self, (_1 {}, _1 {}, k): (_1, _1, K)) -> K {
-        k
-    }
+ty! { #[inline]
+    fam CompareCont(_1  , _0  , K) => K {
+        CompareCont(_1{}, _0{}, k) => k
+    } for .[ K ]
 }
 // `compare_cont(1, q:b, k) ==> lt`
-impl<P: Pos, B: Bit, K> Fn<(_1, (P, B), K)> for CompareCont {
-    type Output = order::LT;
-    #[inline]
-    extern "rust-call" fn call(&self, (_1 {}, (_p, _b), _k): (_1, (P, B), K)) -> order::LT {
-        order::LT
-    }
+ty! { #[inline]
+    fam CompareCont(_1  , (Q, B), K) => order::LT {
+        CompareCont(_1{}, (_, _), _) => order::LT
+    } for .[ K ] :[ Q: Pos, B: Bit ]
 }
 // `compare_cont(p:0, 1, k) ==> gt`
-impl<LHS: Pos, K> Fn<((LHS, _0), _1, K)> for CompareCont {
-    type Output = order::GT;
-    #[inline]
-    extern "rust-call" fn call(&self, ((_lhs, _0 {}), _1 {}, _k): ((LHS, _0), _1, K)) -> order::GT {
-        order::GT
-    }
+ty! { #[inline]
+    fam CompareCont((P, _0  ), _1  , K) => order::GT {
+        CompareCont((_, _0{}), _1{}, _) => order::GT
+    } for .[ K ] :[ P: Pos ]
 }
 // `compare_cont(p:0, q:0, k) ==> compare_cont(p, q, k)`
-impl<LHS: Pos, RHS: Pos, K, Rec> Fn<((LHS, _0), (RHS, _0), K)> for CompareCont where
-    CompareCont: Fn(LHS, RHS, K) -> Rec
-{
-    type Output = Rec;
-    #[inline]
-    extern "rust-call" fn call(&self, ((lhs, _0 {}), (rhs, _0 {}), k): ((LHS, _0), (RHS, _0), K)) -> Rec {
-        CompareCont(lhs, rhs, k)
-    }
+ty! { #[inline]
+    fam CompareCont((P, _0  ), (Q, _0  ), K) => Rec {
+        CompareCont((p, _0{}), (q, _0{}), k) => CompareCont(p, q, k)
+    } let {
+        Rec = CompareCont(P, Q, K),
+    } for .[ K, Rec ] :[ P: Pos, Q: Pos ]
 }
 // `compare_cont(p:0, q:1, k) ==> compare_cont(p, q, lt)`
-impl<LHS: Pos, RHS: Pos, K, Rec> Fn<((LHS, _0), (RHS, _1), K)> for CompareCont where
-    CompareCont: Fn(LHS, RHS, order::LT) -> Rec
-{
-    type Output = Rec;
-    #[inline]
-    extern "rust-call" fn call(&self, ((lhs, _0 {}), (rhs, _1 {}), _k): ((LHS, _0), (RHS, _1), K)) -> Rec {
-        CompareCont(lhs, rhs, order::LT)
-    }
+ty! { #[inline]
+    fam CompareCont((P, _0  ), (Q, _1  ), K) => Rec {
+        CompareCont((p, _0{}), (q, _1{}), _) => CompareCont(p, q, order::LT)
+    } let {
+        Rec = CompareCont(P, Q, order::LT),
+    } for .[ K, Rec ] :[ P: Pos, Q: Pos ]
 }
 // `compare_cont(p:1, 1, k) ==> gt`
-impl<LHS: Pos, K> Fn<((LHS, _1), _1, K)> for CompareCont {
-    type Output = order::GT;
-    #[inline]
-    extern "rust-call" fn call(&self, ((_lhs, _1 {}), _1 {}, _k): ((LHS, _1), _1, K)) -> order::GT {
-        order::GT
-    }
+ty! { #[inline]
+    fam CompareCont((P, _1  ), _1  , K) => order::GT {
+        CompareCont((_, _1{}), _1{}, _) => order::GT
+    } for .[ K ] :[ P: Pos ]
 }
 // `compare_cont(p:1, q:0, k) ==> compare_cont(p, q, gt)`
-impl<LHS: Pos, RHS: Pos, K, Rec> Fn<((LHS, _1), (RHS, _0), K)> for CompareCont where
-    CompareCont: Fn(LHS, RHS, order::GT) -> Rec
-{
-    type Output = Rec;
-    #[inline]
-    extern "rust-call" fn call(&self, ((lhs, _1 {}), (rhs, _0 {}), _): ((LHS, _1), (RHS, _0), K)) -> Rec {
-        CompareCont(lhs, rhs, order::GT)
-    }
+ty! {
+    fam CompareCont((P, _1  ), (Q, _0  ), K) => Rec {
+        CompareCont((p, _1{}), (q, _0{}), _) => CompareCont(p, q, order::GT)
+    } let {
+        Rec = CompareCont(P, Q, order::GT),
+    } for .[ K, Rec ] :[ P: Pos, Q: Pos ]
 }
 // `compare_cont(p:1, q:1, k) ==> compare_cont(p, q, k)`
-impl<LHS: Pos, RHS: Pos, K, Rec> Fn<((LHS, _1), (RHS, _1), K)> for CompareCont where
-    CompareCont: Fn(LHS, RHS, K) -> Rec
-{
-    type Output = Rec;
-    #[inline]
-    extern "rust-call" fn call(&self, ((lhs, _1 {}), (rhs, _1 {}), k): ((LHS, _1), (RHS, _1), K)) -> Rec {
-        CompareCont(lhs, rhs, k)
-    }
+ty! { #[inline]
+    fam CompareCont((P, _1  ), (Q, _1  ), K) => Rec {
+        CompareCont((p, _1{}), (q, _1{}), k) => CompareCont(p, q, k)
+    } let {
+        Rec = CompareCont(P, Q, K),
+    } for .[ K, Rec ] :[ P: Pos, Q: Pos ]
 }
