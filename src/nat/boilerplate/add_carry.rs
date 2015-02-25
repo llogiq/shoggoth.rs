@@ -10,90 +10,72 @@ use nat::ops::*;
 // Fn: AddCarry ////////////////////////////////////////////////////////////////
 
 /// `add_carry(1, 1) ==> 1:1`
-impl Fn<(_1, _1)> for AddCarry {
-    type Output = (_1, _1);
-    #[inline]
-    extern "rust-call" fn call(&self, (_1 {}, _1 {}): (_1, _1)) -> (_1, _1) {
-        (_1, _1)
+ty! { #[inline]
+    fam AddCarry(_1  , _1  ) => (_1, _1) {
+        AddCarry(_1{}, _1{}) => (_1, _1)
     }
 }
 /// `add_carry(1, q:0) ==> succ(q):0`
-impl<RHS: Pos, Rec> Fn<(_1, (RHS, _0))> for AddCarry where
-    Succ: Fn(RHS) -> Rec
-{
-    type Output = (Rec, _0);
-    #[inline]
-    extern "rust-call" fn call(&self, (_1 {}, (rhs, _0 {})): (_1, (RHS, _0))) -> (Rec, _0) {
-        (Succ(rhs), _0)
-    }
+ty! { #[inline]
+    fam AddCarry(_1  , (Q, _0  )) => (Rec    , _0) {
+        AddCarry(_1{}, (q, _0{})) => (Succ(q), _0)
+    } let {
+        Rec = Succ(Q,),
+    } for .[ Rec ] :[ Q: Pos ]
 }
 /// `add_carry(1, q:1) ==> succ(q):1`
-impl<RHS: Pos, Rec> Fn<(_1, (RHS, _1))> for AddCarry where
-    Succ: Fn(RHS) -> Rec
-{
-    type Output = (Rec, _1);
-    #[inline]
-    extern "rust-call" fn call(&self, (_1 {}, (rhs, _1 {})): (_1, (RHS, _1))) -> (Rec, _1) {
-        (Succ(rhs), _1)
-    }
+ty! { #[inline]
+    fam AddCarry(_1  , (Q, _1  )) => (Rec    , _1) {
+        AddCarry(_1{}, (q, _1{})) => (Succ(q), _1)
+    } let {
+        Rec = Succ(Q,),
+    } for .[ Rec ] :[ Q: Pos ]
 }
 /// `add_carry(p:0, 1) ==> succ(p):0`
-impl<LHS: Pos, Rec> Fn<((LHS, _0), _1)> for AddCarry where
-    Succ: Fn(LHS) -> Rec
-{
-    type Output = (Rec, _0);
-    #[inline]
-    extern "rust-call" fn call(&self, ((lhs, _0 {},), _1 {}): ((LHS, _0), _1)) -> (Rec, _0) {
-        (Succ(lhs), _0)
-    }
+ty! { #[inline]
+    fam AddCarry((P, _0  ), _1  ) => (Rec    , _0) {
+        AddCarry((p, _0{}), _1{}) => (Succ(p), _0)
+    } let {
+        Rec = Succ(P,),
+    } for .[ Rec ] :[ P: Pos ]
 }
 /// `add_carry(p:0, q:0) ==> add(p, q):1`
-impl<LHS: Pos, RHS: Pos, Rec> Fn<((LHS, _0), (RHS, _0))> for AddCarry where
-    Add: Fn(LHS, RHS) -> Rec
-{
-    type Output = (Rec, _1);
-    #[inline]
-    extern "rust-call" fn call(&self, ((lhs, _0 {}), (rhs, _0 {})): ((LHS, _0), (RHS, _0))) -> (Rec, _1) {
-        (Add(lhs, rhs), _1)
-    }
+ty! { #[inline]
+    fam AddCarry((P, _0  ), (Q, _0  )) => (Rec      , _1) {
+        AddCarry((p, _0{}), (q, _0{})) => (Add(p, q), _1)
+    } let {
+        Rec = Add(P, Q),
+    } for .[ Rec ] :[ P: Pos, Q: Pos ]
 }
 /// `add_carry(p:0, q:1) ==> add_carry(p, q):0`
-impl<LHS: Pos, RHS: Pos, Rec> Fn<((LHS, _0), (RHS, _1))> for AddCarry where
-    AddCarry: Fn(LHS, RHS) -> Rec
-{
-    type Output = (Rec, _0);
-    #[inline]
-    extern "rust-call" fn call(&self, ((lhs, _0 {}), (rhs, _1 {})): ((LHS, _0), (RHS, _1))) -> (Rec, _0) {
-        (AddCarry(lhs, rhs), _0)
-    }
+ty! { #[inline]
+    fam AddCarry((P, _0  ), (Q, _1  )) => (Rec           , _0) {
+        AddCarry((p, _0{}), (q, _1{})) => (AddCarry(p, q), _0)
+    } let {
+        Rec = AddCarry(P, Q),
+    } for .[ Rec ] :[ P: Pos, Q: Pos ]
 }
 /// `add_carry(p:1, 1) ==> succ(p):1`
-impl<LHS: Pos, Rec> Fn<((LHS, _1), _1)> for AddCarry where
-    Succ: Fn(LHS) -> Rec
-{
-    type Output = (Rec, _1);
-    #[inline]
-    extern "rust-call" fn call(&self, ((lhs, _1 {}), _1 {}): ((LHS, _1), _1)) -> (Rec, _1) {
-        (Succ(lhs), _1)
-    }
+ty! { #[inline]
+    fam AddCarry((P, _1  ), _1  ) => (Rec    , _1) {
+        AddCarry((p, _1{}), _1{}) => (Succ(p), _1)
+    } let {
+        Rec = Succ(P,),
+    } for .[ Rec ] :[ P: Pos ]
 }
 /// `add_carry(p:1, q:0) ==> add_carry(p, q):0`
-impl<LHS: Pos, RHS: Pos, Rec> Fn<((LHS, _1), (RHS, _0,))> for AddCarry where
-    AddCarry: Fn<(LHS, RHS), Output = Rec>
-{
-    type Output = (Rec, _0);
-    #[inline]
-    extern "rust-call" fn call(&self, ((lhs, _1 {}), (rhs, _0 {})): ((LHS, _1), (RHS, _0))) -> (Rec, _0) {
-        (AddCarry(lhs, rhs), _0)
-    }
+ty! { #[inline]
+    fam AddCarry((P, _1  ), (Q, _0  )) => (Rec           , _0) {
+        AddCarry((p, _1{}), (q, _0{})) => (AddCarry(p, q), _0)
+    } let {
+        Rec = AddCarry(P, Q),
+    } for .[ Rec ] :[ P: Pos, Q: Pos ]
 }
 /// `add_carry(p:1, q:1) ==> add_carry(p, q):1`
-impl<LHS: Pos, RHS: Pos, Rec> Fn<((LHS, _1), (RHS, _1,))> for AddCarry where
-    AddCarry: Fn<(LHS, RHS), Output = Rec>
-{
-    type Output = (Rec, _1);
-    #[inline]
-    extern "rust-call" fn call(&self, ((lhs, _1 {}), (rhs, _1 {})): ((LHS, _1), (RHS, _1))) -> (Rec, _1) {
-        (AddCarry(lhs, rhs), _1)
-    }
+ty! { #[inline]
+    fam AddCarry((P, _1  ), (Q, _1  )) => (Rec           , _1) {
+        AddCarry((p, _1{}), (q, _1{})) => (AddCarry(p, q), _1)
+    } let {
+        Rec = AddCarry(P, Q),
+    } for .[ Rec ] :[ P: Pos, Q: Pos ]
 }
