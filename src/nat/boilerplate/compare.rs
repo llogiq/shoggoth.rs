@@ -11,43 +11,38 @@ use order;
 
 // Fn: Compare /////////////////////////////////////////////////////////////////
 
-impl<LHS: IsNat, RHS: IsNat, Rec> Fn<(W<LHS>, W<RHS>)> for Compare where
-    Compare: Fn(LHS, RHS) -> Rec
-{
-    type Output = Rec;
-    #[inline]
-    extern "rust-call" fn call(&self, (W(lhs), W(rhs)): (W<LHS>, W<RHS>)) -> Rec {
-        Compare(lhs, rhs)
-    }
+// unwrap
+ty! { #[inline]
+    fam Compare(W<M>, W<N>) => Rec {
+        Compare(W(m), W(n)) => Compare(m, n)
+    } let {
+        Rec = Compare(M, N),
+    } for .[ Rec ] :[ M: IsNat, N: IsNat ]
 }
 
-impl Fn<(_0, _0)> for Compare {
-    type Output = order::Eq;
-    #[inline]
-    extern "rust-call" fn call(&self, (_0 {}, _0 {}): (_0, _0)) -> order::Eq {
-        order::Eq
+/// compare(0, 0) ==> eq
+ty! { #[inline]
+    fam Compare(_0  , _0  ) => order::Eq {
+        Compare(_0{}, _0{}) => order::Eq
     }
 }
-impl<RHS: Pos> Fn<(_0, RHS)> for Compare {
-    type Output = order::LT;
-    #[inline]
-    extern "rust-call" fn call(&self, (_0 {}, _rhs): (_0, RHS)) -> order::LT {
-        order::LT
-    }
+/// compare(0, q) ==> lt
+ty! { #[inline]
+    fam Compare(_0  , Q) => order::LT {
+        Compare(_0{}, _) => order::LT
+    } for :[ Q: Pos ]
 }
-impl<LHS: Pos> Fn<(LHS, _0)> for Compare {
-    type Output = order::GT;
-    #[inline]
-    extern "rust-call" fn call(&self, (_lhs, _0 {}): (LHS, _0)) -> order::GT {
-        order::GT
-    }
+/// compare(p, 0) ==> gt
+ty! { #[inline]
+    fam Compare(P, _0  ) => order::GT {
+        Compare(_, _0{}) => order::GT
+    } for :[ P: Pos ]
 }
-impl<LHS: Pos, RHS: Pos, Rec> Fn<(LHS, RHS)> for Compare where
-    CompareCont: Fn(LHS, RHS, order::Eq) -> Rec
-{
-    type Output = Rec;
-    #[inline]
-    extern "rust-call" fn call(&self, (lhs, rhs): (LHS, RHS)) -> Rec {
-        CompareCont(lhs, rhs, order::Eq)
-    }
+/// compare(p, q) ==> compare_cont(p, q, eq)
+ty! { #[inline]
+    fam Compare(P, Q) => Rec {
+        Compare(p, q) => CompareCont(p, q, order::Eq)
+    } let {
+        Rec = CompareCont(P, Q, order::Eq),
+    } for .[ Rec ] :[ P: Pos, Q: Pos ]
 }
