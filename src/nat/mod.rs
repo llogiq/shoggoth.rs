@@ -35,6 +35,8 @@ pub mod ops {
                    pub struct Compare;
     #[doc(hidden)] pub struct CompareCont;
     #[doc(hidden)] pub struct Eq;
+                   pub struct Pred;
+    #[doc(hidden)] pub struct PredDouble;
                    pub struct Succ;
 }
 
