@@ -13,115 +13,97 @@ use std;
 // Fn: Add /////////////////////////////////////////////////////////////////////
 
 // unwrap/rewrap
-impl<LHS: IsNat, RHS: IsNat, Rec: IsNat> Fn<(W<LHS>, W<RHS>)> for Add where
-    Add: Fn(LHS, RHS) -> Rec
-{
-    type Output = W<Rec>;
-    #[inline]
-    extern "rust-call" fn call(&self, (W(lhs), W(rhs)): (W<LHS>, W<RHS>)) -> W<Rec> {
-        W(Add(lhs, rhs))
-    }
+ty! { #[inline]
+    fam Add(W<M>, W<N>) => W<Rec> {
+        Add(W(m), W(n)) => W(Add(m, n))
+    } let {
+        Rec = Add(M, N),
+    } for :[ M: IsNat, N: IsNat, Rec: IsNat ]
 }
 
-/// `add(0, q) ==> q`
-impl<RHS: Pos> Fn<(_0, RHS)> for Add {
-    type Output = RHS;
-    #[inline]
-    extern "rust-call" fn call(&self, (_0 {}, rhs): (_0, RHS)) -> RHS {
-        rhs
+/// `add(0, 0) ==> 0`
+ty! { #[inline]
+    fam Add(_0  , _0  ) => _0 {
+        Add(_0{}, _0{}) => _0
     }
+}
+/// `add(0, q) ==> q`
+ty! { #[inline]
+    fam Add(_0  , Q) => Q {
+        Add(_0{}, q) => q
+    } for :[ Q: Pos ]
 }
 /// `add(p, 0) ==> p`
-impl<LHS: Pos> Fn<(LHS, _0)> for Add {
-    type Output = LHS;
-    #[inline]
-    extern "rust-call" fn call(&self, (lhs, _0 {}): (LHS, _0)) -> LHS {
-        lhs
-    }
+ty! { #[inline]
+    fam Add(P, _0  ) => P {
+        Add(p, _0{}) => p
+    } for :[ P: Pos ]
 }
 /// `add(1, 1) ==> 1:0`
-impl Fn<(_1, _1)> for Add {
-    type Output = (_1, _0);
-    #[inline]
-    extern "rust-call" fn call(&self, (_1 {}, _1 {}): (_1, _1)) -> (_1, _0) {
-        (_1, _0)
+ty! { #[inline]
+    fam Add(_1  , _1  ) => (_1, _0) {
+        Add(_1{}, _1{}) => (_1, _0)
     }
 }
 /// `add(1, q:0) ==> q:1`
-impl<RHS: Pos> Fn<(_1, (RHS, _0))> for Add {
-    type Output = (RHS, _1);
-    #[inline]
-    extern "rust-call" fn call(&self, (_1 {}, (rhs, _0 {})): (_1, (RHS, _0))) -> (RHS, _1) {
-        (rhs, _1)
-    }
+ty! { #[inline]
+    fam Add(_1  , (Q, _0  )) => (Q, _1) {
+        Add(_1{}, (q, _0{})) => (q, _1)
+    } for :[ Q: Pos ]
 }
 /// `add(1, q:1) ==> succ(q):0`
-impl<RHS: Pos, Rec> Fn<(_1, (RHS, _1))> for Add where
-    Succ: Fn(RHS) -> Rec
-{
-    type Output = (Rec, _0);
-    #[inline]
-    extern "rust-call" fn call(&self, (_1 {}, (rhs, _1 {})): (_1, (RHS, _1))) -> (Rec, _0) {
-        (Succ(rhs), _0)
-    }
+ty! { #[inline]
+    fam Add(_1  , (Q, _1  )) => (Rec    , _0) {
+        Add(_1{}, (q, _1{})) => (Succ(q), _0)
+    } let {
+        Rec = Succ(Q,),
+    } for .[ Rec ] :[ Q: Pos ]
 }
 /// `add(p:0, 1) ==> p:1`
-impl<LHS: Pos> Fn<((LHS, _0), _1)> for Add {
-    type Output = (LHS, _1);
-    #[inline]
-    extern "rust-call" fn call(&self, ((lhs, _0 {}), _1 {}): ((LHS, _0), _1)) -> (LHS, _1) {
-        (lhs, _1)
-    }
+ty! { #[inline]
+    fam Add((P, _0  ), _1  ) => (P, _1) {
+        Add((p, _0{}), _1{}) => (p, _1)
+    } for :[ P: Pos ]
 }
 /// `add(p:0, q:0) ==> add(p, q):0`
-impl<LHS: Pos, RHS: Pos, Rec> Fn<((LHS, _0), (RHS, _0))> for Add where
-    Add: Fn(LHS, RHS) -> Rec
-{
-    type Output = (Rec, _0);
-    #[inline]
-    extern "rust-call" fn call(&self, ((lhs, _0 {}), (rhs, _0 {})): ((LHS, _0), (RHS, _0))) -> (Rec, _0) {
-        (Add(lhs, rhs), _0)
-    }
+ty! { #[inline]
+    fam Add((P, _0  ), (Q, _0  )) => (Rec      , _0) {
+        Add((p, _0{}), (q, _0{})) => (Add(p, q), _0)
+    } let {
+        Rec = Add(P, Q),
+    } for .[ Rec ] :[ P: Pos, Q: Pos ]
 }
 /// `add(p:0, q:1) ==> add(p, q):1`
-impl<LHS: Pos, RHS: Pos, Rec> Fn<((LHS, _0), (RHS, _1))> for Add where
-    Add: Fn(LHS, RHS) -> Rec
-{
-    type Output = (Rec, _1);
-    #[inline]
-    extern "rust-call" fn call(&self, ((lhs, _0 {}), (rhs, _1 {})): ((LHS, _0), (RHS, _1))) -> (Rec, _1) {
-        (Add(lhs, rhs), _1)
-    }
+ty! { #[inline]
+    fam Add((P, _0  ), (Q, _1  )) => (Rec      , _1) {
+        Add((p, _0{}), (q, _1{})) => (Add(p, q), _1)
+    } let {
+        Rec = Add(P, Q),
+    } for .[ Rec ] :[ P: Pos, Q: Pos ]
 }
 /// `add(p:1, 1) ==> succ(p):0`
-impl<LHS: Pos, Rec> Fn<((LHS, _1), _1)> for Add where
-    Succ: Fn(LHS) -> Rec
-{
-    type Output = (Rec, _0);
-    #[inline]
-    extern "rust-call" fn call(&self, ((lhs, _1 {}), _1 {}): ((LHS, _1), _1)) -> (Rec, _0) {
-        (Succ(lhs), _0)
-    }
+ty! { #[inline]
+    fam Add((P, _1  ), _1  ) => (Rec    , _0) {
+        Add((p, _1{}), _1{}) => (Succ(p), _0)
+    } let {
+        Rec = Succ(P,),
+    } for .[ Rec ] :[ P: Pos ]
 }
 /// `add(p:1, q:0) ==> add(p, q):1`
-impl<LHS: Pos, RHS: Pos, Rec> Fn<((LHS, _1), (RHS, _0,))> for Add where
-    Add: Fn(LHS, RHS) -> Rec
-{
-    type Output = (Rec, _1);
-    #[inline]
-    extern "rust-call" fn call(&self, ((lhs, _1 {}), (rhs, _0 {})): ((LHS, _1), (RHS, _0))) -> (Rec, _1) {
-        (Add(lhs, rhs), _1)
-    }
+ty! { #[inline]
+    fam Add((P, _1  ), (Q, _0  )) => (Rec      , _1) {
+        Add((p, _1{}), (q, _0{})) => (Add(p, q), _1)
+    } let {
+        Rec = Add(P, Q),
+    } for .[ Rec ] :[ P: Pos, Q: Pos ]
 }
 /// `add(p:1, q:1) ==> add_carry(p, q):0`
-impl<LHS: Pos, RHS: Pos, Rec> Fn<((LHS, _1), (RHS, _1,))> for Add where
-    AddCarry: Fn(LHS, RHS) -> Rec
-{
-    type Output = (Rec, _0);
-    #[inline]
-    extern "rust-call" fn call(&self, ((lhs, _1 {}), (rhs, _1 {})): ((LHS, _1), (RHS, _1))) -> (Rec, _0) {
-        (AddCarry(lhs, rhs), _0)
-    }
+ty! { #[inline]
+    fam Add((P, _1  ), (Q, _1  )) => (Rec           , _0) {
+        Add((p, _1{}), (q, _1{})) => (AddCarry(p, q), _0)
+    } let {
+        Rec = AddCarry(P, Q),
+    } for .[ Rec ] :[ P: Pos, Q: Pos ]
 }
 
 // Infix: Add //////////////////////////////////////////////////////////////////
