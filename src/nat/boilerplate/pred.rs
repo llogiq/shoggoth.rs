@@ -13,39 +13,31 @@ use nat::ops::*;
 // Fn: Pred ////////////////////////////////////////////////////////////////////
 
 // unwrap/rewrap
-impl<N: IsNat, Rec: IsNat> Fn<(W<N>,)> for Pred where
-    Pred: Fn(N) -> Rec
-{
-    type Output = W<Rec>;
-    #[inline]
-    extern "rust-call" fn call(&self, (W(n),): (W<N>,)) -> W<Rec> {
-        W(Pred.call((n,)))
-    }
+ty! { #[inline]
+    fam Pred(W<N>,) => W<Rec> {
+        Pred(W(m),) => W(Pred(m))
+    } let {
+        Rec = Pred(N,),
+    } for :[ N: IsNat, Rec: IsNat ]
 }
 
 /// `pred(b) ==> 0`
-impl<B: Bit> Fn<(B,)> for Pred {
-    type Output = _0;
-    #[inline]
-    extern "rust-call" fn call(&self, (_b,): (B,)) -> _0 {
-        _0
-    }
+ty! { #[inline]
+    fam Pred(B,) => _0 {
+        Pred(_,) => _0
+    } for :[ B: Bit ]
 }
 /// `pred(p:0) ==> pred_double(p)`
-impl<P: Pos, Rec> Fn<((P, _0),)> for Pred where
-    PredDouble: Fn(P) -> Rec
-{
-    type Output = Rec;
-    #[inline]
-    extern "rust-call" fn call(&self, ((p, _0 {}),): ((P, _0),)) -> Rec {
-        PredDouble(p)
-    }
+ty! { #[inline]
+    fam Pred((P, _0  ),) => Rec {
+        Pred((p, _0{}),) => PredDouble(p)
+    } let {
+        Rec = PredDouble(P,),
+    } for .[ Rec ] :[ P: Pos ]
 }
 /// `pred(p:1) ==> p:0`
-impl<P: Pos> Fn<((P, _1),)> for Pred {
-    type Output = (P, _0);
-    #[inline]
-    extern "rust-call" fn call(&self, ((p, _1 {}),): ((P, _1),)) -> (P, _0) {
-        (p, _0)
-    }
+ty! { #[inline]
+    fam Pred((P, _1  ),) => (P, _0) {
+        Pred((p, _1{}),) => (p, _0)
+    } for :[ P: Pos ]
 }
