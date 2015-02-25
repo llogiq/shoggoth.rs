@@ -16,7 +16,7 @@ use std;
 
 // unwrap/rewrap
 impl<N: IsNat, Rec: Pos> Fn<(W<N>,)> for nat::ops::Succ where
-    nat::ops::Succ: Fn<(N,), Output = Rec>
+    nat::ops::Succ: Fn(N) -> Rec
 {
     type Output = W<Rec>;
     #[inline]
@@ -51,7 +51,7 @@ impl<LHS: Pos> Fn<((LHS, _0),)> for nat::ops::Succ {
 }
 /// `succ(p:1) ==> succ(p):0`
 impl<LHS: Pos, Rec> Fn<((LHS, _1),)> for nat::ops::Succ where
-    nat::ops::Succ: Fn<(LHS,), Output = Rec>,
+    nat::ops::Succ: Fn(LHS) -> Rec
 {
     type Output = (Rec, _0);
     #[inline]
@@ -64,7 +64,7 @@ impl<LHS: Pos, Rec> Fn<((LHS, _1),)> for nat::ops::Succ where
 
 // unwrap/rewrap
 impl<LHS: IsNat, RHS: IsNat, Rec: Pos> Fn<(W<LHS>, W<RHS>)> for nat::ops::Add where
-    nat::ops::Add: Fn<(LHS, RHS), Output = Rec>
+    nat::ops::Add: Fn(LHS, RHS) -> Rec
 {
     type Output = W<Rec>;
     #[inline]
@@ -107,7 +107,7 @@ impl<RHS: Pos> Fn<(_1, (RHS, _0))> for nat::ops::Add {
 }
 /// `add(1, q:1) ==> succ(q):0`
 impl<RHS: Pos, Rec> Fn<(_1, (RHS, _1))> for nat::ops::Add where
-    nat::ops::Succ: Fn<(RHS,), Output = Rec>
+    nat::ops::Succ: Fn(RHS) -> Rec
 {
     type Output = (Rec, _0);
     #[inline]
@@ -125,7 +125,7 @@ impl<LHS: Pos> Fn<((LHS, _0), _1)> for nat::ops::Add {
 }
 /// `add(p:0, q:0) ==> add(p, q):0`
 impl<LHS: Pos, RHS: Pos, Rec> Fn<((LHS, _0), (RHS, _0))> for nat::ops::Add where
-    nat::ops::Add: Fn<(LHS, RHS), Output = Rec>
+    nat::ops::Add: Fn(LHS, RHS) -> Rec
 {
     type Output = (Rec, _0);
     #[inline]
@@ -135,7 +135,7 @@ impl<LHS: Pos, RHS: Pos, Rec> Fn<((LHS, _0), (RHS, _0))> for nat::ops::Add where
 }
 /// `add(p:0, q:1) ==> add(p, q):1`
 impl<LHS: Pos, RHS: Pos, Rec> Fn<((LHS, _0), (RHS, _1))> for nat::ops::Add where
-    nat::ops::Add: Fn<(LHS, RHS), Output = Rec>
+    nat::ops::Add: Fn(LHS, RHS) -> Rec
 {
     type Output = (Rec, _1);
     #[inline]
@@ -145,7 +145,7 @@ impl<LHS: Pos, RHS: Pos, Rec> Fn<((LHS, _0), (RHS, _1))> for nat::ops::Add where
 }
 /// `add(p:1, 1) ==> succ(p):0`
 impl<LHS: Pos, Rec> Fn<((LHS, _1), _1)> for nat::ops::Add where
-    nat::ops::Succ: Fn<(LHS,), Output = Rec>
+    nat::ops::Succ: Fn(LHS) -> Rec
 {
     type Output = (Rec, _0);
     #[inline]
@@ -155,7 +155,7 @@ impl<LHS: Pos, Rec> Fn<((LHS, _1), _1)> for nat::ops::Add where
 }
 /// `add(p:1, q:0) ==> add(p, q):1`
 impl<LHS: Pos, RHS: Pos, Rec> Fn<((LHS, _1), (RHS, _0,))> for nat::ops::Add where
-    nat::ops::Add: Fn<(LHS, RHS), Output = Rec>
+    nat::ops::Add: Fn(LHS, RHS) -> Rec
 {
     type Output = (Rec, _1);
     #[inline]
@@ -165,7 +165,7 @@ impl<LHS: Pos, RHS: Pos, Rec> Fn<((LHS, _1), (RHS, _0,))> for nat::ops::Add wher
 }
 /// `add(p:1, q:1) ==> add_carry(p, q):0`
 impl<LHS: Pos, RHS: Pos, Rec> Fn<((LHS, _1), (RHS, _1,))> for nat::ops::Add where
-    nat::ops::AddCarry: Fn<(LHS, RHS), Output = Rec>
+    nat::ops::AddCarry: Fn(LHS, RHS) -> Rec
 {
     type Output = (Rec, _0);
     #[inline]
@@ -186,7 +186,7 @@ impl Fn<(_1, _1)> for nat::ops::AddCarry {
 }
 /// `add_carry(1, q:0) ==> succ(q):0`
 impl<RHS: Pos, Rec> Fn<(_1, (RHS, _0))> for nat::ops::AddCarry where
-    nat::ops::Succ: Fn<(RHS,), Output = Rec>
+    nat::ops::Succ: Fn(RHS) -> Rec
 {
     type Output = (Rec, _0);
     #[inline]
@@ -196,7 +196,7 @@ impl<RHS: Pos, Rec> Fn<(_1, (RHS, _0))> for nat::ops::AddCarry where
 }
 /// `add_carry(1, q:1) ==> succ(q):1`
 impl<RHS: Pos, Rec> Fn<(_1, (RHS, _1))> for nat::ops::AddCarry where
-    nat::ops::Succ: Fn<(RHS,), Output = Rec>
+    nat::ops::Succ: Fn(RHS) -> Rec
 {
     type Output = (Rec, _1);
     #[inline]
@@ -206,7 +206,7 @@ impl<RHS: Pos, Rec> Fn<(_1, (RHS, _1))> for nat::ops::AddCarry where
 }
 /// `add_carry(p:0, 1) ==> succ(p):0`
 impl<LHS: Pos, Rec> Fn<((LHS, _0), _1)> for nat::ops::AddCarry where
-    nat::ops::Succ: Fn<(LHS,), Output = Rec>
+    nat::ops::Succ: Fn(LHS) -> Rec
 {
     type Output = (Rec, _0);
     #[inline]
@@ -216,7 +216,7 @@ impl<LHS: Pos, Rec> Fn<((LHS, _0), _1)> for nat::ops::AddCarry where
 }
 /// `add_carry(p:0, q:0) ==> add(p, q):1`
 impl<LHS: Pos, RHS: Pos, Rec> Fn<((LHS, _0), (RHS, _0))> for nat::ops::AddCarry where
-    nat::ops::Add: Fn<(LHS, RHS), Output = Rec>
+    nat::ops::Add: Fn(LHS, RHS) -> Rec
 {
     type Output = (Rec, _1);
     #[inline]
@@ -226,7 +226,7 @@ impl<LHS: Pos, RHS: Pos, Rec> Fn<((LHS, _0), (RHS, _0))> for nat::ops::AddCarry 
 }
 /// `add_carry(p:0, q:1) ==> add_carry(p, q):0`
 impl<LHS: Pos, RHS: Pos, Rec> Fn<((LHS, _0), (RHS, _1))> for nat::ops::AddCarry where
-    nat::ops::AddCarry: Fn<(LHS, RHS), Output = Rec>
+    nat::ops::AddCarry: Fn(LHS, RHS) -> Rec
 {
     type Output = (Rec, _0);
     #[inline]
@@ -236,7 +236,7 @@ impl<LHS: Pos, RHS: Pos, Rec> Fn<((LHS, _0), (RHS, _1))> for nat::ops::AddCarry 
 }
 /// `add_carry(p:1, 1) ==> succ(p):1`
 impl<LHS: Pos, Rec> Fn<((LHS, _1), _1)> for nat::ops::AddCarry where
-    nat::ops::Succ: Fn<(LHS,), Output = Rec>
+    nat::ops::Succ: Fn(LHS) -> Rec
 {
     type Output = (Rec, _1);
     #[inline]
@@ -269,7 +269,7 @@ impl<LHS: Pos, RHS: Pos, Rec> Fn<((LHS, _1), (RHS, _1,))> for nat::ops::AddCarry
 
 // unwrap/rewrap
 impl<M: IsNat, N: IsNat, Rec: IsNat> std::ops::Add<W<N>> for W<M> where
-    nat::ops::Add: Fn<(M, N), Output = Rec>
+    nat::ops::Add: Fn(M, N) -> Rec
 {
     type Output = W<Rec>;
     #[inline]
@@ -306,7 +306,7 @@ impl<LHS: Pos, K> Fn<((LHS, _0), _1, K)> for nat::ops::CompareCont {
 }
 // `compare_cont(p:0, q:0, k) ==> compare_cont(p, q, k)`
 impl<LHS: Pos, RHS: Pos, K, Rec> Fn<((LHS, _0), (RHS, _0), K)> for nat::ops::CompareCont where
-    nat::ops::CompareCont: Fn<(LHS, RHS, K), Output = Rec>
+    nat::ops::CompareCont: Fn(LHS, RHS, K) -> Rec
 {
     type Output = Rec;
     #[inline]
@@ -316,7 +316,7 @@ impl<LHS: Pos, RHS: Pos, K, Rec> Fn<((LHS, _0), (RHS, _0), K)> for nat::ops::Com
 }
 // `compare_cont(p:0, q:1, k) ==> compare_cont(p, q, lt)`
 impl<LHS: Pos, RHS: Pos, K, Rec> Fn<((LHS, _0), (RHS, _1), K)> for nat::ops::CompareCont where
-    nat::ops::CompareCont: Fn<(LHS, RHS, order::LT), Output = Rec>
+    nat::ops::CompareCont: Fn(LHS, RHS, order::LT) -> Rec
 {
     type Output = Rec;
     #[inline]
@@ -334,7 +334,7 @@ impl<LHS: Pos, K> Fn<((LHS, _1), _1, K)> for nat::ops::CompareCont {
 }
 // `compare_cont(p:1, q:0, k) ==> compare_cont(p, q, gt)`
 impl<LHS: Pos, RHS: Pos, K, Rec> Fn<((LHS, _1), (RHS, _0), K)> for nat::ops::CompareCont where
-    nat::ops::CompareCont: Fn<(LHS, RHS, order::GT), Output = Rec>
+    nat::ops::CompareCont: Fn(LHS, RHS, order::GT) -> Rec
 {
     type Output = Rec;
     #[inline]
@@ -344,7 +344,7 @@ impl<LHS: Pos, RHS: Pos, K, Rec> Fn<((LHS, _1), (RHS, _0), K)> for nat::ops::Com
 }
 // `compare_cont(p:1, q:1, k) ==> compare_cont(p, q, k)`
 impl<LHS: Pos, RHS: Pos, K, Rec> Fn<((LHS, _1), (RHS, _1), K)> for nat::ops::CompareCont where
-    nat::ops::CompareCont: Fn<(LHS, RHS, K), Output = Rec>
+    nat::ops::CompareCont: Fn(LHS, RHS, K) -> Rec
 {
     type Output = Rec;
     #[inline]
@@ -356,7 +356,7 @@ impl<LHS: Pos, RHS: Pos, K, Rec> Fn<((LHS, _1), (RHS, _1), K)> for nat::ops::Com
 // Fn: Compare /////////////////////////////////////////////////////////////////
 
 impl<LHS: IsNat, RHS: IsNat, Rec> Fn<(W<LHS>, W<RHS>)> for nat::ops::Compare where
-    nat::ops::Compare: Fn<(LHS, RHS), Output = Rec>
+    nat::ops::Compare: Fn(LHS, RHS) -> Rec
 {
     type Output = Rec;
     #[inline]
@@ -387,7 +387,7 @@ impl<LHS: Pos> Fn<(LHS, _0)> for nat::ops::Compare {
     }
 }
 impl<LHS: Pos, RHS: Pos, Rec> Fn<(LHS, RHS)> for nat::ops::Compare where
-    nat::ops::CompareCont: Fn<(LHS, RHS, order::Eq), Output = Rec>
+    nat::ops::CompareCont: Fn(LHS, RHS, order::Eq) -> Rec
 {
     type Output = Rec;
     #[inline]
