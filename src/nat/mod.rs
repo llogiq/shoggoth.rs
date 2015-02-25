@@ -7,7 +7,7 @@ use reflect::{
     Reifies,
 };
 use std::marker::{
-    PhantomFn,
+    MarkerTrait,
 };
 
 mod boilerplate;
@@ -17,16 +17,16 @@ mod boilerplate;
 pub struct W<N: IsNat>(pub N);
 
 // Classify valid binary nats (positive)
-pub trait Pos: PhantomFn<Self> + IsNat {}
+pub trait Pos: MarkerTrait + IsNat {}
 impl Pos for _1 {}
 impl<P: Pos, B: Bit> Pos for (P, B) {}
 
-pub trait IsNat: PhantomFn<Self> {}
+pub trait IsNat: MarkerTrait {}
 impl IsNat for _0 {}
 impl<P: Pos> IsNat for P {}
 
 // Classify valid binary nats (with zero)
-pub trait Nat: PhantomFn<Self> + Reifies<Output = usize> {}
+pub trait Nat: MarkerTrait + Reifies<Output = usize> {}
 impl<N: IsNat + Reifies<Output = usize>> Nat for W<N> {}
 
 pub mod ops {
