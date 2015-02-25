@@ -30,17 +30,15 @@ pub trait Nat: MarkerTrait + Reifies<Output = usize> {}
 impl<N: IsNat + Reifies<Output = usize>> Nat for W<N> {}
 
 pub mod ops {
-    pub struct Add;
+                   pub struct Add;
     #[doc(hidden)] pub struct AddCarry;
-    pub struct Compare;
+                   pub struct Compare;
     #[doc(hidden)] pub struct CompareCont;
-    pub struct Eq;
-    pub struct Succ;
+    #[doc(hidden)] pub struct Eq;
+                   pub struct Succ;
 }
 
-impl<N: IsNat> Reifies for W<N> where
-    N: Reifies<Output = usize>
-{
+impl<N: IsNat> Reifies for W<N> where N: Reifies<Output = usize> {
     type Output = usize;
     #[inline(always)]
     fn reflect(&self) -> usize {

@@ -12,7 +12,7 @@ use nat::{
 use order;
 use std;
 
-// Fn: Succ ///////////////////////////////////////////////////////////////////
+// Fn: Succ ////////////////////////////////////////////////////////////////////
 
 // unwrap/rewrap
 impl<N: IsNat, Rec: Pos> Fn<(W<N>,)> for nat::ops::Succ where
@@ -60,7 +60,7 @@ impl<LHS: Pos, Rec> Fn<((LHS, _1),)> for nat::ops::Succ where
     }
 }
 
-// Fn: Add ////////////////////////////////////////////////////////////////////
+// Fn: Add /////////////////////////////////////////////////////////////////////
 
 // unwrap/rewrap
 impl<LHS: IsNat, RHS: IsNat, Rec: Pos> Fn<(W<LHS>, W<RHS>)> for nat::ops::Add where
@@ -143,7 +143,7 @@ impl<LHS: Pos, RHS: Pos, Rec> Fn<((LHS, _0), (RHS, _1))> for nat::ops::Add where
         (nat::ops::Add(lhs, rhs), _1)
     }
 }
-                   /// `add(p:1, 1) ==> succ(p):0`
+/// `add(p:1, 1) ==> succ(p):0`
 impl<LHS: Pos, Rec> Fn<((LHS, _1), _1)> for nat::ops::Add where
     nat::ops::Succ: Fn<(LHS,), Output = Rec>
 {
@@ -174,7 +174,7 @@ impl<LHS: Pos, RHS: Pos, Rec> Fn<((LHS, _1), (RHS, _1,))> for nat::ops::Add wher
     }
 }
 
-// Fn: AddCarry ///////////////////////////////////////////////////////////////
+// Fn: AddCarry ////////////////////////////////////////////////////////////////
 
 /// `add_carry(1, 1) ==> 1:1`
 impl Fn<(_1, _1)> for nat::ops::AddCarry {
@@ -265,7 +265,7 @@ impl<LHS: Pos, RHS: Pos, Rec> Fn<((LHS, _1), (RHS, _1,))> for nat::ops::AddCarry
     }
 }
 
-// Infix: Add /////////////////////////////////////////////////////////////////
+// Infix: Add //////////////////////////////////////////////////////////////////
 
 // unwrap/rewrap
 impl<M: IsNat, N: IsNat, Rec: IsNat> std::ops::Add<W<N>> for W<M> where
