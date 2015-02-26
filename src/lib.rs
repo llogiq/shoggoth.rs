@@ -1,3 +1,4 @@
+#![allow(unused_features)]
 #![feature(core)]
 #![feature(on_unimplemented)]
 #![feature(plugin)]
