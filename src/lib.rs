@@ -12,10 +12,10 @@
 
 #[macro_use] mod macros;
 
-pub mod bit;
+pub mod numerics;
+
 pub mod impls;
 pub mod list;
-pub mod nat;
 pub mod ops;
 pub mod order;
 pub mod reflect;
