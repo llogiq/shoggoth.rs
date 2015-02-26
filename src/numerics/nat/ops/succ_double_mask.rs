@@ -4,7 +4,6 @@ use bit::{
 use nat::{
     Pos,
 };
-use nat::ops::*;
 
 // Fn: SuccDoubleMask //////////////////////////////////////////////////////////
 

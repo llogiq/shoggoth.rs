@@ -6,7 +6,6 @@ use bit::{
 use nat::{
     Pos,
 };
-use nat::ops::*;
 use order;
 
 // Fn: CompareCont /////////////////////////////////////////////////////////////
