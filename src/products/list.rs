@@ -1,5 +1,3 @@
-pub mod diff;
-
 #[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
 pub struct Nil;
 

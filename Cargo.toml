@@ -10,6 +10,8 @@ license = "MIT"
 readme = "README.md"
 repository = "https://github.com/epsilonz/shoggoth.rs"
 
+[features]
+products = []
 [lib]
 name = "shoggoth"
 path = "src/lib.rs"

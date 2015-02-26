@@ -13,6 +13,8 @@
 #[macro_use] mod macros;
 
 pub mod numerics;
+
+#[cfg(feature = "products")]
 pub mod products;
 
 pub mod order;

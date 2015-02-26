@@ -1,4 +1,4 @@
-use list::{
+use products::list::{
     List,
     self,
 };
