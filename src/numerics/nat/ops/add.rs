@@ -1,12 +1,9 @@
-use bit::{
+use numerics::bit::{
     _0,
     _1,
 };
-use nat::{
-    IsNat,
-    Pos,
-    W,
-};
+use numerics::nat::*;
+use numerics::nat::ops::*;
 use std;
 
 // Fn: Add /////////////////////////////////////////////////////////////////////

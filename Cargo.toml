@@ -11,7 +11,11 @@ readme = "README.md"
 repository = "https://github.com/epsilonz/shoggoth.rs"
 
 [features]
+
+numerics = []
 products = []
+reflection = []
+
 [lib]
 name = "shoggoth"
 path = "src/lib.rs"

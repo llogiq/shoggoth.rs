@@ -1,7 +1,3 @@
-use reflect::{
-    Reifies,
-};
-use std;
 use std::marker::{
     PhantomFn,
 };
@@ -18,24 +14,31 @@ impl Comparison for Eq {}
 impl Comparison for GT {}
 impl Comparison for LT {}
 
-impl Reifies for Eq {
-    type Output = std::cmp::Ordering;
-    #[inline(always)]
-    fn reflect(&self) -> std::cmp::Ordering {
-        std::cmp::Ordering::Equal
+#[cfg(feature = "reflection")]
+mod reflection {
+    use reflect::Reifies;
+    use std;
+    use super::*;
+
+    impl Reifies for Eq {
+        type Output = std::cmp::Ordering;
+        #[inline(always)]
+        fn reflect(&self) -> std::cmp::Ordering {
+            std::cmp::Ordering::Equal
+        }
     }
-}
-impl Reifies for GT {
-    type Output = std::cmp::Ordering;
-    #[inline(always)]
-    fn reflect(&self) -> std::cmp::Ordering {
-        std::cmp::Ordering::Greater
+    impl Reifies for GT {
+        type Output = std::cmp::Ordering;
+        #[inline(always)]
+        fn reflect(&self) -> std::cmp::Ordering {
+            std::cmp::Ordering::Greater
+        }
     }
-}
-impl Reifies for LT {
-    type Output = std::cmp::Ordering;
-    #[inline(always)]
-    fn reflect(&self) -> std::cmp::Ordering {
-        std::cmp::Ordering::Less
+    impl Reifies for LT {
+        type Output = std::cmp::Ordering;
+        #[inline(always)]
+        fn reflect(&self) -> std::cmp::Ordering {
+            std::cmp::Ordering::Less
+        }
     }
 }

@@ -1,9 +1,6 @@
-use bit::{
-    _0,
-};
-use nat::{
-    Pos,
-};
+use numerics::bit::*;
+use numerics::nat::*;
+use numerics::nat::ops::*;
 
 // Fn: SubCont /////////////////////////////////////////////////////////////////
 

@@ -1,11 +1,6 @@
-use bit::{
-    _0,
-};
-use nat::{
-    IsNat,
-    Pos,
-    W,
-};
+use numerics::bit::*;
+use numerics::nat::*;
+use numerics::nat::ops::*;
 use order;
 
 // Fn: Compare /////////////////////////////////////////////////////////////////

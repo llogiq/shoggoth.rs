@@ -1,5 +1,5 @@
 pub mod mask {
-    use nat::{
+    use numerics::nat::{
         Pos,
     };
     use std::marker::{

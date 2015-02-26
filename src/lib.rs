@@ -12,10 +12,14 @@
 
 #[macro_use] mod macros;
 
+#[cfg(feature = "numerics")]
 pub mod numerics;
 
 #[cfg(feature = "products")]
 pub mod products;
 
-pub mod order;
+#[cfg(feature = "reflection")]
 pub mod reflect;
+
+pub mod bool;
+pub mod order;

@@ -1,10 +1,6 @@
-use bit::{
-    Bit,
-    _1,
-};
-use nat::{
-    Pos,
-};
+use numerics::bit::*;
+use numerics::nat::*;
+use numerics::nat::ops::*;
 
 // Fn: PredMask ////////////////////////////////////////////////////////////////
 
