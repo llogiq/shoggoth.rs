@@ -13,9 +13,7 @@
 #[macro_use] mod macros;
 
 pub mod numerics;
+pub mod products;
 
-pub mod impls;
-pub mod list;
-pub mod ops;
 pub mod order;
 pub mod reflect;
