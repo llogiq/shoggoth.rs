@@ -1,3 +1,4 @@
+#[macro_use] mod bit;
 #[macro_use] mod fam;
 #[macro_use] mod list;
 #[macro_use] mod phantom;
