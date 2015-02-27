@@ -12,7 +12,8 @@ repository = "https://github.com/epsilonz/shoggoth.rs"
 
 [features]
 
-numerics = []
+all = ["numerics", "products", "reflection"]
+numerics = ["reflection"]
 products = []
 reflection = []
 

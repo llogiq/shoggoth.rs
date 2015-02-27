@@ -1,9 +1,6 @@
-use numerics::{
-    bit,
-};
-use std::marker::{
-    MarkerTrait,
-};
+use numerics::bit::*;
+use std::marker::*;
+use reflect::*;
 
 pub mod ops;
 
@@ -13,11 +10,11 @@ pub struct W<N: IsNat>(pub N);
 
 // Classify valid binary nats (positive)
 pub trait Pos: MarkerTrait + IsNat {}
-impl Pos for bit::_1 {}
-impl<P: Pos, B: bit::Bit> Pos for (P, B) {}
+impl Pos for _1 {}
+impl<P: Pos, B: Bit> Pos for (P, B) {}
 
 pub trait IsNat: MarkerTrait {}
-impl IsNat for bit::_0 {}
+impl IsNat for _0 {}
 impl<P: Pos> IsNat for P {}
 
 // Classify valid binary nats (with zero)
@@ -26,10 +23,8 @@ impl<N: IsNat + Reifies<Output = usize>> Nat for W<N> {}
 
 #[cfg(feature = "reflection")]
 mod reflection {
-    use numerics::{
-        bit,
-    };
-    use reflect::Reifies;
+    use numerics::bit::*;
+    use reflect::*;
     use super::*;
 
     impl<N: IsNat> Reifies for W<N> where N: Reifies<Output = usize> {
@@ -39,21 +34,21 @@ mod reflection {
             self.0.reflect()
         }
     }
-    impl Reifies for bit::_0 {
+    impl Reifies for _0 {
         type Output = usize;
         #[inline(always)]
         fn reflect(&self) -> usize {
             0
         }
     }
-    impl Reifies for bit::_1 {
+    impl Reifies for _1 {
         type Output = usize;
         #[inline(always)]
         fn reflect(&self) -> usize {
             1
         }
     }
-    impl<P: Pos, B: bit::Bit> Reifies for (P, B) where
+    impl<P: Pos, B: Bit> Reifies for (P, B) where
         P: Reifies<Output = usize>,
         B: Reifies<Output = usize>,
     {
