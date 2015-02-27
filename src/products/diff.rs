@@ -130,15 +130,11 @@ impl<Xf: Diff + EvalOp<list::Nil>> ToList for Xf {
 
 #[cfg(test)]
 mod test {
-    use list::{
+    use products::list::{
         List,
         self,
     };
-    use list::diff::{
-        Diff,
-        ToDiff,
-        ToList,
-    };
+    use super::*;
 
     #[test]
     fn diff() {
