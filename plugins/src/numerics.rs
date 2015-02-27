@@ -25,8 +25,8 @@ fn crate_prefix_path<'a, 'cx>(
     let mut res = String::new();
     if ecx.ecfg.crate_name.as_slice() != SHOGGOTH_CRATE_NAME {
         res.push_str(SHOGGOTH_CRATE_NAME);
-        res.push_str("::");
     }
+    res.push_str("::");
     res.push_str(path);
     res
 }
