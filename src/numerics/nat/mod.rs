@@ -63,11 +63,7 @@ mod reflection {
 
 #[cfg(test)]
 mod test {
-    use bit;
-    use nat;
-    use reflect::{
-        Reifies,
-    };
+    use reflect::*;
 
     // FIXME: add algebraic tests
 
@@ -78,7 +74,7 @@ mod test {
 
     #[test]
     fn compare() {
-        println!("{:?}", nat::ops::Compare.call((nat!(10), nat!(20))));
+        println!("{:?}", ::numerics::nat::ops::Compare.call((nat!(10), nat!(20))));
     }
 
     #[test]
