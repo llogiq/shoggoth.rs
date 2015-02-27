@@ -22,5 +22,6 @@ pub mod products;
 #[cfg(feature = "reflection")]
 pub mod reflect;
 
+pub mod bit;
 pub mod bool;
 pub mod order;

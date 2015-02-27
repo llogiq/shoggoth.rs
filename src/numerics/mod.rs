@@ -1,2 +1,2 @@
-pub mod bit;
+pub mod fixed;
 pub mod nat;

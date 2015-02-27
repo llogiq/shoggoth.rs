@@ -40,8 +40,8 @@ fn nat_str<'cx>(
     mut num: u64,
        mode: Mode,
 ) -> String {
-    let nat_path = crate_prefix_path(ecx, "numerics::nat::W");
-    let bit_path = crate_prefix_path(ecx, "numerics::bit::_");
+    let nat_path = crate_prefix_path(ecx, "numerics::nat::bin::W");
+    let bit_path = crate_prefix_path(ecx, "bit::_");
     let delims = match mode {
         Mode::Tm => { ("(", ")") }
         Mode::Ty => { ("<", ">") }

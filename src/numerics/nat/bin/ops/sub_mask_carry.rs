@@ -1,6 +1,6 @@
-use numerics::bit::*;
-use numerics::nat::*;
-use numerics::nat::ops::*;
+use bit::*;
+use numerics::nat::bin::*;
+use numerics::nat::bin::ops::*;
 
 // Fn: SubMaskCarry ////////////////////////////////////////////////////////////
 

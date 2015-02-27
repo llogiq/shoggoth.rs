@@ -1,10 +1,6 @@
 pub mod mask {
-    use numerics::nat::{
-        Pos,
-    };
-    use std::marker::{
-        MarkerTrait,
-    };
+    use numerics::nat::bin::*;
+    use std::marker::*;
 
     #[doc(hidden)] pub struct IsNul;
     #[doc(hidden)] pub struct IsNeg;

@@ -1,9 +1,6 @@
-use numerics::bit::{
-    _0,
-    _1,
-};
-use numerics::nat::*;
-use numerics::nat::ops::*;
+use bit::*;
+use numerics::nat::bin::*;
+use numerics::nat::bin::ops::*;
 use std;
 
 // Fn: Add /////////////////////////////////////////////////////////////////////
