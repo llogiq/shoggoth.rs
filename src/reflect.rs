@@ -11,7 +11,6 @@ impl<A, Rec> Reifies for PhantomData<A> where
     A: Reifies<Output = Rec>
 {
     type Output = Rec;
-    #[inline(always)]
     fn reflect(&self) -> Rec {
         unsafe { ::std::mem::transmute::<&PhantomData<A>, &A>(self).reflect() }
     }

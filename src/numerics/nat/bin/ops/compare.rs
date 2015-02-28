@@ -6,7 +6,7 @@ use order;
 // Fn: Compare /////////////////////////////////////////////////////////////////
 
 // unwrap
-ty! { #[inline]
+ty! {
     fam Compare(W<M>, W<N>) => Rec {
         Compare(W(m), W(n)) => Compare(m, n)
     } let {
@@ -15,25 +15,25 @@ ty! { #[inline]
 }
 
 /// compare(0, 0) ==> eq
-ty! { #[inline]
+ty! {
     fam Compare(_0  , _0  ) => order::Eq {
         Compare(_0{}, _0{}) => order::Eq
     }
 }
 /// compare(0, q) ==> lt
-ty! { #[inline]
+ty! {
     fam Compare(_0  , Q) => order::LT {
         Compare(_0{}, _) => order::LT
     } for :[ Q: Pos ]
 }
 /// compare(p, 0) ==> gt
-ty! { #[inline]
+ty! {
     fam Compare(P, _0  ) => order::GT {
         Compare(_, _0{}) => order::GT
     } for :[ P: Pos ]
 }
 /// compare(p, q) ==> compare_cont(p, q, eq)
-ty! { #[inline]
+ty! {
     fam Compare(P, Q) => Rec {
         Compare(p, q) => CompareCont(p, q, order::Eq)
     } let {

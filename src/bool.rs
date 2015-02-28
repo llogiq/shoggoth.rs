@@ -10,14 +10,12 @@ mod reflection {
 
     impl Reifies for FF {
         type Output = bool;
-        #[inline]
         fn reflect(&self) -> bool {
             false
         }
     }
     impl Reifies for TT {
         type Output = bool;
-        #[inline]
         fn reflect(&self) -> bool {
             true
         }

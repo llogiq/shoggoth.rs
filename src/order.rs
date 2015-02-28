@@ -21,21 +21,18 @@ mod reflection {
 
     impl Reifies for Eq {
         type Output = std::cmp::Ordering;
-        #[inline(always)]
         fn reflect(&self) -> std::cmp::Ordering {
             std::cmp::Ordering::Equal
         }
     }
     impl Reifies for GT {
         type Output = std::cmp::Ordering;
-        #[inline(always)]
         fn reflect(&self) -> std::cmp::Ordering {
             std::cmp::Ordering::Greater
         }
     }
     impl Reifies for LT {
         type Output = std::cmp::Ordering;
-        #[inline(always)]
         fn reflect(&self) -> std::cmp::Ordering {
             std::cmp::Ordering::Less
         }

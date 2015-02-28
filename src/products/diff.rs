@@ -14,20 +14,17 @@ pub type Cons<X, Xf> = Append<Id<list::Single<X>>, Xf>;
 pub type Snoc<Xf, X> = Append<Xf, Id<list::Single<X>>>;
 pub type Single<X> = Id<list::Single<X>>;
 
-#[inline]
 pub fn nil() -> Nil {
     Id(list::nil())
 }
 
 pub trait Diff {
-    #[inline]
     fn cons<X>(self, x: X) -> Cons<X, Self> where
         Self: Sized,
     {
         Append::<Id<list::Cons<_, _>>, _>(Id(list::ToSingleton::single(x)), self)
     }
 
-    #[inline]
     fn snoc<X>(self, x: X) -> Snoc<Self, X> where
         Self: Sized,
     {
@@ -35,7 +32,6 @@ pub trait Diff {
     }
 }
 impl<Xs: List> Diff for Id<Xs> {
-    #[inline]
     fn cons<X>(self, x: X) -> Cons<X, Self> where
         Self: Sized,
     {
@@ -46,7 +42,6 @@ impl<Xf: Diff, Yf: Diff> Diff for Append<Xf, Yf> {
 }
 
 pub trait ToDiff: List {
-    #[inline]
     fn diff(self) -> Id<Self> where
         Self: Sized,
     {
@@ -58,8 +53,6 @@ impl<Xs: List> ToDiff for Xs {
 
 impl<Xs: List, Yf: Diff> ::std::ops::Add<Yf> for Id<Xs> {
     type Output = Append<Id<Xs>, Yf>;
-
-    #[inline]
     fn add(self, rhs: Yf) -> Append<Id<Xs>, Yf> {
         Append(self, rhs)
     }
@@ -67,8 +60,6 @@ impl<Xs: List, Yf: Diff> ::std::ops::Add<Yf> for Id<Xs> {
 
 impl<Xf: Diff, Yf: Diff, Zf: Diff> ::std::ops::Add<Zf> for Append<Xf, Yf> {
     type Output = Append<Append<Xf, Yf>, Zf>;
-
-    #[inline]
     fn add(self, rhs: Zf) -> Append<Append<Xf, Yf>, Zf> {
         Append(self, rhs)
     }
@@ -78,7 +69,6 @@ pub type Eval<Xf, Ys> = <Xf as EvalOp<Ys>>::Output;
 
 pub trait EvalOp<In: List>: Diff {
     type Output;
-
     fn eval(self, acc: In) -> Self::Output;
 }
 
@@ -89,8 +79,6 @@ impl<
     Xs: ::std::ops::Add<Ys>,
 {
     type Output = list::Append<Xs, Ys>;
-
-    #[inline]
     fn eval(self, acc: Ys) -> list::Append<Xs, Ys> {
         self.0 + acc
     }
@@ -106,8 +94,6 @@ impl<
     Yf: EvalOp<Zs, Output = Rec>,
 {
     type Output = Eval<Xf, Rec>;
-
-    #[inline]
     fn eval(self, acc: Zs) -> Eval<Xf, Rec> {
         (self.0).eval((self.1).eval(acc))
     }
@@ -115,8 +101,6 @@ impl<
 
 pub trait ToList: Diff + EvalOp<list::Nil> {
     type Output;
-
-    #[inline]
     fn list(self) -> Eval<Self, list::Nil> where
         Self: Sized,
     {

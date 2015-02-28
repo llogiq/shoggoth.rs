@@ -5,7 +5,7 @@ use numerics::nat::bin::ops::*;
 // Fn: Pred ////////////////////////////////////////////////////////////////////
 
 // unwrap/rewrap
-ty! { #[inline]
+ty! {
     fam Pred(W<N>,) => W<Rec> {
         Pred(W(m),) => W(Pred(m))
     } let {
@@ -14,13 +14,13 @@ ty! { #[inline]
 }
 
 /// `pred(b) ==> 0`
-ty! { #[inline]
+ty! {
     fam Pred(B,) => _0 {
         Pred(_,) => _0
     } for :[ B: Bit ]
 }
 /// `pred(p:0) ==> pred_double(p)`
-ty! { #[inline]
+ty! {
     fam Pred((P, _0  ),) => Rec {
         Pred((p, _0{}),) => PredDouble(p)
     } let {
@@ -28,7 +28,7 @@ ty! { #[inline]
     } for .[ Rec ] :[ P: Pos ]
 }
 /// `pred(p:1) ==> p:0`
-ty! { #[inline]
+ty! {
     fam Pred((P, _1  ),) => (P, _0) {
         Pred((p, _1{}),) => (p, _0)
     } for :[ P: Pos ]

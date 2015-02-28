@@ -4,14 +4,12 @@ pub struct Nil;
 #[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
 pub struct Cons<H, T: List>(pub H, pub T);
 
-#[inline]
 pub fn nil() -> Nil {
     Nil
 }
 
 #[rustc_on_unimplemented = "`{Self}` is not a heterogeneous list"]
 pub trait List {
-    #[inline]
     fn cons<X>(self, x: X) -> Cons<X, Self> where Self: Sized {
         Cons(x, self)
     }
@@ -23,8 +21,6 @@ impl<H, T: List> List for Cons<H, T> {
 
 impl<Ys: List> ::std::ops::Add<Ys> for Nil {
     type Output = Ys;
-
-    #[inline]
     fn add(self, rhs: Ys) -> Ys {
         rhs
     }
@@ -38,8 +34,6 @@ impl<
     Xs: ::std::ops::Add<Ys, Output = Rec>,
 {
     type Output = Cons<X, Rec>;
-
-    #[inline]
     fn add(self, rhs: Ys) -> Cons<X, Rec> {
         Cons(self.0, self.1 + rhs)
     }
@@ -51,8 +45,6 @@ pub type Single<X> = Cons<X, Nil>;
 
 pub trait ToSingleton {
     type Out: List = Cons<Self, Nil>;
-
-    #[inline]
     fn single(self) -> Cons<Self, Nil> where
         Self: Sized,
     {

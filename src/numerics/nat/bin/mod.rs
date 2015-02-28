@@ -28,21 +28,18 @@ mod reflection {
 
     impl<N: IsNat> Reifies for W<N> where N: Reifies<Output = usize> {
         type Output = usize;
-        #[inline(always)]
         fn reflect(&self) -> usize {
             self.0.reflect()
         }
     }
     impl Reifies for _0 {
         type Output = usize;
-        #[inline(always)]
         fn reflect(&self) -> usize {
             0
         }
     }
     impl Reifies for _1 {
         type Output = usize;
-        #[inline(always)]
         fn reflect(&self) -> usize {
             1
         }
@@ -52,7 +49,6 @@ mod reflection {
         B: Reifies<Output = usize>,
     {
         type Output = usize;
-        #[inline(always)]
         fn reflect(&self) -> usize {
             let &(ref p, ref b) = self;
             2 * p.reflect() + b.reflect()
