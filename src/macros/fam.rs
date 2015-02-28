@@ -1,139 +1,169 @@
 #[macro_export] macro_rules! ty {
-    // - let; - [.]; - [:];
     {
-        $(#[ $attr:meta ])*
-        // fam $Op:ident ($($Args:ty),*) -> $Output:ty {
-        fam $Op:ident $Args:ty  => $Output:ty {
-            $op:ident $args:pat => $output:expr
-        }
+        fam $($rest:tt)*
     } => {
-        impl Fn<$Args> for $Op {
+        parse_fam_init! {
+            { $($rest)* }
+        }
+    };
+}
+
+macro_rules! parse_fam_init {
+    {
+        { $($rest:tt)* }
+    } => {
+        parse_fam_fun_type! {
+            { $($rest)* }
+        }
+    };
+}
+
+macro_rules! parse_fam_fun_type {
+    {
+        { :[ $($fun_type:tt)+ ] $($rest:tt)* }
+    } => {
+        parse_fam_fun_body! {
+            { $($rest)* }
+            { $($fun_type)+ }
+        }
+    };
+}
+
+macro_rules! parse_fam_fun_body {
+    {
+        { =[ $($fun_body:tt)+ ] $($rest:tt)* }
+        { $($fun_type:tt)* }
+    } => {
+        parse_fam_let! {
+            { $($rest)* }
+            { $($fun_type)+ }
+            { $($fun_body)* }
+        }
+    };
+}
+
+macro_rules! parse_fam_let {
+    {
+        { let { $($equations:tt)* } $($rest:tt)* }
+        { $($fun_type:tt)* }
+        { $($fun_body:tt)* }
+    } => {
+        parse_fam_for! {
+            { $($rest)* }
+            { $($fun_type)+ }
+            { $($fun_body)* }
+            { $($equations)* }
+        }
+    };
+    {
+        { $($rest:tt)* }
+        { $($fun_type:tt)* }
+        { $($fun_body:tt)* }
+    } => {
+        parse_fam_for! {
+            { $($rest)* }
+            { $($fun_type)+ }
+            { $($fun_body)* }
+            {}
+        }
+    };
+}
+
+macro_rules! parse_fam_for {
+    {
+        { for { $($variables:tt)* } $($rest:tt)* }
+        { $($fun_type:tt)* }
+        { $($fun_body:tt)* }
+        { $($equations:tt)* }
+    } => {
+        parse_fam_where! {
+            { $($rest)* }
+            { $($fun_type)+ }
+            { $($fun_body)* }
+            { $($equations)* }
+            { $($variables)* }
+        }
+    };
+    {
+        { $($rest:tt)* }
+        { $($fun_type:tt)* }
+        { $($fun_body:tt)* }
+        { $($equations:tt)* }
+    } => {
+        parse_fam_where! {
+            { $($rest)* }
+            { $($fun_type)+ }
+            { $($fun_body)* }
+            { $($equations)* }
+            {}
+        }
+    };
+}
+
+macro_rules! parse_fam_where {
+    {
+        { where { $($constraints:tt)* } $($rest:tt)* }
+        { $($fun_type:tt)* }
+        { $($fun_body:tt)* }
+        { $($equations:tt)* }
+        { $($variables:tt)* }
+    } => {
+        parse_fam! {
+            { $($rest)* }
+            { $($fun_type)+ }
+            { $($fun_body)* }
+            { $($equations)* }
+            { $($variables)* }
+            { $($constraints)* }
+        }
+    };
+    {
+        { $($rest:tt)* }
+        { $($fun_type:tt)* }
+        { $($fun_body:tt)* }
+        { $($equations:tt)* }
+        { $($variables:tt)* }
+    } => {
+        parse_fam! {
+            { $($rest)* }
+            { $($fun_type)+ }
+            { $($fun_body)* }
+            { $($equations)* }
+            { $($variables)* }
+            {}
+        }
+    };
+}
+
+macro_rules! parse_fam {
+    {
+        {}
+        { $Op:ident $Args:ty  => $Output:ty }
+        { $op:ident $args:pat => $output:expr }
+        {}
+        { $($X:ident),* }
+        {}
+    } => {
+        impl<$($X,)*> Fn<$Args> for $Op {
             type Output = $Output;
-            $(#[$attr])*
             extern "rust-call" fn call(&self, $args : $Args) -> $Output {
                 $output
             }
         }
     };
-
-    // - let; + [.]; - [:]
     {
-        $(#[ $attr:meta ])*
-        fam $Op:ident $Args:ty  => $Output:ty {
-            $op:ident $args:pat => $output:expr
-        } for .[ $($A:ident),* ]
+        {}
+        { $Op:ident $Args:ty  => $Output:ty }
+        { $op:ident $args:pat => $output:expr }
+        { $($RecVal:ty = $RecOp:ident $RecArgs:ty,)* }
+        { $($X:ident),* }
+        { $($T:ty : $C:ident),* }
     } => {
-        ty! {
-            $(#[$attr])*
-            fam $Op $Args => $Output {
-                $op $args => $output
-            } for .[ $($A),* ] :[]
-        }
-    };
-
-    // - let; - [.]; + [:]
-    {
-        $(#[ $attr:meta ])*
-        fam $Op:ident $Args:ty  => $Output:ty {
-            $op:ident $args:pat => $output:expr
-        } for :[ $($B:ident : $T:ident),* ]
-    } => {
-        ty! {
-            $(#[$attr])*
-            fam $Op $Args => $Output {
-                $op $args => $output
-            } for .[] :[ $($B : $T),* ]
-        }
-    };
-
-    // - let; + [.]; + [:]
-    {
-        $(#[ $attr:meta ])*
-        fam $Op:ident $Args:ty  => $Output:ty {
-            $op:ident $args:pat => $output:expr
-        } for .[ $($A:ident),* ] :[ $($B:ident : $T:ident),* ]
-    } => {
-        impl<$($A,)* $($B : $T,)*> Fn<$Args> for $Op {
-            type Output = $Output;
-            $(#[$attr])*
-            extern "rust-call" fn call(&self, $args : $Args) -> $Output {
-                $output
-            }
-        }
-    };
-
-    // + let; - [.]; - [:]
-    {
-        $(#[ $attr:meta ])*
-        fam $Op:ident $Args:ty  => $Output:ty {
-            $op:ident $args:pat => $output:expr
-        } let {
-            $($E:ty = $F:ident $Xs:ty ,)*
-        }
-    } => {
-        impl Fn<$Args> for $Op where
-            $($F : Fn<$Xs, Output = $E>),*
+        impl<$($X,)*> Fn<$Args> for $Op where
+            $($RecOp : Fn<$RecArgs, Output = $RecVal>,)*
+            $($T : $C,)*
         {
             type Output = $Output;
-            $(#[$attr])*
-            extern "rust-call" fn call(&self, $args : $Args) -> $Output {
-                $output
-            }
-        }
-    };
-
-    // + let; + [.]; - [:]
-    {
-        $(#[ $attr:meta ])*
-        fam $Op:ident $Args:ty  => $Output:ty {
-            $op:ident $args:pat => $output:expr
-        } let {
-            $($E:ty = $F:ident $Xs:ty ,)*
-        } for .[ $($A:ident),* ]
-    } => {
-        ty! {
-            $(#[$attr])*
-            fam $Op $Args => $Output {
-                $op $args => $output
-            } let {
-                $($E = $F $Xs,)*
-            } for .[ $($A),* ] :[]
-        }
-    };
-
-    // + let; - [.]; + [:]
-    {
-        $(#[ $attr:meta ])*
-        fam $Op:ident $Args:ty  => $Output:ty {
-            $op:ident $args:pat => $output:expr
-        } let {
-            $($E:ty = $F:ident $Xs:ty ,)*
-        } for :[ $($B:ident : $T:ident),* ]
-    } => {
-        ty! {
-            $(#[$attr])*
-            fam $Op $Args => $Output {
-                $op $args => $output
-            } let {
-                $($E = $F $Xs,)*
-            } for .[] :[ $($B : $T),* ]
-        }
-    };
-
-    // + let; + [.]; + [:]
-    {
-        $(#[ $attr:meta ])*
-        fam $Op:ident $Args:ty  => $Output:ty {
-            $op:ident $args:pat => $output:expr
-        } let {
-            $($E:ty = $F:ident $Xs:ty ,)*
-        } for .[ $($A:ident),* ] :[ $($B:ident : $T:ident),* ]
-    } => {
-        impl<$($A,)* $($B : $T,)*> Fn<$Args> for $Op where
-            $($F : Fn<$Xs, Output = $E>),*
-        {
-            type Output = $Output;
-            $(#[$attr])*
             extern "rust-call" fn call(&self, $args : $Args) -> $Output {
                 $output
             }
