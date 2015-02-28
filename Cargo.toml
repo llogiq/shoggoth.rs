@@ -10,13 +10,6 @@ license = "MIT"
 readme = "README.md"
 repository = "https://github.com/epsilonz/shoggoth.rs"
 
-[features]
-
-all = ["numerics", "products", "reflection"]
-numerics = ["reflection"]
-products = []
-reflection = []
-
 [lib]
 name = "shoggoth"
 path = "src/lib.rs"

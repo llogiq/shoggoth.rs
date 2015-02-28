@@ -14,7 +14,6 @@ impl Comparison for Eq {}
 impl Comparison for GT {}
 impl Comparison for LT {}
 
-#[cfg(feature = "reflection")]
 mod reflection {
     use reflect::Reifies;
     use std;

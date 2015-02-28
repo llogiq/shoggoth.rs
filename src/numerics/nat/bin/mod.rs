@@ -21,7 +21,6 @@ impl<P: Pos> IsNat for P {}
 pub trait Nat: MarkerTrait + Reifies<Output = usize> {}
 impl<N: IsNat + Reifies<Output = usize>> Nat for W<N> {}
 
-#[cfg(feature = "reflection")]
 mod reflection {
     use bit::*;
     use reflect::*;

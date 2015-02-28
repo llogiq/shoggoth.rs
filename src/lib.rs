@@ -13,13 +13,8 @@
 
 #[macro_use] mod macros;
 
-#[cfg(feature = "numerics")]
 pub mod numerics;
-
-#[cfg(feature = "products")]
 pub mod products;
-
-#[cfg(feature = "reflection")]
 pub mod reflect;
 
 pub mod bit;
