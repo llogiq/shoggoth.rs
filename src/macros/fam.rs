@@ -2,55 +2,55 @@
     {
         fam $($rest:tt)*
     } => {
-        parse_fam_init! {
+        fam_parse_init! {
             { $($rest)* }
         }
     };
 }
 
-macro_rules! parse_fam_init {
+macro_rules! fam_parse_init {
     {
         { $($rest:tt)* }
     } => {
-        parse_fam_fun_type! {
+        fam_parse_fun_type! {
             { $($rest)* }
         }
     };
 }
 
-macro_rules! parse_fam_fun_type {
+macro_rules! fam_parse_fun_type {
     {
         { :[ $($fun_type:tt)+ ] $($rest:tt)* }
     } => {
-        parse_fam_fun_body! {
+        fam_parse_fun_body! {
             { $($rest)* }
             { $($fun_type)+ }
         }
     };
 }
 
-macro_rules! parse_fam_fun_body {
+macro_rules! fam_parse_fun_body {
     {
         { =[ $($fun_body:tt)+ ] $($rest:tt)* }
         { $($fun_type:tt)* }
     } => {
-        parse_fam_let! {
+        fam_parse_let! {
             { $($rest)* }
-            { $($fun_type)+ }
-            { $($fun_body)* }
+            { $($fun_type)* }
+            { $($fun_body)+ }
         }
     };
 }
 
-macro_rules! parse_fam_let {
+macro_rules! fam_parse_let {
     {
         { let { $($equations:tt)* } $($rest:tt)* }
         { $($fun_type:tt)* }
         { $($fun_body:tt)* }
     } => {
-        parse_fam_for! {
+        fam_parse_for! {
             { $($rest)* }
-            { $($fun_type)+ }
+            { $($fun_type)* }
             { $($fun_body)* }
             { $($equations)* }
         }
@@ -60,25 +60,25 @@ macro_rules! parse_fam_let {
         { $($fun_type:tt)* }
         { $($fun_body:tt)* }
     } => {
-        parse_fam_for! {
+        fam_parse_for! {
             { $($rest)* }
-            { $($fun_type)+ }
+            { $($fun_type)* }
             { $($fun_body)* }
             {}
         }
     };
 }
 
-macro_rules! parse_fam_for {
+macro_rules! fam_parse_for {
     {
         { for { $($variables:tt)* } $($rest:tt)* }
         { $($fun_type:tt)* }
         { $($fun_body:tt)* }
         { $($equations:tt)* }
     } => {
-        parse_fam_where! {
+        fam_parse_where! {
             { $($rest)* }
-            { $($fun_type)+ }
+            { $($fun_type)* }
             { $($fun_body)* }
             { $($equations)* }
             { $($variables)* }
@@ -90,9 +90,9 @@ macro_rules! parse_fam_for {
         { $($fun_body:tt)* }
         { $($equations:tt)* }
     } => {
-        parse_fam_where! {
+        fam_parse_where! {
             { $($rest)* }
-            { $($fun_type)+ }
+            { $($fun_type)* }
             { $($fun_body)* }
             { $($equations)* }
             {}
@@ -100,7 +100,7 @@ macro_rules! parse_fam_for {
     };
 }
 
-macro_rules! parse_fam_where {
+macro_rules! fam_parse_where {
     {
         { where { $($constraints:tt)* } $($rest:tt)* }
         { $($fun_type:tt)* }
@@ -108,7 +108,7 @@ macro_rules! parse_fam_where {
         { $($equations:tt)* }
         { $($variables:tt)* }
     } => {
-        parse_fam! {
+        fam_parse! {
             { $($rest)* }
             { $($fun_type)+ }
             { $($fun_body)* }
@@ -124,9 +124,9 @@ macro_rules! parse_fam_where {
         { $($equations:tt)* }
         { $($variables:tt)* }
     } => {
-        parse_fam! {
+        fam_parse! {
             { $($rest)* }
-            { $($fun_type)+ }
+            { $($fun_type)* }
             { $($fun_body)* }
             { $($equations)* }
             { $($variables)* }
@@ -135,7 +135,7 @@ macro_rules! parse_fam_where {
     };
 }
 
-macro_rules! parse_fam {
+macro_rules! fam_parse {
     {
         {}
         { $Op:ident $Args:ty  => $Output:ty }
