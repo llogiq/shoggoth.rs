@@ -7,6 +7,7 @@ use syntax::ext::base;
 use syntax::ext::quote::rt::{
     ToTokens,
 };
+use syntax::util::small_vector::*;
 use syntax::parse::{
     token,
 };
@@ -55,7 +56,7 @@ pub fn invoke_for_seq_upto_expand<'cx>(
         }
 
         // splice the impl fragments into the ast
-        Some(base::MacItems::new(items.into_iter()))
+        Some(base::MacEager::items(SmallVector::many(items)))
 
     }).unwrap_or_else(|| {
         ecx.span_err(span, "invoke_for_seq_upto!: expected an integer literal argument");

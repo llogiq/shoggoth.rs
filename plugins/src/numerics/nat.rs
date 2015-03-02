@@ -32,10 +32,10 @@ fn crate_prefix_path<'a, 'cx>(
 }
 
 // Convert a u64 to a string representation of a type-level binary natural, e.g.,
-//     nat_str(1024)
-//         ==> (((((((((_1, _0), _0), _0), _0), _0), _0), _0), _0), _0)
+//     ast_as_str(1024)
+//         ==> "(((((((((_1, _0), _0), _0), _0), _0), _0), _0), _0), _0)"
 #[inline(always)]
-fn nat_str<'cx>(
+fn ast_as_str<'cx>(
         ecx: &'cx base::ExtCtxt,
     mut num: u64,
        mode: Mode,
@@ -71,16 +71,16 @@ fn nat_str<'cx>(
     res
 }
 
-// Generate a parser with the nat string for `num` as input
+// Generate a parser which uses the nat's ast-as-string as its input
 #[inline(always)]
-fn nat_str_parser<'cx>(
+fn ast_parser<'cx>(
     ecx: &'cx base::ExtCtxt,
     num: u64,
    mode: Mode,
 ) -> parse::parser::Parser<'cx> {
     let filemap = ecx
         .codemap()
-        .new_filemap(String::from_str("<nat!>"), nat_str(ecx, num, mode));
+        .new_filemap(String::from_str("<nat!>"), ast_as_str(ecx, num, mode));
     let reader  = lexer::StringReader::new(
         &ecx.parse_sess().span_diagnostic,
         filemap);
@@ -90,16 +90,17 @@ fn nat_str_parser<'cx>(
         Box::new(reader))
 }
 
-// Try to parse an integer literal and return a new parser for its nat string
+// Try to parse an integer literal and return a new parser which uses
+// the nat's ast-as-string as its input
 #[inline(always)]
-pub fn nat_lit_parser<'cx>(
+pub fn lit_parser<'cx>(
      ecx: &'cx base::ExtCtxt,
     args: &[ast::TokenTree],
     mode: Mode,
 ) -> Option<parse::parser::Parser<'cx>> {
-    let mut litp = ecx.new_parser_from_tts(args);
-    if let ast::Lit_::LitInt(lit, _) = litp.parse_lit().node {
-        Some(nat_str_parser(ecx, lit, mode))
+    let mut lit_parser = ecx.new_parser_from_tts(args);
+    if let ast::Lit_::LitInt(lit, _) = lit_parser.parse_lit().node {
+        Some(ast_parser(ecx, lit, mode))
     } else {
         None
     }
@@ -109,15 +110,15 @@ pub fn nat_lit_parser<'cx>(
 //     Nat!(1024)
 //         ==> (((((((((_1, _0), _0), _0), _0), _0), _0), _0), _0), _0)
 #[inline]
-pub fn nat_ty_expand<'cx>(
+pub fn expand_ty<'cx>(
      ecx: &'cx mut base::ExtCtxt,
     span: codemap::Span,
     args: &[ast::TokenTree],
 ) -> Box<base::MacResult + 'cx> {
     {
-        nat_lit_parser(ecx, args, Mode::Ty)
-    }.and_then(|mut natp| {
-        Some(base::MacTy::new(natp.parse_ty()))
+        lit_parser(ecx, args, Mode::Ty)
+    }.and_then(|mut ast_parser| {
+        Some(base::MacEager::ty(ast_parser.parse_ty()))
     }).unwrap_or_else(|| {
         ecx.span_err(span, "Nat!: expected an integer literal argument");
         base::DummyResult::any(span)
@@ -128,15 +129,15 @@ pub fn nat_ty_expand<'cx>(
 //     nat!(1024)
 //         ==> (((((((((_1, _0), _0), _0), _0), _0), _0), _0), _0), _0)
 #[inline]
-pub fn nat_tm_expand<'cx>(
+pub fn expand_tm<'cx>(
      ecx: &'cx mut base::ExtCtxt,
     span: codemap::Span,
     args: &[ast::TokenTree],
 ) -> Box<base::MacResult + 'cx> {
     {
-        nat_lit_parser(ecx, args, Mode::Tm)
-    }.and_then(|mut natp| {
-        Some(base::MacExpr::new(natp.parse_expr()))
+        lit_parser(ecx, args, Mode::Tm)
+    }.and_then(|mut ast_parser| {
+        Some(base::MacEager::expr(ast_parser.parse_expr()))
     }).unwrap_or_else(|| {
         ecx.span_err(span, "nat!: expected an integer literal argument");
         base::DummyResult::any(span)
