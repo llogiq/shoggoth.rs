@@ -1,17 +1,39 @@
 #[macro_export] macro_rules! List {
-    {} => { $crate::list::Nil };
-    { $head:ty } => { $crate::list::Cons<$head, $crate::list::Nil> };
-    { $head:ty, $($tail:ty),* } => { $crate::list::Cons<$head, List!($($tail),*)> };
+    {} => {
+        $crate::products::list::Nil
+    };
+    { $head:ty } => {
+        $crate::products::list::Cons<$head, $crate::products::list::Nil>
+    };
+    { $head:ty, $($tail:ty),* } => {
+        $crate::products::list::Cons<$head, List!($($tail),*)>
+    };
 }
 
 #[macro_export] macro_rules! list {
-    {} => { $crate::list::Nil };
-    { $head:expr } => { $crate::list::Cons($head, $crate::list::Nil) };
-    { $head:expr, $($tail:expr),* } => { $crate::list::Cons($head, list!($($tail),*)) };
+    {} => {
+        $crate::products::list::Nil
+    };
+    {=> $($elem:tt),+ } => {
+        list_pat!($($elem),+)
+    };
+    { $head:expr, $($tail:expr),* } => {
+        $crate::products::list::Cons($head, list!($($tail),*))
+    };
+    { $head:expr } => {
+        $crate::products::list::Cons($head, $crate::products::list::Nil)
+    };
 }
 
-#[macro_export] macro_rules! list_match {
-    {} => { $crate::list::Nil };
-    { $head:ident } => { $crate::list::Cons($head, $crate::list::Nil) };
-    { $head:ident, $($tail:ident),* } => { $crate::list::Cons($head, list_match!($($tail),*)) };
+macro_rules! list_pat {
+    {} => {
+        $crate::products::list::Nil
+    };
+    { $head:pat, $($tail:tt),* } => {
+        $crate::products::list::Cons($head, list_pat!($($tail),*))
+    };
+    { $head:pat } => {
+        $crate::products::list::Cons($head, $crate::products::list::Nil)
+    };
 }
+
