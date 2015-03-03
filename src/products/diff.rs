@@ -1,15 +1,8 @@
-use products::list::{
-    List,
-    self,
-};
+use diff::*;
+use products::list;
+use std;
 
-#[derive(Copy, Clone, Debug, Eq, Ord, PartialEq, PartialOrd)]
-pub struct Id<Xs: List>(pub Xs);
-
-#[derive(Copy, Clone, Debug, Eq, Ord, PartialEq, PartialOrd)]
-pub struct Append<Xf: Diff, Yf: Diff>(pub Xf, pub Yf);
-
-pub type Nil = Id<list::Nil>;
+pub type Nil = Id<::list::Nil>;
 pub type Cons<X, Xf> = Append<Id<list::Single<X>>, Xf>;
 pub type Snoc<Xf, X> = Append<Xf, Id<list::Single<X>>>;
 pub type Single<X> = Id<list::Single<X>>;
@@ -19,46 +12,40 @@ pub fn nil() -> Nil {
 }
 
 pub trait Diff {
-    fn cons<X>(self, x: X) -> Cons<X, Self> where
-        Self: Sized,
-    {
-        Append::<Id<list::Cons<_, _>>, _>(Id(list::ToSingleton::single(x)), self)
+    fn cons<X>(self, x: X) -> Cons<X, Self> where Self: Sized {
+        Append::<Id<::list::Cons<_, _>>, _>(Id(list::ToSingleton::single(x)), self)
     }
 
-    fn snoc<X>(self, x: X) -> Snoc<Self, X> where
-        Self: Sized,
-    {
-        Append::<_, Id<list::Cons<_, _>>>(self, Id(list::ToSingleton::single(x)))
+    fn snoc<X>(self, x: X) -> Snoc<Self, X> where Self: Sized {
+        Append::<_, Id<::list::Cons<_, _>>>(self, Id(list::ToSingleton::single(x)))
     }
 }
-impl<Xs: List> Diff for Id<Xs> {
-    fn cons<X>(self, x: X) -> Cons<X, Self> where
-        Self: Sized,
-    {
-        Append::<Id<list::Cons<_, _>>, _>(Id(list::ToSingleton::single(x)), self)
+impl<Xs> Diff for Id<Xs> {
+    fn cons<X>(self, x: X) -> Cons<X, Self> where Self: Sized {
+        Append::<Id<::list::Cons<_, _>>, _>(Id(list::ToSingleton::single(x)), self)
     }
 }
-impl<Xf: Diff, Yf: Diff> Diff for Append<Xf, Yf> {
+impl<Xf, Yf> Diff for Append<Xf, Yf> {
 }
 
-pub trait ToDiff: List {
-    fn diff(self) -> Id<Self> where
-        Self: Sized,
-    {
+pub trait ToDiff {
+    fn diff(self) -> Id<Self> where Self: Sized {
         Id(self)
     }
 }
-impl<Xs: List> ToDiff for Xs {
+impl ToDiff for ::list::Nil {
+}
+impl<X, Xs: ToDiff> ToDiff for ::list::Cons<X, Xs> {
 }
 
-impl<Xs: List, Yf: Diff> ::std::ops::Add<Yf> for Id<Xs> {
+impl<Xs, Yf> std::ops::Add<Yf> for Id<Xs> {
     type Output = Append<Id<Xs>, Yf>;
     fn add(self, rhs: Yf) -> Append<Id<Xs>, Yf> {
         Append(self, rhs)
     }
 }
 
-impl<Xf: Diff, Yf: Diff, Zf: Diff> ::std::ops::Add<Zf> for Append<Xf, Yf> {
+impl<Xf, Yf, Zf> std::ops::Add<Zf> for Append<Xf, Yf> {
     type Output = Append<Append<Xf, Yf>, Zf>;
     fn add(self, rhs: Zf) -> Append<Append<Xf, Yf>, Zf> {
         Append(self, rhs)
@@ -67,16 +54,13 @@ impl<Xf: Diff, Yf: Diff, Zf: Diff> ::std::ops::Add<Zf> for Append<Xf, Yf> {
 
 pub type Eval<Xf, Ys> = <Xf as EvalOp<Ys>>::Output;
 
-pub trait EvalOp<In: List>: Diff {
+pub trait EvalOp<In>: Diff {
     type Output;
     fn eval(self, acc: In) -> Self::Output;
 }
 
-impl<
-    Xs: List,
-    Ys: List
-> EvalOp<Ys> for Id<Xs> where
-    Xs: ::std::ops::Add<Ys>,
+impl<Xs, Ys> EvalOp<Ys> for Id<Xs> where
+    Xs: std::ops::Add<Ys>,
 {
     type Output = list::Append<Xs, Ys>;
     fn eval(self, acc: Ys) -> list::Append<Xs, Ys> {
@@ -84,12 +68,7 @@ impl<
     }
 }
 
-impl<
-    Rec: List,
-    Xf: Diff,
-    Yf: Diff,
-    Zs: List,
-> EvalOp<Zs> for Append<Xf, Yf> where
+impl<Rec, Xf, Yf, Zs> EvalOp<Zs> for Append<Xf, Yf> where
     Xf: EvalOp<Rec>,
     Yf: EvalOp<Zs, Output = Rec>,
 {
@@ -99,17 +78,15 @@ impl<
     }
 }
 
-pub trait ToList: Diff + EvalOp<list::Nil> {
+pub trait ToList: EvalOp<::list::Nil> {
     type Output;
-    fn list(self) -> Eval<Self, list::Nil> where
-        Self: Sized,
-    {
+    fn list(self) -> Eval<Self, ::list::Nil> where Self: Sized {
         self.eval(list::nil())
     }
 }
 
-impl<Xf: Diff + EvalOp<list::Nil>> ToList for Xf {
-    type Output = Eval<Xf, list::Nil>;
+impl<Xf: EvalOp<::list::Nil>> ToList for Xf {
+    type Output = Eval<Xf, ::list::Nil>;
 }
 
 #[cfg(test)]

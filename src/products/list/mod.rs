@@ -1,8 +1,6 @@
-#[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
-pub struct Nil;
+use list::*;
 
-#[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
-pub struct Cons<H, T: List>(pub H, pub T);
+mod boilerplate;
 
 pub fn nil() -> Nil {
     Nil
@@ -16,7 +14,7 @@ pub trait List {
 }
 impl List for Nil {
 }
-impl<H, T: List> List for Cons<H, T> {
+impl<H, T> List for Cons<H, T> {
 }
 
 impl<Ys: List> ::std::ops::Add<Ys> for Nil {
@@ -25,12 +23,7 @@ impl<Ys: List> ::std::ops::Add<Ys> for Nil {
         rhs
     }
 }
-impl<
-    Rec: List + Sized,
-    X,
-    Xs: List,
-    Ys: List,
-> ::std::ops::Add<Ys> for Cons<X, Xs> where
+impl<Rec: Sized, X, Xs, Ys> ::std::ops::Add<Ys> for Cons<X, Xs> where
     Xs: ::std::ops::Add<Ys, Output = Rec>,
 {
     type Output = Cons<X, Rec>;
@@ -44,7 +37,7 @@ pub type Append<Xs, Ys> = <Xs as ::std::ops::Add<Ys>>::Output;
 pub type Single<X> = Cons<X, Nil>;
 
 pub trait ToSingleton {
-    type Out: List = Cons<Self, Nil>;
+    type Out = Cons<Self, Nil>;
     fn single(self) -> Cons<Self, Nil> where
         Self: Sized,
     {
