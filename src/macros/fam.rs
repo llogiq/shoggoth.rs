@@ -31,6 +31,16 @@ macro_rules! fam_parse_fun_type {
 
 macro_rules! fam_parse_fun_body {
     {
+        { =[.. $($fun_body:tt)+ ] $($rest:tt)* }
+        { $($fun_type:tt)* }
+    } => {
+        fam_parse_let! {
+            { $($rest)* }
+            { $($fun_type)* }
+            { __op _ => $($fun_body)+ }
+        }
+    };
+    {
         { =[ $($fun_body:tt)+ ] $($rest:tt)* }
         { $($fun_type:tt)* }
     } => {
