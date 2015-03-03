@@ -15,7 +15,3 @@ impl<A, Rec> Reifies for PhantomData<A> where
         unsafe { ::std::mem::transmute::<&PhantomData<A>, &A>(self).reflect() }
     }
 }
-
-pub trait Reflects {
-    fn reify(&self) -> Box<Reifies<Output = Self>>;
-}

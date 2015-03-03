@@ -15,7 +15,7 @@ impl Comparison for GT {}
 impl Comparison for LT {}
 
 mod reflection {
-    use reflect::Reifies;
+    use data::reflect::*;
     use std;
     use super::*;
 

@@ -1,5 +1,4 @@
 #![crate_type="dylib"]
-#![feature(collections)]
 #![feature(core)]
 #![feature(plugin_registrar)]
 #![feature(quote)]
@@ -10,13 +9,10 @@ extern crate rustc;
 
 use rustc::plugin;
 
-mod numerics;
-mod products;
+mod seq;
 
 #[plugin_registrar]
 #[doc(hidden)]
 pub fn shoggoth_plugins_registrar(reg: &mut plugin::Registry) {
-    reg.register_macro("invoke_for_seq_upto", products::invoke_for_seq_upto_expand);
-    reg.register_macro("Nat", numerics::nat::expand_ty);
-    reg.register_macro("nat", numerics::nat::expand_tm);
+    reg.register_macro("invoke_for_seq_upto", seq::expand_invoke_for_seq_upto);
 }

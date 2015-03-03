@@ -1,82 +1,83 @@
 #[macro_export] macro_rules! List {
     {} => {
-        $crate::list::Nil
+        $crate::data::list::Nil
     };
-    { $lhs:ty } => {
-        $crate::list::Cons<$lhs, $crate::list::Nil>
+    { $head:ty } => {
+        $crate::data::list::Cons<$head, $crate::data::list::Nil>
     };
-    { $lhs:ty, $($rest:ty),+ } => {
-        $crate::list::Cons<$lhs, List![$($rest)+]>
+    { $head:ty, $($rest:ty),+ } => {
+        $crate::data::list::Cons<$head, List![$($rest),+]>
     };
-    { $($lhs:ty),+ : $ret:ty } => {
-        ListRet!({ $ret } $($lhs),+)
+    { $($head:ty),+ : $tail:ty } => {
+        ListTail!({ $tail } $($head),+)
     };
 }
-macro_rules! ListRet {
-    { { $ret:ty } } => {
-        $ret
+
+macro_rules! ListTail {
+    { { $tail:ty } } => {
+        $tail
     };
-    { { $ret:ty } $lhs:ty } => {
-        $crate::list::Cons<$lhs, $ret>
+    { { $tail:ty } $head:ty } => {
+        $crate::data::list::Cons<$head, $tail>
     };
-    { { $ret:tt } $lhs:ty, $($rest:tt),+ } => {
-        $crate::list::Cons<$lhs, ListRet!({ $ret } $($rest),+)>
+    { { $tail:tt } $head:ty, $($rest:tt),+ } => {
+        $crate::data::list::Cons<$head, ListTail!({ $tail } $($rest),+)>
     };
 }
 
 #[macro_export] macro_rules! list {
     {} => {
-        $crate::list::Nil
+        $crate::data::list::Nil
     };
     {=> $($elem:tt)+ } => {
         list_pat!($($elem)+)
     };
     { $head:expr } => {
-        $crate::list::Cons($head, $crate::list::Nil)
+        $crate::data::list::Cons($head, $crate::data::list::Nil)
     };
     { $head:expr, $($tail:expr),+ } => {
-        $crate::list::Cons($head, list!($($tail),+))
+        $crate::data::list::Cons($head, list!($($tail),+))
     };
-    { $($lhs:expr),+ : $ret:expr } => {
-        list_expr_ret!({ $ret } $($lhs),+)
+    { $($head:expr),+ : $tail:expr } => {
+        list_expr_tail!({ $tail } $($head),+)
     };
 }
 
-macro_rules! list_expr_ret {
-    { { $ret:expr } } => {
-        $ret
+macro_rules! list_expr_tail {
+    { { $tail:expr } } => {
+        $tail
     };
-    { { $ret:expr } $lhs:expr } => {
-        $crate::list::Cons($lhs, $ret)
+    { { $tail:expr } $head:expr } => {
+        $crate::data::list::Cons($head, $tail)
     };
-    { { $ret:tt } $lhs:expr, $($rest:tt),+ } => {
-        $crate::list::Cons($lhs, list_expr_ret!({ $ret } $($rest),+))
+    { { $tail:tt } $head:expr, $($rest:tt),+ } => {
+        $crate::data::list::Cons($head, list_expr_tail!({ $tail } $($rest),+))
     };
 }
 
 macro_rules! list_pat {
     {} => {
-        $crate::list::Nil
+        $crate::data::list::Nil
     };
-    { $lhs:pat } => {
-        $crate::list::Cons($lhs, $crate::list::Nil)
+    { $head:pat } => {
+        $crate::data::list::Cons($head, $crate::data::list::Nil)
     };
-    { $lhs:pat, $($rest:tt),+ } => {
-        $crate::list::Cons($lhs, list_pat!($($rest),+))
+    { $head:pat, $($rest:tt),+ } => {
+        $crate::data::list::Cons($head, list_pat!($($rest),+))
     };
-    { $($lhs:pat),+ : $ret:pat } => {
-        list_pat_ret!({ $ret } $($lhs),+)
+    { $($head:pat),+ : $tail:pat } => {
+        list_pat_tail!({ $tail } $($head),+)
     };
 }
 
-macro_rules! list_pat_ret {
-    { { $ret:pat } } => {
-        $ret
+macro_rules! list_pat_tail {
+    { { $tail:pat } } => {
+        $tail
     };
-    { { $ret:pat } $lhs:pat } => {
-        $crate::list::Cons($lhs, $ret)
+    { { $tail:pat } $head:pat } => {
+        $crate::data::list::Cons($head, $tail)
     };
-    { { $ret:tt } $lhs:pat, $($rest:tt),+ } => {
-        $crate::list::Cons($lhs, list_pat_ret!({ $ret } $($rest),+))
+    { { $tail:tt } $head:pat, $($rest:tt),+ } => {
+        $crate::data::list::Cons($head, list_pat_tail!({ $tail } $($rest),+))
     };
 }

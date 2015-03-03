@@ -1,6 +1,13 @@
-#[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
-pub struct Nil;
+use std::marker::{
+    MarkerTrait,
+};
 
 #[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
-pub struct Cons<H, T>(pub H, pub T);
+pub struct _0;
 
+#[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+pub struct _1;
+
+pub trait Bit: MarkerTrait {}
+impl Bit for _0 {}
+impl Bit for _1 {}

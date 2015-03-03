@@ -5,7 +5,7 @@ pub struct FF;
 pub struct TT;
 
 mod reflection {
-    use reflect::Reifies;
+    use data::reflect::*;
     use super::*;
 
     impl Reifies for FF {
