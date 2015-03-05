@@ -40,3 +40,12 @@ ty! {
         (I!(_1, [X : Xs]),)    => O!(Sx, Xs)           = { .. o!() } let { Sx = Succ(X,) } for { Sx, X, Xs }
         (I!(Z, Xs),)           => O!(_1, [Pz : Xs])    = { .. o!() } let { Pz = Pred(Z,) } for { Pz, Xs, Z }
 }
+
+// Mul2 ////////////////////////////////////////////////////////////////////////
+
+ty! {
+    fam Mul2 :: Fn(Nat) -> Nat where
+        (_1,)        => O!(_1, [])       = { .. o!() }
+        (O!(X, Xs),) => O!(Sx, Xs)       = { .. o!() } let { Sx = Succ(X,) } for { Sx, X, Xs }
+        (I!(X, Xs),) => O!(_1, [X : Xs]) = { .. o!() } for { X, Xs }
+}
