@@ -59,3 +59,10 @@ ty! {
         (O!(O!(Y, Ys), Xs),) => O!(Px, Xs) = { .. o!() } let { Px = Succ((Y, Ys),) } for { Px, Xs, Y, Ys }
         (O!(I!(Y, Ys), Xs),) => O!(Px, Xs) = { .. o!() } let { Px = Succ((Y, Ys),) } for { Px, Xs, Y, Ys }
 }
+
+// Exp2 ////////////////////////////////////////////////////////////////////////
+
+ty! {
+    fam Exp2 :: Fn(Nat) -> Nat where
+        (X,) => O!(X, []) = { .. o!() } for { X }
+}
