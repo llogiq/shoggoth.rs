@@ -26,3 +26,17 @@ ty! {
         (I!(Z, [_1, Y : Ys]),) => O!(Z, [Sy : Ys])     = { .. o!() } let { Sy = Succ(Y,) } for { Sy, Y, Ys, Z }
         (I!(Z, [X : Xs]),)     => O!(Z, [_1, Px : Xs]) = { .. o!() } let { Px = Pred(X,) } for { Px, X, Xs, Z }
 }
+
+// Predecessor /////////////////////////////////////////////////////////////////
+
+ty! {
+    fam Pred :: Fn(Nat) -> Nat where
+        (O!(_1, []),)          => _1                   = { ..   _1 }
+        (O!(Z, []),)           => I!(Pz, [])           = { .. i!() } let { Pz = Pred(Z,) } for { Pz, Z }
+        (O!(Z, [_1]),)         => I!(Z, [_1])          = { .. i!() } for { Z }
+        (O!(Z, [_1, X : Xs]),) => I!(Z, [Sx : Xs])     = { .. i!() } let { Sx = Succ(X,) } for { Sx, X, Xs, Z }
+        (O!(Z, [X : Xs]),)     => I!(Z, [_1, Px : Xs]) = { .. i!() } let { Px = Pred(X,) } for { Px, X, Xs, Z }
+        (I!(_1, []),)          => O!(_1, [])           = { .. o!() }
+        (I!(_1, [X : Xs]),)    => O!(Sx, Xs)           = { .. o!() } let { Sx = Succ(X,) } for { Sx, X, Xs }
+        (I!(Z, Xs),)           => O!(_1, [Pz : Xs])    = { .. o!() } let { Pz = Pred(Z,) } for { Pz, Xs, Z }
+}
