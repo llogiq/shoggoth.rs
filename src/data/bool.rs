@@ -8,6 +8,15 @@ mod reflection {
     use data::reflect::*;
     use super::*;
 
+    impl Reflects for bool {
+        fn reify(&self) -> Box<Reifies<Output = Self>> {
+            match self {
+                &false => { box FF }
+                &true  => { box TT }
+            }
+        }
+    }
+
     impl Reifies for FF {
         type Output = bool;
         fn reflect(&self) -> bool {

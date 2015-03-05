@@ -17,6 +17,16 @@ mod reflection {
     use std;
     use super::*;
 
+    impl Reflects for std::cmp::Ordering {
+        fn reify(&self) -> Box<Reifies<Output = Self>> {
+            match self {
+                &std::cmp::Ordering::Equal   => { box Eq }
+                &std::cmp::Ordering::Greater => { box GT }
+                &std::cmp::Ordering::Less    => { box LT }
+            }
+        }
+    }
+
     impl Reifies for Eq {
         type Output = std::cmp::Ordering;
         fn reflect(&self) -> std::cmp::Ordering {

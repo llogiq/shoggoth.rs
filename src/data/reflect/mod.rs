@@ -56,3 +56,7 @@ impl<A, C, V: Sized> Reifies<Streaming> for A where A: Emit<Code = C>, C: Exec<V
         stack.pop().unwrap()
     }
 }
+
+pub trait Reflects<M: Mode = Recursive> {
+    fn reify(&self) -> Box<Reifies<M, Output = Self>>;
+}
