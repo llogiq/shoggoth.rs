@@ -66,3 +66,10 @@ ty! {
     fam Exp2 :: Fn(Nat) -> Nat where
         (X,) => O!(X, []) = { .. o!() } for { X }
 }
+
+// Log2 ////////////////////////////////////////////////////////////////////////
+
+ty! {
+    fam Log2 :: Fn(Nat) -> Nat where
+        (O!(X, []),) => Rec = { .. Head(o!()) } let { Rec = Head(O!(X, []),) } for { Rec, X }
+}
