@@ -49,3 +49,13 @@ ty! {
         (O!(X, Xs),) => O!(Sx, Xs)       = { .. o!() } let { Sx = Succ(X,) } for { Sx, X, Xs }
         (I!(X, Xs),) => O!(_1, [X : Xs]) = { .. o!() } for { X, Xs }
 }
+
+// Div2 ////////////////////////////////////////////////////////////////////////
+
+ty! {
+    fam Div2 :: Fn(Nat) -> Nat where
+        (O!(_1, []),)        => _1         = { ..   _1 }
+        (O!(_1, [X : Xs]),)  => I!(X, Xs)  = { .. i!() } let { Sx = Succ(X,) } for { Sx, X, Xs }
+        (O!(O!(Y, Ys), Xs),) => O!(Px, Xs) = { .. o!() } let { Px = Succ((Y, Ys),) } for { Px, Xs, Y, Ys }
+        (O!(I!(Y, Ys), Xs),) => O!(Px, Xs) = { .. o!() } let { Px = Succ((Y, Ys),) } for { Px, Xs, Y, Ys }
+}
