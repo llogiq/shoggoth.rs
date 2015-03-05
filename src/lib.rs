@@ -1,3 +1,4 @@
+#![feature(box_syntax)]
 #![feature(core)]
 #![feature(plugin)]
 #![feature(unboxed_closures)]

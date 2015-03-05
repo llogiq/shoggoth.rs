@@ -19,19 +19,19 @@ mod reflection {
     use std;
     use super::*;
 
-    impl Reifies for Eq {
+    impl Reifies<Recursive> for Eq {
         type Output = std::cmp::Ordering;
         fn reflect(&self) -> std::cmp::Ordering {
             std::cmp::Ordering::Equal
         }
     }
-    impl Reifies for GT {
+    impl Reifies<Recursive> for GT {
         type Output = std::cmp::Ordering;
         fn reflect(&self) -> std::cmp::Ordering {
             std::cmp::Ordering::Greater
         }
     }
-    impl Reifies for LT {
+    impl Reifies<Recursive> for LT {
         type Output = std::cmp::Ordering;
         fn reflect(&self) -> std::cmp::Ordering {
             std::cmp::Ordering::Less
