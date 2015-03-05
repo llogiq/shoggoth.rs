@@ -1,6 +1,4 @@
-use std::marker::{
-    PhantomFn,
-};
+use std::marker::*;
 
 #[derive(Copy, Clone, Debug, Eq, Ord, PartialEq, PartialOrd)]
 pub struct Eq;
@@ -9,7 +7,7 @@ pub struct GT;
 #[derive(Copy, Clone, Debug, Eq, Ord, PartialEq, PartialOrd)]
 pub struct LT;
 
-pub trait Comparison: PhantomFn<Self> {}
+pub trait Comparison: MarkerTrait {}
 impl Comparison for Eq {}
 impl Comparison for GT {}
 impl Comparison for LT {}
@@ -19,19 +17,19 @@ mod reflection {
     use std;
     use super::*;
 
-    impl Reifies<Recursive> for Eq {
+    impl Reifies for Eq {
         type Output = std::cmp::Ordering;
         fn reflect(&self) -> std::cmp::Ordering {
             std::cmp::Ordering::Equal
         }
     }
-    impl Reifies<Recursive> for GT {
+    impl Reifies for GT {
         type Output = std::cmp::Ordering;
         fn reflect(&self) -> std::cmp::Ordering {
             std::cmp::Ordering::Greater
         }
     }
-    impl Reifies<Recursive> for LT {
+    impl Reifies for LT {
         type Output = std::cmp::Ordering;
         fn reflect(&self) -> std::cmp::Ordering {
             std::cmp::Ordering::Less

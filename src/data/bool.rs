@@ -8,14 +8,14 @@ mod reflection {
     use data::reflect::*;
     use super::*;
 
-    impl Reifies<Recursive> for FF {
+    impl Reifies for FF {
         type Output = bool;
         fn reflect(&self) -> bool {
             false
         }
     }
 
-    impl Reifies<Recursive> for TT {
+    impl Reifies for TT {
         type Output = bool;
         fn reflect(&self) -> bool {
             true
