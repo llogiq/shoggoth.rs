@@ -32,10 +32,6 @@ This library implements generic and type-level programming functionality. It is 
 * type-level binary rationals
 * type macros
 
-## Documentation
-
-See the API documentation [here](http://epsilonz.github.io/shoggoth.rs/doc/shoggoth/).
-
 ## Requirements
 
 1.   [Rust](http://www.rust-lang.org/)
