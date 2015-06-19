@@ -1,5 +1,4 @@
 #![crate_type="dylib"]
-#![feature(core)]
 #![feature(plugin_registrar)]
 #![feature(quote)]
 #![feature(rustc_private)]
@@ -12,6 +11,7 @@ use syntax::{
     ast,
     codemap,
     parse,
+    util,
 };
 use syntax::ext::base;
 use syntax::ext::quote::rt::{
@@ -55,13 +55,13 @@ fn impl_for_seq_upto_expand<'cx>(
     let mut parser = ecx.new_parser_from_tts(args);
 
     // parse the macro name
-    let mac = parser.parse_ident();
+    let mac = parser.parse_ident().unwrap();
 
     // parse a comma
-    parser.eat(&token::Token::Comma);
+    let _ = parser.eat(&token::Token::Comma);
 
     // parse the number of iterations
-    let iterations = match parser.parse_lit().node {
+    let iterations = match parser.parse_lit().unwrap().node {
         ast::Lit_::LitInt(i, _) => i,
         _ => {
             ecx.span_err(span, "welp");
@@ -69,12 +69,12 @@ fn impl_for_seq_upto_expand<'cx>(
         }
     };
 
-    let xs = range(0, iterations)
-        .map(|x| token::str_to_ident(format!("A{}", x).as_slice()))
+    let xs = (0 .. iterations)
+        .map(|x| token::str_to_ident(&format!("A{}", x)))
         .collect::<Vec<_>>()
         .to_tokens(ecx);
 
-    let mut ctx = range(0, xs.len() * 2 - 1).map(|k| {
+    let mut ctx = (0 .. xs.len() * 2 - 1).map(|k| {
         if k % 2 == 0 {
             xs[k / 2].clone()
         } else {
@@ -86,11 +86,11 @@ fn impl_for_seq_upto_expand<'cx>(
 
     let mut items = vec![];
     let mut i = ctx.len();
-    for _ in range(0, iterations) {
-        items.push(quote_item!(ecx, $mac!{ $ctx };).unwrap());
+    for _ in [0 .. iterations].iter() {
+        items.push(quote_item!(ecx, $mac: { $ctx }).unwrap());
         i -= 2;
         ctx.truncate(i);
     }
 
-    base::MacItems::new(items.into_iter())
+    base::MacEager::items(util::small_vector::SmallVector::many(items))
 }
